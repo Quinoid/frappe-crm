@@ -153,7 +153,7 @@
               variant="solid"
               v-bind="submitButtonProps || {}"
               :label="__('Send')"
-              clasa="bg-btn_primary"
+              class="bg-btn_primary text-white"
             />
           </div>
         </div>
