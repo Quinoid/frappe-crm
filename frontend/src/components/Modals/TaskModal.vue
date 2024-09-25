@@ -107,6 +107,18 @@
           </Dropdown>
         </div>
       </div>
+      <div class="pt-4 ">
+        <div class="space-y-2">
+          <Button
+            class="w-full bg-btn_primary"
+            variant="solid"
+            :key="editMode ? __('Update') : __('Create')"
+            :label="editMode ? __('Update') : __('Create')"
+            :loading="loading"
+            @click="updateTask"
+          />
+        </div>
+      </div>
     </template>
   </Dialog>
 </template>

@@ -4,14 +4,14 @@
     :options="{
       title: editMode ? __(emailTemplate.name) : __('Create Email Template'),
       size: 'xl',
-      actions: [
-        {
-          label: editMode ? __('Update') : __('Create'),
-          variant: 'solid',
-          onClick: () => (editMode ? updateEmailTemplate() : callInsertDoc()),
-          class: 'btn-primary',
-        },
-      ],
+      // actions: [
+      //   {
+      //     label: editMode ? __('Update') : __('Create'),
+      //     variant: 'solid',
+      //     onClick: () => (editMode ? updateEmailTemplate() : callInsertDoc()),
+      //     class: 'btn-primary',
+      //   },
+      // ],
     }"
   >
     <template #body-content>
@@ -91,6 +91,18 @@
           <Checkbox v-model="_emailTemplate.use_html" :label="__('Use HTML')" />
         </div>
         <ErrorMessage :message="__(errorMessage)" />
+      </div>
+      <div class=" pt-4 ">
+        <div class="space-y-2">
+          <Button
+            class="w-full bg-btn_primary"
+            variant="solid"
+            :key="editMode ? __('Update') : __('Create')"
+            :label="editMode ? __('Update') : __('Create')"
+            :loading="loading"
+            @click="editMode ? updateEmailTemplate() : callInsertDoc()"
+          />
+        </div>
       </div>
     </template>
   </Dialog>

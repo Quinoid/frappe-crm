@@ -3,14 +3,13 @@
     v-model="show"
     :options="{
       size: 'xl',
-      actions: [
-        {
-          label: editMode ? __('Update') : __('Create'),
-          variant: 'solid',
-          class: 'btn-primary',
-          onClick: () => updateNote(),
-        },
-      ],
+      // actions: [
+      //   {
+      //     label: editMode ? __('Update') : __('Create'),
+      //     variant: 'solid',
+      //     onClick: () => updateNote(),
+      //   },
+      // ],
     }"
   >
     <template #body-title>
@@ -59,6 +58,18 @@
               __('Took a call with John Doe and discussed the new project.')
             "
           />
+        </div>
+        <div class="pt-4 ">
+          <div class="space-y-2">
+            <Button
+              variant="solid"
+              class="w-full bg-btn_primary"
+              :key="editMode ? __('Update') : __('Create')"
+              :label="editMode ? __('Update') : __('Create')"
+              :loading="loading"
+              @click="updateNote"
+            />
+          </div>
         </div>
       </div>
     </template>
