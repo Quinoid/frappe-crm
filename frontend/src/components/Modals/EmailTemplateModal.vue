@@ -9,6 +9,7 @@
           label: editMode ? __('Update') : __('Create'),
           variant: 'solid',
           onClick: () => (editMode ? updateEmailTemplate() : callInsertDoc()),
+          class: 'btn-primary',
         },
       ],
     }"
@@ -64,7 +65,7 @@
             v-model="_emailTemplate.response_html"
             :placeholder="
               __(
-                '<p>Dear {{ lead_name }},</p>\n\n<p>This is a reminder for the payment of {{ grand_total }}.</p>\n\n<p>Thanks,</p>\n<p>Frappé</p>'
+                '<p>Dear {{ lead_name }},</p>\n\n<p>This is a reminder for the payment of {{ grand_total }}.</p>\n\n<p>Thanks,</p>\n<p>Frappé</p>',
               )
             "
           />
@@ -78,7 +79,7 @@
             @change="(val) => (_emailTemplate.response = val)"
             :placeholder="
               __(
-                'Dear {{ lead_name }}, \n\nThis is a reminder for the payment of {{ grand_total }}. \n\nThanks, \nFrappé'
+                'Dear {{ lead_name }}, \n\nThis is a reminder for the payment of {{ grand_total }}. \n\nThanks, \nFrappé',
               )
             "
           />
@@ -219,6 +220,6 @@ watch(
         editMode.value = true
       }
     })
-  }
+  },
 )
 </script>

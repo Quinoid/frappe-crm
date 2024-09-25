@@ -43,6 +43,7 @@
                         variant="solid"
                         :label="__('Apply')"
                         @click="updateColumn"
+                        class="bg-btn_primary"
                       />
                     </div>
                   </div>

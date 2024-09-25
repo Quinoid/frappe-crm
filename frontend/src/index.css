@@ -2,9 +2,8 @@
 @import 'frappe-ui/src/style.css';
 
 @layer components {
-	.prose-f {
-		@apply
-		break-all
+  .prose-f {
+    @apply break-all
 		max-w-none
 		prose
 		prose-code:break-all
@@ -21,6 +20,19 @@
 		prose-th:border
 		prose-th:border-gray-300
 		prose-th:p-2
-		prose-th:relative
-	}
+		prose-th:relative;
+  }
+}
+.separator-grid > div {
+  position: relative;
+}
+
+.separator-grid > div:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 1px;
+  background-color: #e5e7eb; /* Light gray (tailwind gray-300) */
 }

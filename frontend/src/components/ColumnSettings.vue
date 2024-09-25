@@ -130,7 +130,7 @@
               <Button
                 variant="solid"
                 :label="__('Update')"
-                class="w-full flex-1"
+                class="w-full flex-1 bg-btn_primary"
                 @click="updateColumn(column)"
               />
             </div>

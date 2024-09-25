@@ -52,6 +52,7 @@
           :label="__('Save')"
           variant="solid"
           @click="saveChanges"
+          class="bg-btn_primary"
         />
         <Button :label="__('Reset')" @click="reload" />
       </div>

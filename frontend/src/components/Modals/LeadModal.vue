@@ -31,6 +31,7 @@
         <div class="flex flex-row-reverse gap-2">
           <Button
             variant="solid"
+            class="bg-btn_primary"
             :label="__('Create')"
             :loading="isLeadCreating"
             @click="createNewLead"

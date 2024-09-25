@@ -90,7 +90,7 @@
       #actions
     >
       <Button
-        class="w-full"
+        class="w-full bg-btn_primary"
         variant="solid"
         :label="__('Create lead')"
         @click="createLead"

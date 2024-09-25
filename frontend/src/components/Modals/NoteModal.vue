@@ -7,6 +7,7 @@
         {
           label: editMode ? __('Update') : __('Create'),
           variant: 'solid',
+          class: 'btn-primary',
           onClick: () => updateNote(),
         },
       ],
@@ -155,6 +156,6 @@ watch(
         editMode.value = true
       }
     })
-  }
+  },
 )
 </script>

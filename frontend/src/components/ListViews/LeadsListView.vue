@@ -16,7 +16,7 @@
     row-key="name"
   >
     <ListHeader
-      class="sm:mx-5 mx-3"
+      class="sm:mx-5 mx-3 bg-table_header separator-grid"
       @columnWidthUpdated="emit('columnWidthUpdated')"
     >
       <ListHeaderItem

@@ -33,6 +33,7 @@
       :key="row.name"
       v-slot="{ idx, column, item }"
       :row="row"
+      class="separator-grid"
     >
       <slot v-bind="{ idx, column, item, row }" />
     </ListRow>
@@ -55,12 +56,18 @@ const reactivieRows = ref(props.rows)
 
 watch(
   () => props.rows,
-  (val) => (reactivieRows.value = val)
+  (val) => (reactivieRows.value = val),
 )
 
 let showGroupedRows = computed(() => {
   return props.rows.every(
-    (row) => row.group && row.rows && Array.isArray(row.rows)
+    (row) => row.group && row.rows && Array.isArray(row.rows),
   )
 })
+const targetDiv = document.querySelector('div.grid')
+
+// Add the Tailwind border-right class dynamically
+if (targetDiv) {
+  targetDiv.classList.add('separator-grid') // Adds a border-right with gray-300 color
+}
 </script>

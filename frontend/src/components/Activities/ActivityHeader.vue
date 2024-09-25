@@ -9,6 +9,7 @@
       v-if="title == 'Emails'"
       variant="solid"
       @click="emailBox.show = true"
+      class="bg-btn_primary"
     >
       <template #prefix>
         <FeatherIcon name="plus" class="h-4 w-4" />
@@ -18,6 +19,7 @@
     <Button
       v-else-if="title == 'Comments'"
       variant="solid"
+      class="bg-btn_primary"
       @click="emailBox.showComment = true"
     >
       <template #prefix>
@@ -28,6 +30,7 @@
     <Button
       v-else-if="title == 'Calls'"
       variant="solid"
+      class="bg-btn_primary"
       @click="makeCall(doc.data.mobile_no)"
     >
       <template #prefix>
@@ -38,6 +41,7 @@
     <Button
       v-else-if="title == 'Notes'"
       variant="solid"
+      class="bg-btn_primary"
       @click="modalRef.showNote()"
     >
       <template #prefix>
@@ -48,6 +52,7 @@
     <Button
       v-else-if="title == 'Tasks'"
       variant="solid"
+      class="bg-btn_primary"
       @click="modalRef.showTask()"
     >
       <template #prefix>
@@ -60,7 +65,7 @@
         :label="__('Send Template')"
         @click="showWhatsappTemplates = true"
       />
-      <Button variant="solid" @click="whatsappBox.show()">
+      <Button variant="solid" @click="whatsappBox.show()" class="bg-btn_primary" >
         <template #prefix>
           <FeatherIcon name="plus" class="h-4 w-4" />
         </template>
@@ -69,7 +74,7 @@
     </div>
     <Dropdown v-else :options="defaultActions" @click.stop>
       <template v-slot="{ open }">
-        <Button variant="solid" class="flex items-center gap-1">
+        <Button variant="solid" class="flex items-center gap-1 bg-btn_primary">
           <template #prefix>
             <FeatherIcon name="plus" class="h-4 w-4" />
           </template>

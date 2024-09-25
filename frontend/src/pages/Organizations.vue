@@ -12,6 +12,7 @@
         variant="solid"
         :label="__('Create')"
         @click="showOrganizationModal = true"
+        class="bg-btn_primary"
       >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>

@@ -45,6 +45,7 @@
       <Button
         :label="__('Convert')"
         variant="solid"
+        class="bg-btn_primary"
         @click="showConvertToDealModal = true"
       />
     </div>

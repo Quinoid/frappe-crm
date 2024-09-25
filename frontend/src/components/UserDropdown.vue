@@ -11,7 +11,7 @@
               : 'w-52 px-2 hover:bg-gray-200'
         "
       >
-        <CRMLogo class="size-8 flex-shrink-0 rounded" />
+        <BizpoleLogo class="size-8 flex-shrink-0 rounded" />
         <div
           class="flex flex-1 flex-col text-left duration-300 ease-in-out"
           :class="
@@ -49,12 +49,12 @@
 
 <script setup>
 import SettingsModal from '@/components/Settings/SettingsModal.vue'
-import CRMLogo from '@/components/Icons/CRMLogo.vue'
+import BizpoleLogo from '@/components/Icons/BizpoleLogo.vue'
 import Apps from '@/components/Apps.vue'
 import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'
 import { Dropdown } from 'frappe-ui'
-import { computed, ref, markRaw} from 'vue'
+import { computed, ref, markRaw } from 'vue'
 
 const props = defineProps({
   isCollapsed: {

@@ -8,6 +8,7 @@
           label: editMode ? __('Update') : __('Create'),
           variant: 'solid',
           onClick: () => updateTask(),
+          class: 'btn-primary',
         },
       ],
     }"

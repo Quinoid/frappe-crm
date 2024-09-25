@@ -64,6 +64,7 @@
                   theme="gray"
                   variant="ghost"
                   @click="openFileSelector()"
+                  
                 >
                   <template #icon>
                     <AttachmentIcon class="h-4" />
@@ -78,6 +79,7 @@
               variant="solid"
               v-bind="submitButtonProps || {}"
               :label="__('Comment')"
+              class=" bg-btn_primary"
             />
           </div>
         </div>
