@@ -3,14 +3,14 @@
     v-model="show"
     :options="{
       size: 'xl',
-      actions: [
-        {
-          label: editMode ? __('Update') : __('Create'),
-          variant: 'solid',
-          onClick: () => updateTask(),
-          class: 'btn-primary',
-        },
-      ],
+      // actions: [
+      //   {
+      //     label: editMode ? __('Update') : __('Create'),
+      //     variant: 'solid',
+      //     onClick: () => updateTask(),
+      //     class: 'btn-primary',
+      //   },
+      // ],
     }"
   >
     <template #body-title>
