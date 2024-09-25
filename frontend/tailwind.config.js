@@ -24,6 +24,7 @@ module.exports = {
         sidebar: '#F3F6F9 !important',
         table_header: '#FFF !important',
         btn_primary: '#007bff !important',
+        bg_white: '#FFF !important',
       },
     },
   },
