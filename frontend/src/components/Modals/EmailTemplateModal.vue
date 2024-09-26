@@ -110,7 +110,7 @@
 
 <script setup>
 import { capture } from '@/telemetry'
-import { Checkbox, Select, TextEditor, call } from 'frappe-ui'
+import { Checkbox, Select, TextEditor, call } from 'qbs-vue-ui'
 import { ref, nextTick, watch } from 'vue'
 
 const props = defineProps({

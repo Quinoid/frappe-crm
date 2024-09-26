@@ -22,7 +22,7 @@ import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
 import { setupListCustomizations, createToast } from '@/utils'
 import { globalStore } from '@/stores/global'
 import { capture } from '@/telemetry'
-import { call } from 'frappe-ui'
+import { call } from 'qbs-vue-ui'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 

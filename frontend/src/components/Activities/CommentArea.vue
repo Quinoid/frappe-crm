@@ -37,7 +37,7 @@
 <script setup>
 import UserAvatar from '@/components/UserAvatar.vue'
 import AttachmentItem from '@/components/AttachmentItem.vue'
-import { Tooltip } from 'frappe-ui'
+import { Tooltip } from 'qbs-vue-ui'
 import { timeAgo, dateFormat, dateTooltipFormat } from '@/utils'
 const props = defineProps({
   activity: Object,

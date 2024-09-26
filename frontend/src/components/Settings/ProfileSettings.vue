@@ -58,7 +58,7 @@
 <script setup>
 import ProfileImageEditor from '@/components/Settings/ProfileImageEditor.vue'
 import { usersStore } from '@/stores/users'
-import { Dialog, Avatar, createResource } from 'frappe-ui'
+import { Dialog, Avatar, createResource } from 'qbs-vue-ui'
 import { ref, computed, onMounted } from 'vue'
 
 const { getUser, users } = usersStore()

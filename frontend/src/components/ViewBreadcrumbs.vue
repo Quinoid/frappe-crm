@@ -80,7 +80,7 @@
 </template>
 <script setup>
 import Icon from '@/components/Icon.vue'
-import Dropdown from '@/components/frappe-ui/Dropdown.vue'
+import Dropdown from '@/components/qbs-vue-ui/Dropdown.vue'
 
 const props = defineProps({
   routeName: {

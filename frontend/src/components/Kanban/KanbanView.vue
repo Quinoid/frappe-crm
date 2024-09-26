@@ -166,12 +166,12 @@
   </div>
 </template>
 <script setup>
-import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
+import Autocomplete from '@/components/qbs-vue-ui/Autocomplete.vue'
 import NestedPopover from '@/components/NestedPopover.vue'
 import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
 import { isTouchScreenDevice } from '@/utils'
 import Draggable from 'vuedraggable'
-import { Dropdown } from 'frappe-ui'
+import { Dropdown } from 'qbs-vue-ui'
 import { computed } from 'vue'
 
 const props = defineProps({

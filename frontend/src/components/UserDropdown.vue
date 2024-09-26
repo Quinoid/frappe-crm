@@ -53,7 +53,7 @@ import BizpoleLogo from '@/components/Icons/BizpoleLogo.vue'
 import Apps from '@/components/Apps.vue'
 import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'
-import { Dropdown } from 'frappe-ui'
+import { Dropdown } from 'qbs-vue-ui'
 import { computed, ref, markRaw } from 'vue'
 
 const props = defineProps({

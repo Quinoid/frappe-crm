@@ -85,7 +85,7 @@ import ReplyIcon from '@/components/Icons/ReplyIcon.vue'
 import ReplyAllIcon from '@/components/Icons/ReplyAllIcon.vue'
 import AttachmentItem from '@/components/AttachmentItem.vue'
 import EmailContent from '@/components/Activities/EmailContent.vue'
-import { Badge, Tooltip } from 'frappe-ui'
+import { Badge, Tooltip } from 'qbs-vue-ui'
 import { timeAgo, dateFormat, dateTooltipFormat } from '@/utils'
 
 const props = defineProps({

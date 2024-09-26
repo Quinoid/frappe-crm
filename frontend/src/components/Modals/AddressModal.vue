@@ -54,7 +54,7 @@ import Fields from '@/components/Fields.vue'
 import EditIcon from '@/components/Icons/EditIcon.vue'
 import { usersStore } from '@/stores/users'
 import { capture } from '@/telemetry'
-import { call, FeatherIcon, createResource, ErrorMessage } from 'frappe-ui'
+import { call, FeatherIcon, createResource, ErrorMessage } from 'qbs-vue-ui'
 import { ref, nextTick, watch, computed } from 'vue'
 
 const props = defineProps({

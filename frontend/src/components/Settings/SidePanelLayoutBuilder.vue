@@ -136,10 +136,10 @@
 </template>
 <script setup>
 import EditIcon from '@/components/Icons/EditIcon.vue'
-import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
+import Autocomplete from '@/components/qbs-vue-ui/Autocomplete.vue'
 import DragVerticalIcon from '@/components/Icons/DragVerticalIcon.vue'
 import Draggable from 'vuedraggable'
-import { Input, createResource } from 'frappe-ui'
+import { Input, createResource } from 'qbs-vue-ui'
 import { computed, watch } from 'vue'
 
 const props = defineProps({

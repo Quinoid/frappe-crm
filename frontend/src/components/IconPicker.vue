@@ -64,7 +64,7 @@
   </Popover>
 </template>
 <script setup>
-import Popover from '@/components/frappe-ui/Popover.vue'
+import Popover from '@/components/qbs-vue-ui/Popover.vue'
 import { gemoji } from 'gemoji'
 import { ref, computed } from 'vue'
 

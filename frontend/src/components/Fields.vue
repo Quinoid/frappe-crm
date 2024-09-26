@@ -228,7 +228,7 @@ import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import Link from '@/components/Controls/Link.vue'
 import { usersStore } from '@/stores/users'
-import { Tooltip, DatePicker, DateTimePicker } from 'frappe-ui'
+import { Tooltip, DatePicker, DateTimePicker } from 'qbs-vue-ui'
 
 const { getUser } = usersStore()
 

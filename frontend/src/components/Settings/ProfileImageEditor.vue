@@ -47,7 +47,7 @@
   </FileUploader>
 </template>
 <script setup>
-import { FileUploader } from 'frappe-ui'
+import { FileUploader } from 'qbs-vue-ui'
 
 const profile = defineModel()
 

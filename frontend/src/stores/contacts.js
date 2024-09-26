@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { createResource } from 'frappe-ui'
+import { createResource } from 'qbs-vue-ui'
 import { reactive } from 'vue'
 
 export const contactsStore = defineStore('crm-contacts', () => {

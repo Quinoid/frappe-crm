@@ -221,7 +221,7 @@
 
 <script setup>
 import Icon from '@/components/Icon.vue'
-import Dropdown from '@/components/frappe-ui/Dropdown.vue'
+import Dropdown from '@/components/qbs-vue-ui/Dropdown.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import Email2Icon from '@/components/Icons/Email2Icon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
@@ -252,7 +252,7 @@ import {
   call,
   createResource,
   usePageMeta,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { ref, computed, h } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 

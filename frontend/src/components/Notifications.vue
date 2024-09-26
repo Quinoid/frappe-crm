@@ -96,7 +96,7 @@ import { globalStore } from '@/stores/global'
 import { timeAgo } from '@/utils'
 import { onClickOutside } from '@vueuse/core'
 import { capture } from '@/telemetry'
-import { Tooltip } from 'frappe-ui'
+import { Tooltip } from 'qbs-vue-ui'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const { $socket } = globalStore()

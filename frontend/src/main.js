@@ -22,7 +22,7 @@ import {
   setConfig,
   frappeRequest,
   FeatherIcon,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 
 let globalComponents = {
   Button,

@@ -31,7 +31,7 @@
     </div>
   </div>
   <CustomListRows
-    class="mx-3 sm:mx-5 border border-table_border"
+    class="mx-3 sm:mx-5 border"
     v-else
     id="list-rows"
   >
@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ListGroupHeader, ListGroupRows } from 'frappe-ui'
+import { ListGroupHeader, ListGroupRows } from 'qbs-vue-ui'
 import { ref, computed, watch } from 'vue'
 import ListRow from './ListRow.vue'
 import CustomListRows from './CustomListRows.vue'

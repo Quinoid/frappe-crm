@@ -50,7 +50,7 @@
 
 <script setup>
 import IconPicker from '@/components/IconPicker.vue'
-import { call, TextInput } from 'frappe-ui'
+import { call, TextInput } from 'qbs-vue-ui'
 import { ref, watch, nextTick } from 'vue'
 
 const props = defineProps({

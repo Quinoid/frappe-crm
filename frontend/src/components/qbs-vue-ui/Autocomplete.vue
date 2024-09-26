@@ -14,7 +14,7 @@
         >
           <div class="w-full">
             <button
-              class="flex w-full items-center justify-between focus:outline-none"
+              class="flex w-full items-center bg-bg_white justify-between focus:outline-none"
               :class="inputClasses"
               @click="() => togglePopover()"
             >
@@ -132,7 +132,7 @@ import {
   ComboboxOptions,
   ComboboxOption,
 } from '@headlessui/vue'
-import { Popover, Button, FeatherIcon } from 'frappe-ui'
+import { Popover, Button, FeatherIcon } from 'qbs-vue-ui'
 import { ref, computed, useAttrs, useSlots, watch, nextTick } from 'vue'
 
 const props = defineProps({

@@ -158,7 +158,7 @@
 import NestedPopover from '@/components/NestedPopover.vue'
 import FilterIcon from '@/components/Icons/FilterIcon.vue'
 import Link from '@/components/Controls/Link.vue'
-import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
+import Autocomplete from '@/components/qbs-vue-ui/Autocomplete.vue'
 import {
   FormControl,
   createResource,
@@ -166,7 +166,7 @@ import {
   DatePicker,
   DateTimePicker,
   DateRangePicker,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { h, computed, onMounted } from 'vue'
 import { isMobileView } from '@/composables/settings'
 

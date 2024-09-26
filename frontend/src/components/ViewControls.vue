@@ -235,7 +235,7 @@ import {
   call,
   FeatherIcon,
   usePageMeta,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { computed, ref, onMounted, watch, h, markRaw } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useDebounceFn } from '@vueuse/core'

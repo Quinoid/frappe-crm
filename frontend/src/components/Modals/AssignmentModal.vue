@@ -81,7 +81,7 @@ import UserAvatar from '@/components/UserAvatar.vue'
 import Link from '@/components/Controls/Link.vue'
 import { usersStore } from '@/stores/users'
 import { capture } from '@/telemetry'
-import { Tooltip, call } from 'frappe-ui'
+import { Tooltip, call } from 'qbs-vue-ui'
 import { ref, computed, onMounted } from 'vue'
 
 const props = defineProps({

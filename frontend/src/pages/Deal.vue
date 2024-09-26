@@ -351,7 +351,7 @@ import {
   Breadcrumbs,
   call,
   usePageMeta,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { ref, computed, h, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 

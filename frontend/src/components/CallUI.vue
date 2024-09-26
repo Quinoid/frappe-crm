@@ -198,7 +198,7 @@ import { useDraggable, useWindowSize } from '@vueuse/core'
 import { globalStore } from '@/stores/global'
 import { contactsStore } from '@/stores/contacts'
 import { capture } from '@/telemetry'
-import { Avatar, call } from 'frappe-ui'
+import { Avatar, call } from 'qbs-vue-ui'
 import { onMounted, ref, watch } from 'vue'
 
 const { getContact, getLeadContact } = contactsStore()

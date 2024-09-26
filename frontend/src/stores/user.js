@@ -1,5 +1,5 @@
 import router from '@/router'
-import { createResource } from 'frappe-ui'
+import { createResource } from 'qbs-vue-ui'
 
 export const userResource = createResource({
   url: 'frappe.auth.get_logged_user',

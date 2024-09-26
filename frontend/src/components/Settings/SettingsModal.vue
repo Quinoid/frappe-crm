@@ -48,7 +48,7 @@ import ERPNextSettings from '@/components/Settings/ERPNextSettings.vue'
 import TwilioSettings from '@/components/Settings/TwilioSettings.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import { isWhatsappInstalled } from '@/composables/settings'
-import { Dialog } from 'frappe-ui'
+import { Dialog } from 'qbs-vue-ui'
 import { ref, markRaw, computed, h } from 'vue'
 
 const show = defineModel()

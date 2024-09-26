@@ -263,7 +263,7 @@ import {
   createListResource,
   createDocumentResource,
   usePageMeta,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { h, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 

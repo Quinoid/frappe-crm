@@ -117,7 +117,7 @@ import {
   Tooltip,
   createDocumentResource,
   call,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { getCallLogDetail } from '@/utils/callLog'
 import { ref, computed, h, watch } from 'vue'
 import { useRouter } from 'vue-router'

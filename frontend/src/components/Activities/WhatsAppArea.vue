@@ -171,7 +171,7 @@ import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
 import ReactIcon from '@/components/Icons/ReactIcon.vue'
 import { dateFormat } from '@/utils'
 import { capture } from '@/telemetry'
-import { Tooltip, Dropdown, createResource } from 'frappe-ui'
+import { Tooltip, Dropdown, createResource } from 'qbs-vue-ui'
 import { ref } from 'vue'
 
 const props = defineProps({

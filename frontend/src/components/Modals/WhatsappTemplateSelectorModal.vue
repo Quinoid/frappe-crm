@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { TextEditor, createListResource } from 'frappe-ui'
+import { TextEditor, createListResource } from 'qbs-vue-ui'
 import { ref, computed, nextTick, watch, onMounted } from 'vue'
 
 const props = defineProps({

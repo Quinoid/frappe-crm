@@ -1,7 +1,7 @@
 import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
 import { capture } from '@/telemetry'
 import { defineStore } from 'pinia'
-import { createListResource } from 'frappe-ui'
+import { createListResource } from 'qbs-vue-ui'
 import { reactive, h } from 'vue'
 
 export const statusesStore = defineStore('crm-statuses', () => {

@@ -1,10 +1,10 @@
 module.exports = {
-  presets: [require('frappe-ui/src/utils/tailwind.config')],
+  presets: [require('qbs-vue-ui/src/utils/tailwind.config')],
   content: [
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
-    './node_modules/frappe-ui/src/components/**/*.{vue,js,ts,jsx,tsx}',
-    '../node_modules/frappe-ui/src/components/**/*.{vue,js,ts,jsx,tsx}',
+    './node_modules/qbs-vue-ui/src/components/**/*.{vue,js,ts,jsx,tsx}',
+    '../node_modules/qbs-vue-ui/src/components/**/*.{vue,js,ts,jsx,tsx}',
   ],
   safelist: [
     { pattern: /!(text|bg)-/, variants: ['hover', 'active'] },
@@ -25,7 +25,7 @@ module.exports = {
         table_header: '#EDEEF1 !important',
         btn_primary: '#317CF7  !important',
         bg_white: '#FFF !important',
-        table_border:'#CACEDA !important',
+        table_border: '#CACEDA !important',
       },
     },
   },

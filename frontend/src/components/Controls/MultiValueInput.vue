@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { TextInput } from 'frappe-ui'
+import { TextInput } from 'qbs-vue-ui'
 import { ref, nextTick } from 'vue'
 
 const props = defineProps({

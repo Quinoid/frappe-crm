@@ -1,4 +1,4 @@
-import { createResource } from 'frappe-ui'
+import { createResource } from 'qbs-vue-ui'
 import { computed, ref } from 'vue'
 
 export const whatsappEnabled = ref(false)

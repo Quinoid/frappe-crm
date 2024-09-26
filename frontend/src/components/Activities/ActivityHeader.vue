@@ -99,7 +99,7 @@ import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
 import { globalStore } from '@/stores/global'
 import { whatsappEnabled, callEnabled } from '@/composables/settings'
-import { Dropdown } from 'frappe-ui'
+import { Dropdown } from 'qbs-vue-ui'
 import { computed, h } from 'vue'
 
 const props = defineProps({

@@ -42,7 +42,7 @@
   </div>
 </template>
 <script setup>
-import { Dropdown, Tooltip } from 'frappe-ui'
+import { Dropdown, Tooltip } from 'qbs-vue-ui'
 import { timeAgo, dateFormat, formatTime, dateTooltipFormat } from '@/utils'
 import { statusesStore } from '@/stores/statuses'
 import { capture } from '@/telemetry'

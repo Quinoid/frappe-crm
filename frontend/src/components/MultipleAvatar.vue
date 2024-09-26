@@ -35,7 +35,7 @@
   </div>
 </template>
 <script setup>
-import { Avatar, Tooltip } from 'frappe-ui'
+import { Avatar, Tooltip } from 'qbs-vue-ui'
 import { computed } from 'vue'
 
 const props = defineProps({

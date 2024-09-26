@@ -9,7 +9,7 @@
 <script setup>
 import { Dialogs } from '@/utils/dialogs'
 import { sessionStore as session } from '@/stores/session'
-import { Toasts } from 'frappe-ui'
+import { Toasts } from 'qbs-vue-ui'
 import { computed, defineAsyncComponent } from 'vue'
 
 const MobileLayout = defineAsyncComponent(() =>

@@ -206,7 +206,7 @@ import KanbanView from '@/components/Kanban/KanbanView.vue'
 import TaskModal from '@/components/Modals/TaskModal.vue'
 import { usersStore } from '@/stores/users'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
-import { Tooltip, Avatar, TextEditor, Dropdown, call } from 'frappe-ui'
+import { Tooltip, Avatar, TextEditor, Dropdown, call } from 'qbs-vue-ui'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 

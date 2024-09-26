@@ -207,7 +207,7 @@ import {
   ListFooter,
   Dropdown,
   Tooltip,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { sessionStore } from '@/stores/session'
 import ListHeader from './ListHeader.vue'
 

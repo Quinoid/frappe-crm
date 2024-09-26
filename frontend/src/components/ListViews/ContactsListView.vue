@@ -36,7 +36,7 @@
         </Button>
       </ListHeaderItem>
     </ListHeader>
-    <ListRows class="mx-3 sm:mx-5" id="list-rows">
+    <CustomListRows class="mx-3 sm:mx-5" id="list-rows">
       <ListRow
         v-for="row in rows"
         :key="row.name"
@@ -126,7 +126,7 @@
           </template>
         </ListRowItem>
       </ListRow>
-    </ListRows>
+    </CustomListRows>
     <ListSelectBanner>
       <template #actions="{ selections, unselectAll }">
         <Dropdown
@@ -164,17 +164,16 @@ import {
   Avatar,
   ListView,
   ListHeaderItem,
-  ListRows,
-  ListRow,
   ListSelectBanner,
   ListRowItem,
   ListFooter,
   Tooltip,
   Dropdown,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { sessionStore } from '@/stores/session'
 import ListHeader from './ListHeader.vue'
-
+import CustomListRows from './CustomListRows.vue'
+import ListRow from './ListRow.vue'
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 

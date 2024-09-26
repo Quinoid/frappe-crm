@@ -79,7 +79,7 @@
 <script setup>
 import ArrowUpRightIcon from '@/components/Icons/ArrowUpRightIcon.vue'
 import { capture } from '@/telemetry'
-import { TextEditor, call } from 'frappe-ui'
+import { TextEditor, call } from 'qbs-vue-ui'
 import { ref, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 

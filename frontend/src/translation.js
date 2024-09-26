@@ -1,4 +1,4 @@
-import { createResource } from 'frappe-ui'
+import { createResource } from 'qbs-vue-ui'
 
 export default function translationPlugin(app) {
   app.config.globalProperties.__ = translate

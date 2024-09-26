@@ -67,7 +67,7 @@
 import IconPicker from '@/components/IconPicker.vue'
 import SmileIcon from '@/components/Icons/SmileIcon.vue'
 import { capture } from '@/telemetry'
-import { createResource, Textarea, FileUploader, Dropdown } from 'frappe-ui'
+import { createResource, Textarea, FileUploader, Dropdown } from 'qbs-vue-ui'
 import { ref, nextTick, watch } from 'vue'
 
 const props = defineProps({

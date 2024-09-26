@@ -23,9 +23,9 @@
   </Autocomplete>
 </template>
 <script setup>
-import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
+import Autocomplete from '@/components/qbs-vue-ui/Autocomplete.vue'
 import DetailsIcon from '@/components/Icons/DetailsIcon.vue'
-import { createResource } from 'frappe-ui'
+import { createResource } from 'qbs-vue-ui'
 import { ref, computed, onMounted, nextTick } from 'vue'
 
 const props = defineProps({

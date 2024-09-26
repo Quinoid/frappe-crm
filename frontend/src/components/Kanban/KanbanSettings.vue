@@ -111,8 +111,8 @@
 <script setup>
 import DragVerticalIcon from '@/components/Icons/DragVerticalIcon.vue'
 import KanbanIcon from '@/components/Icons/KanbanIcon.vue'
-import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
-import { Dialog, createResource } from 'frappe-ui'
+import Autocomplete from '@/components/qbs-vue-ui/Autocomplete.vue'
+import { Dialog, createResource } from 'qbs-vue-ui'
 import Draggable from 'vuedraggable'
 import { ref, computed, nextTick } from 'vue'
 

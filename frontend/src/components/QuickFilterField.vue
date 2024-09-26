@@ -42,7 +42,7 @@
 </template>
 <script setup>
 import Link from '@/components/Controls/Link.vue'
-import { TextInput, FormControl, DatePicker, DateTimePicker } from 'frappe-ui'
+import { TextInput, FormControl, DatePicker, DateTimePicker } from 'qbs-vue-ui'
 import { useDebounceFn } from '@vueuse/core'
 
 const props = defineProps({

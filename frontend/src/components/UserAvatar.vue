@@ -7,7 +7,7 @@
 </template>
 <script setup>
 import { usersStore } from '@/stores/users'
-import { Avatar } from 'frappe-ui'
+import { Avatar } from 'qbs-vue-ui'
 
 const props = defineProps({
   user: {

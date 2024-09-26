@@ -98,7 +98,7 @@ import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import AudioPlayer from '@/components/Activities/AudioPlayer.vue'
 import { statusLabelMap, statusColorMap } from '@/utils/callLog.js'
 import { dateFormat, timeAgo, dateTooltipFormat } from '@/utils'
-import { Avatar, Badge, Tooltip } from 'frappe-ui'
+import { Avatar, Badge, Tooltip } from 'qbs-vue-ui'
 
 const props = defineProps({
   activity: Object,

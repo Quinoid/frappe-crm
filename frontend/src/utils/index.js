@@ -3,7 +3,7 @@ import TaskPriorityIcon from '@/components/Icons/TaskPriorityIcon.vue'
 import { useDateFormat, useTimeAgo } from '@vueuse/core'
 import { usersStore } from '@/stores/users'
 import { gemoji } from 'gemoji'
-import { toast } from 'frappe-ui'
+import { toast } from 'qbs-vue-ui'
 import { h } from 'vue'
 
 export function createToast(options) {

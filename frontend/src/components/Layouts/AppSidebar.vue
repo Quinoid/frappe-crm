@@ -113,7 +113,7 @@ import SidebarLink from '@/components/SidebarLink.vue'
 import Notifications from '@/components/Notifications.vue'
 import { viewsStore } from '@/stores/views'
 import { notificationsStore } from '@/stores/notifications'
-import { FeatherIcon } from 'frappe-ui'
+import { FeatherIcon } from 'qbs-vue-ui'
 import { useStorage } from '@vueuse/core'
 import { computed, h } from 'vue'
 

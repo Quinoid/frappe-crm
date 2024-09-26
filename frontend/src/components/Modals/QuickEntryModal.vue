@@ -64,7 +64,7 @@ import Fields from '@/components/Fields.vue'
 import QuickEntryLayoutBuilder from '@/components/QuickEntryLayoutBuilder.vue'
 import { useDebounceFn } from '@vueuse/core'
 import { capture } from '@/telemetry'
-import { Dialog, Badge, Switch, call, createResource } from 'frappe-ui'
+import { Dialog, Badge, Switch, call, createResource } from 'qbs-vue-ui'
 import { ref, watch, onMounted, nextTick } from 'vue'
 
 const props = defineProps({

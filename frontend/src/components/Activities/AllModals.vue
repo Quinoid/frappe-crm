@@ -17,7 +17,7 @@
 <script setup>
 import TaskModal from '@/components/Modals/TaskModal.vue'
 import NoteModal from '@/components/Modals/NoteModal.vue'
-import { call } from 'frappe-ui'
+import { call } from 'qbs-vue-ui'
 import { ref } from 'vue'
 
 const props = defineProps({

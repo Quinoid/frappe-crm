@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { Tooltip } from 'frappe-ui'
+import { Tooltip } from 'qbs-vue-ui'
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { isMobileView, mobileSidebarOpened } from '@/composables/settings'

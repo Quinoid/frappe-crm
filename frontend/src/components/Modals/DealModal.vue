@@ -63,7 +63,7 @@ import Fields from '@/components/Fields.vue'
 import { usersStore } from '@/stores/users'
 import { statusesStore } from '@/stores/statuses'
 import { capture } from '@/telemetry'
-import { Switch, createResource } from 'frappe-ui'
+import { Switch, createResource } from 'qbs-vue-ui'
 import { computed, ref, reactive, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 

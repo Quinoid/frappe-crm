@@ -97,7 +97,7 @@ import UserAvatar from '@/components/UserAvatar.vue'
 import { dateFormat, taskStatusOptions } from '@/utils'
 import { usersStore } from '@/stores/users'
 import { globalStore } from '@/stores/global'
-import { Tooltip, Dropdown } from 'frappe-ui'
+import { Tooltip, Dropdown } from 'qbs-vue-ui'
 
 const props = defineProps({
   tasks: Array,

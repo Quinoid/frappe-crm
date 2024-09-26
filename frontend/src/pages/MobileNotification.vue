@@ -78,7 +78,7 @@ import UserAvatar from '@/components/UserAvatar.vue'
 import { notificationsStore } from '@/stores/notifications'
 import { globalStore } from '@/stores/global'
 import { timeAgo } from '@/utils'
-import { Breadcrumbs, Tooltip } from 'frappe-ui'
+import { Breadcrumbs, Tooltip } from 'qbs-vue-ui'
 import { onMounted, onBeforeUnmount } from 'vue'
 
 const { $socket } = globalStore()

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid items-center space-x-4 bg-table_header px-2 border-b-0 border border-table_border"
+    class="grid items-center space-x-4 bg-table_header separator-grid px-2 border-b-0 border border-table_border"
     :style="{
       gridTemplateColumns: getGridTemplateColumns(
         list.columns,
@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { Checkbox, ListHeaderItem } from 'frappe-ui'
+import { Checkbox, ListHeaderItem } from 'qbs-vue-ui'
 
 import { getGridTemplateColumns } from './utils'
 import { inject } from 'vue'

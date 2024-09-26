@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { createResource } from 'frappe-ui'
+import { createResource } from 'qbs-vue-ui'
 import { sessionStore } from './session'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'

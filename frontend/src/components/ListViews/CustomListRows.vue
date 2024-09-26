@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-y-auto">
+  <div class="overflow-y-auto border border-table_border">
     <slot>
       <ListRow v-for="row in list.rows" :key="row[list.rowKey]" :row="row" />
     </slot>

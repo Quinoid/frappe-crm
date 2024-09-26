@@ -295,7 +295,7 @@ import {
   formatNumberIntoCurrency,
   formatTime,
 } from '@/utils'
-import { Tooltip, Avatar, Dropdown } from 'frappe-ui'
+import { Tooltip, Avatar, Dropdown } from 'qbs-vue-ui'
 import { useRoute } from 'vue-router'
 import { ref, reactive, computed, h } from 'vue'
 

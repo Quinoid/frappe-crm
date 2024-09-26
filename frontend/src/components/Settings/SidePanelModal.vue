@@ -80,7 +80,7 @@ import SectionFields from '@/components/SectionFields.vue'
 import SidePanelLayoutBuilder from '@/components/Settings/SidePanelLayoutBuilder.vue'
 import { useDebounceFn } from '@vueuse/core'
 import { capture } from '@/telemetry'
-import { Dialog, Badge, Switch, call, createResource } from 'frappe-ui'
+import { Dialog, Badge, Switch, call, createResource } from 'qbs-vue-ui'
 import { ref, watch, onMounted, nextTick } from 'vue'
 
 const props = defineProps({

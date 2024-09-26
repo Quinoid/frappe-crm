@@ -32,7 +32,7 @@
 
 <script setup>
 import { computed, h } from 'vue'
-import { Dropdown } from 'frappe-ui'
+import { Dropdown } from 'qbs-vue-ui'
 import { isMobileView } from '@/composables/settings'
 
 const props = defineProps({

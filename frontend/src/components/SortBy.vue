@@ -171,9 +171,9 @@ import DesendingIcon from '@/components/Icons/DesendingIcon.vue'
 import NestedPopover from '@/components/NestedPopover.vue'
 import SortIcon from '@/components/Icons/SortIcon.vue'
 import DragIcon from '@/components/Icons/DragIcon.vue'
-import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
+import Autocomplete from '@/components/qbs-vue-ui/Autocomplete.vue'
 import { useSortable } from '@vueuse/integrations/useSortable'
-import { createResource } from 'frappe-ui'
+import { createResource } from 'qbs-vue-ui'
 import { computed, nextTick, onMounted } from 'vue'
 
 const props = defineProps({

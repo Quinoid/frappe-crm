@@ -438,7 +438,7 @@ import { usersStore } from '@/stores/users'
 import { contactsStore } from '@/stores/contacts'
 import { whatsappEnabled } from '@/composables/settings'
 import { capture } from '@/telemetry'
-import { Button, Tooltip, createResource } from 'frappe-ui'
+import { Button, Tooltip, createResource } from 'qbs-vue-ui'
 import { useElementVisibility } from '@vueuse/core'
 import {
   ref,

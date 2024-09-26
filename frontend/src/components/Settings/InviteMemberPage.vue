@@ -81,7 +81,7 @@ import {
   createResource,
   FormControl,
   Tooltip,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { ref, computed } from 'vue'
 
 const invitees = ref([])

@@ -38,7 +38,7 @@
 </template>
 <script setup>
 import AppsIcon from '@/components/Icons/AppsIcon.vue'
-import { Popover, createResource } from 'frappe-ui'
+import { Popover, createResource } from 'qbs-vue-ui'
 import { onUnmounted } from 'vue';
 import { stopRecording } from '@/telemetry';
 

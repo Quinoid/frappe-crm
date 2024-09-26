@@ -93,8 +93,8 @@ import {
   ComboboxOption,
 } from '@headlessui/vue'
 import UserAvatar from '@/components/UserAvatar.vue'
-import Popover from '@/components/frappe-ui/Popover.vue'
-import { createResource } from 'frappe-ui'
+import Popover from '@/components/qbs-vue-ui/Popover.vue'
+import { createResource } from 'qbs-vue-ui'
 import { ref, computed, nextTick } from 'vue'
 import { watchDebounced } from '@vueuse/core'
 

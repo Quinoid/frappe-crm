@@ -35,9 +35,9 @@
 
 <script setup>
 import Link from '@/components/Controls/Link.vue'
-import Autocomplete from '@/components/frappe-ui/Autocomplete.vue'
+import Autocomplete from '@/components/qbs-vue-ui/Autocomplete.vue'
 import { capture } from '@/telemetry'
-import { FormControl, call, createResource, TextEditor, DatePicker } from 'frappe-ui'
+import { FormControl, call, createResource, TextEditor, DatePicker } from 'qbs-vue-ui'
 import { ref, computed, onMounted, h } from 'vue'
 
 const typeCheck = ['Check']

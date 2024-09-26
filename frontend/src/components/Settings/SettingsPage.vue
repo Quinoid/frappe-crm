@@ -39,7 +39,7 @@ import {
   Spinner,
   Badge,
   ErrorMessage,
-} from 'frappe-ui'
+} from 'qbs-vue-ui'
 import { evaluate_depends_on_value, createToast } from '@/utils'
 import { ref, computed } from 'vue'
 

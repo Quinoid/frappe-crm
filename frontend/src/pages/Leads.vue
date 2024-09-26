@@ -315,7 +315,7 @@ import {
   website,
   formatTime,
 } from '@/utils'
-import { Avatar, Tooltip, Dropdown } from 'frappe-ui'
+import { Avatar, Tooltip, Dropdown } from 'qbs-vue-ui'
 import { useRoute } from 'vue-router'
 import { ref, computed, reactive, h } from 'vue'
 
