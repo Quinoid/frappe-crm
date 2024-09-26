@@ -55,7 +55,7 @@
             <FormControl
               v-else-if="field.type === 'Select'"
               type="select"
-              class="form-control"
+              class="form-control bg-white"
               :class="field.prefix ? 'prefix' : ''"
               :options="field.options"
               v-model="data[field.name]"
@@ -70,7 +70,7 @@
               class="flex items-center gap-2"
             >
               <FormControl
-                class="form-control"
+                class="form-control bg-white"
                 type="checkbox"
                 v-model="data[field.name]"
                 @change="(e) => (data[field.name] = e.target.checked)"
@@ -133,7 +133,7 @@
                 <template #target="{ open }">
                   <Button
                     :label="data[field.name]"
-                    class="dropdown-button flex w-full items-center justify-between rounded border border-gray-100 bg-gray-100 px-2 py-1.5 text-base text-gray-800 placeholder-gray-500 transition-colors hover:border-gray-200 hover:bg-gray-200 focus:border-gray-500 focus:bg-white focus:shadow-sm focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-gray-400"
+                    class="dropdown-button flex w-full items-center justify-between rounded border border-gray-100 bg-white px-2 py-1.5 text-base text-gray-800 placeholder-gray-500 transition-colors hover:border-gray-200 hover:bg-gray-200 focus:border-gray-500 focus:bg-white focus:shadow-sm focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-gray-400"
                   >
                     <div class="truncate">{{ data[field.name] }}</div>
                     <template #suffix>
@@ -181,13 +181,13 @@
               v-else-if="field.type === 'Datetime'"
               v-model="data[field.name]"
               :placeholder="__(field.placeholder || field.label)"
-              input-class="border-none"
+              input-class="border-none bg-white"
             />
             <DatePicker
               v-else-if="field.type === 'Date'"
               v-model="data[field.name]"
               :placeholder="__(field.placeholder || field.label)"
-              input-class="border-none"
+              input-class="border-none bg-white"
             />
             <FormControl
               v-else-if="
@@ -196,12 +196,14 @@
               type="textarea"
               :placeholder="__(field.placeholder || field.label)"
               v-model="data[field.name]"
+              class="bg-white"
             />
             <FormControl
               v-else-if="['Int'].includes(field.type)"
               type="number"
               :placeholder="__(field.placeholder || field.label)"
               v-model="data[field.name]"
+              class="bg-white"
             />
             <FormControl
               v-else
@@ -209,6 +211,7 @@
               :placeholder="__(field.placeholder || field.label)"
               v-model="data[field.name]"
               :disabled="Boolean(field.read_only)"
+              class="bg-white"
             />
           </div>
         </div>

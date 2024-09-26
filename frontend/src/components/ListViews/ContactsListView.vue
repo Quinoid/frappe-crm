@@ -163,7 +163,6 @@ import ListBulkActions from '@/components/ListBulkActions.vue'
 import {
   Avatar,
   ListView,
-  ListHeader,
   ListHeaderItem,
   ListRows,
   ListRow,
@@ -174,6 +173,8 @@ import {
   Dropdown,
 } from 'frappe-ui'
 import { sessionStore } from '@/stores/session'
+import ListHeader from './ListHeader.vue'
+
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 

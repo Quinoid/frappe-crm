@@ -7,6 +7,7 @@
       <TextInput
         ref="searchInput"
         v-model="search"
+        variant="outline"
         type="text"
         :placeholder="__('Welcome Message')"
       >

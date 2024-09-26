@@ -75,7 +75,7 @@
             theme="red"
             :label="__('Cancel')"
             @click="cancelCall"
-            class="rounded-lg"
+            class="rounded-lg bg-btn_primary "
             :disabled="callStatus == 'initiating'"
           >
             <template #prefix>
@@ -89,7 +89,7 @@
             variant="solid"
             theme="green"
             :label="__('Accept')"
-            class="rounded-lg"
+            class="rounded-lg bg-btn_primary"
             @click="acceptIncomingCall"
           >
             <template #prefix>
@@ -101,7 +101,7 @@
             variant="solid"
             theme="red"
             :label="__('Reject')"
-            class="rounded-lg"
+            class="rounded-lg bg-btn_primary"
             @click="rejectIncomingCall"
           >
             <template #prefix>
@@ -148,7 +148,7 @@
       <Button
         variant="solid"
         theme="red"
-        class="!h-6 !w-6 rounded-full"
+        class="!h-6 !w-6 rounded-full bg-btn_primary"
         @click.stop="cancelCall"
       >
         <template #icon>
@@ -160,7 +160,7 @@
       <Button
         variant="solid"
         theme="green"
-        class="pulse relative !h-6 !w-6 rounded-full"
+        class="pulse relative !h-6 !w-6 rounded-full bg-btn_primary"
         @click.stop="acceptIncomingCall"
       >
         <template #icon>
@@ -170,7 +170,7 @@
       <Button
         variant="solid"
         theme="red"
-        class="!h-6 !w-6 rounded-full"
+        class="!h-6 !w-6 rounded-full bg-btn_primary"
         @click.stop="rejectIncomingCall"
       >
         <template #icon>

@@ -16,7 +16,7 @@
     row-key="name"
   >
     <ListHeader
-      class="sm:mx-5 mx-3"
+      class="sm:mx-5 mx-3 bg-table_header separator-grid"
       @columnWidthUpdated="emit('columnWidthUpdated')"
     >
       <ListHeaderItem
@@ -214,7 +214,6 @@ import ListRows from '@/components/ListViews/ListRows.vue'
 import {
   Avatar,
   ListView,
-  ListHeader,
   ListHeaderItem,
   ListSelectBanner,
   ListRowItem,
@@ -225,6 +224,7 @@ import {
 import { sessionStore } from '@/stores/session'
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import ListHeader from './ListHeader.vue'
 
 const props = defineProps({
   rows: {

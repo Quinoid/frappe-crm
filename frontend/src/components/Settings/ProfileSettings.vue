@@ -46,7 +46,7 @@
         />
         <Button
           variant="solid"
-          class="w-full"
+          class="w-full bg-btn_primary"
           :loading="loading"
           @click="updateUser"
           :label="__('Save')"

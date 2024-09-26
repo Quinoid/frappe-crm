@@ -26,6 +26,7 @@
         :label="__('Update')"
         variant="solid"
         @click="update"
+        class="bg-btn_primary"
       />
     </div>
   </div>

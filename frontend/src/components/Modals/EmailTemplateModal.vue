@@ -4,13 +4,14 @@
     :options="{
       title: editMode ? __(emailTemplate.name) : __('Create Email Template'),
       size: 'xl',
-      actions: [
-        {
-          label: editMode ? __('Update') : __('Create'),
-          variant: 'solid',
-          onClick: () => (editMode ? updateEmailTemplate() : callInsertDoc()),
-        },
-      ],
+      // actions: [
+      //   {
+      //     label: editMode ? __('Update') : __('Create'),
+      //     variant: 'solid',
+      //     onClick: () => (editMode ? updateEmailTemplate() : callInsertDoc()),
+      //     class: 'btn-primary',
+      //   },
+      // ],
     }"
   >
     <template #body-content>
@@ -64,7 +65,7 @@
             v-model="_emailTemplate.response_html"
             :placeholder="
               __(
-                '<p>Dear {{ lead_name }},</p>\n\n<p>This is a reminder for the payment of {{ grand_total }}.</p>\n\n<p>Thanks,</p>\n<p>Frappé</p>'
+                '<p>Dear {{ lead_name }},</p>\n\n<p>This is a reminder for the payment of {{ grand_total }}.</p>\n\n<p>Thanks,</p>\n<p>Frappé</p>',
               )
             "
           />
@@ -78,7 +79,7 @@
             @change="(val) => (_emailTemplate.response = val)"
             :placeholder="
               __(
-                'Dear {{ lead_name }}, \n\nThis is a reminder for the payment of {{ grand_total }}. \n\nThanks, \nFrappé'
+                'Dear {{ lead_name }}, \n\nThis is a reminder for the payment of {{ grand_total }}. \n\nThanks, \nFrappé',
               )
             "
           />
@@ -90,6 +91,18 @@
           <Checkbox v-model="_emailTemplate.use_html" :label="__('Use HTML')" />
         </div>
         <ErrorMessage :message="__(errorMessage)" />
+      </div>
+      <div class=" pt-4 ">
+        <div class="space-y-2">
+          <Button
+            class="w-full bg-btn_primary"
+            variant="solid"
+            :key="editMode ? __('Update') : __('Create')"
+            :label="editMode ? __('Update') : __('Create')"
+            :loading="loading"
+            @click="editMode ? updateEmailTemplate() : callInsertDoc()"
+          />
+        </div>
       </div>
     </template>
   </Dialog>
@@ -219,6 +232,6 @@ watch(
         editMode.value = true
       }
     })
-  }
+  },
 )
 </script>

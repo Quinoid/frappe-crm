@@ -27,6 +27,7 @@
           ref="search"
           class="w-full border-none bg-white hover:bg-white focus:border-none focus:!shadow-none focus-visible:!ring-0"
           type="text"
+          variant="outline"
           v-model="query"
           placeholder="example@email.com"
           @keydown.enter.capture.stop="addValue()"

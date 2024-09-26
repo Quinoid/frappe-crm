@@ -5,15 +5,16 @@
       title: editMode
         ? __('Edit View')
         : duplicateMode
-        ? __('Duplicate View')
-        : __('Create View'),
+          ? __('Duplicate View')
+          : __('Create View'),
       actions: [
         {
           label: editMode
             ? __('Save Changes')
             : duplicateMode
-            ? __('Duplicate')
-            : __('Create'),
+              ? __('Duplicate')
+              : __('Create'),
+          class: 'btn-primary',
           variant: 'solid',
           onClick: () => (editMode ? update() : create()),
         },
@@ -87,7 +88,7 @@ async function create() {
   view.value.doctype = props.doctype
   let v = await call(
     'crm.fcrm.doctype.crm_view_settings.crm_view_settings.create',
-    { view: view.value }
+    { view: view.value },
   )
   show.value = false
   props.options.afterCreate?.(v)

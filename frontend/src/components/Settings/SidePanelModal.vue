@@ -66,6 +66,7 @@
           :loading="loading"
           :label="__('Save')"
           variant="solid"
+          class="bg-btn_primary"
           @click="saveChanges"
         />
         <Button :label="__('Reset')" @click="reload" />

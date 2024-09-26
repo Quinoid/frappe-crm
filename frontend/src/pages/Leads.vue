@@ -11,6 +11,7 @@
       <Button
         variant="solid"
         :label="__('Create')"
+        class="bg-btn_primary"
         @click="showLeadModal = true"
       >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>

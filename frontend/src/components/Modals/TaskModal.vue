@@ -3,13 +3,14 @@
     v-model="show"
     :options="{
       size: 'xl',
-      actions: [
-        {
-          label: editMode ? __('Update') : __('Create'),
-          variant: 'solid',
-          onClick: () => updateTask(),
-        },
-      ],
+      // actions: [
+      //   {
+      //     label: editMode ? __('Update') : __('Create'),
+      //     variant: 'solid',
+      //     onClick: () => updateTask(),
+      //     class: 'btn-primary',
+      //   },
+      // ],
     }"
   >
     <template #body-title>
@@ -104,6 +105,18 @@
               </template>
             </Button>
           </Dropdown>
+        </div>
+      </div>
+      <div class="pt-4 ">
+        <div class="space-y-2">
+          <Button
+            class="w-full bg-btn_primary"
+            variant="solid"
+            :key="editMode ? __('Update') : __('Create')"
+            :label="editMode ? __('Update') : __('Create')"
+            :loading="loading"
+            @click="updateTask"
+          />
         </div>
       </div>
     </template>

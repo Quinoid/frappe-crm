@@ -8,7 +8,7 @@
         v-if="tasksListView?.customListActions"
         :actions="tasksListView.customListActions"
       />
-      <Button variant="solid" :label="__('Create')" @click="createTask">
+      <Button variant="solid" :label="__('Create')" @click="createTask" class="bg-btn_primary">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </template>

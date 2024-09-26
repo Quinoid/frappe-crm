@@ -171,7 +171,6 @@ import { dateFormat } from '@/utils'
 import {
   Avatar,
   ListView,
-  ListHeader,
   ListHeaderItem,
   ListRows,
   ListRow,
@@ -182,6 +181,8 @@ import {
   Tooltip,
 } from 'frappe-ui'
 import { sessionStore } from '@/stores/session'
+import ListHeader from './ListHeader.vue'
+
 import { ref, computed, watch } from 'vue'
 
 const props = defineProps({

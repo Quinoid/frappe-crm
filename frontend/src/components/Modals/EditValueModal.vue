@@ -23,7 +23,7 @@
     </template>
     <template #actions>
       <Button
-        class="w-full"
+        class="w-full bg-btn_primary"
         variant="solid"
         @click="updateValues"
         :loading="loading"

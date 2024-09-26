@@ -49,6 +49,7 @@
             :label="__('Create')"
             :loading="isDealCreating"
             @click="createDeal"
+            class="bg-btn_primary"
           />
         </div>
       </div>

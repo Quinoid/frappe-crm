@@ -67,7 +67,7 @@
       <div v-if="!detailMode" class="px-4 pb-7 pt-4 sm:px-6">
         <div class="space-y-2">
           <Button
-            class="w-full"
+            class="w-full bg-btn_primary"
             v-for="action in dialogOptions.actions"
             :key="action.label"
             v-bind="action"

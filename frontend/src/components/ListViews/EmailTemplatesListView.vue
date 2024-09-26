@@ -150,7 +150,6 @@ import HeartIcon from '@/components/Icons/HeartIcon.vue'
 import ListBulkActions from '@/components/ListBulkActions.vue'
 import {
   ListView,
-  ListHeader,
   ListHeaderItem,
   ListRows,
   ListRow,
@@ -161,6 +160,8 @@ import {
   Tooltip,
 } from 'frappe-ui'
 import { sessionStore } from '@/stores/session'
+import ListHeader from './ListHeader.vue'
+
 import { ref, computed, watch } from 'vue'
 
 const props = defineProps({

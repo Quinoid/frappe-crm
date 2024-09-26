@@ -68,6 +68,7 @@
         variant="solid"
         @click="inviteByEmail.submit()"
         :loading="inviteByEmail.loading"
+        class="bg-btn_primary"
       />
     </div>
   </div>

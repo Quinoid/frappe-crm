@@ -8,7 +8,7 @@
   />
   <FormControl
     v-else-if="filter.type === 'Select'"
-    class="form-control cursor-pointer [&_select]:cursor-pointer"
+    class="form-control bg-white cursor-pointer [&_select]:cursor-pointer"
     type="select"
     v-model="filter.value"
     :options="filter.options"
@@ -33,8 +33,10 @@
   <TextInput
     v-else
     v-model="filter.value"
+    variant="outline"
     type="text"
     :placeholder="filter.label"
+    class="bg-white"
     @input.stop="debouncedFn(filter, $event.target.value)"
   />
 </template>
