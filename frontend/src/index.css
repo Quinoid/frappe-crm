@@ -23,8 +23,13 @@
 		prose-th:relative;
   }
 }
+.separator-grid {
+  height: 35px;
+}
+
 .separator-grid > div {
   position: relative;
+  height: 100%;
 }
 
 .separator-grid > div:not(:last-child)::after {
@@ -34,5 +39,5 @@
   right: 0;
   height: 100%;
   width: 1px;
-  background-color: #e5e7eb; /* Light gray (tailwind gray-300) */
+  background-color: #caceda; /* Light gray (tailwind gray-300) */
 }

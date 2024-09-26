@@ -201,7 +201,6 @@ import ListRows from '@/components/ListViews/ListRows.vue'
 import {
   Avatar,
   ListView,
-  ListHeader,
   ListHeaderItem,
   ListRowItem,
   ListSelectBanner,
@@ -210,6 +209,8 @@ import {
   Tooltip,
 } from 'frappe-ui'
 import { sessionStore } from '@/stores/session'
+import ListHeader from './ListHeader.vue'
+
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 

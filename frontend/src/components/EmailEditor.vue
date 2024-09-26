@@ -74,8 +74,10 @@
         <div class="sm:mx-10 mx-4 flex items-center gap-2 pb-2.5">
           <span class="text-xs text-gray-500">{{ __('SUBJECT') }}:</span>
           <TextInput
+            variant="outline"
             class="flex-1 border-none bg-white hover:bg-white focus:border-none focus:!shadow-none focus-visible:!ring-0"
             v-model="subject"
+            type
           />
         </div>
       </div>

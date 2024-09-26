@@ -1,5 +1,8 @@
 <template>
-  <div class="mx-3 mt-2 h-full overflow-y-auto sm:mx-5" v-if="showGroupedRows">
+  <div
+    class="mx-3 mt-2 h-full overflow-y-auto sm:mx-5 separator-grid"
+    v-if="showGroupedRows"
+  >
     <div v-for="group in reactivieRows" :key="group.group">
       <ListGroupHeader :group="group">
         <div
@@ -27,24 +30,27 @@
       </ListGroupRows>
     </div>
   </div>
-  <ListRows class="mx-3 sm:mx-5" v-else id="list-rows">
+  <CustomListRows
+    class="mx-3 sm:mx-5 border border-table_border"
+    v-else
+    id="list-rows"
+  >
     <ListRow
       v-for="row in reactivieRows"
       :key="row.name"
       v-slot="{ idx, column, item }"
       :row="row"
-      class="separator-grid"
     >
       <slot v-bind="{ idx, column, item, row }" />
     </ListRow>
-  </ListRows>
+  </CustomListRows>
 </template>
 
 <script setup>
-import { ListRows, ListRow, ListGroupHeader, ListGroupRows } from 'frappe-ui'
-
+import { ListGroupHeader, ListGroupRows } from 'frappe-ui'
 import { ref, computed, watch } from 'vue'
-
+import ListRow from './ListRow.vue'
+import CustomListRows from './CustomListRows.vue'
 const props = defineProps({
   rows: {
     type: Array,
@@ -64,10 +70,4 @@ let showGroupedRows = computed(() => {
     (row) => row.group && row.rows && Array.isArray(row.rows),
   )
 })
-const targetDiv = document.querySelector('div.grid')
-
-// Add the Tailwind border-right class dynamically
-if (targetDiv) {
-  targetDiv.classList.add('separator-grid') // Adds a border-right with gray-300 color
-}
 </script>

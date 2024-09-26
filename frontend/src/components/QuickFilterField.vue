@@ -33,6 +33,7 @@
   <TextInput
     v-else
     v-model="filter.value"
+    variant="outline"
     type="text"
     :placeholder="filter.label"
     class="bg-white"

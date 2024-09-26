@@ -8,6 +8,7 @@
         ref="inputRef"
         v-show="editMode"
         v-model="option.value"
+        variant="outline"
         class="w-full"
         :placeholder="option.placeholder"
         @blur.stop="saveOption"

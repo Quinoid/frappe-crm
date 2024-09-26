@@ -214,7 +214,6 @@ import ListRows from '@/components/ListViews/ListRows.vue'
 import {
   Avatar,
   ListView,
-  ListHeader,
   ListHeaderItem,
   ListSelectBanner,
   ListRowItem,
@@ -225,6 +224,7 @@ import {
 import { sessionStore } from '@/stores/session'
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import ListHeader from './ListHeader.vue'
 
 const props = defineProps({
   rows: {
