@@ -1,12 +1,32 @@
 <template>
-  <Dialog v-model="show" :options="{ size: '5xl' }">
+  <Dialog v-model="show" :options="{ size: isMobile ? 'full' : '5xl' }">
     <template #body>
-      <div class="flex h-[calc(100vh_-_8rem)]">
-        <div class="flex w-52 shrink-0 flex-col bg-gray-50 p-2">
+      <div
+        :class="[
+          'flex',
+          isMobile ? 'flex-col' : 'flex-row',
+          'h-[calc(100vh_-_8rem)]',
+        ]"
+      >
+        <button
+          v-if="isMobile"
+          @click="showSidebar = !showSidebar"
+          class="bg-gray-100 p-2 text-center text-lg font-medium text-gray-600 w-full"
+        >
+          {{ showSidebar ? 'Hide Menu' : 'Show Menu' }}
+        </button>
+
+        <div
+          v-show="!isMobile || showSidebar"
+          :class="[
+            'shrink-0 flex flex-col bg-gray-50 p-2',
+            isMobile ? 'w-full' : 'w-52',
+          ]"
+        >
           <h1 class="mb-3 px-2 pt-2 text-lg font-semibold">
             {{ __('Settings') }}
           </h1>
-          <div v-for="tab in tabs">
+          <div v-for="(tab, index) in tabs" :key="index">
             <div
               v-if="!tab.hideLabel"
               class="mb-2 mt-3 flex cursor-pointer gap-1.5 px-1 text-base font-medium text-gray-600 transition-all duration-300 ease-in-out"
@@ -16,6 +36,7 @@
             <nav class="space-y-1">
               <SidebarLink
                 v-for="i in tab.items"
+                :key="i.label"
                 :icon="i.icon"
                 :label="__(i.label)"
                 class="w-full"
@@ -49,10 +70,10 @@ import TwilioSettings from '@/components/Settings/TwilioSettings.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import { isWhatsappInstalled } from '@/composables/settings'
 import { Dialog } from 'qbs-vue-ui'
-import { ref, markRaw, computed, h } from 'vue'
+import { ref, markRaw, computed } from 'vue'
 
 const show = defineModel()
-
+const showSidebar = ref(false)
 const tabs = computed(() => {
   let _tabs = [
     {
@@ -106,4 +127,8 @@ const tabs = computed(() => {
 })
 
 const activeTab = ref(tabs.value[0].items[0])
+const isMobile = ref(window.innerWidth < 768)
+window.addEventListener('resize', () => {
+  isMobile.value = window.innerWidth < 768
+})
 </script>
