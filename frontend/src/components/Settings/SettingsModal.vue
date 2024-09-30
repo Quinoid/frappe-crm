@@ -1,5 +1,9 @@
 <template>
-  <Dialog v-model="show" :options="{ size: isMobile ? 'full' : '5xl' }">
+  <Dialog
+    v-model="show"
+    :options="{ size: isMobile ? 'full' : '5xl' }"
+    class="z-50"
+  >
     <template #body>
       <div
         :class="[
