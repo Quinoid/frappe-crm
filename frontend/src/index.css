@@ -41,3 +41,10 @@
   width: 1px;
   background-color: #caceda; /* Light gray (tailwind gray-300) */
 }
+
+.qbs-vue-checkbox:checked {
+  @apply !text-primary;
+}
+.qbs-vue-switch:checked {
+  @apply !text-primary;
+}

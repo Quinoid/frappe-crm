@@ -14,7 +14,10 @@
     }"
     row-key="name"
   >
-    <ListHeader class="sm:mx-5 mx-3" @columnWidthUpdated="emit('columnWidthUpdated')">
+    <ListHeader
+      class="sm:mx-5 mx-3"
+      @columnWidthUpdated="emit('columnWidthUpdated')"
+    >
       <ListHeaderItem
         v-for="column in columns"
         :key="column.key"
@@ -216,7 +219,7 @@ const listBulkActionsRef = ref(null)
 
 defineExpose({
   customListActions: computed(
-    () => listBulkActionsRef.value?.customListActions
+    () => listBulkActionsRef.value?.customListActions,
   ),
 })
 </script>
