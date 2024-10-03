@@ -8,6 +8,7 @@
         {
           label: __('Cancel'),
           variant: 'subtle',
+          class: 'bg-btn_grey hover:bg-btn_grey',
           onClick: () => {
             assignees = [...oldAssignees]
             show = false
@@ -16,6 +17,7 @@
         {
           label: __('Update'),
           variant: 'solid',
+          class: 'bg-btn_primary hover:bg-btn_primary',
           onClick: () => updateAssignees(),
         },
       ],

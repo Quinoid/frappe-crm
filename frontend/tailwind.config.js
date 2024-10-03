@@ -26,6 +26,7 @@ module.exports = {
         btn_primary: '#317CF7  !important',
         bg_white: '#FFF !important',
         table_border: '#CACEDA !important',
+        btn_grey: '#ebecef !important',
       },
     },
   },

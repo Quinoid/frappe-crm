@@ -131,6 +131,7 @@
               items: [
                 {
                   label: __('Export'),
+                  class: 'bg-btn_primary hover:bg-btn_primary',
                   icon: () =>
                     h(FeatherIcon, { name: 'download', class: 'h-4 w-4' }),
                   onClick: () => (showExportDialog = true),
@@ -175,6 +176,7 @@
         {
           label: __('Download'),
           variant: 'solid',
+          class: 'bg-btn_primary hover:bg-btn_primary',
           onClick: () => exportRows(),
         },
       ],

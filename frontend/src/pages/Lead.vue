@@ -212,6 +212,7 @@
         {
           label: __('Convert'),
           variant: 'solid',
+          class: 'w-full bg-btn_primary hover:bg-btn_primary',
           onClick: convertToDeal,
         },
       ],

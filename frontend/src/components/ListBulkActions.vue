@@ -69,6 +69,7 @@ function convertToDeal(selections, unselectAll) {
       {
         label: __('Convert'),
         variant: 'solid',
+        class: 'bg-btn_primary hover:bg-btn_primary',
         onClick: (close) => {
           capture('bulk_convert_to_deal')
           Array.from(selections).forEach((name) => {
@@ -103,6 +104,7 @@ function deleteValues(selections, unselectAll) {
       {
         label: __('Delete'),
         variant: 'solid',
+        class: 'bg-btn_primary hover:bg-btn_primary',
         theme: 'red',
         onClick: (close) => {
           capture('bulk_delete')
@@ -147,6 +149,8 @@ function clearAssignemnts(selections, unselectAll) {
         label: __('Clear Assignment'),
         variant: 'solid',
         theme: 'red',
+        class: 'bg-btn_primary hover:bg-btn_primary',
+
         onClick: (close) => {
           capture('bulk_clear_assignment')
           call('frappe.desk.form.assign_to.remove_multiple', {
@@ -177,6 +181,8 @@ function bulkActions(selections, unselectAll) {
   if (!props.options.hideEdit) {
     actions.push({
       label: __('Edit'),
+      class: 'bg-btn_primary hover:bg-btn_primary',
+
       onClick: () => editValues(selections, unselectAll),
     })
   }
@@ -184,6 +190,8 @@ function bulkActions(selections, unselectAll) {
   if (!props.options.hideDelete) {
     actions.push({
       label: __('Delete'),
+      class: 'bg-btn_primary hover:bg-btn_primary',
+
       onClick: () => deleteValues(selections, unselectAll),
     })
   }
@@ -191,10 +199,13 @@ function bulkActions(selections, unselectAll) {
   if (!props.options.hideAssign) {
     actions.push({
       label: __('Assign To'),
+      class: 'bg-btn_primary hover:bg-btn_primary',
+
       onClick: () => assignValues(selections, unselectAll),
     })
     actions.push({
       label: __('Clear Assignment'),
+      class: 'bg-btn_primary hover:bg-btn_primary',
       onClick: () => clearAssignemnts(selections, unselectAll),
     })
   }
@@ -202,6 +213,7 @@ function bulkActions(selections, unselectAll) {
   if (props.doctype === 'CRM Lead') {
     actions.push({
       label: __('Convert to Deal'),
+      class: 'bg-btn_primary hover:bg-btn_primary',
       onClick: () => convertToDeal(selections, unselectAll),
     })
   }
