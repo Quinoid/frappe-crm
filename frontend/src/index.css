@@ -45,6 +45,9 @@
 .qbs-vue-checkbox:checked {
   @apply !text-primary;
 }
-.qbs-vue-switch:checked {
-  @apply !text-primary;
+.qbs-vue-switch:enabled:checked {
+  @apply !bg-primary;
+}
+.qbs-vue-switch-selected {
+  @apply !bg-primary;
 }
