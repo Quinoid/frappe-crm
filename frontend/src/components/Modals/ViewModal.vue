@@ -14,7 +14,7 @@
             : duplicateMode
               ? __('Duplicate')
               : __('Create'),
-          class: 'btn-primary',
+          class: 'bg-btn_primary hover:bg-btn_primary',
           variant: 'solid',
           onClick: () => (editMode ? update() : create()),
         },

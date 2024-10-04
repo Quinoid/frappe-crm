@@ -34,10 +34,10 @@
             callStatus == 'initiating'
               ? __('Initiating call...')
               : callStatus == 'ringing'
-              ? __('Ringing...')
-              : calling
-              ? __('Calling...')
-              : __('Incoming call...')
+                ? __('Ringing...')
+                : calling
+                  ? __('Calling...')
+                  : __('Incoming call...')
           }}
         </div>
         <div v-if="onCall" class="flex gap-2">
@@ -75,7 +75,7 @@
             theme="red"
             :label="__('Cancel')"
             @click="cancelCall"
-            class="rounded-lg bg-btn_primary "
+            class="rounded-lg bg-btn_primary"
             :disabled="callStatus == 'initiating'"
           >
             <template #prefix>
@@ -148,7 +148,7 @@
       <Button
         variant="solid"
         theme="red"
-        class="!h-6 !w-6 rounded-full bg-btn_primary"
+        class="!h-6 !w-6 rounded-full"
         @click.stop="cancelCall"
       >
         <template #icon>
@@ -160,7 +160,7 @@
       <Button
         variant="solid"
         theme="green"
-        class="pulse relative !h-6 !w-6 rounded-full bg-btn_primary"
+        class="pulse relative !h-6 !w-6 rounded-full"
         @click.stop="acceptIncomingCall"
       >
         <template #icon>
@@ -170,7 +170,7 @@
       <Button
         variant="solid"
         theme="red"
-        class="!h-6 !w-6 rounded-full bg-btn_primary"
+        class="!h-6 !w-6 rounded-full"
         @click.stop="rejectIncomingCall"
       >
         <template #icon>
@@ -504,7 +504,7 @@ watch(
   (value) => {
     console.log(value)
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 

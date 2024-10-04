@@ -580,6 +580,7 @@ const viewsDropdownOptions = computed(() => {
       {
         label: __('Create View'),
         icon: 'plus',
+        class: 'bg-btn_primary hover:bg-btn_primary',
         onClick: () => createView(),
       },
     ],

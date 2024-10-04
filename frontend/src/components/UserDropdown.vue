@@ -69,7 +69,16 @@ const { getUser } = usersStore()
 const user = computed(() => getUser() || {})
 
 const showSettingsModal = ref(false)
-
+const handleLogotut = async () => {
+  try {
+    await logout.submit()
+    window.location.href = '/'
+  } catch (e) {
+    const msg = 'An error occurred while attempting to log out!'
+    console.error(msg, e)
+    showErrorAlert(msg)
+  }
+}
 let dropdownOptions = ref([
   {
     group: 'Manage',
@@ -102,7 +111,7 @@ let dropdownOptions = ref([
       {
         icon: 'log-out',
         label: computed(() => __('Log out')),
-        onClick: () => logout.submit(),
+        onClick: () => handleLogotut(),
       },
     ],
   },
