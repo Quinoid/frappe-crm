@@ -75,8 +75,8 @@
 
 <script setup>
 // import Checkbox from '../Checkbox.vue'
-// import ListRowItem from './ListRowItem.vue'
-import { Checkbox, ListRowItem } from 'qbs-vue-ui'
+import ListRowItem from './ListRowItem.vue'
+import { Checkbox } from 'qbs-vue-ui'
 import { alignmentMap, getGridTemplateColumns } from './utils'
 import { computed, inject } from 'vue'
 

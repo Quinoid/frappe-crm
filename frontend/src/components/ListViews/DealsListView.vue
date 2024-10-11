@@ -202,12 +202,12 @@ import {
   Avatar,
   ListView,
   ListHeaderItem,
-  ListRowItem,
   ListSelectBanner,
   ListFooter,
   Dropdown,
   Tooltip,
 } from 'qbs-vue-ui'
+import ListRowItem from './ListRowItem.vue'
 import { sessionStore } from '@/stores/session'
 import ListHeader from './ListHeader.vue'
 

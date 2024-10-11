@@ -4,7 +4,12 @@
       <ViewBreadcrumbs v-model="viewControls" routeName="Notes" />
     </template>
     <template #right-header>
-      <Button variant="solid" class="bg-btn_primary" :label="__('Create')" @click="createNote">
+      <Button
+        variant="solid"
+        class="bg-btn_primary"
+        :label="__('Create')"
+        @click="createNote"
+      >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </template>
@@ -23,7 +28,7 @@
   <div class="flex-1 overflow-y-auto">
     <div
       v-if="notes.data?.data?.length"
-      class="grid grid-cols-1 gap-2 px-3 pb-2 sm:grid-cols-4 sm:gap-4 sm:px-5 sm:pb-3"
+      class="grid grid-cols-1 gap-2 px-3 pb-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-4 sm:px-5 sm:pb-3"
     >
       <div
         v-for="note in notes.data.data"

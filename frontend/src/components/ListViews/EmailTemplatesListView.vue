@@ -155,12 +155,13 @@ import {
   ListView,
   ListHeaderItem,
   ListSelectBanner,
-  ListRowItem,
   ListFooter,
   Dropdown,
   Tooltip,
 } from 'qbs-vue-ui'
 import { sessionStore } from '@/stores/session'
+import ListRowItem from './ListRowItem.vue'
+
 import ListHeader from './ListHeader.vue'
 import CustomListRows from './CustomListRows.vue'
 import { ref, computed, watch } from 'vue'
