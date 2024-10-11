@@ -14,7 +14,10 @@
       </h3>
     </template>
     <template #body-content>
-      <div class="flex flex-col gap-5.5">
+      <div
+        class="flex flex-col gap-5.5"
+        style="overflow: auto; max-height: calc(100vh - 300px)"
+      >
         <div class="flex justify-between gap-2">
           <FormControl
             type="select"

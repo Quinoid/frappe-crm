@@ -50,9 +50,11 @@
               <div
                 class="px-2.5 py-2 border rounded text-base bg-white text-gray-800 flex items-center leading-4 justify-between gap-2"
               >
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 min-w-0">
                   <DragVerticalIcon class="h-3.5 cursor-grab" />
-                  <div>{{ field.label }}</div>
+                  <Tooltip :text="field.label">
+                    <div class="truncate">{{ field.label }}</div>
+                  </Tooltip>
                 </div>
                 <Button
                   variant="ghost"
@@ -121,7 +123,7 @@
 import Autocomplete from '@/components/qbs-vue-ui/Autocomplete.vue'
 import DragVerticalIcon from '@/components/Icons/DragVerticalIcon.vue'
 import Draggable from 'vuedraggable'
-import { Dropdown, createResource } from 'qbs-vue-ui'
+import { Dropdown, createResource, Tooltip } from 'qbs-vue-ui'
 import { computed, watch } from 'vue'
 
 const props = defineProps({
