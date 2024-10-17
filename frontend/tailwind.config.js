@@ -25,7 +25,7 @@ module.exports = {
         table_header: '#EDEEF1 !important',
         btn_primary: '#317CF7  !important',
         bg_white: '#FFF !important',
-        table_border: '#CACEDA !important',
+        table_border: '#f0f1f5 !important',
         btn_grey: '#ebecef !important',
       },
     },

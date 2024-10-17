@@ -1,5 +1,5 @@
 export function getGridTemplateColumns(columns, withCheckbox = true) {
-  let checkBoxWidth = withCheckbox ? '20px ' : ''
+  let checkBoxWidth = withCheckbox ? '22px ' : ''
   let columnsWidth = columns
     .map((col) => {
       let width = col.width || 1

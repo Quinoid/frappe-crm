@@ -10,7 +10,7 @@
   >
     <Checkbox
       v-if="list.options.selectable"
-      class="cursor-pointer duration-300 "
+      class="cursor-pointer duration-300"
       :modelValue="list.allRowsSelected"
       @click.stop="list.toggleAllRows"
     />
