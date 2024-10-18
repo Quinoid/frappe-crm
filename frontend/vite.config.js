@@ -22,32 +22,32 @@ export default defineConfig({
       },
       manifest: {
         display: 'standalone',
-        name: 'Frappe CRM',
-        short_name: 'Frappe CRM',
+        name: 'Bizpole CRM',
+        short_name: 'Bizpole CRM',
         start_url: '/crm',
         description:
           'Modern & 100% Open-source CRM tool to supercharge your sales operations',
         icons: [
           {
-            src: '/assets/crm/manifest/manifest-icon-192.maskable.png',
+            src: '/assets/crm/manifest/apple-icon-180.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/assets/crm/manifest/manifest-icon-192.maskable.png',
+            src: '/assets/crm/manifest/apple-icon-180.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable',
           },
           {
-            src: '/assets/crm/manifest/manifest-icon-512.maskable.png',
+            src: '/assets/crm/manifest/apple-icon-180.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/assets/crm/manifest/manifest-icon-512.maskable.png',
+            src: '/assets/crm/manifest/apple-icon-180.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
@@ -68,7 +68,7 @@ export default defineConfig({
                 {% endfor %}
             </script>
             </body>
-            `
+            `,
           )
         }
         return html

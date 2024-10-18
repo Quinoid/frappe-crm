@@ -67,7 +67,7 @@ If you prefer self-hosting, follow the official [Frappe Bench Installation](http
 ### Local Setup
 
 1. [Install Bench](https://github.com/frappe/bench).
-2. Install Frappe CRM app:
+2. Install Bizpole CRM app:
     ```sh
     $ bench get-app crm
     ```
