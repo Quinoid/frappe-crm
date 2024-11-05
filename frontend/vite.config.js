@@ -22,8 +22,8 @@ export default defineConfig({
       },
       manifest: {
         display: 'standalone',
-        name: 'Bizpole CRM',
-        short_name: 'Bizpole CRM',
+        name: 'Quinoid CRM',
+        short_name: 'Quinoid CRM',
         start_url: '/crm',
         description:
           'Modern & 100% Open-source CRM tool to supercharge your sales operations',

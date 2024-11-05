@@ -1,6 +1,6 @@
 app_name = "crm"
-app_title = "Bizpole CRM"
-app_publisher = "Bizpole Solutions Pvt. Ltd."
+app_title = "Quinoid CRM"
+app_publisher = "Quinoid Business Solutions Pvt. Ltd."
 app_description = "Kick-ass Open Source CRM"
 app_email = "shariq@frappe.io"
 app_license = "AGPLv3"
