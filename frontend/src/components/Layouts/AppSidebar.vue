@@ -141,6 +141,7 @@ import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import CollapseSidebar from '@/components/Icons/CollapseSidebar.vue'
 import NotificationsIcon from '@/components/Icons/NotificationsIcon.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
+import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import Notifications from '@/components/Notifications.vue'
 import { viewsStore } from '@/stores/views'
 import { notificationsStore } from '@/stores/notifications'
@@ -194,6 +195,11 @@ const links = [
     icon: Email2Icon,
     to: 'Email Templates',
   },
+  {
+    label:'Calendar',
+    icon: CalendarIcon,
+    to: 'Calendar',
+  }
 ]
 
 const allViews = computed(() => {

@@ -92,6 +92,14 @@ const routes = [
     meta: { scrollPos: { top: 0, left: 0 } },
   },
   {
+    alias: '/calendar',
+    path: '/calendar/view/:viewType?',
+    name: 'Calendar',
+    component: () => import('@/pages/Calendar.vue'),
+    meta: { scrollPos: { top: 0, left: 0 } },
+  },
+
+  {
     path: '/email-templates/:emailTemplateId',
     name: 'Email Template',
     component: () => import('@/pages/EmailTemplate.vue'),
@@ -145,7 +153,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.name === 'Home' && isLoggedIn) {
     next({ name: 'Leads' })
   } else if (!isLoggedIn) {
-    window.location.href = "/login?redirect-to=/crm";
+    window.location.href = '/login?redirect-to=/crm'
   } else if (to.matched.length === 0) {
     next({ name: 'Invalid Page' })
   } else {
