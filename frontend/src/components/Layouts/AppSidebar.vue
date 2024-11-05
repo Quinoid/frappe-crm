@@ -72,7 +72,7 @@
             />
           </nav>
           <a
-            href="https://docs.bizpoleapps.com/"
+            href="https://docs.qbsapps.com/"
             target="_blank"
             rel="noopener noreferrer"
             :class="[
