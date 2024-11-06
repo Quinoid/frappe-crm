@@ -1,34 +1,36 @@
 <template>
-  <div v-if="!isLoading" class="flex flex-col h-full p-2">
+  <div
+    v-if="!isLoading"
+    class="flex flex-col h-full m-5 p-5 shadow-sm rounded-sm"
+  >
     <Calendar :config="config" :events="calendarEvents">
       <template
         #header="{
           currentMonthYear,
           enabledModes,
           activeView,
-          decrement,
-          increment,
           updateActiveView,
         }"
       >
-        <div v-if="calendarEvents.length === 0" class="mt-4 text-center">
+        <div v-if="calendarEvents.length === 0" class="text-center">
           No events to display.
         </div>
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center mb-4 gap-3">
           <div class="flex gap-3 items-center">
-            <button
-              class="text-xl font-bold p-1 hover:bg-gray-100 transition-all duration-300 ease-in-out"
-              @click="decrement"
+            <select
+              v-model="selectedMonth"
+              class="px-2 py-1 border rounded-md text-lg font-bold"
+              @change="handleMonthChange"
             >
-              {{ '<' }}
-            </button>
-            <span class="fornt-bold">{{ currentMonthYear }}</span>
-            <button
-              class="text-xl font-bold p-1 hover:bg-gray-100 transition-all duration-300 ease-in-out"
-              @click="increment"
-            >
-              {{ '>' }}
-            </button>
+              <option
+                v-for="(month, index) in months"
+                :key="index"
+                :value="index"
+              >
+                {{ month }}
+              </option>
+            </select>
+            <span class="font-bold">{{ currentYear }}</span>
           </div>
           <div class="flex gap-2 text-sm">
             <button
@@ -48,14 +50,14 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
-import { Calendar } from 'qbs-vue-ui'
+import { ref, computed, watch } from 'vue'
+import { Calendar, createResource } from 'qbs-vue-ui'
 
 export default {
   components: { Calendar },
   setup() {
-    const rawEvents = ref([])
     const isLoading = ref(true)
+    const rawEvents = ref([])
     const config = ref({
       disableModes: [],
       defaultMode: 'Month',
@@ -66,24 +68,53 @@ export default {
       enableShortcuts: true,
     })
 
-    async function fetchEvents() {
-      try {
-        const response = await fetch(
-          'https://demo.qbsapps.com/api/resource/Event?fields=["*"]',
-          {
-            headers: {
-              Authorization: 'token c4798018f59e3de:01b3a2e2f58cd1c', // Replace with your token if required
-            },
-          },
-        )
-        const data = await response.json()
-        const convertedEvents = convertToCalendarData(data?.data || [])
-        rawEvents.value = convertedEvents
-        isLoading.value = false
-      } catch (error) {
-        isLoading.value = false
+    const currentMonth = ref(new Date().getMonth())
+    const currentYear = ref(new Date().getFullYear())
+
+    // List of month names
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+
+    const selectedMonth = ref(currentMonth.value)
+
+    const getMonthRange = (month, year) => {
+      const start = new Date(year, month, 1)
+      const end = new Date(year, month + 1, 0)
+      return {
+        starts_on: start.toISOString().split('T')[0],
+        ends_on: end.toISOString().split('T')[0],
       }
     }
+
+    const { starts_on, ends_on } = getMonthRange(
+      currentMonth.value,
+      currentYear.value,
+    )
+
+    const eventsResource = createResource({
+      url: 'crm.api.events.custom_list_events',
+      cache: ['events', currentMonth.value, currentYear.value],
+      params: {
+        starts_on,
+        ends_on,
+      },
+      auto: true,
+      transform: (data) => {
+        return data ? convertToCalendarData(data) : []
+      },
+    })
 
     function convertToCalendarData(events) {
       if (!Array.isArray(events)) {
@@ -98,8 +129,9 @@ export default {
         description: event.description
           ? event.description.replace(/<\/?[^>]+(>|$)/g, '')
           : '',
-        color: event.color || '#3788d8',
-        allDay: Boolean(event.all_day),
+        type: event.event_type,
+        color: event.custom_color ?? 'green',
+        isFullDay: Boolean(event.all_day),
         extendedProps: {
           owner: event.owner,
           status: event.status,
@@ -112,12 +144,31 @@ export default {
       }))
     }
 
-    const calendarEvents = computed(() => {
-      return rawEvents.value
-    })
+    const calendarEvents = computed(() => eventsResource.data)
+    watch(
+      () => eventsResource.loading,
+      (loading) => (isLoading.value = loading),
+    )
 
-    fetchEvents() // Call fetchEvents on component mount
-    return { calendarEvents, config, isLoading }
+    // Handle changes in selected month
+    const handleMonthChange = () => {
+      currentMonth.value = selectedMonth.value
+      eventsResource.fetch({
+        starts_on: getMonthRange(currentMonth.value, currentYear.value)
+          .starts_on,
+        ends_on: getMonthRange(currentMonth.value, currentYear.value).ends_on,
+      })
+    }
+
+    return {
+      calendarEvents,
+      config,
+      isLoading,
+      currentYear,
+      selectedMonth,
+      months,
+      handleMonthChange,
+    }
   },
 }
 </script>
