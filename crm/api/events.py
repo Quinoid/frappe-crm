@@ -44,7 +44,7 @@ def custom_get_event_details(name):
 
     event = query.run(as_dict=True)
     if not len(event):
-        frappe.throw(_("event not found"), frappe.DoesNotExistError)
+        frappe.throw(_("Event not found"), frappe.DoesNotExistError)
     event = event.pop()
 
     event["doctype"] = "Event"
