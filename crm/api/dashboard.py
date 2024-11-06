@@ -2,7 +2,7 @@ import requests
 import frappe
 from frappe import _
 from frappe.utils import nowdate, add_days
-
+from frappe.query_builder import Order
 
 @frappe.whitelist()
 def custom_dashboard():
@@ -23,6 +23,8 @@ def custom_dashboard():
             ((Task.due_date < current_date) & 
             (Task.status.isin(["Backlog", "Todo", "In Progress"]))))
         )
+        .orderby(Task.due_date, order=Order.asc)
+
     )
 
     if not is_admin:
