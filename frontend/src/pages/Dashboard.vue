@@ -7,44 +7,51 @@
 
   <div v-if="!isLoading" class="p-6 space-y-6">
     <!-- Dashboard Counts -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-6 gap-6">
       <!-- Leads Card -->
-      <div class="bg-white shadow-md rounded-lg p-6 text-center">
+      <div
+        class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center"
+      >
         <h3 class="text-lg font-semibold">Leads</h3>
         <p class="text-3xl font-bold text-indigo-600">
-          {{ dashboardData.value.leadCount }}
+          {{ dashboardData?.leadCount }}
         </p>
       </div>
 
       <!-- Deals Card -->
-      <div class="bg-white shadow-md rounded-lg p-6 text-center">
+      <div
+        class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center"
+      >
         <h3 class="text-lg font-semibold">Deals</h3>
         <p class="text-3xl font-bold text-green-600">
-          {{ dashboardData.value.dealCount }}
+          {{ dashboardData?.dealCount }}
         </p>
       </div>
 
       <!-- Tasks Card -->
-      <div class="bg-white shadow-md rounded-lg p-6 text-center">
+      <div
+        class=" sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center"
+      >
         <h3 class="text-lg font-semibold">Tasks</h3>
         <p class="text-3xl font-bold text-red-600">
-          {{ dashboardData.value.taskCount }}
+          {{ dashboardData?.taskCount }}
         </p>
       </div>
     </div>
 
     <!-- Task List -->
-    <div class="bg-white shadow-md rounded-lg p-6">
-      <h3 class="text-lg font-semibold mb-4">Recent Tasks</h3>
+    <div class="bg-white shadow-md rounded-lg p-6 sm:w-full lg:w-1/2">
+      <h3 class="text-lg font-medium mb-4 text-gray-900">Recent Tasks</h3>
       <ul>
         <li
-          v-for="task in dashboardData.value.tasks"
+          v-for="task in dashboardData?.tasks"
           :key="task.name"
           class="border-b last:border-none py-2"
         >
           <div class="flex justify-between items-center">
             <div>
               <p class="font-semibold">{{ task.title }}</p>
+
               <p class="text-sm text-gray-500">
                 {{
                   task.due_date
@@ -53,6 +60,7 @@
                 }}
               </p>
             </div>
+
             <span
               :class="{
                 'bg-yellow-100 text-yellow-800': task.priority === 'Low',
@@ -67,7 +75,7 @@
         </li>
       </ul>
       <div
-        v-if="dashboardData.value.tasks.length === 0"
+        v-if="dashboardData?.tasks?.length === 0"
         class="text-center text-gray-500 mt-4"
       >
         No tasks to display.
@@ -93,12 +101,13 @@ const dashboardResource = createResource({
   cache: ['dashboardCounts'],
   auto: true,
   transform: (data) => {
-    const message = data?.message || {}
+    const message = data || {}
+    console.log(message)
     return {
-      leadCount: message.lead_total_count || 0,
-      dealCount: message.deal_total_count || 0,
-      taskCount: message.task_total_count || 0,
-      tasks: message.tasks || [],
+      leadCount: message?.lead_total_count || 0,
+      dealCount: message?.deal_total_count || 0,
+      taskCount: message?.task_total_count || 0,
+      tasks: message?.tasks || [],
     }
   },
 })
