@@ -142,6 +142,7 @@ import CollapseSidebar from '@/components/Icons/CollapseSidebar.vue'
 import NotificationsIcon from '@/components/Icons/NotificationsIcon.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
+import DashboardIcon from '@/components/Icons/DashboardIcon.vue'
 import Notifications from '@/components/Notifications.vue'
 import { viewsStore } from '@/stores/views'
 import { notificationsStore } from '@/stores/notifications'
@@ -155,6 +156,11 @@ const { toggle: toggleNotificationPanel } = notificationsStore()
 const isSidebarCollapsed = useStorage('isSidebarCollapsed', false)
 
 const links = [
+  {
+    label: 'Dashboard',
+    icon: DashboardIcon,
+    to: 'Dashboard',
+  },
   {
     label: 'Leads',
     icon: LeadsIcon,
@@ -196,10 +202,10 @@ const links = [
     to: 'Email Templates',
   },
   {
-    label:'Calendar',
+    label: 'Calendar',
     icon: CalendarIcon,
     to: 'Calendar',
-  }
+  },
 ]
 
 const allViews = computed(() => {

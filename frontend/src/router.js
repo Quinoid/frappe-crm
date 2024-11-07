@@ -14,6 +14,13 @@ const routes = [
     component: () => import('@/pages/MobileNotification.vue'),
   },
   {
+    alias: '/dashboard',
+    path: '/dashboard/view/:viewType?',
+    name: 'Dashboard',
+    component: () => import('@/pages/Dashboard.vue'),
+    meta: { scrollPos: { top: 0, left: 0 } },
+  },
+  {
     alias: '/leads',
     path: '/leads/view/:viewType?',
     name: 'Leads',
