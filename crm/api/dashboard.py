@@ -33,8 +33,8 @@ def custom_dashboard():
     tasks = task_query.run(as_dict=True)
     task_total_count = len(tasks)
 
-    if not tasks:
-        return {"task_total_count": task_total_count, "message": _("No tasks found for today")}
+    # if not tasks:
+    #     return {"task_total_count": task_total_count, "message": _("No tasks found for today")}
 
 
     lead_query = frappe.qb.from_(Lead).select("*")
