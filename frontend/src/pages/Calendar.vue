@@ -1,4 +1,11 @@
 <template>
+  <LayoutHeader>
+    <template #left-header>
+      <Breadcrumbs
+        :items="[{ label: 'Calendar', route: { name: 'Calendar' } }]"
+      />
+    </template>
+  </LayoutHeader>
   <div
     v-if="!isLoading"
     class="flex flex-col h-full m-5 p-5 shadow-sm rounded-sm"
@@ -52,9 +59,10 @@
 <script>
 import { ref, computed, watch } from 'vue'
 import { Calendar, createResource } from 'qbs-vue-ui'
-
+import LayoutHeader from '@/components/LayoutHeader.vue'
+import { Breadcrumbs } from 'qbs-vue-ui'
 export default {
-  components: { Calendar },
+  components: { Calendar, LayoutHeader, Breadcrumbs },
   setup() {
     const isLoading = ref(true)
     const rawEvents = ref([])
