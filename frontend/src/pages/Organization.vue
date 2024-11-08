@@ -346,6 +346,27 @@ async function changeOrganizationImage(file) {
   organization.reload()
 }
 
+// async function deleteOrganization() {
+//   $dialog({
+//     title: __('Delete organization'),
+//     message: __('Are you sure you want to delete this organization?'),
+//     actions: [
+//       {
+//         label: __('Delete'),
+//         theme: 'red',
+//         variant: 'solid',
+//         async onClick(close) {
+//           await call('frappe.client.delete', {
+//             doctype: 'CRM Organization',
+//             name: props.organizationId,
+//           })
+//           close()
+//           router.push({ name: 'Organizations' })
+//         },
+//       },
+//     ],
+//   })
+// }
 async function deleteOrganization() {
   $dialog({
     title: __('Delete organization'),
@@ -356,12 +377,48 @@ async function deleteOrganization() {
         theme: 'red',
         variant: 'solid',
         async onClick(close) {
-          await call('frappe.client.delete', {
-            doctype: 'CRM Organization',
-            name: props.organizationId,
-          })
-          close()
-          router.push({ name: 'Organizations' })
+          try {
+            await call('frappe.client.delete', {
+              doctype: 'CRM Organization',
+              name: props.organizationId,
+            })
+            close()
+            router.push({ name: 'Organizations' })
+          } catch (error) {
+            let errorMessage = __(
+              'Failed to delete the organization. Please try again.',
+            )
+
+            if (error._server_messages) {
+              try {
+                const serverMessages = JSON.parse(error._server_messages)
+                if (Array.isArray(serverMessages) && serverMessages[0]) {
+                  const parsedMessage = JSON.parse(serverMessages[0])
+                  errorMessage = parsedMessage.message || errorMessage
+                }
+              } catch (parseError) {
+                console.error(
+                  'Failed to parse server error message:',
+                  parseError,
+                )
+              }
+            }
+
+            // Display the error message
+            $dialog({
+              title: __('Error'),
+              message: errorMessage,
+              actions: [
+                {
+                  label: __('OK'),
+                  theme: 'primary',
+                  variant: 'solid',
+                  class: 'bg-btn_primary hover:bg-btn_primary text-white',
+                  onClick: (closeErrorDialog) => closeErrorDialog(),
+                },
+              ],
+            })
+          }
         },
       },
     ],

@@ -96,11 +96,11 @@ let dropdownOptions = ref([
             '_blank',
           ),
       },
-      // {
-      //   icon: 'book-open',
-      //   label: computed(() => __('Docs')),
-      //   onClick: () => window.open('https://docs.frappe.io/crm', '_blank'),
-      // },
+      {
+        icon: 'book-open',
+        label: computed(() => __('Docs')),
+        onClick: () => window.open('https://docs.bizpoleapps.com/', '_blank'),
+      },
     ],
   },
   {
