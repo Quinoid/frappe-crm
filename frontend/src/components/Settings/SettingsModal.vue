@@ -2,7 +2,7 @@
   <Dialog
     v-model="show"
     :options="{ size: isMobile ? 'full' : '5xl' }"
-    class="z-50"
+    class="z-40"
   >
     <template #body>
       <div
@@ -110,11 +110,11 @@ const tabs = computed(() => {
           component: markRaw(WhatsAppSettings),
           condition: () => isWhatsappInstalled.value,
         },
-        {
-          label: __('ERPNext'),
-          icon: ERPNextIcon,
-          component: markRaw(ERPNextSettings),
-        },
+        // {
+        //   label: __('ERPNext'),
+        //   icon: ERPNextIcon,
+        //   component: markRaw(ERPNextSettings),
+        // },
       ],
     },
   ]
