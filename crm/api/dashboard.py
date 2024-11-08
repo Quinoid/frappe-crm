@@ -9,6 +9,7 @@ def custom_dashboard():
     Task = frappe.qb.DocType("CRM Task")
     Lead = frappe.qb.DocType("CRM Lead")
     Deal = frappe.qb.DocType("CRM Deal")
+    Event = frappe.qb.DocType("Event")
     
     current_date = nowdate()
     current_user = frappe.session.user
@@ -38,25 +39,42 @@ def custom_dashboard():
 
 
     lead_query = frappe.qb.from_(Lead).select("*")
-    if not is_admin:
-        lead_query = lead_query.where(Lead._assign == current_user)
+    # if not is_admin:
+    #     lead_query = lead_query.where(Lead._assign == current_user)
 
     leads = lead_query.run(as_dict=True)
     lead_total_count = len(leads)
 
 
     deal_query = frappe.qb.from_(Deal).select("*")
-    if not is_admin:
-        deal_query = deal_query.where(Deal._assign == current_user)
+    # if not is_admin:
+    #     deal_query = deal_query.where(Deal._assign == current_user)
 
     deals = deal_query.run(as_dict=True)
     deal_total_count = len(deals)
+
+    event_query = (
+        frappe.qb.from_(Event)
+        .select("*")
+        .where(
+            (Event.starts_on <= current_date) & (Event.ends_on >= current_date) 
+        )
+        .orderby(Event.starts_on, order=Order.asc)
+
+    )
+    # if not is_admin:
+    #     lead_query = lead_query.where(Lead._assign == current_user)
+
+    events = event_query.run(as_dict=True)
+    event_total_count = len(events)
 
     return {
         "task_total_count": task_total_count,
         "lead_total_count": lead_total_count,
         "deal_total_count": deal_total_count,
-        "tasks": tasks
+        "event_total_count": event_total_count,
+        "tasks": tasks,
+        "events":events
     }
 
 
