@@ -265,6 +265,10 @@ function getIcon(routeName, icon) {
       return NoteIcon
     case 'Call Logs':
       return PhoneIcon
+    case 'Calendar':
+      return CalendarIcon
+    case 'Dashboard':
+      return DashboardIcon 
     default:
       return PinIcon
   }
