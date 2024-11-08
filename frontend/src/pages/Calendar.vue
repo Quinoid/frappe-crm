@@ -69,7 +69,7 @@ export default {
     const config = ref({
       disableModes: [],
       defaultMode: 'Month',
-      isEditMode: false,
+      isEditMode: true,
       eventIcons: {},
       redundantCellHeight: 50,
       hourHeight: 50,
