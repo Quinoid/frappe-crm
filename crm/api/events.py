@@ -50,3 +50,44 @@ def custom_get_event_details(name):
     event["doctype"] = "Event"
 
     return event
+
+
+
+@frappe.whitelist(allow_guest=True)
+def custom_create_event(subject, starts_on, ends_on, event_category="Event", event_type="Private", **kwargs):
+    # Create a new document for the Event doctype
+    event = frappe.get_doc({
+        "doctype": "Event",
+        "subject": subject,
+        "starts_on": starts_on,
+        "ends_on": ends_on,
+        "event_category": event_category,
+        "event_type": event_type,
+        **kwargs  # Allows additional fields to be set dynamically
+    })
+    
+    # Insert the new event document into the database
+    event.insert(ignore_permissions=True)
+    frappe.db.commit()  # Ensure the data is saved to the database
+
+    # Return the event details to confirm creation
+    return {"message": "Event created successfully", "event_name": event.name}
+
+
+@frappe.whitelist()
+def custom_edit_event(name, **kwargs):
+    # Fetch the event document by name (ID)
+    event = frappe.get_doc("Event", name)
+
+    # Update the fields with the data provided in kwargs
+    for key, value in kwargs.items():
+        if hasattr(event, key):
+            setattr(event, key, value)
+    
+    # Save changes to the database
+    event.save(ignore_permissions=True)
+    frappe.db.commit()  # Ensure the changes are saved
+
+    # Return confirmation message with updated event details
+    return {"message": "Event updated successfully", "event_name": event.name}
+
