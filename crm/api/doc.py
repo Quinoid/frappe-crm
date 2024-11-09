@@ -400,7 +400,7 @@ def get_data(
 			"value": "modified_by",
 			"options": "User",
 		},
-		{"label": "Assigned To", "type": "Text", "value": "_assign"},
+		{"label": "Assigned To", "type": "Link", "value": "_assign", "options": "User"},
 		{"label": "Owner", "type": "Link", "value": "owner", "options": "User"},
 		{"label": "Like", "type": "Data", "value": "_liked_by"},
 	]
