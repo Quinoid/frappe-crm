@@ -456,13 +456,6 @@ function parseRows(rows) {
         if (!assignees.length && lead.lead_owner) {
           assignees = [lead.lead_owner]
         }
-        // _rows[row] = [
-        //   {
-        //     name: assignees[0],
-        //     label: getUser(assignees[0]).full_name,
-        //     image: getUser(assignees[0]).user_image,
-        //   },
-        // ]
         _rows[row] = assignees.map((user) => ({
           name: user,
           image: getUser(user).user_image,

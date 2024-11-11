@@ -84,10 +84,16 @@
                 <span class="text-red-500" v-if="field.mandatory">*</span>
               </label>
             </div>
-            <div class="flex gap-1" v-else-if="field.type === 'Link'">
+            <div
+              class="flex gap-1"
+              v-else-if="
+                field.type === 'Link' || field.type === 'Table MultiSelect'
+              "
+            >
               <Link
                 class="form-control flex-1"
                 :value="data[field.name]"
+                :isMultiple="field.type === 'Table MultiSelect' ? true : false"
                 :doctype="field.options"
                 @change="(v) => (data[field.name] = v)"
                 :placeholder="__(field.placeholder || field.label)"

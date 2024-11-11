@@ -270,6 +270,12 @@ const filteredSections = computed(() => {
               placeholder: 'john@doe.com',
               onClick: () => {
                 _contact.value.email_id = email.email_id
+                _contact.value.email_ids = _contact.value.email_ids.map(
+                  (emails) => ({
+                    ...emails,
+                    is_primary: emails.email_id === email.email_id ? 1 : 0,
+                  }),
+                )
                 setAsPrimary('email', email.email_id)
               },
               onSave: (option, isNew) => {
@@ -279,6 +285,13 @@ const filteredSections = computed(() => {
                     _contact.value.email_id = option.value
                   }
                 } else {
+                  if (props.contact.data.email_ids.length === 1) {
+                    _contact.value.email_id = option.value
+                  } else {
+                    _contact.value.email_ids.find(
+                      (emails) => emails.name === option.name,
+                    ).email_id = option.value
+                  }
                   editOption('Contact Email', option.name, option.value)
                 }
               },
@@ -382,7 +395,6 @@ const filteredSections = computed(() => {
 
   return allSections
 })
-
 async function setAsPrimary(field, value) {
   let d = await call('crm.api.contact.set_as_primary', {
     contact: props.contact.data.name,
@@ -390,6 +402,7 @@ async function setAsPrimary(field, value) {
     value,
   })
   if (d) {
+    handleContactUpdate(d)
     props.contact.reload()
     createToast({
       title: 'Contact updated',
@@ -419,9 +432,10 @@ async function editOption(doctype, name, value) {
   let d = await call('frappe.client.set_value', {
     doctype,
     name,
-    fieldname: doctype == 'Contact Phone' ? 'phone' : 'email',
+    fieldname: doctype == 'Contact Phone' ? 'phone' : 'email_id',
     value,
   })
+  handleContactUpdate(d)
   if (d) {
     props.contact.reload()
     createToast({

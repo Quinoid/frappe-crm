@@ -257,7 +257,7 @@ import { ref, computed, h } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const { $dialog, makeCall } = globalStore()
-
+import { createToast } from '@/utils'
 const { getUser } = usersStore()
 const { getOrganization } = organizationsStore()
 const { getDealStatus } = statusesStore()
@@ -350,12 +350,40 @@ async function deleteContact() {
         theme: 'red',
         variant: 'solid',
         async onClick(close) {
-          await call('frappe.client.delete', {
-            doctype: 'Contact',
-            name: props.contactId,
-          })
-          close()
-          router.push({ name: 'Contacts' })
+          try {
+            await call('frappe.client.delete', {
+              doctype: 'Contact',
+              name: props.contactId,
+            })
+            close()
+            router.push({ name: 'Contacts' })
+          } catch (error) {
+            let errorMessage = __(
+              'Failed to delete the Contact. Please try again.',
+            )
+
+            if (error._server_messages) {
+              try {
+                const serverMessages = JSON.parse(error._server_messages)
+                if (Array.isArray(serverMessages) && serverMessages[0]) {
+                  const parsedMessage = JSON.parse(serverMessages[0])
+                  errorMessage = parsedMessage.message || errorMessage
+                }
+              } catch (parseError) {
+                console.error(
+                  'Failed to parse server error message:',
+                  parseError,
+                )
+              }
+            }
+            createToast({
+              title: 'Error',
+              text: errorMessage,
+              icon: 'x',
+              iconClasses: 'text-red-600',
+            })
+            close()
+          }
         },
       },
     ],

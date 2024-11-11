@@ -247,6 +247,7 @@ import { globalStore } from '@/stores/global'
 import { usersStore } from '@/stores/users'
 import { statusesStore } from '@/stores/statuses'
 import { getView } from '@/utils/view'
+import { createToast } from '@/utils'
 import {
   dateFormat,
   dateTooltipFormat,
@@ -403,21 +404,13 @@ async function deleteOrganization() {
                 )
               }
             }
-
-            // Display the error message
-            $dialog({
-              title: __('Error'),
-              message: errorMessage,
-              actions: [
-                {
-                  label: __('OK'),
-                  theme: 'primary',
-                  variant: 'solid',
-                  class: 'bg-btn_primary hover:bg-btn_primary text-white',
-                  onClick: (closeErrorDialog) => closeErrorDialog(),
-                },
-              ],
+            createToast({
+              title: 'Error',
+              text: errorMessage,
+              icon: 'x',
+              iconClasses: 'text-red-600',
             })
+            close()
           }
         },
       },
