@@ -36,6 +36,7 @@
       <Button
         :label="__('Convert to Deal')"
         variant="solid"
+        v-if="lead.data.status == 'Qualified'"
         class="bg-btn_primary"
         @click="showConvertToDealModal = true"
       />
