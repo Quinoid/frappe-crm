@@ -94,4 +94,36 @@ def custom_task_details(name):
     return task
 
 
+@frappe.whitelist()
+def custom_lead_count(limit_count):
+    Lead = frappe.qb.DocType("CRM Lead")
+
+    # Get the current user
+    current_user = frappe.session.user
+
+    try:
+        limit_count = int(limit_count)
+    except ValueError:
+        frappe.throw(_("Limit count must be a valid integer."))
+
+    # Query to get all leads assigned to the current user
+    lead_query = frappe.qb.from_(Lead).select("*").where(Lead.owner == current_user)
+    leads = lead_query.run(as_dict=True)
+    lead_total_count = len(leads)
+
+    # Check if the lead count exceeds the specified limit
+    if lead_total_count >= limit_count:
+        frappe.throw(
+            _("You have reached the maximum lead limit for your plan and cannot create additional leads."),
+            frappe.ValidationError
+        )
+    
+    return {
+        "lead_total_count": lead_total_count,
+        "status": 200,
+        "message": "Within limit"
+    }
+
+
+
 

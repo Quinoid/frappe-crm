@@ -2,6 +2,15 @@ import requests
 import frappe
 from frappe import _
 from frappe.utils import nowdate, add_days
+import json
+from frappe import _
+from frappe.model.document import get_controller
+from frappe.model import no_value_fields
+from pypika import Criterion
+from frappe.utils import make_filter_tuple
+
+from crm.api.views import get_views
+from crm.fcrm.doctype.crm_form_script.crm_form_script import get_form_script
 
 
 @frappe.whitelist()
@@ -53,7 +62,7 @@ def custom_get_event_details(name):
 
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def custom_create_event(subject, starts_on, ends_on, event_category="Event", event_type="Private", **kwargs):
     # Create a new document for the Event doctype
     event = frappe.get_doc({
@@ -90,4 +99,259 @@ def custom_edit_event(name, **kwargs):
 
     # Return confirmation message with updated event details
     return {"message": "Event updated successfully", "event_name": event.name}
+
+
+@staticmethod
+def custom_event_default_list_data():
+    columns = [
+        {
+            'label': 'Name',
+            'type': 'Data',
+            'key': 'name',
+            'width': '12rem',
+        },
+        {
+            'label': 'Subject',
+            'type': 'Link',
+            'key': 'subject',
+            'width': '10rem',
+        },
+        {
+            'label': 'Event Category',
+            'type': 'Data',
+            'key': 'event_category',
+            'width': '8rem',
+        },
+        {
+            'label': 'Start Date',
+            'type': 'Data',
+            'key': 'starts_on',
+            'width': '8rem',
+        },
+
+        {
+            'label': 'End Date',
+            'type': 'Data',
+            'key': 'ends_on',
+            'width': '8rem',
+        },
+
+        {
+            'label': 'Last Modified',
+            'type': 'Datetime',
+            'key': 'modified',
+            'width': '8rem',
+        },
+    ]
+    rows = [
+        "name",
+        "subject",
+        "organization",
+        "event_category",
+        "starts_on",
+        "ends_on",
+        "modified",
+    ]
+    return {'columns': columns, 'rows': rows}
+
+
+
+@frappe.whitelist()
+def custom_get_data(
+    doctype: str,
+    filters: dict,
+    order_by: str,
+    page_length=20,
+    page_length_count=20,
+    column_field=None,
+    title_field=None,
+    columns=[],
+    rows=[],
+    kanban_columns=[],
+    kanban_fields=[],
+    view=None,
+    default_filters=None,
+):
+    custom_view = False
+    filters = frappe._dict(filters)
+    rows = frappe.parse_json(rows or "[]")
+    columns = frappe.parse_json(columns or "[]")
+    kanban_fields = frappe.parse_json(kanban_fields or "[]")
+    kanban_columns = frappe.parse_json(kanban_columns or "[]")
+
+    custom_view_name = view.get('custom_view_name') if view else None
+    view_type = view.get('view_type') if view else None
+    group_by_field = view.get('group_by_field') if view else None
+
+    for key in filters:
+        value = filters[key]
+        if isinstance(value, list):
+            if "@me" in value:
+                value[value.index("@me")] = frappe.session.user
+            elif "%@me%" in value:
+                index = [i for i, v in enumerate(value) if v == "%@me%"]
+                for i in index:
+                    value[i] = "%" + frappe.session.user + "%"
+        elif value == "@me":
+            filters[key] = frappe.session.user
+
+    if default_filters:
+        default_filters = frappe.parse_json(default_filters)
+        filters.update(default_filters)
+
+    is_default = True
+    data = []
+    _list = get_controller(doctype)
+    default_rows = []
+    if hasattr(_list, "custom_event_default_list_data"):
+        default_rows = custom_event_default_list_data().get("rows")
+
+    if view_type != "kanban":
+        if columns or rows:
+            custom_view = True
+            is_default = False
+            columns = frappe.parse_json(columns)
+            rows = frappe.parse_json(rows)
+
+        if not columns:
+            columns = [
+                {"label": "Name", "type": "Data", "key": "name", "width": "16rem"},
+                {"label": "Last Modified", "type": "Datetime", "key": "modified", "width": "8rem"},
+            ]
+
+        if not rows:
+            rows = ["name"]
+
+        default_view_filters = {
+            "dt": doctype,
+            "type": view_type or 'list',
+            "is_default": 1,
+            "user": frappe.session.user,
+        }
+
+        if not custom_view and frappe.db.exists("CRM View Settings", default_view_filters):
+            list_view_settings = frappe.get_doc("CRM View Settings", default_view_filters)
+            columns = frappe.parse_json(list_view_settings.columns)
+            rows = frappe.parse_json(list_view_settings.rows)
+            is_default = False
+        elif not custom_view or is_default and hasattr(_list, "custom_event_default_list_data"):
+            rows = default_rows
+            columns = custom_event_default_list_data().get("columns")
+
+        # check if rows has all keys from columns if not add them
+        for column in columns:
+            if column.get("key") not in rows:
+                rows.append(column.get("key"))
+            column["label"] = _(column.get("label"))
+
+            if column.get("key") == "_liked_by" and column.get("width") == "10rem":
+                column["width"] = "50px"
+
+        # check if rows has group_by_field if not add it
+        if group_by_field and group_by_field not in rows:
+            rows.append(group_by_field)
+
+        # data = frappe.get_list(
+        #     doctype,
+        #     fields=rows,
+        #     filters=filters,
+        #     order_by=order_by,
+        #     page_length=page_length,
+        # ) or []
+
+
+    fields = frappe.get_meta(doctype).fields
+    fields = [field for field in fields if field.fieldtype not in no_value_fields]
+    fields = [
+        {
+            "label": _(field.label),
+            "type": field.fieldtype,
+            "value": field.fieldname,
+            "options": field.options,
+        }
+        for field in fields
+        if field.label and field.fieldname
+    ]
+
+    std_fields = [
+        {"label": "Name", "type": "Data", "value": "name"},
+        {"label": "Created On", "type": "Datetime", "value": "creation"},
+        {"label": "Last Modified", "type": "Datetime", "value": "modified"},
+        {
+            "label": "Modified By",
+            "type": "Link",
+            "value": "modified_by",
+            "options": "User",
+        },
+        {"label": "Owner", "type": "Link", "value": "owner", "options": "User"},
+    ]
+
+    for field in std_fields:
+        if field.get('value') not in rows:
+            rows.append(field.get('value'))
+        if field not in fields:
+            field["label"] = _(field["label"])
+            fields.append(field)
+
+    if not is_default and custom_view_name:
+        is_default = frappe.db.get_value("CRM View Settings", custom_view_name, "load_default_columns")
+
+    if group_by_field and view_type == "group_by":
+        def get_options(type, options):
+            if type == "Select":
+                return [option for option in options.split("\n")]
+            else:
+                has_empty_values = any([not d.get(group_by_field) for d in data])
+                options = list(set([d.get(group_by_field) for d in data]))
+                options = [u for u in options if u]
+                if has_empty_values:
+                    options.append("")
+
+                if order_by and group_by_field in order_by:
+                    order_by_fields = order_by.split(",")
+                    order_by_fields = [(field.split(" ")[0], field.split(" ")[1]) for field in order_by_fields]
+                    if (group_by_field, "asc") in order_by_fields:
+                        options.sort()
+                    elif (group_by_field, "desc") in order_by_fields:
+                        options.sort(reverse=True)
+                else:
+                    options.sort()
+                return options
+
+        for field in fields:
+            if field.get("value") == group_by_field:
+                group_by_field = {
+                    "label": field.get("label"),
+                    "name": field.get("value"),
+                    "type": field.get("type"),
+                    "options": get_options(field.get("type"), field.get("options")),
+                }
+
+    Event = frappe.qb.DocType("Event")
+    event_query = frappe.qb.from_(Event).select("*")
+
+    data = event_query.run(as_dict=True)
+    event_total_count = len(data)
+
+    return {
+        "data": data,
+        "columns": columns,
+        "rows": rows,
+        "fields": fields,
+        "column_field": column_field,
+        "title_field": title_field,
+        "kanban_columns": kanban_columns,
+        "kanban_fields": kanban_fields,
+        "group_by_field": group_by_field,
+        "page_length": page_length,
+        "page_length_count": page_length_count,
+        "is_default": is_default,
+        "views": get_views(doctype),
+        #"total_count": len(frappe.get_list(doctype, filters=filters)),
+        #"total_count": len(frappe.get_list(doctype, filters=filters)),
+        "row_count": len(data),
+        "form_script": get_form_script(doctype),
+        "list_script": get_form_script(doctype, "List"),
+        "view_type": view_type,
+    }
 
