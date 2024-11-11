@@ -72,12 +72,14 @@ const sections = createResource({
   transform: (data) => {
     return data.forEach((section) => {
       section.fields.forEach((field) => {
-        if (field.name == 'status') {
-          field.type = 'Select'
-          field.options = leadStatuses.value
-          field.prefix = getLeadStatus(lead.status).iconColorClass
-        } else if (field.name == 'lead_owner') {
-          field.type = 'User'
+        if (field) {
+          if (field.name == 'status') {
+            field.type = 'Select'
+            field.options = leadStatuses.value
+            field.prefix = getLeadStatus(lead.status).iconColorClass
+          } else if (field.name == 'lead_owner') {
+            field.type = 'User'
+          }
         }
       })
     })
@@ -181,6 +183,7 @@ function openQuickEntryModal() {
 }
 
 onMounted(() => {
+  console.log(lead, props.defaults)
   Object.assign(lead, props.defaults)
   if (!lead.lead_owner) {
     lead.lead_owner = getUser().name

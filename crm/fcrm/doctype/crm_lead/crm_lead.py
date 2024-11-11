@@ -295,9 +295,10 @@ class CRMLead(Document):
 			},
 			{
 				'label': 'Assigned To',
-				'type': 'Text',
+				'type': 'Link',
 				'key': '_assign',
 				'width': '10rem',
+				'options':'User'
 			},
 			{
 				'label': 'Last Modified',
