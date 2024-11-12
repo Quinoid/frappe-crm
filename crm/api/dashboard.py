@@ -94,4 +94,78 @@ def custom_task_details(name):
     return task
 
 
+@frappe.whitelist()
+def custom_record_count(doctype, domain):
 
+    limit_counts = {
+        "CRM Lead": 100,
+        "Contact": 10,
+        "CRM Deal": 10
+    }
+
+    limit_count = limit_counts.get(doctype)
+
+    try:
+        DocType = frappe.qb.DocType(doctype)
+        current_user = frappe.session.user
+
+        record_query = frappe.qb.from_(DocType).select("*")
+        records = record_query.run(as_dict=True)
+        record_total_count = len(records)
+
+        if record_total_count >= limit_count:
+            frappe.response["http_status_code"] = 400
+            return {
+                "status": "error",
+                "error_type": "LimitExceeded",
+                "message": _("You have reached the maximum {0} limit of {1} for your plan and cannot create additional records.").format(doctype, limit_count),
+                "record_total_count": record_total_count,
+                "limit_count": limit_count
+            }
+
+
+        return {
+            "record_total_count": record_total_count,
+            "status": 200,
+            "message": "Within limit"
+        }
+    
+    except frappe.DoesNotExistError:
+        frappe.response["http_status_code"] = 400
+        frappe.throw(_(f"The specified doctype '{doctype}' does not exist."), frappe.ValidationError)
+
+    except Exception as e:
+        frappe.log_error(message=str(e), title="Custom Record Count Error")
+        frappe.throw(_("An error occurred while fetching the record count."), frappe.ValidationError)
+
+
+
+@frappe.whitelist()
+def custom_delete(doctype, name):
+    try:
+        # Attempt to delete the document
+        frappe.delete_doc(doctype, name, ignore_permissions=True)
+        
+        # Success response
+        return {
+            "status": "success",
+            "message": _(f"{doctype} '{name}' has been successfully deleted.")
+        }
+    
+    except frappe.LinkExistsError as e:
+        # Custom error response for link exists error
+        frappe.response["http_status_code"] = 400
+        return {
+            "status": "error",
+            "error_type": "LinkExistsError",
+            "message": str(e)
+        }
+    
+    except Exception as e:
+        # General error response
+        frappe.response["http_status_code"] = 400
+        return {
+            "status": "error",
+            "error_type": "GeneralError",
+            "message": str(e)
+        }
