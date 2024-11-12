@@ -251,13 +251,13 @@ def custom_get_data(
         if group_by_field and group_by_field not in rows:
             rows.append(group_by_field)
 
-        # data = frappe.get_list(
-        #     doctype,
-        #     fields=rows,
-        #     filters=filters,
-        #     order_by=order_by,
-        #     page_length=page_length,
-        # ) or []
+        data = frappe.get_list(
+            doctype,
+            fields=rows,
+            filters=filters,
+            order_by=order_by,
+            page_length=page_length,
+        ) or []
 
 
     fields = frappe.get_meta(doctype).fields
@@ -327,12 +327,6 @@ def custom_get_data(
                     "options": get_options(field.get("type"), field.get("options")),
                 }
 
-    Event = frappe.qb.DocType("Event")
-    event_query = frappe.qb.from_(Event).select("*")
-
-    data = event_query.run(as_dict=True)
-    event_total_count = len(data)
-
     return {
         "data": data,
         "columns": columns,
@@ -347,8 +341,7 @@ def custom_get_data(
         "page_length_count": page_length_count,
         "is_default": is_default,
         "views": get_views(doctype),
-        #"total_count": len(frappe.get_list(doctype, filters=filters)),
-        #"total_count": len(frappe.get_list(doctype, filters=filters)),
+        "total_count": len(frappe.get_list(doctype, filters=filters)),
         "row_count": len(data),
         "form_script": get_form_script(doctype),
         "list_script": get_form_script(doctype, "List"),
