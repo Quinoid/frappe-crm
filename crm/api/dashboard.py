@@ -99,7 +99,7 @@ def custom_record_count(doctype, domain):
 
     limit_counts = {
         "CRM Lead": 100,
-        "CRM Contact": 10,
+        "Contact": 10,
         "CRM Deal": 10
     }
 
@@ -114,8 +114,9 @@ def custom_record_count(doctype, domain):
         record_total_count = len(records)
 
         if record_total_count >= limit_count:
+            frappe.response["http_status_code"] = 400
             return {
-                "status": 500,
+                "status": "error",
                 "error_type": "LimitExceeded",
                 "message": _("You have reached the maximum {0} limit of {1} for your plan and cannot create additional records.").format(doctype, limit_count),
                 "record_total_count": record_total_count,
@@ -130,6 +131,7 @@ def custom_record_count(doctype, domain):
         }
     
     except frappe.DoesNotExistError:
+        frappe.response["http_status_code"] = 400
         frappe.throw(_(f"The specified doctype '{doctype}' does not exist."), frappe.ValidationError)
 
     except Exception as e:
@@ -143,25 +145,27 @@ def custom_delete(doctype, name):
     try:
         # Attempt to delete the document
         frappe.delete_doc(doctype, name, ignore_permissions=True)
-
+        
         # Success response
         return {
             "status": "success",
             "message": _(f"{doctype} '{name}' has been successfully deleted.")
         }
-
+    
     except frappe.LinkExistsError as e:
         # Custom error response for link exists error
+        frappe.response["http_status_code"] = 400
         return {
-            "status": 500,
+            "status": "error",
             "error_type": "LinkExistsError",
             "message": str(e)
         }
-
+    
     except Exception as e:
         # General error response
+        frappe.response["http_status_code"] = 400
         return {
-            "status": 500,
+            "status": "error",
             "error_type": "GeneralError",
             "message": str(e)
         }
