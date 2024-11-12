@@ -41,6 +41,9 @@
   width: 1px;
   background-color: #f0f1f5; /* Light gray (tailwind gray-300) */
 }
+.event-submit-button {
+  @apply !bg-btn_primary !text-white hover:!text-white;
+}
 
 .qbs-vue-checkbox:checked {
   @apply !text-primary;
@@ -51,8 +54,6 @@
 .qbs-vue-switch-selected {
   @apply !bg-primary;
 }
-
-
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Change color on hover */
