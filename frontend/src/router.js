@@ -105,6 +105,13 @@ const routes = [
     component: () => import('@/pages/Calendar.vue'),
     meta: { scrollPos: { top: 0, left: 0 } },
   },
+  {
+    alias: '/events',
+    path: '/events/view/:viewType?',
+    name: 'Events',
+    component: () => import('@/pages/Events.vue'),
+    meta: { scrollPos: { top: 0, left: 0 } },
+  },
 
   {
     path: '/email-templates/:emailTemplateId',

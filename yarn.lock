@@ -2530,6 +2530,11 @@ frappe-ui@^0.1.66:
     socket.io-client "^4.5.1"
     tippy.js "^6.3.7"
 
+frappe@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/frappe/-/frappe-0.0.1.tgz#cf49bba8b933b65c4adf8c2729f3beb975c0317f"
+  integrity sha512-hwhxtLmmqRM1DcuAD2H3pmidELtupMo12hA3EF0w90BfIlolOgsfR0xT+IBZrpq7Y724p8sGT5lGHHfnUocyaw==
+
 fs-extra@^9.0.1:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.1.0.tgz#5954460c764a8da2094ba3554bf839e6b9a7c86d"
@@ -3551,10 +3556,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.1.tgz#027422e2faec0b25e1549c3e1bd8309b9133b6e5"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
 
-qbs-vue-ui@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/qbs-vue-ui/-/qbs-vue-ui-1.0.4.tgz#4339711cf1a02f3f6ffee4f172c520b36a68de39"
-  integrity sha512-G1tn5uVQ5y6fBNsNIjwuEUcdbAAA3vd4akGquWcps3Ma3oLR/FMyilnSP95rv3LYPHbLDAG8tjhGhc5ZsoqJcg==
+qbs-vue-ui@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/qbs-vue-ui/-/qbs-vue-ui-1.0.7.tgz#03f5ff0a2022cec75d98ed24074c0005da7d183c"
+  integrity sha512-7Q95uzI3ZTWToEOX9jDw3wRL2E4mWah69tl0oPFC0lXal/6rZTNtIBpXOEa0huYgD4+1hf8DnS027Lk/gXwF/w==
   dependencies:
     "@headlessui/vue" "^1.7.14"
     "@popperjs/core" "^2.11.2"

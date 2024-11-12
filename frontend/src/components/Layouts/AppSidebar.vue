@@ -190,6 +190,11 @@ const links = [
     icon: CalendarIcon,
     to: 'Calendar',
   },
+  {
+    label: 'Events',
+    icon: CalendarIcon,
+    to: 'Events',
+  },
 ]
 
 const allViews = computed(() => {

@@ -379,7 +379,7 @@ async function deleteOrganization() {
         variant: 'solid',
         async onClick(close) {
           try {
-            await call('frappe.client.delete', {
+            await call('crm.api.dashboard.custom_delete', {
               doctype: 'CRM Organization',
               name: props.organizationId,
             })

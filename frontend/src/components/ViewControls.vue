@@ -592,18 +592,22 @@ const viewsDropdownOptions = computed(() => {
 const quickFilterList = computed(() => {
   let nameField
   let labelField
-  if (props.doctype === 'CRM Lead' || props.doctype === 'CRM Contact') {
-    nameField = 'first_name'
+  if (props.doctype === 'CRM Lead') {
+    nameField = 'lead_name'
     labelField = 'Name'
   } else if (props.doctype === 'CRM Task' || props.doctype === 'FCRM Note') {
     nameField = 'title'
     labelField = 'Title'
   } else if (
     props.doctype === 'Email Template' ||
-    props.doctype === 'CRM Organization'
+    props.doctype === 'CRM Organization' ||
+    props.doctype === 'Contact'
   ) {
     nameField = 'name'
     labelField = 'Name'
+  } else if (props.doctype === 'CRM Deal') {
+    nameField = 'organization'
+    labelField = 'Organisation Name'
   } else if (props.doctype === 'CRM Call Log') {
     nameField = 'to'
     labelField = 'Number'
