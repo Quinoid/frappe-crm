@@ -95,35 +95,73 @@ def custom_task_details(name):
 
 
 @frappe.whitelist()
-def custom_lead_count(limit_count):
-    Lead = frappe.qb.DocType("CRM Lead")
+def custom_record_count(doctype, domain):
 
-    # Get the current user
-    current_user = frappe.session.user
-
-    try:
-        limit_count = int(limit_count)
-    except ValueError:
-        frappe.throw(_("Limit count must be a valid integer."))
-
-    # Query to get all leads assigned to the current user
-    lead_query = frappe.qb.from_(Lead).select("*").where(Lead.owner == current_user)
-    leads = lead_query.run(as_dict=True)
-    lead_total_count = len(leads)
-
-    # Check if the lead count exceeds the specified limit
-    if lead_total_count >= limit_count:
-        frappe.throw(
-            _("You have reached the maximum lead limit for your plan and cannot create additional leads."),
-            frappe.ValidationError
-        )
-    
-    return {
-        "lead_total_count": lead_total_count,
-        "status": 200,
-        "message": "Within limit"
+    limit_counts = {
+        "CRM Lead": 100,
+        "CRM Contact": 10,
+        "CRM Deal": 10
     }
 
+    limit_count = limit_counts.get(doctype)
+
+    try:
+        DocType = frappe.qb.DocType(doctype)
+        current_user = frappe.session.user
+
+        record_query = frappe.qb.from_(DocType).select("*")
+        records = record_query.run(as_dict=True)
+        record_total_count = len(records)
+
+        if record_total_count >= limit_count:
+            return {
+                "status": "error",
+                "error_type": "LimitExceeded",
+                "message": _("You have reached the maximum {0} limit of {1} for your plan and cannot create additional records.").format(doctype, limit_count),
+                "record_total_count": record_total_count,
+                "limit_count": limit_count
+            }
+
+
+        return {
+            "record_total_count": record_total_count,
+            "status": 200,
+            "message": "Within limit"
+        }
+    
+    except frappe.DoesNotExistError:
+        frappe.throw(_(f"The specified doctype '{doctype}' does not exist."), frappe.ValidationError)
+
+    except Exception as e:
+        frappe.log_error(message=str(e), title="Custom Record Count Error")
+        frappe.throw(_("An error occurred while fetching the record count."), frappe.ValidationError)
 
 
 
+@frappe.whitelist()
+def custom_delete(doctype, name):
+    try:
+        # Attempt to delete the document
+        frappe.delete_doc(doctype, name, ignore_permissions=True)
+
+        # Success response
+        return {
+            "status": "success",
+            "message": _(f"{doctype} '{name}' has been successfully deleted.")
+        }
+
+    except frappe.LinkExistsError as e:
+        # Custom error response for link exists error
+        return {
+            "status": "error",
+            "error_type": "LinkExistsError",
+            "message": str(e)
+        }
+
+    except Exception as e:
+        # General error response
+        return {
+            "status": "error",
+            "error_type": "GeneralError",
+            "message": str(e)
+        }
