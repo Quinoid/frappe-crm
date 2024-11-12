@@ -259,6 +259,79 @@ def custom_get_data(
             page_length=page_length,
         ) or []
 
+    if view_type == "kanban":
+        if not rows:
+            rows = default_rows
+
+        if not kanban_columns and column_field:
+            field_meta = frappe.get_meta(doctype).get_field(column_field)
+            if field_meta.fieldtype == "Link":
+                kanban_columns = frappe.get_all(
+                    field_meta.options,
+                    fields=["name"],
+                    order_by="modified asc",
+                )
+            elif field_meta.fieldtype == "Select":
+                kanban_columns = [{"name": option} for option in field_meta.options.split("\n")]
+
+        if not title_field:
+            title_field = "name"
+            if hasattr(_list, "default_kanban_settings"):
+                title_field = _list.default_kanban_settings().get("title_field")
+
+        if title_field not in rows:
+            rows.append(title_field)
+
+        if not kanban_fields:
+            kanban_fields = ["name"]
+            if hasattr(_list, "default_kanban_settings"):
+                kanban_fields = json.loads(_list.default_kanban_settings().get("kanban_fields"))
+
+        for field in kanban_fields:
+            if field not in rows:
+                rows.append(field)
+
+        for kc in kanban_columns:
+            column_filters = { column_field: kc.get('name') }
+            order = kc.get("order")
+            if column_field in filters and filters.get(column_field) != kc.name or kc.get('delete'):
+                column_data = []
+            else:
+                column_filters.update(filters.copy())
+                page_length = 20
+
+                if kc.get("page_length"):
+                    page_length = kc.get("page_length")
+
+                if order:
+                    column_data = get_records_based_on_order(doctype, rows, column_filters, page_length, order)
+                else:
+                    column_data = frappe.get_list(
+                        doctype,
+                        fields=rows,
+                        filters=convert_filter_to_tuple(doctype, column_filters),
+                        order_by=order_by,
+                        page_length=page_length,
+                    )
+
+                new_filters = filters.copy()
+                new_filters.update({ column_field: kc.get('name') })
+
+                all_count = len(frappe.get_list(doctype, filters=convert_filter_to_tuple(doctype, new_filters)))
+
+                kc["all_count"] = all_count
+                kc["count"] = len(column_data)
+
+                for d in column_data:
+                    getCounts(d, doctype)
+
+            if order:
+                column_data = sorted(
+                    column_data, key=lambda x: order.index(x.get("name"))
+                    if x.get("name") in order else len(order)
+                )
+
+            data.append({"column": kc, "fields": kanban_fields, "data": column_data})
 
     fields = frappe.get_meta(doctype).fields
     fields = [field for field in fields if field.fieldtype not in no_value_fields]
@@ -284,6 +357,7 @@ def custom_get_data(
             "options": "User",
         },
         {"label": "Owner", "type": "Link", "value": "owner", "options": "User"},
+        {"label": "Like", "type": "Data", "value": "_liked_by"},
     ]
 
     for field in std_fields:
