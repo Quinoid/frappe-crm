@@ -115,7 +115,7 @@ def custom_record_count(doctype, domain):
 
         if record_total_count >= limit_count:
             return {
-                "status": "error",
+                "status": 500,
                 "error_type": "LimitExceeded",
                 "message": _("You have reached the maximum {0} limit of {1} for your plan and cannot create additional records.").format(doctype, limit_count),
                 "record_total_count": record_total_count,
@@ -153,7 +153,7 @@ def custom_delete(doctype, name):
     except frappe.LinkExistsError as e:
         # Custom error response for link exists error
         return {
-            "status": "error",
+            "status": 500,
             "error_type": "LinkExistsError",
             "message": str(e)
         }
@@ -161,7 +161,7 @@ def custom_delete(doctype, name):
     except Exception as e:
         # General error response
         return {
-            "status": "error",
+            "status": 500,
             "error_type": "GeneralError",
             "message": str(e)
         }
