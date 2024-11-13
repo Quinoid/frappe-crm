@@ -1,48 +1,43 @@
 <template>
   <LayoutHeader>
     <template #left-header>
-      <ViewBreadcrumbs v-model="viewControls" routeName="Leads" />
+      <ViewBreadcrumbs v-model="viewControls" routeName="Events" />
     </template>
     <template #right-header>
       <CustomActions
-        v-if="leadsListView?.customListActions"
-        :actions="leadsListView.customListActions"
+        v-if="eventsListView?.customListActions"
+        :actions="eventsListView.customListActions"
       />
-      <Button
+      <!-- <Button
         variant="solid"
         :label="__('Create')"
         class="bg-btn_primary"
-        @click="showLeadModal = true"
+        @click="showContactModal = true"
       >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
-      </Button>
+      </Button> -->
     </template>
   </LayoutHeader>
   <ViewControls
     ref="viewControls"
-    v-model="leads"
+    v-model="events"
     v-model:loadMore="loadMore"
     v-model:resizeColumn="triggerResize"
     v-model:updatedPageCount="updatedPageCount"
-    doctype="CRM Lead"
-    :filters="{ converted: 0 }"
-    :options="{
-      allowedViews: ['list', 'group_by', 'kanban'],
-    }"
+    doctype="Event"
   />
-
-  <LeadsListView
-    ref="leadsListView"
-    v-if="leads.data && rows.length"
-    v-model="leads.data.page_length_count"
-    v-model:list="leads"
+  <EventsListView
+    ref="eventsListView"
+    v-if="events.data && rows.length"
+    v-model="events.data.page_length_count"
+    v-model:list="events"
     :rows="rows"
-    :columns="leads.data.columns"
+    :columns="events.data.columns"
     :options="{
       showTooltip: false,
       resizeColumn: true,
-      rowCount: leads.data.row_count,
-      totalCount: leads.data.total_count,
+      rowCount: events.data.row_count,
+      totalCount: events.data.total_count,
     }"
     @loadMore="() => loadMore++"
     @columnWidthUpdated="() => triggerResize++"
@@ -51,217 +46,71 @@
     @applyLikeFilter="(data) => viewControls.applyLikeFilter(data)"
     @likeDoc="(data) => viewControls.likeDoc(data)"
   />
-  <div v-else-if="leads.data" class="flex h-full items-center justify-center">
+  <div v-else-if="events.data" class="flex h-full items-center justify-center">
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <LeadsIcon class="h-10 w-10" />
-      <span>{{ __('No {0} Found', [__('Leads')]) }}</span>
-      <Button :label="__('Create')" @click="showLeadModal = true">
+      <ContactsIcon class="h-10 w-10" />
+      <span>{{ __('No {0} Found', [__('Contacts')]) }}</span>
+      <Button :label="__('Create')" @click="showContactModal = true">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </div>
   </div>
-
-  <QuickEntryModal v-if="showQuickEntryModal" v-model="showQuickEntryModal" />
 </template>
 
 <script setup>
 import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import CustomActions from '@/components/CustomActions.vue'
-import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import LeadsIcon from '@/components/Icons/LeadsIcon.vue'
+import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
-import LeadsListView from '@/components/ListViews/LeadsListView.vue'
-
-import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
+import EventsListView from '@/components/ListViews/EventsListView.vue'
 import ViewControls from '@/components/ViewControls.vue'
-import { globalStore } from '@/stores/global'
-import { usersStore } from '@/stores/users'
-import { statusesStore } from '@/stores/statuses'
-import {
-  dateFormat,
-  dateTooltipFormat,
-  timeAgo,
-  website,
-  formatTime,
-} from '@/utils'
-import { useRoute } from 'vue-router'
-import { ref, computed, reactive, h } from 'vue'
+import { ref, computed } from 'vue'
 
-const { makeCall } = globalStore()
-const { getUser } = usersStore()
-const { getLeadStatus } = statusesStore()
-
-const route = useRoute()
-
-const leadsListView = ref(null)
-const showLeadModal = ref(false)
+const showContactModal = ref(false)
 const showQuickEntryModal = ref(false)
 
-const defaults = reactive({})
+const eventsListView = ref(null)
 
-// leads data is loaded in the ViewControls component
-const leads = ref({})
+// events data is loaded in the ViewControls component
+const events = ref({})
 const loadMore = ref(1)
 const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
 
-function getRow(name, field) {
-  function getValue(value) {
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-      return value
-    }
-    return { label: value }
-  }
-  return getValue(rows.value?.find((row) => row.name == name)[field])
-}
-
-// Rows
 const rows = computed(() => {
-  if (!leads.value?.data?.data) return []
-  if (leads.value.data.view_type === 'group_by') {
-    if (!leads.value?.data.group_by_field?.name) return []
-    return getGroupedByRows(
-      leads.value?.data.data,
-      leads.value?.data.group_by_field,
-    )
-  } else if (leads.value.data.view_type === 'kanban') {
-    return getKanbanRows(leads.value.data.data)
-  } else {
-    return parseRows(leads.value?.data.data)
-  }
+  if (
+    !events.value?.data?.data ||
+    !['list', 'group_by'].includes(events.value.data.view_type)
+  )
+    return []
+  return events.value?.data.data
+  //   .map((event) => {
+  //   let _rows = {}
+  //   events.value?.data.rows.forEach((row) => {
+  //     _rows[row] = event[row]
+
+  //     if (row == 'full_name') {
+  //       _rows[row] = {
+  //         label: event.full_name,
+  //         image_label: event.full_name,
+  //         image: event.image,
+  //       }
+  //     } else if (row == 'company_name') {
+  //       _rows[row] = {
+  //         label: event.company_name,
+  //         logo: getOrganization(event.company_name)?.organization_logo,
+  //       }
+  //     } else if (['modified', 'creation'].includes(row)) {
+  //       _rows[row] = {
+  //         label: dateFormat(event[row], dateTooltipFormat),
+  //         timeAgo: __(timeAgo(event[row])),
+  //       }
+  //     }
+  //   })
+  //   return _rows
+  // })
 })
-
-function getGroupedByRows(listRows, groupByField) {
-  let groupedRows = []
-
-  groupByField.options?.forEach((option) => {
-    let filteredRows = []
-
-    if (!option) {
-      filteredRows = listRows.filter((row) => !row[groupByField.name])
-    } else {
-      filteredRows = listRows.filter((row) => row[groupByField.name] == option)
-    }
-
-    let groupDetail = {
-      label: groupByField.label,
-      group: option || __(' '),
-      collapsed: false,
-      rows: parseRows(filteredRows),
-    }
-    if (groupByField.name == 'status') {
-      groupDetail.icon = () =>
-        h(IndicatorIcon, {
-          class: getLeadStatus(option)?.iconColorClass,
-        })
-    }
-    groupedRows.push(groupDetail)
-  })
-
-  return groupedRows || listRows
-}
-
-function getKanbanRows(data) {
-  let _rows = []
-  data.forEach((column) => {
-    column.data?.forEach((row) => {
-      _rows.push(row)
-    })
-  })
-  return parseRows(_rows)
-}
-
-function parseRows(rows) {
-  return rows.map((lead) => {
-    let _rows = {}
-    leads.value?.data.rows.forEach((row) => {
-      _rows[row] = lead[row]
-
-      if (row == 'lead_name') {
-        _rows[row] = {
-          label: lead.lead_name,
-          image: lead.image,
-          image_label: lead.first_name,
-        }
-      } else if (row == 'organization') {
-        _rows[row] = lead.organization
-      } else if (row === 'website') {
-        _rows[row] = website(lead.website)
-      } else if (row == 'status') {
-        _rows[row] = {
-          label: lead.status,
-          color: getLeadStatus(lead.status)?.iconColorClass,
-        }
-      } else if (row == 'sla_status') {
-        let value = lead.sla_status
-        let tooltipText = value
-        let color =
-          lead.sla_status == 'Failed'
-            ? 'red'
-            : lead.sla_status == 'Fulfilled'
-              ? 'green'
-              : 'orange'
-        if (value == 'First Response Due') {
-          value = __(timeAgo(lead.response_by))
-          tooltipText = dateFormat(lead.response_by, dateTooltipFormat)
-          if (new Date(lead.response_by) < new Date()) {
-            color = 'red'
-          }
-        }
-        _rows[row] = {
-          label: tooltipText,
-          value: value,
-          color: color,
-        }
-      } else if (row == 'lead_owner') {
-        _rows[row] = {
-          label: lead.lead_owner && getUser(lead.lead_owner).full_name,
-          ...(lead.lead_owner && getUser(lead.lead_owner)),
-        }
-      } else if (row == '_assign') {
-        let assignees = JSON.parse(lead._assign || '[]')
-        if (!assignees.length && lead.lead_owner) {
-          assignees = [lead.lead_owner]
-        }
-        _rows[row] = assignees.map((user) => ({
-          name: user,
-          image: getUser(user).user_image,
-          label: getUser(user).full_name,
-        }))
-      } else if (['modified', 'creation'].includes(row)) {
-        _rows[row] = {
-          label: dateFormat(lead[row], dateTooltipFormat),
-          timeAgo: __(timeAgo(lead[row])),
-        }
-      } else if (
-        ['first_response_time', 'first_responded_on', 'response_by'].includes(
-          row,
-        )
-      ) {
-        let field = row == 'response_by' ? 'response_by' : 'first_responded_on'
-        _rows[row] = {
-          label: lead[field] ? dateFormat(lead[field], dateTooltipFormat) : '',
-          timeAgo: lead[row]
-            ? row == 'first_response_time'
-              ? formatTime(lead[row])
-              : __(timeAgo(lead[row]))
-            : '',
-        }
-      }
-    })
-    _rows['_email_count'] = lead._email_count
-    _rows['_note_count'] = lead._note_count
-    _rows['_task_count'] = lead._task_count
-    _rows['_comment_count'] = lead._comment_count
-    return _rows
-  })
-}
-
-const docname = ref('')
-const showNoteModal = ref(false)
-
-const showTaskModal = ref(false)
 </script>
