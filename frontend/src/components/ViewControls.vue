@@ -418,7 +418,10 @@ function getParams() {
 }
 
 list.value = createResource({
-  url: 'crm.api.doc.get_data',
+  url:
+    props.doctype === 'Event'
+      ? 'crm.api.events.custom_get_data'
+      : 'crm.api.doc.get_data',
   params: getParams(),
   cache: [props.doctype, route.query.view, route.params.viewType],
   onSuccess(data) {
@@ -595,7 +598,7 @@ const quickFilterList = computed(() => {
   if (props.doctype === 'CRM Lead') {
     nameField = 'lead_name'
     labelField = 'Name'
-  } else if (props.doctype === 'CRM Task' || props.doctype === 'FCRM Note') {
+  } else if (props.doctype === 'CRM Task') {
     nameField = 'title'
     labelField = 'Title'
   } else if (
@@ -611,16 +614,23 @@ const quickFilterList = computed(() => {
   } else if (props.doctype === 'CRM Call Log') {
     nameField = 'to'
     labelField = 'Number'
+  } else if (props.doctype === 'Event') {
+    nameField = 'subject'
+    labelField = 'Subject'
   } else {
     nameField = 'name'
     labelField = 'ID'
   }
-  let filters = [
-    {
-      name: nameField,
-      label: __(labelField),
-    },
-  ]
+  let filters =
+    props.doctype !== 'FCRM Note'
+      ? [
+          {
+            name: nameField,
+            label: __(labelField),
+          },
+        ]
+      : []
+
   if (quickFilters.data) {
     filters.push(...quickFilters.data)
   }

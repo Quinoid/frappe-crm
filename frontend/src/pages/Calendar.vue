@@ -242,7 +242,6 @@ export default {
           ...transformEvent(event, true),
         })
 
-        await eventsResource.refresh()
         isCreateEventModalOpen.value = false // Close modal after creation
         handleMonthChange() // Ensure this re-fetches the events
         createToast({
@@ -250,7 +249,6 @@ export default {
           icon: 'check',
           iconClasses: 'text-green-600',
         })
-        console.log('Event updated:', newEvent)
       } catch (error) {
         console.error('Error creating event:', error)
       }
