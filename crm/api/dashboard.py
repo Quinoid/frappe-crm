@@ -113,21 +113,22 @@ def custom_record_count(doctype, domain):
         records = record_query.run(as_dict=True)
         record_total_count = len(records)
 
-        if record_total_count >= limit_count:
-            frappe.response["http_status_code"] = 400
-            return {
-                "status": "error",
-                "error_type": "LimitExceeded",
-                "message": _("You have reached the maximum {0} limit of {1} for your plan and cannot create additional records.").format(doctype, limit_count),
-                "record_total_count": record_total_count,
-                "limit_count": limit_count
-            }
+        # if record_total_count >= limit_count:
+        #     frappe.response["http_status_code"] = 400
+        #     return {
+        #         "status": "error",
+        #         "error_type": "LimitExceeded",
+        #         "message": _("You have reached the maximum {0} limit of {1} for your plan and cannot create additional records.").format(doctype, limit_count),
+        #         "record_total_count": record_total_count,
+        #         "limit_count": limit_count
+        #     }
 
 
         return {
-            "record_total_count": record_total_count,
             "status": 200,
-            "message": "Within limit"
+            "record_total_count": record_total_count,
+            "limit_count": limit_count
+            
         }
     
     except frappe.DoesNotExistError:
