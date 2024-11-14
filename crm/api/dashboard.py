@@ -57,7 +57,7 @@ def custom_dashboard():
         frappe.qb.from_(Event)
         .select("*")
         .where(
-            (Event.starts_on <= current_date) & (Event.ends_on >= current_date) 
+            Event.starts_on == current_date
         )
         .orderby(Event.starts_on, order=Order.asc)
 
