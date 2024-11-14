@@ -166,6 +166,8 @@ export default {
         description: event.description
           ? event.description.replace(/<\/?[^>]+(>|$)/g, '')
           : '',
+        participant: event.custom_participant,
+        venue: event.custom_venue,
         type: event.event_type,
         color: event.custom_color ?? 'green',
         isFullDay: Boolean(event.all_day),
@@ -203,7 +205,17 @@ export default {
       return formattedDate
     }
     function transformEvent(event, update) {
-      const { title, date, from_time, color, to_time, id, ...rest } = event
+      const {
+        title,
+        date,
+        from_time,
+        venue,
+        participant,
+        color,
+        to_time,
+        id,
+        ...rest
+      } = event
       console.log(event)
       // Create a new object with the transformed keys
       const transformedEvent = {
@@ -213,6 +225,8 @@ export default {
         custom_color: color, // color to custom_color
         from_time: from_time,
         name: update ? id : '',
+        custom_participant: participant,
+        custom_venue: venue,
         ...rest, // include the remaining properties as is
       }
 

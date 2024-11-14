@@ -51,7 +51,7 @@
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
       <ContactsIcon class="h-10 w-10" />
-      <span>{{ __('No {0} Found', [__('Contacts')]) }}</span>
+      <span>{{ __('No {0} Found', [__('Event')]) }}</span>
       <Button :label="__('Create')" @click="showContactModal = true">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
@@ -87,30 +87,5 @@ const rows = computed(() => {
   )
     return []
   return events.value?.data.data
-  //   .map((event) => {
-  //   let _rows = {}
-  //   events.value?.data.rows.forEach((row) => {
-  //     _rows[row] = event[row]
-
-  //     if (row == 'full_name') {
-  //       _rows[row] = {
-  //         label: event.full_name,
-  //         image_label: event.full_name,
-  //         image: event.image,
-  //       }
-  //     } else if (row == 'company_name') {
-  //       _rows[row] = {
-  //         label: event.company_name,
-  //         logo: getOrganization(event.company_name)?.organization_logo,
-  //       }
-  //     } else if (['modified', 'creation'].includes(row)) {
-  //       _rows[row] = {
-  //         label: dateFormat(event[row], dateTooltipFormat),
-  //         timeAgo: __(timeAgo(event[row])),
-  //       }
-  //     }
-  //   })
-  //   return _rows
-  // })
 })
 </script>
