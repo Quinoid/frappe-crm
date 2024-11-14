@@ -83,7 +83,7 @@ def get_linked_deals(contact):
 	# get deals data
 	deals = []
 	for d in deal_names:
-		deal = frappe.get_cached_doc(
+		deal = frappe.get_doc(
 			"CRM Deal",
 			d.parent,
 			fields=[
