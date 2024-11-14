@@ -333,8 +333,52 @@ def custom_get_data(
 
             data.append({"column": kc, "fields": kanban_fields, "data": column_data})
 
-    fields = frappe.get_meta(doctype).fields
-    fields = [field for field in fields if field.fieldtype not in no_value_fields]
+    # fields = frappe.get_meta(doctype).fields
+    # print("-------------------------------------------", fields)
+    # #fields = ["subject", "event_category", "event_type", "custom_color", "repeat_this_event", "starts_on", "ends_on", "status", "sync_with_google_calendar", "description"]
+
+    # fields = [field for field in fields if field.fieldtype not in no_value_fields]
+    # fields = [
+    #     {
+    #         "label": _(field.label),
+    #         "type": field.fieldtype,
+    #         "value": field.fieldname,
+    #         "options": field.options,
+    #     }
+    #     for field in fields
+    #     if field.label and field.fieldname
+    # ]
+
+    # std_fields = [
+    #     {"label": "Name", "type": "Data", "value": "name"},
+    #     {"label": "Created On", "type": "Datetime", "value": "creation"},
+    #     {"label": "Last Modified", "type": "Datetime", "value": "modified"},
+    #     {
+    #         "label": "Modified By",
+    #         "type": "Link",
+    #         "value": "modified_by",
+    #         "options": "User",
+    #     },
+    #     {"label": "Owner", "type": "Link", "value": "owner", "options": "User"},
+    #     {"label": "Like", "type": "Data", "value": "_liked_by"},
+    # ]
+
+    # for field in std_fields:
+    #     if field.get('value') not in rows:
+    #         rows.append(field.get('value'))
+    #     if field not in fields:
+    #         field["label"] = _(field["label"])
+    #         fields.append(field)
+
+    # List of specific field names you want to retrieve
+    selected_fieldnames = ["subject", "event_category", "event_type", "custom_color", 
+                           "repeat_this_event", "starts_on", "ends_on", "status", 
+                           "sync_with_google_calendar", "description"]
+
+    # Get all fields for the doctype
+    all_fields = frappe.get_meta(doctype).fields
+
+    # Filter to include only selected fields
     fields = [
         {
             "label": _(field.label),
@@ -342,10 +386,11 @@ def custom_get_data(
             "value": field.fieldname,
             "options": field.options,
         }
-        for field in fields
-        if field.label and field.fieldname
+        for field in all_fields
+        if field.fieldname in selected_fieldnames and field.fieldtype not in no_value_fields
     ]
 
+    # Add standard fields if they’re not already in `fields`
     std_fields = [
         {"label": "Name", "type": "Data", "value": "name"},
         {"label": "Created On", "type": "Datetime", "value": "creation"},
@@ -361,11 +406,13 @@ def custom_get_data(
     ]
 
     for field in std_fields:
-        if field.get('value') not in rows:
-            rows.append(field.get('value'))
-        if field not in fields:
+        if field.get("value") not in rows:
+            rows.append(field.get("value"))
+        # Append standard fields only if they are not already in fields
+        if all(f.get("value") != field["value"] for f in fields):
             field["label"] = _(field["label"])
             fields.append(field)
+
 
     if not is_default and custom_view_name:
         is_default = frappe.db.get_value("CRM View Settings", custom_view_name, "load_default_columns")
