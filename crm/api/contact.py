@@ -34,7 +34,7 @@ def update_deals_email_mobile_no(doc):
 	)
 
 	for linked_deal in linked_deals:
-		deal = frappe.get_cached_doc("CRM Deal", linked_deal.parent)
+		deal = frappe.get_doc("CRM Deal", linked_deal.parent)
 		if deal.email != doc.email_id or deal.mobile_no != doc.mobile_no:
 			deal.email = doc.email_id
 			deal.mobile_no = doc.mobile_no
