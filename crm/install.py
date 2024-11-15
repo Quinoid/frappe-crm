@@ -135,7 +135,8 @@ def add_default_fields_layout():
 		},
 		"Event-Quick Entry": {
 			"doctype": "Event",
-			"layout": '[{"label":"Event","fields":["name", "subject","starts_on","ends_on", "custom_venue", "custom_color", custom_participant],"hideLabel":true}]'
+			"layout": '[{"label":"Event","fields":["name", "subject","starts_on","ends_on", "custom_venue", "custom_color", "custom_participant"],"hideLabel":true}]'
+
 		},
 	}
 
