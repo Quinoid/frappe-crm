@@ -8,14 +8,14 @@
         v-if="eventsListView?.customListActions"
         :actions="eventsListView.customListActions"
       />
-      <!-- <Button
+      <Button
         variant="solid"
         :label="__('Create')"
         class="bg-btn_primary"
         @click="showContactModal = true"
       >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
-      </Button> -->
+      </Button>
     </template>
   </LayoutHeader>
   <ViewControls
@@ -57,6 +57,16 @@
       </Button>
     </div>
   </div>
+  <EventModal
+    v-model="showContactModal"
+    v-model:quickEntry="showQuickEntryModal"
+    :contact="{}"
+  />
+  <QuickEntryModal
+    v-if="showQuickEntryModal"
+    v-model="showQuickEntryModal"
+    doctype="Event"
+  />
 </template>
 
 <script setup>
@@ -67,6 +77,7 @@ import LayoutHeader from '@/components/LayoutHeader.vue'
 import EventsListView from '@/components/ListViews/EventsListView.vue'
 import ViewControls from '@/components/ViewControls.vue'
 import { ref, computed } from 'vue'
+import EventModal from '../components/Modals/EventModal.vue'
 
 const showContactModal = ref(false)
 const showQuickEntryModal = ref(false)
