@@ -27,18 +27,28 @@ def set_primary_mobile_no(doc):
 
 
 def update_deals_email_mobile_no(doc):
-	linked_deals = frappe.get_all(
-		"CRM Contacts",
-		filters={"contact": doc.name, "is_primary": 1},
-		fields=["parent"],
-	)
+    """Update email and mobile number for linked deals when the primary contact is updated"""
+    linked_deals = frappe.get_all(
+        "CRM Contacts",
+        filters={"contact": doc.name, "is_primary": 1},
+        fields=["parent"],
+    )
 
-	for linked_deal in linked_deals:
-		deal = frappe.get_cached_doc("CRM Deal", linked_deal.parent)
-		if deal.email != doc.email_id or deal.mobile_no != doc.mobile_no:
-			deal.email = doc.email_id
-			deal.mobile_no = doc.mobile_no
-			deal.save(ignore_permissions=True)
+    for linked_deal in linked_deals:
+        deal = frappe.get_doc("CRM Deal", linked_deal.parent)
+        
+        # Check if update is required
+        if deal.email != doc.email_id or deal.mobile_no != doc.mobile_no:
+            deal.email = doc.email_id
+            deal.mobile_no = doc.mobile_no
+
+            # Save the updated deal, ignoring permissions
+            try:
+                deal.save(ignore_permissions=True)
+                frappe.db.commit()  # Ensure changes are committed
+            except Exception as e:
+                frappe.log_error(message=f"Error updating deal {deal.name}: {str(e)}", title="Deal Update Failed")
+
 
 
 @frappe.whitelist()
