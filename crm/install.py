@@ -133,6 +133,10 @@ def add_default_fields_layout():
 			"doctype": "Address",
 			"layout": '[{"label":"Address","columns":1,"fields":["address_title","address_type","address_line1","address_line2","city","state","country","pincode"],"hideLabel":true}]'
 		},
+		"Event-Quick Entry": {
+			"doctype": "Event",
+			"layout": '[{"label":"Event","fields":["name", "subject","starts_on","ends_on", "custom_venue", "custom_color", custom_participant],"hideLabel":true}]'
+		},
 	}
 
 	sidebar_fields_layouts = {
