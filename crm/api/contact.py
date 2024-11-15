@@ -34,7 +34,7 @@ def update_deals_email_mobile_no(doc):
 	)
 
 	for linked_deal in linked_deals:
-		deal = frappe.get_doc("CRM Deal", linked_deal.parent)
+		deal = frappe.get_cached_doc("CRM Deal", linked_deal.parent)
 		if deal.email != doc.email_id or deal.mobile_no != doc.mobile_no:
 			deal.email = doc.email_id
 			deal.mobile_no = doc.mobile_no
@@ -82,25 +82,23 @@ def get_linked_deals(contact):
 
 	# get deals data
 	deals = []
-	for d in deal_names:
-		deal = frappe.get_doc(
-			"CRM Deal",
-			d.parent,
-			fields=[
-				"name",
-				"organization",
-				"currency",
-				"annual_revenue",
-				"status",
-				"email",
-				"mobile_no",
-				"deal_owner",
-				"modified",
-			],
-		)
-		deals.append(deal.as_dict())
+    for d in deal_names:
+        deal = frappe.get_doc("CRM Deal", d.parent)  # Fetch the full deal document
+        # Extract required fields into a dictionary
+        deal_data = {
+            "name": deal.name,
+            "organization": deal.organization,
+            "currency": deal.currency,
+            "annual_revenue": deal.annual_revenue,
+            "status": deal.status,
+            "email": deal.email,
+            "mobile_no": deal.mobile_no,
+            "deal_owner": deal.deal_owner,
+            "modified": deal.modified,
+        }
+        deals.append(deal_data)
 
-	return deals
+    return deals
 
 
 @frappe.whitelist()
