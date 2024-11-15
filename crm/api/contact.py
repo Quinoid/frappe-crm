@@ -68,20 +68,22 @@ def get_contact(name):
 
 @frappe.whitelist()
 def get_linked_deals(contact):
-	"""Get linked deals for a contact"""
+    """Get linked deals for a contact"""
+    
+    # Check for read permissions on Contact
+    if not frappe.has_permission("Contact", "read", contact):
+        frappe.throw("Not permitted", frappe.PermissionError)
+    
+    # Get deal names linked to the contact
+    deal_names = frappe.get_all(
+        "CRM Contacts",
+        filters={"contact": contact, "parenttype": "CRM Deal"},
+        fields=["parent"],
+        distinct=True,
+    )
 
-	if not frappe.has_permission("Contact", "read", contact):
-		frappe.throw("Not permitted", frappe.PermissionError)
-
-	deal_names = frappe.get_all(
-		"CRM Contacts",
-		filters={"contact": contact, "parenttype": "CRM Deal"},
-		fields=["parent"],
-		distinct=True,
-	)
-
-	# get deals data
-	deals = []
+    # Fetch deal details
+    deals = []
     for d in deal_names:
         deal = frappe.get_doc("CRM Deal", d.parent)  # Fetch the full deal document
         # Extract required fields into a dictionary
@@ -99,7 +101,7 @@ def get_linked_deals(contact):
         deals.append(deal_data)
 
     return deals
-
+    
 
 @frappe.whitelist()
 def create_new(contact, field, value):
