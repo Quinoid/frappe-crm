@@ -171,7 +171,6 @@ export async function setupListCustomizations(data, obj = {}) {
 
   let actions = []
   let bulkActions = []
-
   if (Array.isArray(data.list_script)) {
     for (let script of data.list_script) {
       let _script = await getListScript(script, obj)

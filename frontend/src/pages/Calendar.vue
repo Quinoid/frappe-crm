@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="contents">
     <LayoutHeader>
       <template #left-header>
@@ -299,6 +299,94 @@ export default {
       updateEvent,
       createEvent,
       openCreateEventModal,
+    }
+  },
+}
+</script> -->
+<template>
+  <div class="contents">
+    <LayoutHeader>
+      <template #left-header>
+        <Breadcrumbs
+          :items="[{ label: 'Calendar', route: { name: 'Calendar' } }]"
+        />
+      </template>
+    </LayoutHeader>
+    <div
+      v-if="!isLoading"
+      class="flex flex-col h-full m-5 p-5 shadow-sm rounded-sm"
+    >
+      <FullCalendar :events="calendarEvents" :options="calendarOptions" />
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue'
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import LayoutHeader from '@/components/LayoutHeader.vue'
+import { Breadcrumbs } from 'qbs-vue-ui'
+
+export default {
+  components: {
+    FullCalendar,
+    LayoutHeader,
+    Breadcrumbs,
+  },
+  setup() {
+    const isLoading = ref(true)
+    const isCreateEventModalOpen = ref(false)
+
+    // Flat array of events
+    const calendarEvents = ref([
+      {
+        title: 'Meeting',
+        start: '2024-11-13T10:37:47',
+        end: '2024-11-19T10:37:51',
+      },
+      {
+        title: 'Event',
+        start: '2024-11-13T17:44:30',
+        end: '2024-11-15T17:44:32',
+      },
+      {
+        title: 'Other Event',
+        start: '2024-11-12T17:40:30',
+        end: '2024-11-13T17:40:32',
+      },
+      {
+        title: 'Example',
+        start: '2024-11-12T20:00:00',
+        end: '2024-11-12T22:00:00',
+      },
+    ])
+
+    const calendarOptions = ref({
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+      initialView: 'dayGridMonth',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      },
+      events: calendarEvents.value,
+      dateClick(info) {
+        console.log('Date clicked:', info.dateStr)
+        isCreateEventModalOpen.value = true
+      },
+      eventClick(info) {
+        console.log('Event clicked:', info.event)
+      },
+      editable: true,
+      droppable: true,
+    })
+
+    return {
+      calendarOptions,
+      calendarEvents,
     }
   },
 }

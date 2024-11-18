@@ -290,11 +290,11 @@ const links = [
     icon: Email2Icon,
     to: 'Email Templates',
   },
-  {
-    label: 'Calendar',
-    icon: CalendarIcon,
-    to: 'Calendar',
-  },
+  // {
+  //   label: 'Calendar',
+  //   icon: CalendarIcon,
+  //   to: 'Calendar',
+  // },
   {
     label: 'Events',
     icon: CalendarIcon,

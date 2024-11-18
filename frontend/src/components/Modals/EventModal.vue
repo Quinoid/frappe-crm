@@ -40,10 +40,10 @@
                   <template #default="{ open }">
                     <Button
                       variant="ghost"
-                      :label="contact.data[field.name]"
+                      :label="event[field.name]"
                       class="dropdown-button w-full justify-between truncate hover:bg-white"
                     >
-                      <div class="truncate">{{ contact.data[field.name] }}</div>
+                      <div class="truncate">{{ event[field.name] }}</div>
                       <template #suffix>
                         <FeatherIcon
                           :name="open ? 'chevron-up' : 'chevron-down'"
@@ -60,8 +60,9 @@
           <Fields
             v-else-if="filteredSections"
             :sections="filteredSections"
-            :data="_contact"
+            :data="_event"
           />
+          <ErrorMessage class="mt-4" v-if="error" :message="__(error)" />
         </div>
       </div>
       <div v-if="!detailMode" class="px-4 pb-7 pt-4 sm:px-6">
@@ -99,7 +100,11 @@ import { createToast } from '@/utils'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
-  contact: {
+  event: {
+    type: Object,
+    default: {},
+  },
+  events: {
     type: Object,
     default: {},
   },
@@ -120,70 +125,75 @@ const show = defineModel()
 
 const detailMode = ref(false)
 const editMode = ref(false)
-let _contact = ref({})
-let _address = ref({})
-
-const showAddressModal = ref(false)
+let _event = ref({})
+const error = ref(null)
 
 async function updateContact() {
+  console.log('Updating event:', _event.value)
   if (!dirty.value) {
     show.value = false
     return
   }
+  if (!_event.value.starts_on) {
+    error.value = __('Start Date is mandatory')
+    return error.value
+  }
+  if (!_event.value.subject) {
+    error.value = __('Subject is mandatory')
+    return error.value
+  }
+  if (!_event.value.event_category) {
+    error.value = __('Event Category is mandatory')
+  }
 
-  const values = { ..._contact.value }
+  const values = { ..._event.value }
 
   let name = await callSetValue(values)
-
-  handleContactUpdate({ name })
+  if (name) {
+    capture('event_updated')
+    props.events?.reload?.()
+    show.value = false
+  }
 }
 
 async function callSetValue(values) {
   const d = await call('frappe.client.set_value', {
     doctype: 'Event',
-    name: props.contact.data.name,
+    name: props.event.name,
     fieldname: values,
   })
   return d.name
 }
 
 async function callInsertDoc() {
-  if (_contact.value.email_id) {
-    _contact.value.email_ids = [{ email_id: _contact.value.email_id }]
-    delete _contact.value.email_id
+  error.value = null
+  if (!_event.value.starts_on) {
+    error.value = __('Start Date is mandatory')
+    return error.value
   }
-
-  if (_contact.value.actual_mobile_no) {
-    _contact.value.phone_nos = [{ phone: _contact.value.actual_mobile_no }]
-    delete _contact.value.actual_mobile_no
+  if (!_event.value.subject) {
+    error.value = __('Subject is mandatory')
+    return error.value
+  }
+  if (!_event.value.event_category) {
+    error.value = __('Event Category is mandatory')
   }
 
   const doc = await call('frappe.client.insert', {
     doc: {
       doctype: 'Event',
-      ..._contact.value,
+      ..._event.value,
     },
   })
   if (doc.name) {
-    capture('contact_created')
-    handleContactUpdate(doc)
+    capture('event_created')
+    props.events?.reload?.()
+    show.value = false
   }
-}
-
-function handleContactUpdate(doc) {
-  props.contact?.reload?.()
-  if (doc.name && props.options.redirect) {
-    router.push({
-      name: 'Event',
-      params: { contactId: doc.name },
-    })
-  }
-  show.value = false
-  props.options.afterInsert && props.options.afterInsert(doc)
 }
 
 const dialogOptions = computed(() => {
-  let title = !editMode.value ? 'New Event' : _contact.value.full_name
+  let title = !editMode.value ? 'New Event' : 'Edit Event'
 
   let size = detailMode.value ? '' : 'xl'
   let actions = detailMode.value
@@ -206,38 +216,38 @@ const detailFields = computed(() => {
       icon: ContactIcon,
       name: 'full_name',
       value:
-        (_contact.value.salutation ? _contact.value.salutation + '. ' : '') +
-        _contact.value.full_name,
+        (_event.value.salutation ? _event.value.salutation + '. ' : '') +
+        _event.value.full_name,
     },
     {
       icon: GenderIcon,
       name: 'gender',
-      value: _contact.value.gender,
+      value: _event.value.gender,
     },
     {
       icon: Email2Icon,
       name: 'email_id',
-      value: _contact.value.email_id,
+      value: _event.value.email_id,
     },
     {
       icon: PhoneIcon,
       name: 'mobile_no',
-      value: _contact.value.actual_mobile_no,
+      value: _event.value.actual_mobile_no,
     },
     {
       icon: OrganizationsIcon,
       name: 'company_name',
-      value: _contact.value.company_name,
+      value: _event.value.company_name,
     },
     {
       icon: CertificateIcon,
       name: 'designation',
-      value: _contact.value.designation,
+      value: _event.value.designation,
     },
     {
       icon: AddressIcon,
       name: 'address',
-      value: _contact.value.address,
+      value: _event.value.address,
     },
   ]
 
@@ -255,210 +265,13 @@ const filteredSections = computed(() => {
   let allSections = sections.data || []
   if (!allSections.length) return []
 
-  allSections.forEach((s) => {
-    s.fields.forEach((field) => {
-      if (field.name == 'email_id') {
-        field.type = props.contact?.data?.name ? 'Dropdown' : 'Data'
-        field.options =
-          props.contact.data?.email_ids?.map((email) => {
-            return {
-              name: email.name,
-              value: email.email_id,
-              selected: email.email_id === props.contact.data.email_id,
-              placeholder: 'john@doe.com',
-              onClick: () => {
-                _contact.value.email_id = email.email_id
-                _contact.value.email_ids = _contact.value.email_ids.map(
-                  (emails) => ({
-                    ...emails,
-                    is_primary: emails.email_id === email.email_id ? 1 : 0,
-                  }),
-                )
-                setAsPrimary('email', email.email_id)
-              },
-              onSave: (option, isNew) => {
-                if (isNew) {
-                  createNew('email', option.value)
-                  if (props.contact.data.email_ids.length === 1) {
-                    _contact.value.email_id = option.value
-                  }
-                } else {
-                  if (props.contact.data.email_ids.length === 1) {
-                    _contact.value.email_id = option.value
-                  } else {
-                    _contact.value.email_ids.find(
-                      (emails) => emails.name === option.name,
-                    ).email_id = option.value
-                  }
-                  editOption('Event Email', option.name, option.value)
-                }
-              },
-              onDelete: async (option, isNew) => {
-                props.contact.data.email_ids =
-                  props.contact.data.email_ids.filter(
-                    (email) => email.name !== option.name,
-                  )
-                !isNew && (await deleteOption('Event Email', option.name))
-                if (_contact.value.email_id === option.value) {
-                  if (props.contact.data.email_ids.length === 0) {
-                    _contact.value.email_id = ''
-                  } else {
-                    _contact.value.email_id = props.contact.data.email_ids.find(
-                      (email) => email.is_primary,
-                    )?.email_id
-                  }
-                }
-              },
-            }
-          }) || []
-        field.create = () => {
-          props.contact.data?.email_ids?.push({
-            name: 'new-1',
-            value: '',
-            selected: false,
-            isNew: true,
-          })
-        }
-      } else if (
-        field.name == 'mobile_no' ||
-        field.name == 'actual_mobile_no'
-      ) {
-        field.type = props.contact?.data?.name ? 'Dropdown' : 'Data'
-        field.name = 'actual_mobile_no'
-        field.options =
-          props.contact.data?.phone_nos?.map((phone) => {
-            return {
-              name: phone.name,
-              value: phone.phone,
-              selected: phone.phone === props.contact.data.actual_mobile_no,
-              onClick: () => {
-                _contact.value.actual_mobile_no = phone.phone
-                _contact.value.mobile_no = phone.phone
-                setAsPrimary('mobile_no', phone.phone)
-              },
-              onSave: (option, isNew) => {
-                if (isNew) {
-                  createNew('phone', option.value)
-                  if (props.contact.data.phone_nos.length === 1) {
-                    _contact.value.actual_mobile_no = option.value
-                  }
-                } else {
-                  editOption('Event Phone', option.name, option.value)
-                }
-              },
-              onDelete: async (option, isNew) => {
-                props.contact.data.phone_nos =
-                  props.contact.data.phone_nos.filter(
-                    (phone) => phone.name !== option.name,
-                  )
-                !isNew && (await deleteOption('Event Phone', option.name))
-                if (_contact.value.actual_mobile_no === option.value) {
-                  if (props.contact.data.phone_nos.length === 0) {
-                    _contact.value.actual_mobile_no = ''
-                  } else {
-                    _contact.value.actual_mobile_no =
-                      props.contact.data.phone_nos.find(
-                        (phone) => phone.is_primary_mobile_no,
-                      )?.phone
-                  }
-                }
-              },
-            }
-          }) || []
-        field.create = () => {
-          props.contact.data?.phone_nos?.push({
-            name: 'new-1',
-            value: '',
-            selected: false,
-            isNew: true,
-          })
-        }
-      } else if (field.name == 'address') {
-        field.create = (value, close) => {
-          _contact.value.address = value
-          _address.value = {}
-          showAddressModal.value = true
-          close()
-        }
-        field.edit = async (addr) => {
-          _address.value = await call('frappe.client.get', {
-            doctype: 'Address',
-            name: addr,
-          })
-          showAddressModal.value = true
-        }
-      }
-    })
+  return allSections?.map((section) => {
+    return { ...section, columns: 1 }
   })
-
-  return allSections
 })
-async function setAsPrimary(field, value) {
-  let d = await call('crm.api.contact.set_as_primary', {
-    contact: props.contact.data.name,
-    field,
-    value,
-  })
-  if (d) {
-    handleContactUpdate(d)
-    props.contact.reload()
-    createToast({
-      title: 'Event updated',
-      icon: 'check',
-      iconClasses: 'text-green-600',
-    })
-  }
-}
-
-async function createNew(field, value) {
-  let d = await call('crm.api.contact.create_new', {
-    contact: props.contact.data.name,
-    field,
-    value,
-  })
-  if (d) {
-    props.contact.reload()
-    createToast({
-      title: 'Event updated',
-      icon: 'check',
-      iconClasses: 'text-green-600',
-    })
-  }
-}
-
-async function editOption(doctype, name, value) {
-  let d = await call('frappe.client.set_value', {
-    doctype,
-    name,
-    fieldname: doctype == 'Event Phone' ? 'phone' : 'email_id',
-    value,
-  })
-  handleContactUpdate(d)
-  if (d) {
-    props.contact.reload()
-    createToast({
-      title: 'Event updated',
-      icon: 'check',
-      iconClasses: 'text-green-600',
-    })
-  }
-}
-
-async function deleteOption(doctype, name) {
-  await call('frappe.client.delete', {
-    doctype,
-    name,
-  })
-  await props.contact.reload()
-  createToast({
-    title: 'Event updated',
-    icon: 'check',
-    iconClasses: 'text-green-600',
-  })
-}
 
 const dirty = computed(() => {
-  return JSON.stringify(props.contact.data) !== JSON.stringify(_contact.value)
+  return JSON.stringify(props.event) !== JSON.stringify(_event.value)
 })
 
 watch(
@@ -466,14 +279,14 @@ watch(
   (value) => {
     if (!value) return
     detailMode.value = props.options.detailMode
-    editMode.value = false
-    nextTick(() => {
-      _contact.value = { ...props.contact.data }
-      if (_contact.value.name) {
-        editMode.value = true
-      }
-    })
+    if (props.event.name) {
+      editMode.value = true
+      _event.value = { ...props.event }
+    } else {
+      editMode.value = false
+    }
   },
+  { deep: true },
 )
 
 const showQuickEntryModal = defineModel('quickEntry')

@@ -63,7 +63,7 @@
   <ContactModal
     v-model="showContactModal"
     v-model:quickEntry="showQuickEntryModal"
-    :contact="{}"
+    :contact="contacts"
   />
   <QuickEntryModal
     v-if="showQuickEntryModal"

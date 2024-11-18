@@ -4,11 +4,6 @@
     :columns="columns"
     :rows="rows"
     :options="{
-      //   getRowRoute: (row) => ({
-      //     name: 'Event',
-      //     params: { eventId: row.name },
-      //     query: { view: route.query.view, viewType: route.params.viewType },
-      //   }),
       selectable: options.selectable,
       showTooltip: options.showTooltip,
       resizeColumn: options.resizeColumn,
@@ -41,6 +36,8 @@
         v-for="row in rows"
         :key="row.name"
         v-slot="{ idx, column, item }"
+        @click="getRowRoute(row)"
+        class="cursor-pointer"
         :row="row"
       >
         <ListRowItem :item="item">
@@ -184,6 +181,10 @@ const props = defineProps({
   },
   columns: {
     type: Array,
+    required: true,
+  },
+  getRowRoute: {
+    type: Function,
     required: true,
   },
   options: {

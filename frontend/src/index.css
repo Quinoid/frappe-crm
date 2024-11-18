@@ -54,7 +54,9 @@
 .qbs-vue-switch-selected {
   @apply !bg-primary;
 }
-
+.fc-button-primary {
+  @apply !bg-btn_primary;
+}
 ::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Change color on hover */
 }

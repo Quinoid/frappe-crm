@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isMobileView"
+    v-if="isMobileView && route.params.viewType !== 'calendar'"
     class="flex flex-col justify-between gap-2 sm:px-5 px-3 py-4"
   >
     <div class="flex flex-col gap-2">
@@ -58,7 +58,10 @@
       </div>
     </div>
   </div>
-  <div v-else class="flex items-center justify-between gap-2 px-5 py-4">
+  <div
+    v-else-if="route.params.viewType !== 'calendar'"
+    class="flex items-center justify-between gap-2 px-5 py-4"
+  >
     <FadedScrollableDiv
       class="flex flex-1 items-center overflow-x-auto -ml-1"
       orientation="horizontal"
@@ -213,6 +216,7 @@
 <script setup>
 import ListIcon from '@/components/Icons/ListIcon.vue'
 import KanbanIcon from '@/components/Icons/KanbanIcon.vue'
+import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import GroupByIcon from '@/components/Icons/GroupByIcon.vue'
 import QuickFilterField from '@/components/QuickFilterField.vue'
 import RefreshIcon from '@/components/Icons/RefreshIcon.vue'
@@ -258,7 +262,7 @@ const props = defineProps({
     default: {
       hideColumnsButton: false,
       defaultViewName: '',
-      allowedViews: ['list'],
+      allowedViews: ['list', 'calendar'],
     },
   },
 })
@@ -297,6 +301,11 @@ function getViewType() {
       name: 'kanban',
       label: __('Kanban'),
       icon: markRaw(KanbanIcon),
+    },
+    calendar: {
+      name: 'calendar',
+      label: __('Calendar'),
+      icon: markRaw(CalendarIcon),
     },
   }
 
@@ -513,6 +522,17 @@ if (allowedViews.includes('group_by')) {
     },
   })
 }
+if (allowedViews.includes('calendar')) {
+  defaultViews.push({
+    name: 'calendar',
+    label: __(props.options?.defaultViewName) || __('Calendar'),
+    icon: markRaw(CalendarIcon),
+    onClick() {
+      viewUpdated.value = false
+      router.push({ name: route.name, params: { viewType: 'calendar' } })
+    },
+  })
+}
 
 function getIcon(icon, type) {
   if (isEmoji(icon)) {
@@ -521,6 +541,8 @@ function getIcon(icon, type) {
     return markRaw(GroupByIcon)
   } else if (!icon && type === 'kanban') {
     return markRaw(KanbanIcon)
+  } else if (!icon && type === 'calendar') {
+    return markRaw(CalendarIcon)
   }
   return icon || markRaw(ListIcon)
 }

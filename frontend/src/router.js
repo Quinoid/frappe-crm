@@ -5,7 +5,7 @@ import { sessionStore } from '@/stores/session'
 const routes = [
   {
     path: '/',
-    redirect: { name: 'Leads' },
+    redirect: { name: 'Dashboard' },
     name: 'Home',
   },
   {
@@ -165,7 +165,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.name === 'Home' && isLoggedIn) {
-    next({ name: 'Leads' })
+    next({ name: 'Dashboard' })
   } else if (!isLoggedIn) {
     window.location.href = '/login?redirect-to=/crm'
   } else if (to.matched.length === 0) {

@@ -9,6 +9,11 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@fullcalendar/vue3": "^6.1.15",
     "@tiptap/extension-paragraph": "^2.4.0",
     "@twilio/voice-sdk": "^2.10.2",
     "@vueuse/core": "^10.3.0",
