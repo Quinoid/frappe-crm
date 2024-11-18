@@ -129,7 +129,6 @@ let _event = ref({})
 const error = ref(null)
 
 async function updateContact() {
-  console.log('Updating event:', _event.value)
   if (!dirty.value) {
     show.value = false
     return
@@ -145,7 +144,6 @@ async function updateContact() {
   if (!_event.value.event_category) {
     error.value = __('Event Category is mandatory')
   }
-
   const values = { ..._event.value }
 
   let name = await callSetValue(values)

@@ -81,9 +81,9 @@
   <EventModal
     v-model="showContactModal"
     v-model:quickEntry="showQuickEntryModal"
-    :event="event"
+    :events="events"
     :key="componentKey"
-    :events="editMode ? events : {}"
+    :event="editMode ? event : {}"
     :options="{ detailMode }"
   />
   <QuickEntryModal
