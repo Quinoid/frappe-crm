@@ -503,7 +503,7 @@ async function createLead() {
     } else {
       createToast({
         title: 'Error',
-        text: res.message,
+        text: `Maximum limit exceeds. Total limit is ${res.limit_count} `,
         icon: 'x',
         iconClasses: 'text-red-600',
       })
