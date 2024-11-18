@@ -38,7 +38,7 @@ def custom_dashboard():
     #     return {"task_total_count": task_total_count, "message": _("No tasks found for today")}
 
 
-    lead_query = frappe.qb.from_(Lead).select("*")
+    lead_query = frappe.qb.from_(Lead).select("*").where(Field("converted") != 1)
     # if not is_admin:
     #     lead_query = lead_query.where(Lead._assign == current_user)
 
