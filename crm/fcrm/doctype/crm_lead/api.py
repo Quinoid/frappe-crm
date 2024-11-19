@@ -29,7 +29,6 @@ def get_lead(name):
     
     # Add the interested services to the lead data
     lead["interested_services_for_lead"] = [service["link_field"] for service in services]
-
     # Additional fields
     lead["fields_meta"] = get_fields_meta("CRM Lead")
     lead["_form_script"] = get_form_script('CRM Lead')

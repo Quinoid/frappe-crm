@@ -70,7 +70,7 @@ def custom_get_event_details(name):
     participants = participants_query.run(as_dict=True)
 
     # Convert the participants to a comma-separated string and wrap it in an array
-    event["custom_participant"] = [", ".join([p["link_field"] for p in participants])]
+    event["custom_participant"] = [p["link_field"] for p in participants]
 
     return event
 
@@ -103,17 +103,24 @@ def custom_edit_event(name, **kwargs):
     # Fetch the event document by name (ID)
     event = frappe.get_doc("Event", name)
 
-    # Update the fields with the data provided in kwargs
+    # Update main fields with the data provided in kwargs
     for key, value in kwargs.items():
-        if hasattr(event, key):
+        if key == "custom_participant":
+            # Handle child table updates
+            if isinstance(value, list):
+                event.custom_participant = []  # Clear existing entries
+                for participant in value:
+                    event.append("custom_participant", participant)
+        elif hasattr(event, key):
             setattr(event, key, value)
-    
+
     # Save changes to the database
     event.save(ignore_permissions=True)
     frappe.db.commit()  # Ensure the changes are saved
 
     # Return confirmation message with updated event details
     return {"message": "Event updated successfully", "event_name": event.name}
+
 
 
 @staticmethod
