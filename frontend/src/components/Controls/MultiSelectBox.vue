@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex flex-wrap gap-1">
+    <div class="flex flex-wrap gap-1 border border-gray-300 rounded-[8px]">
       <Button
         ref="emails"
         v-for="value in values"
@@ -107,6 +107,10 @@ const props = defineProps({
     type: Function,
     default: (value) => `${value} is an Invalid value`,
   },
+  custom_options: {
+    type: String,
+    default: null,
+  },
 })
 
 const values = defineModel()
@@ -141,21 +145,18 @@ watchDebounced(
 )
 
 const filterOptions = createResource({
-  url: 'crm.api.contact.search_emails',
+  url: 'frappe.desk.search.search_link',
   method: 'POST',
-  cache: [text.value, 'Contact'],
-  params: { txt: text.value },
+  cache: [text.value, props.custom_options],
+  params: { txt: text.value, docType: props.custom_options },
   transform: (data) => {
-    let allData = data
-      .map((option) => {
-        let fullName = option[0]
-        let email = option[1]
-        let name = option[2]
-        return {
-          label: fullName || name || email,
-          value: email,
-        }
-      })
+    console.log(data)
+    let allData = data.map((option) => {
+      return {
+        label: option.label,
+        value: option.value,
+      }
+    })
     return allData
   },
 })
@@ -173,7 +174,7 @@ const options = computed(() => {
 
 function reload(val) {
   filterOptions.update({
-    params: { txt: val },
+    params: { txt: val, doctype: props.custom_options },
   })
   filterOptions.reload()
 }
