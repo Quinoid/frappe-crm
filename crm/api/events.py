@@ -70,7 +70,7 @@ def custom_get_event_details(name):
     participants = participants_query.run(as_dict=True)
 
     # Convert the participants to a comma-separated string and wrap it in an array
-    event["custom_participant"] = [", ".join([p["link_field"] for p in participants])]
+    event["custom_participant"] = [p["link_field"] for p in participants]
 
     return event
 
