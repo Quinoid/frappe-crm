@@ -3,6 +3,8 @@ import frappe
 from frappe import _
 from frappe.utils import nowdate, add_days
 from frappe.query_builder import Order
+from frappe.query_builder import Field
+
 
 @frappe.whitelist()
 def custom_dashboard():
@@ -56,9 +58,7 @@ def custom_dashboard():
     event_query = (
         frappe.qb.from_(Event)
         .select("*")
-        .where(
-            Event.starts_on == current_date
-        )
+        .where(Field("starts_on").like(f"{current_date}%"))
         .orderby(Event.starts_on, order=Order.asc)
 
     )
