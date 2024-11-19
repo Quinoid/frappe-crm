@@ -146,6 +146,16 @@ async function updateContact() {
   }
   const values = { ..._event.value }
 
+  if (
+    _event.value.custom_participant &&
+    _event.value.custom_participant?.length > 0
+  ) {
+    values.custom_participant = _event.value.custom_participant.map((p) => {
+      return {
+        event_custom_participant: p,
+      }
+    })
+  }
   let name = await callSetValue(values)
   if (name) {
     capture('event_updated')
@@ -165,6 +175,7 @@ async function callSetValue(values) {
 
 async function callInsertDoc() {
   error.value = null
+  let data = { ..._event.value }
   if (!_event.value.starts_on) {
     error.value = __('Start Date is mandatory')
     return error.value
@@ -177,10 +188,21 @@ async function callInsertDoc() {
     error.value = __('Event Category is mandatory')
   }
 
+  if (
+    _event.value.custom_participant &&
+    _event.value.custom_participant?.length > 0
+  ) {
+    data.custom_participant = _event.value.custom_participant.map((p) => {
+      return {
+        event_custom_participant: p,
+      }
+    })
+  }
+  console.log(data)
   const doc = await call('frappe.client.insert', {
     doc: {
       doctype: 'Event',
-      ..._event.value,
+      ...data,
     },
   })
   if (doc.name) {

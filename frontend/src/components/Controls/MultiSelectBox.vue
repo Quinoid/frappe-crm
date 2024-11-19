@@ -107,7 +107,7 @@ const props = defineProps({
     type: Function,
     default: (value) => `${value} is an Invalid value`,
   },
-  custom_options: {
+  custom_option: {
     type: String,
     default: null,
   },
@@ -147,8 +147,8 @@ watchDebounced(
 const filterOptions = createResource({
   url: 'frappe.desk.search.search_link',
   method: 'POST',
-  cache: [text.value, props.custom_options],
-  params: { txt: text.value, docType: props.custom_options },
+  cache: [text.value, props.custom_option],
+  params: { txt: text.value, docType: props.custom_option },
   transform: (data) => {
     console.log(data)
     let allData = data.map((option) => {
@@ -174,7 +174,7 @@ const options = computed(() => {
 
 function reload(val) {
   filterOptions.update({
-    params: { txt: val, doctype: props.custom_options },
+    params: { txt: val, doctype: props.custom_option },
   })
   filterOptions.reload()
 }

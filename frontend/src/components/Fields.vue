@@ -107,13 +107,16 @@
             </div>
             <div
               class="flex gap-1"
-              v-else-if="field.type === 'Table MultiSelect'"
+              v-else-if="
+                field.type === 'Table MultiSelect' ||
+                field.type === 'table multiselect'
+              "
             >
               <MultiSelectBox
                 class="flex-1"
                 v-model="data[field.name]"
                 :validate="validateEmail"
-                :custom_options="field.custom_options"
+                :custom_option="field.custom_option"
                 :error-message="
                   (value) => __('{0} is an invalid email address', [value])
                 "
