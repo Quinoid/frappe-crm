@@ -152,7 +152,7 @@ async function updateContact() {
   ) {
     values.custom_participant = _event.value.custom_participant.map((p) => {
       return {
-        event_custom_participant: p,
+        link_field: p,
       }
     })
   }

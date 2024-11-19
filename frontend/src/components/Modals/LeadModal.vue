@@ -135,7 +135,7 @@ function createNewLead() {
     request.intersted_services_for_lead = lead.intersted_services_for_lead.map(
       (s) => {
         return {
-          s_name: s,
+          link_field: s,
         }
       },
     )
