@@ -537,8 +537,17 @@ const fieldsLayout = createResource({
 })
 
 function updateField(name, value, callback) {
-  console.log(name, value)
-  updateLead(name, value, () => {
+  let request = value
+  console.log('updateField', name, value)
+  if (name === 'interested_services_for_lead' && value) {
+    request = value?.map((item) => {
+      return {
+        link_field: item,
+      }
+    })
+  }
+  console.log('request', request)
+  updateLead(name, request, () => {
     lead.data[name] = value
     callback?.()
   })

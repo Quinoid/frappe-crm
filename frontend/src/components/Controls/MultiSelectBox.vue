@@ -1,6 +1,14 @@
 <template>
   <div>
-    <div class="flex flex-wrap gap-1 border border-gray-300 rounded-[8px]">
+    <div
+      :class="[
+        'flex flex-wrap gap-1 rounded-[8px]',
+        {
+          'border border-gray-300': !editableOnClick, // Apply border when not in editable mode
+          'hover:border-gray-300 hover:border': editableOnClick, // Apply hover effect when not in editable mode
+        },
+      ]"
+    >
       <Button
         ref="emails"
         v-for="value in values"
@@ -112,19 +120,26 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  modelValue: {
+    type: Array,
+    default: [],
+  },
+  editableOnClick: {
+    type: Boolean,
+    default: false,
+  },
+  datatype: {
+    type: String,
+    default: null, // Add datatype for conditional behavior
+  },
+  data: {
+    type: Object,
+    default: null,
+  },
 })
 
-const values = defineModel()
-const emit = defineEmits(['update', 'change'])
-
-// Existing handleBlur function
-function handleBlur() {
-  if (query.value) {
-    addValue(query.value) // Add the value on blur
-  }
-  console.log(values, query.value, selectedValue.value)
-  emit('change', query.value ?? selectedValue.value) // Emit the 'change' event with the updated values
-}
+// const values = defineModel()
+const emit = defineEmits(['update:modelValue', 'change'])
 const emails = ref([])
 const search = ref(null)
 const error = ref(null)
@@ -132,16 +147,36 @@ const query = ref('')
 const text = ref('')
 const showOptions = ref(false)
 
-const selectedValue = computed({
-  get: () => query.value || '',
-  set: (val) => {
-    query.value = ''
-    if (val) {
-      showOptions.value = false
-    }
-    val?.value && addValue(val.value)
+const values = computed({
+  get: () => props.modelValue,
+  set: (newValues) => {
+    emit('update:modelValue', [...newValues])
+    emit('change', [...newValues])
   },
 })
+
+const selectedValue = computed({
+  get: () => '',
+  set: (val) => {
+    if (val?.value) {
+      addValue(val.value)
+    }
+    query.value = ''
+    showOptions.value = false
+  },
+})
+console.log(props.modelValue, values, selectedValue)
+
+// const selectedValue = computed({
+//   get: () => query.value || '',
+//   set: (val) => {
+//     query.value = ''
+//     if (val) {
+//       showOptions.value = false
+//     }
+//     val?.value && addValue(val.value)
+//   },
+// })
 
 watchDebounced(
   query,
@@ -189,34 +224,45 @@ function reload(val) {
   filterOptions.reload()
 }
 
-const addValue = (value) => {
-  error.value = null
-  if (value) {
-    const splitValues = value.split(',')
-    splitValues.forEach((value) => {
-      value = value.trim()
-      if (value) {
-        // check if value is not already in the values array
-        if (!values.value?.includes(value)) {
-          // check if value is valid
-          if (value && props.validate && !props.validate(value)) {
-            error.value = props.errorMessage(value)
-            return
-          }
-          // add value to values array
-          if (!values.value) {
-            values.value = [value]
-          } else {
-            values.value.push(value)
-          }
-          value = value.replace(value, '')
-          console.log(values, selectedValue, 'addValue')
-          emit('change', values?.value ?? selectedValue.value)
-        }
+// const addValue = (value) => {
+//   error.value = null
+//   if (value) {
+//     const splitValues = value.split(',')
+//     splitValues.forEach((value) => {
+//       value = value.trim()
+//       if (value) {
+//         // check if value is not already in the values array
+//         if (!values.value?.includes(value)) {
+//           // check if value is valid
+//           if (value && props.validate && !props.validate(value)) {
+//             error.value = props.errorMessage(value)
+//             return
+//           }
+//           // add value to values array
+//           if (!values.value) {
+//             values.value = [value]
+//           } else {
+//             values.value.push(value)
+//           }
+//           value = value.replace(value, '')
+//         }
+//       }
+//     })
+//     !error.value && (value = '')
+//   }
+// }
+
+function addValue(value) {
+  if (value && !values.value.includes(value)) {
+    if (props.datatype === 'Email') {
+      if (props.validate && !props.validate(value)) {
+        error.value = props.errorMessage(value)
+        return
       }
-    })
-    !error.value && (value = '')
+    }
+    values.value = [...values.value, value]
   }
+  query.value = ''
 }
 
 const removeValue = (value) => {

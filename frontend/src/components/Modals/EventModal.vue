@@ -96,8 +96,8 @@ import { usersStore } from '@/stores/users'
 import { capture } from '@/telemetry'
 import { call, createResource } from 'qbs-vue-ui'
 import { ref, nextTick, watch, computed } from 'vue'
-import { createToast } from '@/utils'
 import { useRouter } from 'vue-router'
+import { createToast } from '@/utils'
 
 const props = defineProps({
   event: {
@@ -159,6 +159,11 @@ async function updateContact() {
   let name = await callSetValue(values)
   if (name) {
     capture('event_updated')
+    createToast({
+      title: 'Event updated successfully',
+      icon: 'check',
+      iconClasses: 'text-green-600',
+    })
     props.events?.reload?.()
     show.value = false
   }
@@ -207,6 +212,11 @@ async function callInsertDoc() {
   })
   if (doc.name) {
     capture('event_created')
+    createToast({
+      title: 'Event created successfully',
+      icon: 'check',
+      iconClasses: 'text-green-600',
+    })
     props.events?.reload?.()
     show.value = false
   }

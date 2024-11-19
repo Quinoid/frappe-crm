@@ -93,9 +93,12 @@
           <MultiSelectBox
             class="flex-1"
             v-model="data[field.name]"
+            :data="data"
             :validate="validateEmail"
             @change="(data) => emit('update', field.name, data)"
             :custom_option="field.custom_option"
+            :datatype="field.data_type"
+            :editableOnClick="true"
             :error-message="
               (value) => __('{0} is an invalid email address', [value])
             "
@@ -121,6 +124,7 @@
           @change="(data) => emit('update', field.name, data)"
           :onCreate="field.create"
         />
+
         <FormControl
           v-else
           class="form-control"

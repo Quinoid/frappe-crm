@@ -129,10 +129,10 @@ function createNewLead() {
   }
   let request = { ...lead }
   if (
-    request.intersted_services_for_lead &&
-    request.intersted_services_for_lead.length > 0
+    request.interested_services_for_lead &&
+    request.interested_services_for_lead.length > 0
   ) {
-    request.intersted_services_for_lead = lead.intersted_services_for_lead.map(
+    request.interested_services_for_lead = lead.interested_services_for_lead.map(
       (s) => {
         return {
           link_field: s,
