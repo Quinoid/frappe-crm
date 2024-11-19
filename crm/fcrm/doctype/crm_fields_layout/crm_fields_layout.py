@@ -48,6 +48,11 @@ def get_fields_layout(doctype: str, type: str):
 					"custom_option": (
 				        field.options.replace("Custom ", "") if isinstance(field.options, str) else None
 				    ),
+				    "data_type": (
+				        "Email" if field.fieldtype == "Table MultiSelect" and section.get("doctype") == "Event" 
+				        else "Text" if section.get("doctype") == "Lead" and field.fieldtype == "Table MultiSelect" 
+				        else None
+				    )
 				}
 				section["fields"][section.get("fields").index(field["name"])] = field
 

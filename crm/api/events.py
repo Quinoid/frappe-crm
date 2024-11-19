@@ -47,18 +47,33 @@ def custom_list_events(starts_on=None, ends_on=None):
 
 @frappe.whitelist()
 def custom_get_event_details(name):
+    # Fetch Event details
     Event = frappe.qb.DocType("Event")
+    CustomUser = frappe.qb.DocType("Custom User")
 
-    query = frappe.qb.from_(Event).select("*").where(Event.name == name).limit(1)
-
-    event = query.run(as_dict=True)
-    if not len(event):
+    # Query Event details
+    event_query = frappe.qb.from_(Event).select("*").where(Event.name == name).limit(1)
+    event = event_query.run(as_dict=True)
+    
+    if not event:
         frappe.throw(_("Event not found"), frappe.DoesNotExistError)
-    event = event.pop()
-
+    
+    event = event[0]
     event["doctype"] = "Event"
 
+    # Query Custom Participants linked to the Event
+    participants_query = (
+        frappe.qb.from_(CustomUser)
+        .select(CustomUser.link_field)
+        .where(CustomUser.parent == name)
+    )
+    participants = participants_query.run(as_dict=True)
+
+    # Convert the participants to a comma-separated string and wrap it in an array
+    event["custom_participant"] = [", ".join([p["link_field"] for p in participants])]
+
     return event
+
 
 
 
