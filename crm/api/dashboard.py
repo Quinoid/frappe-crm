@@ -58,9 +58,7 @@ def custom_dashboard():
     event_query = (
         frappe.qb.from_(Event)
         .select("*")
-        .where(
-            Event.starts_on == current_date
-        )
+        .where(Field("starts_on").like(f"{current_date}%"))
         .orderby(Event.starts_on, order=Order.asc)
 
     )
