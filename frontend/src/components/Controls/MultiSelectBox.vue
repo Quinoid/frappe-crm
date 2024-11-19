@@ -28,6 +28,7 @@
                 class="search-input form-input w-full border-none bg-white hover:bg-white focus:border-none focus:!shadow-none focus-visible:!ring-0"
                 type="text"
                 :value="query"
+                @blur="handleBlur"
                 @change="
                   (e) => {
                     query = e.target.value
@@ -114,7 +115,16 @@ const props = defineProps({
 })
 
 const values = defineModel()
+const emit = defineEmits(['update', 'change'])
 
+// Existing handleBlur function
+function handleBlur() {
+  if (query.value) {
+    addValue(query.value) // Add the value on blur
+  }
+  console.log(values, query.value, selectedValue.value)
+  emit('change', query.value ?? selectedValue.value) // Emit the 'change' event with the updated values
+}
 const emails = ref([])
 const search = ref(null)
 const error = ref(null)
@@ -200,6 +210,8 @@ const addValue = (value) => {
             values.value.push(value)
           }
           value = value.replace(value, '')
+          console.log(values, selectedValue, 'addValue')
+          emit('change', values?.value ?? selectedValue.value)
         }
       }
     })
