@@ -19,27 +19,34 @@ def get_communications(reference_doctype=None, reference_name=None):
     )
 
 @frappe.whitelist()
-def get_communications_by_recipient(email):
-    # Fetch communications where the recipients field contains the given email
+def get_communications_by_recipient():
+    """
+    Fetch communications where the recipients field contains the session user's email.
+    """
+    user_email = frappe.session.user
+
+    if user_email == "Guest":
+        return {"status": "error", "message": "Guest users cannot retrieve communications."}
+
+    # Fetch communications where the recipients field contains the user's email
     return frappe.get_all(
         "Communication",
-        filters=[["recipients", "like", f"%{email}%"]],
+        filters=[["recipients", "like", f"%{user_email}%"]],
         fields=["name", "subject", "content", "recipients", "communication_date"]
     )
 
 
 @frappe.whitelist()
-def get_communications_by_email(email):
-    if isinstance(email, list):
-        if len(email) == 1:
-            email = email[0]
-        else:
-            frappe.throw("Email parameter must be a single string, not a list.")
-    
-    if not isinstance(email, str):
-        frappe.throw("Email must be a string.")
+def get_communications_by_email():
+    """
+    Fetch communications where the session user's email is present in sender, recipients, cc, or bcc.
+    """
+    user_email = frappe.session.user
 
-    email = email.lower()
+    if user_email == "Guest":
+        return {"status": "error", "message": "Guest users cannot retrieve communications."}
+
+    user_email = user_email.lower()
 
     # Construct the SQL query with OR conditions for sender, recipients, cc, or bcc
     query = """
@@ -52,9 +59,14 @@ def get_communications_by_email(email):
         ORDER BY communication_date DESC
     """
 
-    communications = frappe.db.sql(query, (f"%{email}%", f"%{email}%", f"%{email}%", f"%{email}%"), as_dict=True)
+    communications = frappe.db.sql(
+        query, 
+        (f"%{user_email}%", f"%{user_email}%", f"%{user_email}%", f"%{user_email}%"), 
+        as_dict=True
+    )
 
     return communications
+
 
 
 
