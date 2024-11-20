@@ -1,6 +1,14 @@
 <template>
   <div>
-    <div class="flex flex-wrap gap-1">
+    <div
+      :class="[
+        'flex flex-wrap gap-1 rounded-[8px]',
+        {
+          'border border-gray-300': !editableOnClick, // Apply border when not in editable mode
+          'hover:border-gray-300 hover:border': editableOnClick, // Apply hover effect when not in editable mode
+        },
+      ]"
+    >
       <Button
         ref="emails"
         v-for="value in values"
@@ -28,6 +36,7 @@
                 class="search-input form-input w-full border-none bg-white hover:bg-white focus:border-none focus:!shadow-none focus-visible:!ring-0"
                 type="text"
                 :value="query"
+                @blur="handleBlur"
                 @change="
                   (e) => {
                     query = e.target.value
@@ -107,10 +116,30 @@ const props = defineProps({
     type: Function,
     default: (value) => `${value} is an Invalid value`,
   },
+  custom_option: {
+    type: String,
+    default: null,
+  },
+  modelValue: {
+    type: Array,
+    default: [],
+  },
+  editableOnClick: {
+    type: Boolean,
+    default: false,
+  },
+  datatype: {
+    type: String,
+    default: null, // Add datatype for conditional behavior
+  },
+  data: {
+    type: Object,
+    default: null,
+  },
 })
 
-const values = defineModel()
-
+// const values = defineModel()
+const emit = defineEmits(['update:modelValue', 'change'])
 const emails = ref([])
 const search = ref(null)
 const error = ref(null)
@@ -118,16 +147,36 @@ const query = ref('')
 const text = ref('')
 const showOptions = ref(false)
 
-const selectedValue = computed({
-  get: () => query.value || '',
-  set: (val) => {
-    query.value = ''
-    if (val) {
-      showOptions.value = false
-    }
-    val?.value && addValue(val.value)
+const values = computed({
+  get: () => props.modelValue,
+  set: (newValues) => {
+    emit('update:modelValue', [...newValues])
+    emit('change', [...newValues])
   },
 })
+
+const selectedValue = computed({
+  get: () => '',
+  set: (val) => {
+    if (val?.value) {
+      addValue(val.value)
+    }
+    query.value = ''
+    showOptions.value = false
+  },
+})
+console.log(props.modelValue, values, selectedValue)
+
+// const selectedValue = computed({
+//   get: () => query.value || '',
+//   set: (val) => {
+//     query.value = ''
+//     if (val) {
+//       showOptions.value = false
+//     }
+//     val?.value && addValue(val.value)
+//   },
+// })
 
 watchDebounced(
   query,
@@ -141,21 +190,18 @@ watchDebounced(
 )
 
 const filterOptions = createResource({
-  url: 'crm.api.contact.search_emails',
+  url: 'frappe.desk.search.search_link',
   method: 'POST',
-  cache: [text.value, 'Contact'],
-  params: { txt: text.value },
+  cache: [text.value, props.custom_option],
+  params: { txt: text.value, docType: props.custom_option },
   transform: (data) => {
-    let allData = data
-      .map((option) => {
-        let fullName = option[0]
-        let email = option[1]
-        let name = option[2]
-        return {
-          label: fullName || name || email,
-          value: email,
-        }
-      })
+    console.log(data)
+    let allData = data.map((option) => {
+      return {
+        label: option.label,
+        value: option.value,
+      }
+    })
     return allData
   },
 })
@@ -173,37 +219,50 @@ const options = computed(() => {
 
 function reload(val) {
   filterOptions.update({
-    params: { txt: val },
+    params: { txt: val, doctype: props.custom_option },
   })
   filterOptions.reload()
 }
 
-const addValue = (value) => {
-  error.value = null
-  if (value) {
-    const splitValues = value.split(',')
-    splitValues.forEach((value) => {
-      value = value.trim()
-      if (value) {
-        // check if value is not already in the values array
-        if (!values.value?.includes(value)) {
-          // check if value is valid
-          if (value && props.validate && !props.validate(value)) {
-            error.value = props.errorMessage(value)
-            return
-          }
-          // add value to values array
-          if (!values.value) {
-            values.value = [value]
-          } else {
-            values.value.push(value)
-          }
-          value = value.replace(value, '')
-        }
+// const addValue = (value) => {
+//   error.value = null
+//   if (value) {
+//     const splitValues = value.split(',')
+//     splitValues.forEach((value) => {
+//       value = value.trim()
+//       if (value) {
+//         // check if value is not already in the values array
+//         if (!values.value?.includes(value)) {
+//           // check if value is valid
+//           if (value && props.validate && !props.validate(value)) {
+//             error.value = props.errorMessage(value)
+//             return
+//           }
+//           // add value to values array
+//           if (!values.value) {
+//             values.value = [value]
+//           } else {
+//             values.value.push(value)
+//           }
+//           value = value.replace(value, '')
+//         }
+//       }
+//     })
+//     !error.value && (value = '')
+//   }
+// }
+
+function addValue(value) {
+  if (value && !values.value.includes(value)) {
+    if (props.datatype === 'Email') {
+      if (props.validate && !props.validate(value)) {
+        error.value = props.errorMessage(value)
+        return
       }
-    })
-    !error.value && (value = '')
+    }
+    values.value = [...values.value, value]
   }
+  query.value = ''
 }
 
 const removeValue = (value) => {

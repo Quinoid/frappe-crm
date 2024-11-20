@@ -96,8 +96,8 @@ import { usersStore } from '@/stores/users'
 import { capture } from '@/telemetry'
 import { call, createResource } from 'qbs-vue-ui'
 import { ref, nextTick, watch, computed } from 'vue'
-import { createToast } from '@/utils'
 import { useRouter } from 'vue-router'
+import { createToast } from '@/utils'
 
 const props = defineProps({
   event: {
@@ -146,9 +146,24 @@ async function updateContact() {
   }
   const values = { ..._event.value }
 
+  if (
+    _event.value.custom_participant &&
+    _event.value.custom_participant?.length > 0
+  ) {
+    values.custom_participant = _event.value.custom_participant.map((p) => {
+      return {
+        link_field: p,
+      }
+    })
+  }
   let name = await callSetValue(values)
   if (name) {
     capture('event_updated')
+    createToast({
+      title: 'Event updated successfully',
+      icon: 'check',
+      iconClasses: 'text-green-600',
+    })
     props.events?.reload?.()
     show.value = false
   }
@@ -165,6 +180,7 @@ async function callSetValue(values) {
 
 async function callInsertDoc() {
   error.value = null
+  let data = { ..._event.value }
   if (!_event.value.starts_on) {
     error.value = __('Start Date is mandatory')
     return error.value
@@ -177,14 +193,30 @@ async function callInsertDoc() {
     error.value = __('Event Category is mandatory')
   }
 
+  if (
+    _event.value.custom_participant &&
+    _event.value.custom_participant?.length > 0
+  ) {
+    data.custom_participant = _event.value.custom_participant.map((p) => {
+      return {
+        link_field: p,
+      }
+    })
+  }
+  console.log(data)
   const doc = await call('frappe.client.insert', {
     doc: {
       doctype: 'Event',
-      ..._event.value,
+      ...data,
     },
   })
   if (doc.name) {
     capture('event_created')
+    createToast({
+      title: 'Event created successfully',
+      icon: 'check',
+      iconClasses: 'text-green-600',
+    })
     props.events?.reload?.()
     show.value = false
   }

@@ -84,12 +84,7 @@
                 <span class="text-red-500" v-if="field.mandatory">*</span>
               </label>
             </div>
-            <div
-              class="flex gap-1"
-              v-else-if="
-                field.type === 'Link' || field.type === 'Table MultiSelect'
-              "
-            >
+            <div class="flex gap-1" v-else-if="field.type === 'Link'">
               <Link
                 class="form-control flex-1"
                 :value="data[field.name]"
@@ -98,6 +93,35 @@
                 @change="(v) => (data[field.name] = v)"
                 :placeholder="__(field.placeholder || field.label)"
                 :onCreate="field.create"
+              />
+              <Button
+                v-if="data[field.name] && field.edit"
+                class="shrink-0"
+                :label="__('Edit')"
+                @click="field.edit(data[field.name])"
+              >
+                <template #prefix>
+                  <EditIcon class="h-4 w-4" />
+                </template>
+              </Button>
+            </div>
+            <div
+              class="flex gap-1"
+              v-else-if="
+                field.type === 'Table MultiSelect' ||
+                field.type === 'table multiselect'
+              "
+            >
+              <MultiSelectBox
+                class="flex-1"
+                v-model="data[field.name]"
+                :validate="validateEmail"
+                @change="(v) => (data[field.name] = v)"
+                :datatype="field.data_type"
+                :custom_option="field.custom_option"
+                :error-message="
+                  (value) => __('{0} is an invalid email address', [value])
+                "
               />
               <Button
                 v-if="data[field.name] && field.edit"
@@ -234,6 +258,8 @@ import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import Link from '@/components/Controls/Link.vue'
 import { usersStore } from '@/stores/users'
+import MultiSelectBox from '@/components/Controls/MultiSelectBox.vue'
+import { validateEmail } from '@/utils'
 import { Tooltip, DatePicker, DateTimePicker } from 'qbs-vue-ui'
 
 const { getUser } = usersStore()

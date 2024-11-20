@@ -127,8 +127,20 @@ function createNewLead() {
   if (lead.website && !lead.website.startsWith('http')) {
     lead.website = 'https://' + lead.website
   }
-
-  createLead.submit(lead, {
+  let request = { ...lead }
+  if (
+    request.interested_services_for_lead &&
+    request.interested_services_for_lead.length > 0
+  ) {
+    request.interested_services_for_lead = lead.interested_services_for_lead.map(
+      (s) => {
+        return {
+          link_field: s,
+        }
+      },
+    )
+  }
+  createLead.submit(request, {
     validate() {
       error.value = null
       if (!lead.first_name) {
