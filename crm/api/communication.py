@@ -82,24 +82,24 @@ def change_password(new_password, confirm_password, user=None):
 def change_password(new_password: str, confirm_password: str):
 
     if not new_password or not confirm_password:
-        frappe.throw(_("Password fields cannot be empty"))
-
+            return {"status": "error", "message": "Password fields cannot be empty."}
+        
     if new_password != confirm_password:
-        frappe.throw(_("The new password and confirm password do not match"))
-
+        return {"status": "error", "message": "The new password and confirm password do not match."}
 
     try:
         user = frappe.session.user
 
+        # Ensure the user exists
         if not frappe.db.exists("User", user):
-            frappe.throw(f"User '{user}' does not exist", frappe.DoesNotExistError)
+            return {"status": "error", "message": f"User '{user}' does not exist."}
 
         update_password(user, new_password)
 
         return {"status": "success", "message": f"Password for user '{user}' has been updated successfully."}
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Change Password Error")
-        return {"status": "error", "message": str(e)}
+        return {"status": "error", "message": "An unexpected error occurred. Please try again later."}
 
 
 
