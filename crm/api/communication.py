@@ -422,3 +422,19 @@ def get_communication_data(
         "view_type": view_type,
     }
 
+@frappe.whitelist()
+def custom_get_communication_details(name):
+    # Fetch Communication details
+    Communication = frappe.qb.DocType("Communication")
+
+    # Query Communication details
+    communication_query = frappe.qb.from_(Communication).select("*").where(Communication.name == name).limit(1)
+    communication = communication_query.run(as_dict=True)
+    
+    if not communication:
+        frappe.throw(_("Communication not found"), frappe.DoesNotExistError)
+    
+    communication = communication[0]
+    communication["doctype"] = "Communication"
+
+    return communication
