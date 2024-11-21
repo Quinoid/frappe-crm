@@ -49,7 +49,7 @@
                     ? 'bg-white shadow-sm'
                     : 'hover:bg-gray-100'
                 "
-                @click="activeTab = i"
+                @click="handleTabClick(i)"
               />
             </nav>
           </div>
@@ -57,8 +57,10 @@
         <div class="flex flex-1 flex-col overflow-y-auto">
           <component
             :is="activeTab.component"
+            :key="componentKey"
             v-if="activeTab"
-            :isPasswordSet="isPasswordSet"
+            :is-password-set="isPasswordSet"
+            :show-change-password-modal.sync="showChangePasswordModal"
           />
         </div>
       </div>
@@ -83,7 +85,8 @@ import ChangePassword from '@/components/Settings/ChangePassword.vue'
 const show = defineModel()
 const showSidebar = ref(false)
 const isPasswordSet = ref(false)
-
+const showChangePasswordModal = ref(false)
+const componentKey = ref(0)
 const tabs = computed(() => {
   let _tabs = [
     {
@@ -101,7 +104,9 @@ const tabs = computed(() => {
           component: markRaw(InviteMemberPage),
         },
         {
-          label: isPasswordSet ? __('Change Password') : __('Set Password'),
+          label: isPasswordSet.value
+            ? __('Change Password')
+            : __('Set Password'),
           icon: 'user-plus',
           component: markRaw(ChangePassword),
         },
@@ -140,23 +145,32 @@ const tabs = computed(() => {
     return tab
   })
 })
+const handleTabClick = (tab) => {
+  componentKey.value += 1
+  activeTab.value = {}
+  showChangePasswordModal.value = false
+  activeTab.value = tab
+  if (tab.label === 'Change Password' || tab.label === 'Set Password') {
+    showChangePasswordModal.value = true
+  }
+}
 const checkPasswordStatus = async () => {
   try {
     const response = await createResource({
       url: 'crm.api.communication.is_password_set',
     })
-    console.log(response)
     isPasswordSet.value = response.data ?? false
   } catch (error) {
     console.error('Failed to check password status:', error)
   }
 }
 onMounted(() => {
-  console.log('Mounted Hook Triggered')
   checkPasswordStatus()
 })
+
 const activeTab = ref(tabs.value[0].items[0])
 const isMobile = ref(window.innerWidth < 768)
+
 window.addEventListener('resize', () => {
   isMobile.value = window.innerWidth < 768
 })

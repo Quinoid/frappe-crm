@@ -3,7 +3,8 @@
     :options="{
       title: isPasswordSet ? __('Change Password') : __('Set Password'),
     }"
-    v-model="showChangePasswordModal"
+    @update:model-value="showChangePasswordModal = $event"
+    v-model="localShow"
     class="z-50"
     @after-leave="
       () => {
@@ -53,7 +54,7 @@
 </template>
 <script setup>
 import { Dialog, createResource } from 'qbs-vue-ui'
-import { ref, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { createToast } from '@/utils'
 const props = defineProps({
   user: {
@@ -64,9 +65,11 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
+  showChangePasswordModal: {
+    type: Boolean,
+    required: true,
+  },
 })
-
-const showChangePasswordModal = ref(true)
 
 const passwords = ref({
   new_password: '',
@@ -76,7 +79,23 @@ const passwords = ref({
 const loading = ref(false)
 const error = ref('')
 // const isPasswordSet = ref(false)
+const emit = defineEmits(['update:showChangePasswordModal'])
 
+// Local state for modal visibility
+const localShow = ref(props.showChangePasswordModal)
+
+// Watch for prop changes and sync with local state
+watch(
+  () => props.showChangePasswordModal,
+  (newValue) => {
+    localShow.value = newValue
+  },
+)
+
+// Watch for local state changes and emit to parent
+watch(localShow, (newValue) => {
+  emit('update:showChangePasswordModal', newValue)
+})
 const passwordStrengthError = ref('')
 function updatePassword() {
   // Reset errors
@@ -110,7 +129,7 @@ function updatePassword() {
     auto: true,
     onSuccess: () => {
       loading.value = false
-      showChangePasswordModal.value = false
+      localShow.value = false // Close modal
       createToast({
         title: 'Password updated successfully',
         icon: 'check',
