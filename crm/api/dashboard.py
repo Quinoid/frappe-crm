@@ -98,7 +98,7 @@ def custom_task_details(name):
 def custom_record_count(doctype, domain):
 
     limit_counts = {
-        "CRM Lead": 100,
+        "CRM Lead": 1000,
         "Contact": 10,
         "CRM Deal": 10
     }
