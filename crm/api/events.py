@@ -3,7 +3,6 @@ import frappe
 from frappe import _
 from frappe.utils import nowdate, add_days
 import json
-from frappe import _
 from frappe.model.document import get_controller
 from frappe.model import no_value_fields
 from pypika import Criterion
