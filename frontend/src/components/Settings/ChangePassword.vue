@@ -62,7 +62,7 @@ const props = defineProps({
   },
   isPasswordSet: {
     type: Boolean,
-    required: true,
+    required: false,
   },
 })
 
@@ -163,8 +163,5 @@ const validatePasswordStrength = (password) => {
 //   }
 // }
 
-// onMounted(() => {
-//   checkPasswordStatus()
-// })
 const hasErrors = computed(() => !!error.value || !!passwordStrengthError.value)
 </script>

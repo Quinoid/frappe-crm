@@ -112,6 +112,13 @@ const routes = [
     component: () => import('@/pages/Events.vue'),
     meta: { scrollPos: { top: 0, left: 0 } },
   },
+  {
+    alias: '/communication',
+    path: '/communication/view/:viewType?',
+    name: 'Communication',
+    component: () => import('@/pages/Communication.vue'),
+    meta: { scrollPos: { top: 0, left: 0 } },
+  },
 
   {
     path: '/email-templates/:emailTemplateId',

@@ -430,7 +430,9 @@ list.value = createResource({
   url:
     props.doctype === 'Event'
       ? 'crm.api.events.custom_get_data'
-      : 'crm.api.doc.get_data',
+      : props.doctype === 'Communication'
+        ? 'crm.api.communication.get_communication_data'
+        : 'crm.api.doc.get_data',
   params: getParams(),
   cache: [props.doctype, route.query.view, route.params.viewType],
   onSuccess(data) {
@@ -636,7 +638,7 @@ const quickFilterList = computed(() => {
   } else if (props.doctype === 'CRM Call Log') {
     nameField = 'to'
     labelField = 'Number'
-  } else if (props.doctype === 'Event') {
+  } else if (props.doctype === 'Event' || props.doctype === 'Communication') {
     nameField = 'subject'
     labelField = 'Subject'
   } else {

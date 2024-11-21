@@ -77,7 +77,7 @@ import ERPNextSettings from '@/components/Settings/ERPNextSettings.vue'
 import TwilioSettings from '@/components/Settings/TwilioSettings.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import { isWhatsappInstalled } from '@/composables/settings'
-import { Dialog,createResource } from 'qbs-vue-ui'
+import { Dialog, createResource } from 'qbs-vue-ui'
 import { ref, markRaw, computed, onMounted } from 'vue'
 import ChangePassword from '@/components/Settings/ChangePassword.vue'
 const show = defineModel()
@@ -146,12 +146,13 @@ const checkPasswordStatus = async () => {
       url: 'crm.api.communication.is_password_set',
     })
     console.log(response)
-    isPasswordSet.value = response.data.is_password_set
+    isPasswordSet.value = response.data ?? false
   } catch (error) {
     console.error('Failed to check password status:', error)
   }
 }
 onMounted(() => {
+  console.log('Mounted Hook Triggered')
   checkPasswordStatus()
 })
 const activeTab = ref(tabs.value[0].items[0])

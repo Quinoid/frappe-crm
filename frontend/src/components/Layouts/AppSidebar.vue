@@ -238,7 +238,7 @@ import { notificationsStore } from '@/stores/notifications'
 import { FeatherIcon } from 'qbs-vue-ui'
 import { useStorage } from '@vueuse/core'
 import { computed, h } from 'vue'
-
+import EmailIcon from '../Icons/EmailIcon.vue'
 const { getPinnedViews, getPublicViews } = viewsStore()
 const { toggle: toggleNotificationPanel } = notificationsStore()
 
@@ -290,11 +290,11 @@ const links = [
     icon: Email2Icon,
     to: 'Email Templates',
   },
-  // {
-  //   label: 'Calendar',
-  //   icon: CalendarIcon,
-  //   to: 'Calendar',
-  // },
+  {
+    label: 'Communication',
+    icon: EmailIcon,
+    to: 'Communication',
+  },
   {
     label: 'Events',
     icon: CalendarIcon,
