@@ -293,7 +293,7 @@ const contact = createResource({
 })
 
 const breadcrumbs = computed(() => {
-  let items = [{ label: __('Contacts'), route: { name: 'Contacts' } }]
+  let items = [{ label: __('Communication'), route: { name: 'Communication' } }]
 
   if (route.query.view || route.query.viewType) {
     let view = getView(route.query.view, route.query.viewType, 'Contact')
