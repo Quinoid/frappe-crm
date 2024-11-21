@@ -15,6 +15,7 @@
       </div>
     </div>
     <Button :label="__('Edit profile')" @click="showProfileModal = true" />
+
     <Dialog
       :options="{ title: __('Edit Profile') }"
       v-model="showProfileModal"
@@ -73,8 +74,8 @@ const showProfileModal = ref(false)
 
 const editingProfilePhoto = ref(false)
 const profile = ref({})
-const loading = ref(false)
 
+const loading = ref(false)
 function updateUser() {
   loading.value = true
   const fieldname = {

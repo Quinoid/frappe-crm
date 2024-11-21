@@ -55,7 +55,11 @@
           </div>
         </div>
         <div class="flex flex-1 flex-col overflow-y-auto">
-          <component :is="activeTab.component" v-if="activeTab" />
+          <component
+            :is="activeTab.component"
+            v-if="activeTab"
+            :isPasswordSet="isPasswordSet"
+          />
         </div>
       </div>
     </template>
@@ -73,11 +77,13 @@ import ERPNextSettings from '@/components/Settings/ERPNextSettings.vue'
 import TwilioSettings from '@/components/Settings/TwilioSettings.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import { isWhatsappInstalled } from '@/composables/settings'
-import { Dialog } from 'qbs-vue-ui'
-import { ref, markRaw, computed } from 'vue'
-
+import { Dialog,createResource } from 'qbs-vue-ui'
+import { ref, markRaw, computed, onMounted } from 'vue'
+import ChangePassword from '@/components/Settings/ChangePassword.vue'
 const show = defineModel()
 const showSidebar = ref(false)
+const isPasswordSet = ref(false)
+
 const tabs = computed(() => {
   let _tabs = [
     {
@@ -93,6 +99,11 @@ const tabs = computed(() => {
           label: __('Invite Members'),
           icon: 'user-plus',
           component: markRaw(InviteMemberPage),
+        },
+        {
+          label: isPasswordSet ? __('Change Password') : __('Set Password'),
+          icon: 'user-plus',
+          component: markRaw(ChangePassword),
         },
       ],
     },
@@ -129,7 +140,20 @@ const tabs = computed(() => {
     return tab
   })
 })
-
+const checkPasswordStatus = async () => {
+  try {
+    const response = await createResource({
+      url: 'crm.api.communication.is_password_set',
+    })
+    console.log(response)
+    isPasswordSet.value = response.data.is_password_set
+  } catch (error) {
+    console.error('Failed to check password status:', error)
+  }
+}
+onMounted(() => {
+  checkPasswordStatus()
+})
 const activeTab = ref(tabs.value[0].items[0])
 const isMobile = ref(window.innerWidth < 768)
 window.addEventListener('resize', () => {
