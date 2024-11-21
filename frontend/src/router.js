@@ -119,6 +119,12 @@ const routes = [
     component: () => import('@/pages/Communication.vue'),
     meta: { scrollPos: { top: 0, left: 0 } },
   },
+  {
+    path: '/communication/:communicationId',
+    name: 'CommunicationDetail',
+    component: () => import('@/pages/CommunicationDetail.vue'),
+    props: true,
+  },
 
   {
     path: '/email-templates/:emailTemplateId',

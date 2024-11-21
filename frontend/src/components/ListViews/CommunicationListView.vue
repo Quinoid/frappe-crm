@@ -4,6 +4,11 @@
     :columns="columns"
     :rows="rows"
     :options="{
+      getRowRoute: (row) => ({
+        name: 'CommunicationDetail',
+        params: { communicationId: row.name },
+        query: { view: route.query.view, viewType: route.params.viewType },
+      }),
       selectable: options.selectable,
       showTooltip: options.showTooltip,
       resizeColumn: options.resizeColumn,
@@ -182,7 +187,7 @@ const props = defineProps({
     type: Array,
     required: true,
   },
- 
+
   options: {
     type: Object,
     default: () => ({
