@@ -99,6 +99,18 @@ def public(name, value):
 	doc.save()
 
 @frappe.whitelist()
+def reports(name, value):
+	if frappe.session.user != "Administrator" and "Sales Manager" not in frappe.get_roles():
+		frappe.throw("Not permitted", frappe.PermissionError)
+
+	doc = frappe.get_doc("CRM View Settings", name)
+	if doc.pinned:
+		doc.pinned = False
+	doc.reports = value
+	doc.user = "" if value else frappe.session.user
+	doc.save()
+
+@frappe.whitelist()
 def pin(name, value):
 	doc = frappe.get_doc("CRM View Settings", name)
 	doc.pinned = value
