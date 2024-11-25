@@ -239,7 +239,7 @@ import { FeatherIcon } from 'qbs-vue-ui'
 import { useStorage } from '@vueuse/core'
 import { computed, h } from 'vue'
 import EmailIcon from '../Icons/EmailIcon.vue'
-const { getPinnedViews, getPublicViews } = viewsStore()
+const { getPinnedViews, getPublicViews, getReportViews } = viewsStore()
 const { toggle: toggleNotificationPanel } = notificationsStore()
 
 const isSidebarCollapsed = useStorage('isSidebarCollapsed', false)
@@ -316,6 +316,13 @@ const allViews = computed(() => {
       name: 'Public views',
       opened: true,
       views: parseView(getPublicViews()),
+    })
+  }
+  if (getReportViews().length) {
+    _views.push({
+      name: 'Reports',
+      opened: true,
+      views: parseView(getReportViews()),
     })
   }
 

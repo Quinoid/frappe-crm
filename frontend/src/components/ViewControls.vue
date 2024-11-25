@@ -582,7 +582,7 @@ const viewsDropdownOptions = computed(() => {
       (v) => !v.pinned && !v.public && !v.is_default,
     )
     let pinnedViews = list.value.data.views.filter((v) => v.pinned)
-    let reportViews = list.value.data.views.filter((v) => v.report)
+    let reportViews = list.value.data.views.filter((v) => v.reports)
 
     savedViews.length &&
       _views.push({
@@ -994,10 +994,12 @@ const viewActions = (view) => {
     }
     if (isManager()) {
       actions[0].items.push({
-        label: __('Add to Report'),
+        label: _view.reports?.length
+          ? __('Remove From Reports')
+          : __('Add To Reports'),
         icon: () =>
           h(FeatherIcon, {
-            name: _view.report ? 'x' : 'plus',
+            name: _view.reports ? 'x' : 'plus',
             class: 'h-4 w-4',
           }),
         onClick: () => reportView(_view),
@@ -1071,7 +1073,7 @@ function publicView(v) {
 function reportView(v) {
   call('crm.fcrm.doctype.crm_view_settings.crm_view_settings.reports', {
     name: v.name,
-    value: !v.report,
+    value: !v.reports,
   }).then(() => {
     v.public = !v.public
     reloadView()
