@@ -11,7 +11,7 @@
               : 'w-52 px-2 hover:bg-gray-200'
         "
       >
-        <BizpoleLogo class="size-8 flex-shrink-0 rounded" />
+        <QBSLogo class="size-8 flex-shrink-0 rounded" />
         <div
           class="flex flex-1 flex-col text-left duration-300 ease-in-out"
           :class="
@@ -49,7 +49,7 @@
 
 <script setup>
 import SettingsModal from '@/components/Settings/SettingsModal.vue'
-import BizpoleLogo from '@/components/Icons/BizpoleLogo.vue'
+import QBSLogo from '@/components/Icons/QBSLogo.vue'
 import Apps from '@/components/Apps.vue'
 import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'
@@ -99,7 +99,7 @@ let dropdownOptions = ref([
       {
         icon: 'book-open',
         label: computed(() => __('Docs')),
-        onClick: () => window.open('https://docs.bizpoleapps.com/', '_blank'),
+        onClick: () => window.open('https://docs.qbsapps.com/', '_blank'),
       },
     ],
   },
