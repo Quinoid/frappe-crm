@@ -38,12 +38,21 @@ def get_fields_layout(doctype: str, type: str):
 					field.options = field.options.split("\n")
 					field.options = [{"label": _(option), "value": option} for option in field.options]
 					field.options.insert(0, {"label": "", "value": ""})
+
 				field = {
 					"label": _(field.label),
 					"name": field.fieldname,
 					"type": field.fieldtype,
 					"options": field.options,
 					"mandatory": field.reqd,
+					"custom_option": (
+				        field.options.replace("Custom ", "") if isinstance(field.options, str) else None
+				    ),
+				    "data_type": (
+				        "Email" if field.fieldtype == "Table MultiSelect" and section.get("doctype") == "Event" 
+				        else "Text" if section.get("doctype") == "Lead" and field.fieldtype == "Table MultiSelect" 
+				        else None
+				    )
 				}
 				section["fields"][section.get("fields").index(field["name"])] = field
 

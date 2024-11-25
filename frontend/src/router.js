@@ -5,13 +5,20 @@ import { sessionStore } from '@/stores/session'
 const routes = [
   {
     path: '/',
-    redirect: { name: 'Leads' },
+    redirect: { name: 'Dashboard' },
     name: 'Home',
   },
   {
     path: '/notifications',
     name: 'Notifications',
     component: () => import('@/pages/MobileNotification.vue'),
+  },
+  {
+    alias: '/dashboard',
+    path: '/dashboard/view/:viewType?',
+    name: 'Dashboard',
+    component: () => import('@/pages/Dashboard.vue'),
+    meta: { scrollPos: { top: 0, left: 0 } },
   },
   {
     alias: '/leads',
@@ -98,6 +105,26 @@ const routes = [
     component: () => import('@/pages/Calendar.vue'),
     meta: { scrollPos: { top: 0, left: 0 } },
   },
+  {
+    alias: '/events',
+    path: '/events/view/:viewType?',
+    name: 'Events',
+    component: () => import('@/pages/Events.vue'),
+    meta: { scrollPos: { top: 0, left: 0 } },
+  },
+  {
+    alias: '/communication',
+    path: '/communication/view/:viewType?',
+    name: 'Communication',
+    component: () => import('@/pages/Communication.vue'),
+    meta: { scrollPos: { top: 0, left: 0 } },
+  },
+  {
+    path: '/communication/:communicationId',
+    name: 'CommunicationDetail',
+    component: () => import('@/pages/CommunicationDetail.vue'),
+    props: true,
+  },
 
   {
     path: '/email-templates/:emailTemplateId',
@@ -151,7 +178,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.name === 'Home' && isLoggedIn) {
-    next({ name: 'Leads' })
+    next({ name: 'Dashboard' })
   } else if (!isLoggedIn) {
     window.location.href = '/login?redirect-to=/crm'
   } else if (to.matched.length === 0) {

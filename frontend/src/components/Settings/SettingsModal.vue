@@ -2,7 +2,7 @@
   <Dialog
     v-model="show"
     :options="{ size: isMobile ? 'full' : '5xl' }"
-    class="z-50"
+    class="z-40"
   >
     <template #body>
       <div
@@ -49,13 +49,19 @@
                     ? 'bg-white shadow-sm'
                     : 'hover:bg-gray-100'
                 "
-                @click="activeTab = i"
+                @click="handleTabClick(i)"
               />
             </nav>
           </div>
         </div>
         <div class="flex flex-1 flex-col overflow-y-auto">
-          <component :is="activeTab.component" v-if="activeTab" />
+          <component
+            :is="activeTab.component"
+            :key="componentKey"
+            v-if="activeTab"
+            :is-password-set="isPasswordSet"
+            :show-change-password-modal.sync="showChangePasswordModal"
+          />
         </div>
       </div>
     </template>
@@ -73,11 +79,13 @@ import ERPNextSettings from '@/components/Settings/ERPNextSettings.vue'
 import TwilioSettings from '@/components/Settings/TwilioSettings.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import { isWhatsappInstalled } from '@/composables/settings'
-import { Dialog } from 'qbs-vue-ui'
-import { ref, markRaw, computed } from 'vue'
-
+import { Dialog, createResource } from 'qbs-vue-ui'
+import { ref, markRaw, computed, watch } from 'vue'
+import ChangePassword from '@/components/Settings/ChangePassword.vue'
 const show = defineModel()
 const showSidebar = ref(false)
+const showChangePasswordModal = ref(false)
+const componentKey = ref(0)
 const tabs = computed(() => {
   let _tabs = [
     {
@@ -93,6 +101,11 @@ const tabs = computed(() => {
           label: __('Invite Members'),
           icon: 'user-plus',
           component: markRaw(InviteMemberPage),
+        },
+        {
+          label: isPasswordSet ? __('Change Password') : __('Set Password'),
+          icon: 'user-plus',
+          component: markRaw(ChangePassword),
         },
       ],
     },
@@ -110,11 +123,11 @@ const tabs = computed(() => {
           component: markRaw(WhatsAppSettings),
           condition: () => isWhatsappInstalled.value,
         },
-        {
-          label: __('ERPNext'),
-          icon: ERPNextIcon,
-          component: markRaw(ERPNextSettings),
-        },
+        // {
+        //   label: __('ERPNext'),
+        //   icon: ERPNextIcon,
+        //   component: markRaw(ERPNextSettings),
+        // },
       ],
     },
   ]
@@ -129,9 +142,60 @@ const tabs = computed(() => {
     return tab
   })
 })
+const handleTabClick = (tab) => {
+  // checkPasswordStatus()
+  componentKey.value += 1
+  activeTab.value = {}
+  showChangePasswordModal.value = false
+  activeTab.value = tab
+  if (tab.label === 'Change Password' || tab.label === 'Set Password') {
+    showChangePasswordModal.value = true
+  }
+}
+const API_BASE_PATH = `${window.location.origin}/api/method/`
+
+const isPasswordSetResource = async () => {
+  try {
+    const response = await fetch(
+      `${API_BASE_PATH}crm.api.communication.is_password_set`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    // Transform the data as required
+    return {
+      isPasswordSets: data?.message?.is_password_set || false, // Return false if no data
+    }
+  } catch (error) {
+    console.error('Failed to fetch password set status:', error)
+    return {
+      isPasswordSets: false,
+    }
+  }
+}
+
+// Example usage:
+
+// Reactive property to access the `data` from the resource
+const isPasswordSet = computed(() =>
+  isPasswordSetResource().then((result) => result.isPasswordSets),
+)
+//
+// Watch the resource for changes
 
 const activeTab = ref(tabs.value[0].items[0])
 const isMobile = ref(window.innerWidth < 768)
+
 window.addEventListener('resize', () => {
   isMobile.value = window.innerWidth < 768
 })

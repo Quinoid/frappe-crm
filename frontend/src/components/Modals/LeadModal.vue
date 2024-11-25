@@ -72,12 +72,14 @@ const sections = createResource({
   transform: (data) => {
     return data.forEach((section) => {
       section.fields.forEach((field) => {
-        if (field.name == 'status') {
-          field.type = 'Select'
-          field.options = leadStatuses.value
-          field.prefix = getLeadStatus(lead.status).iconColorClass
-        } else if (field.name == 'lead_owner') {
-          field.type = 'User'
+        if (field) {
+          if (field.name == 'status') {
+            field.type = 'Select'
+            field.options = leadStatuses.value
+            field.prefix = getLeadStatus(lead.status).iconColorClass
+          } else if (field.name == 'lead_owner') {
+            field.type = 'User'
+          }
         }
       })
     })
@@ -125,8 +127,20 @@ function createNewLead() {
   if (lead.website && !lead.website.startsWith('http')) {
     lead.website = 'https://' + lead.website
   }
-
-  createLead.submit(lead, {
+  let request = { ...lead }
+  if (
+    request.interested_services_for_lead &&
+    request.interested_services_for_lead.length > 0
+  ) {
+    request.interested_services_for_lead = lead.interested_services_for_lead.map(
+      (s) => {
+        return {
+          link_field: s,
+        }
+      },
+    )
+  }
+  createLead.submit(request, {
     validate() {
       error.value = null
       if (!lead.first_name) {
@@ -181,6 +195,7 @@ function openQuickEntryModal() {
 }
 
 onMounted(() => {
+  console.log(lead, props.defaults)
   Object.assign(lead, props.defaults)
   if (!lead.lead_owner) {
     lead.lead_owner = getUser().name

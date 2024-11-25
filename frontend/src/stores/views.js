@@ -6,6 +6,7 @@ export const viewsStore = defineStore('crm-views', (doctype) => {
   let viewsByName = reactive({})
   let pinnedViews = ref([])
   let publicViews = ref([])
+  let reportViews = ref([])
   let defaultView = ref({})
 
   // Views
@@ -18,11 +19,15 @@ export const viewsStore = defineStore('crm-views', (doctype) => {
     transform(views) {
       pinnedViews.value = []
       publicViews.value = []
+      reportViews.value = []
       for (let view of views) {
         viewsByName[view.name] = view
         view.type = view.type || 'list'
         if (view.pinned) {
           pinnedViews.value?.push(view)
+        }
+        if (view.reports) {
+          reportViews.value?.push(view)
         }
         if (view.public) {
           publicViews.value?.push(view)
@@ -52,7 +57,10 @@ export const viewsStore = defineStore('crm-views', (doctype) => {
     if (!publicViews.value?.length) return []
     return publicViews.value
   }
-
+  function getReportViews() {
+    if (!reportViews.value?.length) return []
+    return reportViews.value
+  }
   async function reload() {
     await views.reload()
   }
@@ -64,5 +72,6 @@ export const viewsStore = defineStore('crm-views', (doctype) => {
     getPublicViews,
     reload,
     getView,
+    getReportViews,
   }
 })

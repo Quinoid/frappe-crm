@@ -12,7 +12,7 @@
         variant="solid"
         :label="__('Create')"
         class="bg-btn_primary"
-        @click="showLeadModal = true"
+        @click="createLead"
       >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
@@ -257,7 +257,7 @@
     >
       <LeadsIcon class="h-10 w-10" />
       <span>{{ __('No {0} Found', [__('Leads')]) }}</span>
-      <Button :label="__('Create')" @click="showLeadModal = true">
+      <Button :label="__('Create')" @click="createLead">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </div>
@@ -314,11 +314,11 @@ import {
   timeAgo,
   website,
   formatTime,
+  createToast,
 } from '@/utils'
-import { Avatar, Tooltip, Dropdown } from 'qbs-vue-ui'
+import { Avatar, Tooltip, Dropdown, call } from 'qbs-vue-ui'
 import { useRoute } from 'vue-router'
 import { ref, computed, reactive, h } from 'vue'
-
 const { makeCall } = globalStore()
 const { getUser } = usersStore()
 const { getLeadStatus } = statusesStore()
@@ -488,6 +488,32 @@ function parseRows(rows) {
     _rows['_comment_count'] = lead._comment_count
     return _rows
   })
+}
+async function createLead() {
+  const url = new URL(window.location.href)
+  const domain = url.hostname
+  try {
+    // Call the API method with necessary arguments
+    const res = await call('crm.api.dashboard.custom_record_count', {
+      doctype: 'CRM Lead',
+      domain: domain,
+    })
+    if (res.limit_count > leads.value.data.total_count) {
+      showLeadModal.value = true
+    } else {
+      createToast({
+        title: 'Error',
+        text: `Maximum limit exceeds. Total limit is ${res.limit_count} `,
+        icon: 'x',
+        iconClasses: 'text-red-600',
+      })
+    }
+    // Close the modal (or other related cleanup)
+
+    // Navigate to the 'Organizations' route
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 function onNewClick(column) {

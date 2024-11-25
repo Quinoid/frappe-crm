@@ -400,7 +400,7 @@ def get_data(
 			"value": "modified_by",
 			"options": "User",
 		},
-		{"label": "Assigned To", "type": "Text", "value": "_assign"},
+		{"label": "Assigned To", "type": "Link", "value": "_assign", "options": "User"},
 		{"label": "Owner", "type": "Link", "value": "owner", "options": "User"},
 		{"label": "Like", "type": "Data", "value": "_liked_by"},
 	]
@@ -592,7 +592,7 @@ def get_sidebar_fields(doctype, name):
 						field_obj.read_only = 1
 					if not field_has_read_access and not field_has_write_access:
 						field_obj.hidden = 1
-				section["fields"][section.get("fields").index(field)] = get_field_obj(field_obj)
+				section["fields"][section.get("fields").index(field)] = get_field_obj(field_obj,section)
 
 	fields_meta = {}
 	for field in fields:
@@ -600,7 +600,7 @@ def get_sidebar_fields(doctype, name):
 
 	return layout
 
-def get_field_obj(field):
+def get_field_obj(field,section):
 	obj = {
 		"label": field.label,
 		"type": get_type(field),
@@ -609,6 +609,18 @@ def get_field_obj(field):
 		"reqd": field.reqd,
 		"read_only": field.read_only,
 		"all_properties": field,
+		"custom_option": (
+            field.options.replace("Custom ", "") if isinstance(field.options, str) else None
+        ),
+		'data_type' :(
+			"Email"
+			if field.fieldtype.lower() == "table multiselect" and section.get("doctype") == "Event"
+			else "Text"
+			if field.fieldtype.lower() == "table multiselect" and section.get("doctype") == "Lead"
+			else None
+		)
+
+
 	}
 
 	obj["placeholder"] = "Add " + field.label + "..."

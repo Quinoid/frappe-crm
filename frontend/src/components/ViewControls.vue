@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isMobileView"
+    v-if="isMobileView && route.params.viewType !== 'calendar'"
     class="flex flex-col justify-between gap-2 sm:px-5 px-3 py-4"
   >
     <div class="flex flex-col gap-2">
@@ -58,7 +58,10 @@
       </div>
     </div>
   </div>
-  <div v-else class="flex items-center justify-between gap-2 px-5 py-4">
+  <div
+    v-else-if="route.params.viewType !== 'calendar'"
+    class="flex items-center justify-between gap-2 px-5 py-4"
+  >
     <FadedScrollableDiv
       class="flex flex-1 items-center overflow-x-auto -ml-1"
       orientation="horizontal"
@@ -213,6 +216,7 @@
 <script setup>
 import ListIcon from '@/components/Icons/ListIcon.vue'
 import KanbanIcon from '@/components/Icons/KanbanIcon.vue'
+import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import GroupByIcon from '@/components/Icons/GroupByIcon.vue'
 import QuickFilterField from '@/components/QuickFilterField.vue'
 import RefreshIcon from '@/components/Icons/RefreshIcon.vue'
@@ -258,7 +262,7 @@ const props = defineProps({
     default: {
       hideColumnsButton: false,
       defaultViewName: '',
-      allowedViews: ['list'],
+      allowedViews: ['list', 'calendar'],
     },
   },
 })
@@ -297,6 +301,11 @@ function getViewType() {
       name: 'kanban',
       label: __('Kanban'),
       icon: markRaw(KanbanIcon),
+    },
+    calendar: {
+      name: 'calendar',
+      label: __('Calendar'),
+      icon: markRaw(CalendarIcon),
     },
   }
 
@@ -418,7 +427,12 @@ function getParams() {
 }
 
 list.value = createResource({
-  url: 'crm.api.doc.get_data',
+  url:
+    props.doctype === 'Event'
+      ? 'crm.api.events.custom_get_data'
+      : props.doctype === 'Communication'
+        ? 'crm.api.communication.get_communication_data'
+        : 'crm.api.doc.get_data',
   params: getParams(),
   cache: [props.doctype, route.query.view, route.params.viewType],
   onSuccess(data) {
@@ -510,6 +524,17 @@ if (allowedViews.includes('group_by')) {
     },
   })
 }
+if (allowedViews.includes('calendar')) {
+  defaultViews.push({
+    name: 'calendar',
+    label: __(props.options?.defaultViewName) || __('Calendar'),
+    icon: markRaw(CalendarIcon),
+    onClick() {
+      viewUpdated.value = false
+      router.push({ name: route.name, params: { viewType: 'calendar' } })
+    },
+  })
+}
 
 function getIcon(icon, type) {
   if (isEmoji(icon)) {
@@ -518,6 +543,8 @@ function getIcon(icon, type) {
     return markRaw(GroupByIcon)
   } else if (!icon && type === 'kanban') {
     return markRaw(KanbanIcon)
+  } else if (!icon && type === 'calendar') {
+    return markRaw(CalendarIcon)
   }
   return icon || markRaw(ListIcon)
 }
@@ -555,6 +582,7 @@ const viewsDropdownOptions = computed(() => {
       (v) => !v.pinned && !v.public && !v.is_default,
     )
     let pinnedViews = list.value.data.views.filter((v) => v.pinned)
+    let reportViews = list.value.data.views.filter((v) => v.reports)
 
     savedViews.length &&
       _views.push({
@@ -570,6 +598,11 @@ const viewsDropdownOptions = computed(() => {
       _views.push({
         group: __('Pinned Views'),
         items: pinnedViews,
+      })
+    reportViews.length &&
+      _views.push({
+        group: __('Reports'),
+        items: reportViews,
       })
   }
 
@@ -590,7 +623,44 @@ const viewsDropdownOptions = computed(() => {
 })
 
 const quickFilterList = computed(() => {
-  let filters = [{ name: 'name', label: __('ID') }]
+  let nameField
+  let labelField
+  if (props.doctype === 'CRM Lead') {
+    nameField = 'lead_name'
+    labelField = 'Name'
+  } else if (props.doctype === 'CRM Task') {
+    nameField = 'title'
+    labelField = 'Title'
+  } else if (
+    props.doctype === 'Email Template' ||
+    props.doctype === 'CRM Organization' ||
+    props.doctype === 'Contact'
+  ) {
+    nameField = 'name'
+    labelField = 'Name'
+  } else if (props.doctype === 'CRM Deal') {
+    nameField = 'organization'
+    labelField = 'Organisation Name'
+  } else if (props.doctype === 'CRM Call Log') {
+    nameField = 'to'
+    labelField = 'Number'
+  } else if (props.doctype === 'Event' || props.doctype === 'Communication') {
+    nameField = 'subject'
+    labelField = 'Subject'
+  } else {
+    nameField = 'name'
+    labelField = 'ID'
+  }
+  let filters =
+    props.doctype !== 'FCRM Note'
+      ? [
+          {
+            name: nameField,
+            label: __(labelField),
+          },
+        ]
+      : []
+
   if (quickFilters.data) {
     filters.push(...quickFilters.data)
   }
@@ -922,6 +992,19 @@ const viewActions = (view) => {
         onClick: () => publicView(_view),
       })
     }
+    if (isManager()) {
+      actions[0].items.push({
+        label: _view.reports?.length
+          ? __('Remove From Reports')
+          : __('Add To Reports'),
+        icon: () =>
+          h(FeatherIcon, {
+            name: _view.reports ? 'x' : 'plus',
+            class: 'h-4 w-4',
+          }),
+        onClick: () => reportView(_view),
+      })
+    }
 
     actions.push({
       group: __('Delete View'),
@@ -981,6 +1064,16 @@ function publicView(v) {
   call('crm.fcrm.doctype.crm_view_settings.crm_view_settings.public', {
     name: v.name,
     value: !v.public,
+  }).then(() => {
+    v.public = !v.public
+    reloadView()
+    list.value.reload()
+  })
+}
+function reportView(v) {
+  call('crm.fcrm.doctype.crm_view_settings.crm_view_settings.reports', {
+    name: v.name,
+    value: !v.reports,
   }).then(() => {
     v.public = !v.public
     reloadView()

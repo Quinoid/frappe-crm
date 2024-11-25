@@ -83,6 +83,38 @@
             </Tooltip>
           </template>
         </Link>
+        <div
+          class="flex gap-1"
+          v-else-if="
+            field.type === 'Table MultiSelect' ||
+            field.type === 'table multiselect'
+          "
+        >
+          <MultiSelectBox
+            class="flex-1"
+            v-model="data[field.name]"
+            :data="data"
+            :validate="validateEmail"
+            @change="(data) => emit('update', field.name, data)"
+            :custom_option="field.custom_option"
+            :datatype="field.data_type"
+            :editableOnClick="true"
+            :error-message="
+              (value) => __('{0} is an invalid email address', [value])
+            "
+          />
+          <Button
+            v-if="data[field.name] && field.edit"
+            class="shrink-0"
+            :label="__('Edit')"
+            @click="field.edit(data[field.name])"
+          >
+            <template #prefix>
+              <EditIcon class="h-4 w-4" />
+            </template>
+          </Button>
+        </div>
+
         <Link
           v-else-if="field.type === 'link'"
           class="form-control select-text"
@@ -92,6 +124,7 @@
           @change="(data) => emit('update', field.name, data)"
           :onCreate="field.create"
         />
+
         <FormControl
           v-else
           class="form-control"
@@ -119,7 +152,9 @@ import UserAvatar from '@/components/UserAvatar.vue'
 import { usersStore } from '@/stores/users'
 import { Tooltip } from 'qbs-vue-ui'
 import { computed } from 'vue'
-
+import MultiSelectBox from '@/components/Controls/MultiSelectBox.vue'
+import { validateEmail } from '@/utils'
+import EditIcon from '@/components/Icons/EditIcon.vue'
 const props = defineProps({
   fields: {
     type: Object,

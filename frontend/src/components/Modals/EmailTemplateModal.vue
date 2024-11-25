@@ -48,7 +48,7 @@
             ref="subjectRef"
             variant="outline"
             v-model="_emailTemplate.subject"
-            :placeholder="__('Payment Reminder from Frappé - (#{{ name }})')"
+            :placeholder="__('Payment Reminder from Bizpole Team - (#{{ name }})')"
           />
         </div>
         <div>
@@ -65,7 +65,7 @@
             v-model="_emailTemplate.response_html"
             :placeholder="
               __(
-                '<p>Dear {{ lead_name }},</p>\n\n<p>This is a reminder for the payment of {{ grand_total }}.</p>\n\n<p>Thanks,</p>\n<p>Frappé</p>',
+                '<p>Dear {{ lead_name }},</p>\n\n<p>This is a reminder for the payment of {{ grand_total }}.</p>\n\n<p>Thanks,</p>\n<p>Bizpole Team</p>',
               )
             "
           />
@@ -79,7 +79,7 @@
             @change="(val) => (_emailTemplate.response = val)"
             :placeholder="
               __(
-                'Dear {{ lead_name }}, \n\nThis is a reminder for the payment of {{ grand_total }}. \n\nThanks, \nFrappé',
+                'Dear {{ lead_name }}, \n\nThis is a reminder for the payment of {{ grand_total }}. \n\nThanks, \nBizpole Team',
               )
             "
           />

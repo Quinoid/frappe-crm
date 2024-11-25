@@ -19,17 +19,17 @@
     </Tooltip>
     <Tooltip
       v-else
-      :text="avatar.name"
       v-for="avatar in reverseAvatars"
       :key="avatar.name"
+      :text="avatar.name"
     >
       <Avatar
         class="user-avatar -mr-1.5 transform ring-2 ring-white transition hover:z-10 hover:scale-110"
         shape="circle"
-        :image="avatar.image"
-        :label="avatar.label"
+        :image="avatar?.image ?? ''"
+        :label="avatar?.label"
         :size="size"
-        :data-name="avatar.name"
+        :data-name="avatar?.name"
       />
     </Tooltip>
   </div>
@@ -48,5 +48,5 @@ const props = defineProps({
     default: 'md',
   },
 })
-const reverseAvatars = computed(() => props.avatars.reverse())
+const reverseAvatars = computed(() => [...props.avatars].reverse())
 </script>

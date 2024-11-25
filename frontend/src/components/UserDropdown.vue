@@ -90,12 +90,16 @@ let dropdownOptions = ref([
       {
         icon: 'life-buoy',
         label: computed(() => __('Support')),
-        onClick: () => window.open('https://t.me/frappecrm', '_blank'),
+        onClick: () =>
+          window.open(
+            'https://api.whatsapp.com/send?phone=919778575622&lang=en&text=Hello',
+            '_blank',
+          ),
       },
       {
         icon: 'book-open',
         label: computed(() => __('Docs')),
-        onClick: () => window.open('https://docs.frappe.io/crm', '_blank'),
+        onClick: () => window.open('https://docs.bizpoleapps.com/', '_blank'),
       },
     ],
   },

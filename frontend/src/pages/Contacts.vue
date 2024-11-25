@@ -63,7 +63,7 @@
   <ContactModal
     v-model="showContactModal"
     v-model:quickEntry="showQuickEntryModal"
-    :contact="{}"
+    :contact="contacts"
   />
   <QuickEntryModal
     v-if="showQuickEntryModal"
@@ -84,6 +84,7 @@ import ViewControls from '@/components/ViewControls.vue'
 import { organizationsStore } from '@/stores/organizations.js'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { ref, computed } from 'vue'
+
 
 const { getOrganization } = organizationsStore()
 

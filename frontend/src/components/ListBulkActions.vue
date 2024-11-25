@@ -57,6 +57,7 @@ function editValues(selections, unselectAll) {
   unselectAllAction.value = unselectAll
 }
 
+console.log(list.value)
 function convertToDeal(selections, unselectAll) {
   $dialog({
     title: __('Convert to Deal'),
