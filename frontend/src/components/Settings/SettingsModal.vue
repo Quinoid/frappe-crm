@@ -81,11 +81,14 @@ import SidebarLink from '@/components/SidebarLink.vue'
 import { isWhatsappInstalled } from '@/composables/settings'
 import { Dialog, createResource } from 'qbs-vue-ui'
 import { ref, markRaw, computed, watch } from 'vue'
+import { usersStore } from '@/stores/users'
 import ChangePassword from '@/components/Settings/ChangePassword.vue'
 const show = defineModel()
 const showSidebar = ref(false)
 const showChangePasswordModal = ref(false)
 const componentKey = ref(0)
+const { isManager } = usersStore()
+
 const tabs = computed(() => {
   let _tabs = [
     {
@@ -97,11 +100,16 @@ const tabs = computed(() => {
           icon: ContactsIcon,
           component: markRaw(ProfileSettings),
         },
-        {
-          label: __('Invite Members'),
-          icon: 'user-plus',
-          component: markRaw(InviteMemberPage),
-        },
+        ...(isManager()
+          ? [
+              {
+                label: __('Invite Members'),
+                icon: 'user-plus',
+                component: markRaw(InviteMemberPage),
+              },
+            ]
+          : []),
+
         {
           label: isPasswordSet ? __('Change Password') : __('Set Password'),
           icon: 'user-plus',
