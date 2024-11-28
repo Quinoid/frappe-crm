@@ -85,7 +85,6 @@ import { organizationsStore } from '@/stores/organizations.js'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { ref, computed } from 'vue'
 
-
 const { getOrganization } = organizationsStore()
 
 const showContactModal = ref(false)
