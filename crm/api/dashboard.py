@@ -4,6 +4,8 @@ from frappe import _
 from frappe.utils import nowdate, add_days
 from frappe.query_builder import Order
 from frappe.query_builder import Field
+import json
+from frappe.query_builder import DocType
 
 
 @frappe.whitelist()
@@ -94,50 +96,95 @@ def custom_task_details(name):
     return task
 
 
+# @frappe.whitelist()
+# def custom_record_count(doctype, domain):
+
+#     limit_counts = {
+#         "CRM Lead": 1000,
+#         "Contact": 10,
+#         "CRM Deal": 10
+#     }
+
+#     limit_count = limit_counts.get(doctype)
+
+#     try:
+#         DocType = frappe.qb.DocType(doctype)
+#         current_user = frappe.session.user
+
+#         record_query = frappe.qb.from_(DocType).select("*")
+#         records = record_query.run(as_dict=True)
+#         record_total_count = len(records)
+
+#         return {
+#             "status": 200,
+#             "record_total_count": record_total_count,
+#             "limit_count": limit_count
+            
+#         }
+    
+#     except frappe.DoesNotExistError:
+#         frappe.response["http_status_code"] = 400
+#         frappe.throw(_(f"The specified doctype '{doctype}' does not exist."), frappe.ValidationError)
+
+#     except Exception as e:
+#         frappe.log_error(message=str(e), title="Custom Record Count Error")
+#         frappe.throw(_("An error occurred while fetching the record count."), frappe.ValidationError)
+
+
 @frappe.whitelist()
-def custom_record_count(doctype, domain):
-
-    limit_counts = {
-        "CRM Lead": 1000,
-        "Contact": 10,
-        "CRM Deal": 10
-    }
-
-    limit_count = limit_counts.get(doctype)
-
+def custom_record_count(doctype):
     try:
-        DocType = frappe.qb.DocType(doctype)
-        current_user = frappe.session.user
 
+        file_path = frappe.get_site_path("domain_limit.json")
+
+        # Load the domain limits JSON file
+        with open(file_path, "r") as file:
+            domain_limit = json.load(file)
+
+        # Validate the JSON structure
+        if not domain_limit.get("limits") or not isinstance(domain_limit["limits"], list):
+            frappe.response["http_status_code"] = 500
+            frappe.throw(_("Invalid structure in domain_limit.json file."), frappe.ValidationError)
+
+        limits = domain_limit["limits"][0]
+
+        doctype_limit_map = {
+            "CRM Lead": "lead_limit_count",
+            "Contact": "contact_limit_count",
+            "CRM Deal": "deal_limit_count",
+        }
+
+        limit_key = doctype_limit_map.get(doctype)
+        if not limit_key:
+            frappe.response["http_status_code"] = 400
+            frappe.throw(_(f"Invalid doctype '{doctype}' for this function."), frappe.ValidationError)
+
+
+        limit_count = limits.get(limit_key, 0)
+
+        DocType = frappe.qb.DocType(doctype)
         record_query = frappe.qb.from_(DocType).select("*")
         records = record_query.run(as_dict=True)
         record_total_count = len(records)
-
-        # if record_total_count >= limit_count:
-        #     frappe.response["http_status_code"] = 400
-        #     return {
-        #         "status": "error",
-        #         "error_type": "LimitExceeded",
-        #         "message": _("You have reached the maximum {0} limit of {1} for your plan and cannot create additional records.").format(doctype, limit_count),
-        #         "record_total_count": record_total_count,
-        #         "limit_count": limit_count
-        #     }
-
 
         return {
             "status": 200,
             "record_total_count": record_total_count,
             "limit_count": limit_count
-            
         }
-    
-    except frappe.DoesNotExistError:
-        frappe.response["http_status_code"] = 400
-        frappe.throw(_(f"The specified doctype '{doctype}' does not exist."), frappe.ValidationError)
+
+    except FileNotFoundError:
+        frappe.response["http_status_code"] = 500
+        frappe.throw(_("The domain_limit.json file is missing in the sites folder."), frappe.ValidationError)
+
+    except json.JSONDecodeError:
+        frappe.response["http_status_code"] = 500
+        frappe.throw(_("Error parsing the domain_limit.json file. Please check its structure."), frappe.ValidationError)
 
     except Exception as e:
         frappe.log_error(message=str(e), title="Custom Record Count Error")
         frappe.throw(_("An error occurred while fetching the record count."), frappe.ValidationError)
+
 
 
 
@@ -170,3 +217,4 @@ def custom_delete(doctype, name):
             "error_type": "GeneralError",
             "message": str(e)
         }
+
