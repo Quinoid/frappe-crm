@@ -12,6 +12,8 @@ from frappe.utils import make_filter_tuple
 
 from crm.api.views import get_views
 from crm.fcrm.doctype.crm_form_script.crm_form_script import get_form_script
+from frappe.utils.password import get_decrypted_password
+from frappe.query_builder import Table
 
 
 @frappe.whitelist()
@@ -48,33 +50,42 @@ def change_password(new_password: str, confirm_password: str, old_password: str 
         return {"status": "error", "message": "An unexpected error occurred. Please try again later."}
 
 
+Auth = Table("__Auth")
+
+
 @frappe.whitelist()
 def is_password_set():
+
+    user = frappe.session.user
+    user_email = frappe.db.get_value("User", user, "email")
+
     try:
-        user = frappe.session.user
-
-        # Ensure the user exists
-        if not frappe.db.exists("User", user):
-            return {"status": "error", "message": f"User '{user}' does not exist."}
-
-        # Check if password is set
-        auth_enabled = frappe.db.get_value("User", user, "enabled")
-        if not auth_enabled:
+        result = (
+            frappe.qb.from_(Auth)
+            .select(Auth.password)
+            .where(
+                (Auth.doctype == 'User')
+                & (Auth.name == user_email)
+                & (Auth.fieldname == "password")
+            )
+            .limit(1)
+        ).run()
+        
+        if result:
+            return {
+                "status": "success",
+                "is_password_set": True,
+                "message": "Password is set for this user."
+            }
+        else:
             return {
                 "status": "success",
                 "is_password_set": False,
                 "message": "No password is set or user is disabled."
             }
-
-        return {
-            "status": "success",
-            "is_password_set": True,
-            "message": "Password is set for this user."
-        }
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Check Password Status Error")
         return {"status": "error", "message": "An unexpected error occurred. Please try again later."}
-
 
 
 @staticmethod
