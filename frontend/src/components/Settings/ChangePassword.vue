@@ -1,5 +1,5 @@
 <template>
-  <Dialog
+  <!-- <Dialog
     :options="{
       title: isPasswordSet ? __('Change Password') : __('Set Password'),
     }"
@@ -14,7 +14,12 @@
       }
     "
   >
-    <template #body-content>
+   -->
+  <div class="flex h-full flex-col gap-8 p-8 items-center">
+    <div class="w-1/2 flex flex-col gap-4 mt-8">
+      <h2 class="flex gap-2 text-xl font-semibold leading-none h-5">
+        {{ isPasswordSet ? __('Change Password') : __('Set Password') }}
+      </h2>
       <div class="space-y-4">
         <div class="flex items-center gap-4"></div>
         <FormControl
@@ -40,8 +45,7 @@
           {{ error }}
         </p>
       </div>
-    </template>
-    <template #actions>
+
       <Button
         variant="solid"
         class="w-full bg-btn_primary"
@@ -49,12 +53,13 @@
         @click="updatePassword"
         :label="__('Save')"
       />
-    </template>
-  </Dialog>
+    </div>
+  </div>
+  <!-- </Dialog> -->
 </template>
 <script setup>
-import { Dialog, createResource } from 'qbs-vue-ui'
-import { ref, watch, computed } from 'vue'
+import { createResource } from 'qbs-vue-ui'
+import { ref, computed } from 'vue'
 import { createToast } from '@/utils'
 const props = defineProps({
   user: {
@@ -64,10 +69,6 @@ const props = defineProps({
   isPasswordSet: {
     type: Boolean,
     required: false,
-  },
-  showChangePasswordModal: {
-    type: Boolean,
-    required: true,
   },
 })
 
@@ -82,26 +83,22 @@ const error = ref('')
 const emit = defineEmits(['update:showChangePasswordModal'])
 
 // Local state for modal visibility
-const localShow = ref(props.showChangePasswordModal)
 
 // Watch for prop changes and sync with local state
-watch(
-  () => props.showChangePasswordModal,
-  (newValue) => {
-    localShow.value = newValue
-  },
-)
 
 // Watch for local state changes and emit to parent
-watch(localShow, (newValue) => {
-  emit('update:showChangePasswordModal', newValue)
-})
+
 const passwordStrengthError = ref('')
 function updatePassword() {
   // Reset errors
   error.value = ''
   passwordStrengthError.value = ''
-
+  if (props.isPasswordSet) {
+    if (!passwords.value.old_password || passwords.value.old_password == '') {
+      error.value = 'Old Password is required.'
+      return
+    }
+  }
   // Check if passwords match
   if (passwords.value.new_password !== passwords.value.confirm_password) {
     error.value = 'Passwords do not match.'
@@ -129,7 +126,6 @@ function updatePassword() {
     auto: true,
     onSuccess: () => {
       loading.value = false
-      localShow.value = false // Close modal
       createToast({
         title: 'Password updated successfully',
         icon: 'check',
@@ -170,17 +166,6 @@ const validatePasswordStrength = (password) => {
   }
   return ''
 }
-// const checkPasswordStatus = async () => {
-//   try {
-//     const response = await createResource({
-//       url: 'crm.api.communication.is_password_set',
-//     })
-//     console.log(response)
-//     isPasswordSet.value = response.data.is_password_set
-//   } catch (error) {
-//     console.error('Failed to check password status:', error)
-//   }
-// }
 
 const hasErrors = computed(() => !!error.value || !!passwordStrengthError.value)
 </script>

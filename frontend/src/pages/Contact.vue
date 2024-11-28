@@ -255,9 +255,9 @@ import {
 } from 'qbs-vue-ui'
 import { ref, computed, h } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { createToast } from '@/utils'
 
 const { $dialog, makeCall } = globalStore()
-import { createToast } from '@/utils'
 const { getUser } = usersStore()
 const { getOrganization } = organizationsStore()
 const { getDealStatus } = statusesStore()
@@ -293,7 +293,7 @@ const contact = createResource({
 })
 
 const breadcrumbs = computed(() => {
-  let items = [{ label: __('Communication'), route: { name: 'Communication' } }]
+  let items = [{ label: __('Contacs'), route: { name: 'Contacts' } }]
 
   if (route.query.view || route.query.viewType) {
     let view = getView(route.query.view, route.query.viewType, 'Contact')

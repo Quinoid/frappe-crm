@@ -89,8 +89,49 @@ const showChangePasswordModal = ref(false)
 const componentKey = ref(0)
 const { isManager } = usersStore()
 
+const handleTabClick = (tab) => {
+  // checkPasswordStatus()
+  componentKey.value += 1
+  activeTab.value = {}
+  showChangePasswordModal.value = false
+  activeTab.value = tab
+  if (tab.label === 'Change Password' || tab.label === 'Set Password') {
+    showChangePasswordModal.value = true
+  }
+}
+const API_BASE_PATH = `${window.location.origin}/api/method/`
+const isPasswordSet = ref(false)
+
+// Function to fetch and update the `isPasswordSet` value
+const fetchIsPasswordSet = async () => {
+  try {
+    const response = await fetch(
+      `${API_BASE_PATH}crm.api.communication.is_password_set`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+    isPasswordSet.value = data?.message?.is_password_set || false
+  } catch (error) {
+    console.error('Failed to fetch password set status:', error)
+    isPasswordSet.value = false
+  }
+}
+
+// Call the function to fetch the value initially
+fetchIsPasswordSet()
+
 const tabs = computed(() => {
-  let _tabs = [
+  return [
     {
       label: __('Settings'),
       hideLabel: true,
@@ -109,38 +150,36 @@ const tabs = computed(() => {
               },
             ]
           : []),
-
         {
-          label: isPasswordSet ? __('Change Password') : __('Set Password'),
-          icon: 'user-plus',
+          label: isPasswordSet.value
+            ? __('Change Password')
+            : __('Set Password'),
+          icon: 'eye',
           component: markRaw(ChangePassword),
         },
       ],
     },
-    {
-      label: __('Integrations'),
-      items: [
-        {
-          label: __('Twilio'),
-          icon: PhoneIcon,
-          component: markRaw(TwilioSettings),
-        },
-        {
-          label: __('WhatsApp'),
-          icon: WhatsAppIcon,
-          component: markRaw(WhatsAppSettings),
-          condition: () => isWhatsappInstalled.value,
-        },
-        // {
-        //   label: __('ERPNext'),
-        //   icon: ERPNextIcon,
-        //   component: markRaw(ERPNextSettings),
-        // },
-      ],
-    },
-  ]
-
-  return _tabs.map((tab) => {
+    ...(isManager()
+      ? [
+          {
+            label: __('Integrations'),
+            items: [
+              {
+                label: __('Twilio'),
+                icon: PhoneIcon,
+                component: markRaw(TwilioSettings),
+              },
+              {
+                label: __('WhatsApp'),
+                icon: WhatsAppIcon,
+                component: markRaw(WhatsAppSettings),
+                condition: () => isWhatsappInstalled.value,
+              },
+            ],
+          },
+        ]
+      : []),
+  ].map((tab) => {
     tab.items = tab.items.filter((item) => {
       if (item.condition) {
         return item.condition()
@@ -150,56 +189,6 @@ const tabs = computed(() => {
     return tab
   })
 })
-const handleTabClick = (tab) => {
-  // checkPasswordStatus()
-  componentKey.value += 1
-  activeTab.value = {}
-  showChangePasswordModal.value = false
-  activeTab.value = tab
-  if (tab.label === 'Change Password' || tab.label === 'Set Password') {
-    showChangePasswordModal.value = true
-  }
-}
-const API_BASE_PATH = `${window.location.origin}/api/method/`
-
-const isPasswordSetResource = async () => {
-  try {
-    const response = await fetch(
-      `${API_BASE_PATH}crm.api.communication.is_password_set`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const data = await response.json()
-
-    // Transform the data as required
-    return {
-      isPasswordSets: data?.message?.is_password_set || false, // Return false if no data
-    }
-  } catch (error) {
-    console.error('Failed to fetch password set status:', error)
-    return {
-      isPasswordSets: false,
-    }
-  }
-}
-
-// Example usage:
-
-// Reactive property to access the `data` from the resource
-const isPasswordSet = computed(() =>
-  isPasswordSetResource().then((result) => result.isPasswordSets),
-)
-//
-// Watch the resource for changes
 
 const activeTab = ref(tabs.value[0].items[0])
 const isMobile = ref(window.innerWidth < 768)

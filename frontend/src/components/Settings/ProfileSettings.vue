@@ -1,3 +1,4 @@
+
 <template>
   <div
     v-if="profile"
@@ -37,8 +38,29 @@
                 @click="editingProfilePhoto = true"
               />
             </div>
-            <FormControl label="First Name" v-model="profile.first_name" />
-            <FormControl label="Last Name" v-model="profile.last_name" />
+            <FormControl
+              label="First Name"
+              v-model="profile.first_name"
+              :error="errors.first_name"
+            />
+            <FormControl
+              label="Last Name"
+              v-model="profile.last_name"
+              :error="errors.last_name"
+            />
+            <FormControl
+              label="Phone"
+              v-model="profile.phone"
+              :error="errors.phone"
+            />
+            <FormControl
+              label="Email"
+              v-model="profile.email"
+              :error="errors.email"
+            />
+            <p v-if="errors" class="text-red-500 text-sm">
+              {{ errors }}
+            </p>
           </template>
         </div>
       </template>
@@ -53,13 +75,14 @@
           variant="solid"
           class="w-full bg-btn_primary"
           :loading="loading"
-          @click="updateUser"
+          @click="validateAndUpdateUser"
           :label="__('Save')"
         />
       </template>
     </Dialog>
   </div>
 </template>
+
 <script setup>
 import ProfileImageEditor from '@/components/Settings/ProfileImageEditor.vue'
 import { usersStore } from '@/stores/users'
@@ -71,32 +94,55 @@ const { getUser, users } = usersStore()
 const user = computed(() => getUser() || {})
 
 const showProfileModal = ref(false)
-
 const editingProfilePhoto = ref(false)
 const profile = ref({})
-
+const errors = ref('')
 const loading = ref(false)
-function updateUser() {
-  loading.value = true
-  const fieldname = {
-    first_name: profile.value.first_name,
-    last_name: profile.value.last_name,
-    user_image: profile.value.user_image,
+
+// Validation functions
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email) ? '' : 'Invalid email address.'
+}
+
+const validatePhone = (phone) => {
+  const phoneRegex = /^[0-9]{10,15}$/
+  return phoneRegex.test(phone) ? '' : 'Invalid phone number.'
+}
+
+const validateFields = () => {
+  errors.value = profile.value.first_name ? '' : 'First Name is required.'
+  errors.value = validatePhone(profile.value.phone)
+  errors.value = validateEmail(profile.value.email)
+
+  return !errors.value
+}
+
+function validateAndUpdateUser() {
+  if (validateFields()) {
+    loading.value = true
+    const fieldname = {
+      first_name: profile.value.first_name,
+      last_name: profile.value.last_name,
+      email: profile.value.email,
+      phone: profile.value.phone,
+      user_image: profile.value.user_image,
+    }
+    createResource({
+      url: 'frappe.client.set_value',
+      params: {
+        doctype: 'User',
+        name: user.value.name,
+        fieldname,
+      },
+      auto: true,
+      onSuccess: () => {
+        loading.value = false
+        showProfileModal.value = false
+        users.reload()
+      },
+    })
   }
-  createResource({
-    url: 'frappe.client.set_value',
-    params: {
-      doctype: 'User',
-      name: user.value.name,
-      fieldname,
-    },
-    auto: true,
-    onSuccess: () => {
-      loading.value = false
-      showProfileModal.value = false
-      users.reload()
-    },
-  })
 }
 
 onMounted(() => {

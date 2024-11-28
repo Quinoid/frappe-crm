@@ -48,6 +48,9 @@
     >
       <PhoneIcon class="h-10 w-10" />
       <span>{{ __('No {0} Found', [__('Logs')]) }}</span>
+      <span class="text-sm text-gray-500">{{
+        __('Setup Twilio account to enable phone calls from here ')
+      }}</span>
     </div>
   </div>
   <CallLogModal v-model="showCallLogModal" :name="selectedCallLog" />
