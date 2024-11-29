@@ -133,11 +133,11 @@ function updatePassword() {
       confirm_password: passwords.value.confirm_password ?? '',
     },
     auto: true,
-    onSuccess: () => {
+    onSuccess: (data) => {
       loading.value = false
-      fetchIsPasswordSet()
+      props.fetchIsPasswordSet()
       createToast({
-        title: 'Password updated successfully',
+        title: data.message,
         icon: 'check',
         iconClasses: 'text-green-600',
       })
