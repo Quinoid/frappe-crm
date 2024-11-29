@@ -633,10 +633,12 @@ const quickFilterList = computed(() => {
     labelField = 'Title'
   } else if (
     props.doctype === 'Email Template' ||
-    props.doctype === 'CRM Organization' ||
-    props.doctype === 'Contact'
+    props.doctype === 'CRM Organization'
   ) {
     nameField = 'name'
+    labelField = 'Name'
+  } else if (props.doctype === 'Contact') {
+    nameField = 'full_name'
     labelField = 'Name'
   } else if (props.doctype === 'CRM Deal') {
     nameField = 'organization'
