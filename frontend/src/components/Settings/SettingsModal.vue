@@ -60,6 +60,7 @@
             :key="componentKey"
             v-if="activeTab"
             :is-password-set="isPasswordSet"
+            :fetchIsPasswordSet="fetchIsPasswordSet"
             :show-change-password-modal.sync="showChangePasswordModal"
           />
         </div>
@@ -121,6 +122,7 @@ const fetchIsPasswordSet = async () => {
 
     const data = await response.json()
     isPasswordSet.value = data?.message?.is_password_set || false
+    componentKey.value += 1
   } catch (error) {
     console.error('Failed to fetch password set status:', error)
     isPasswordSet.value = false
@@ -141,6 +143,14 @@ const tabs = computed(() => {
           icon: ContactsIcon,
           component: markRaw(ProfileSettings),
         },
+
+        {
+          label: isPasswordSet.value
+            ? __('Change Password')
+            : __('Set Password'),
+          icon: 'eye',
+          component: markRaw(ChangePassword),
+        },
         ...(isManager()
           ? [
               {
@@ -150,13 +160,6 @@ const tabs = computed(() => {
               },
             ]
           : []),
-        {
-          label: isPasswordSet.value
-            ? __('Change Password')
-            : __('Set Password'),
-          icon: 'eye',
-          component: markRaw(ChangePassword),
-        },
       ],
     },
     ...(isManager()
