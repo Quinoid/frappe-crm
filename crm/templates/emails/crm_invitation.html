@@ -1,4 +1,188 @@
-<h2>You have been invited to join Frappe CRM</h2>
-<p>
-	<a class="btn btn-primary" href="{{ invite_link }}">Accept Invitation</a>
-</p>
+
+
+{% block html %}
+<html>
+  <head>
+    <title>Bizpole</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;600;700;900&amp;display=swap" rel="stylesheet">
+    <style>
+      *{
+      font-family: 'Inter', sans-serif !important;
+      box-sizing: border-box;
+      }
+      p {
+      font-family: 'Inter', sans-serif ;
+      font-size: 14px;
+      }
+      ul.list li:before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 20%;
+      background: #909090;
+      width: 1px;
+      height: 60%;
+      }
+      ul.list li {
+      position: relative;
+      }
+      ul.list li:last-child:before {
+      background: transparent;
+      }
+      html,body{
+        width: 100%;
+        display: block;
+        overflow-x: hidden;
+      }
+      @media(max-width: 634px){
+        .resp_padding {
+            padding: 20px !important;
+        }
+
+        .resp_borderbox {
+            padding: 16px !important;
+        }
+
+        p {
+            font-size: 12px !important;
+        }
+      }
+    </style>
+  </head>
+  <body style="
+    margin: 0;
+    padding: 0;
+    background: #0c113305;
+    ">
+    <div style=" width: 604px;
+      max-width: calc(100% - 30px);
+      border-radius: 8px 8px 0 0;
+      margin: 10px auto 0;
+      background-color: #480043; ">
+    
+    <div style="
+      position: relative;
+      text-align: center;
+      background: linear-gradient(45deg,rgb(46,27,70) 0%,rgb(39,27,45) 25%,rgb(38,25,41) 53%,rgb(70,34,69) 81%,rgb(131,50,125) 100%);
+      border-radius: 8px 8px 0 0;
+      border-bottom: 1px solid rgba(47, 47, 47, 0.07);
+      background-color: #480043;
+      ">
+      <div style="
+        padding: 14px 0;
+      ">
+        <img style="width: 200px;" src="/assets/erpnext/images/erpnext-logo.png" alt="Logo">
+      </div>
+    </div>
+    </div>
+    <div class="resp_padding" style="
+      position: relative;
+      width: 604px;
+      max-width: calc(100% - 30px);
+      margin: 0 auto 10px;
+      background: #FFFFFF;
+      border-radius: 0 0 8px 8px;
+      padding: 1rem;
+      box-sizing: border-box;
+      ">
+     
+      <div style="
+        ">
+        <p style="
+          margin: 0 0 20px 0;
+          display: inline-block;
+          width: 100%;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 32px;
+          text-align: center;
+          color: #333333;
+          ">Invitation to Set Up Your Account</p>
+      </div>
+      <div class="resp_borderbox" style="
+        width: 100%;
+        display: inline-block;
+        padding: 24px;
+        text-align: left;
+        border: 1px solid #E6E8EA;
+        box-sizing: border-box;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        background: #F8F8F8;
+        ">
+        <p style="
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 20px;
+          color: #222222;
+          margin: 0 0 12px;
+          ">Hi,</p>
+        <p style="
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 20px;
+          color: #222222;
+          margin: 0 0 12px;
+          ">We are excited to invite you to join Bizpole CRM! </p>
+          <p style="
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 20px;
+          color: #222222;
+          margin: 0 0 12px;
+          ">To get started, please set up your account password by clicking the link below and navigate to settings menu: </p>
+          <p style="
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 20px;
+          color: #222222;
+          margin: 0 0 12px;
+          "><a href="{{invite_link}}" style="color: #007bff; text-decoration: underline; cursor: pointer;">Join</a> </p>
+          <p style="
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 20px;
+          color: #222222;
+          margin: 0 0 12px;
+          overflow-wrap: normal;
+          word-break: normal;
+          ">Click on the link above and follow the on-screen instructions to complete your profile. Start exploring your portal! </p>
+          <p style="
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 20px;
+          color: #222222;
+          margin: 0 0 12px;
+          margin-top:12px;
+          ">If you have any questions or need assistance, feel free to contact our support team. </p>
+          <p style="
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 20px;
+          color: #222222;
+          margin: 0 0 12px;
+          ">We look forward to having you on board! </p>
+          <p style="
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 20px;
+          color: #222222;
+          margin: 0px;
+          ">Best regards,</p>
+          <p style="
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 20px;
+          color: #222222;
+          margin: 0;
+          ">
+            Bizpole Team</p>
+      </div>
+    </div>
+
+</body>
+</html>
+{% endblock %}
