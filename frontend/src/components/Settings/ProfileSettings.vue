@@ -1,4 +1,3 @@
-
 <template>
   <div
     v-if="profile"
@@ -56,6 +55,8 @@
             <FormControl
               label="Email"
               v-model="profile.email"
+              :disabled="true"
+              aria-disabled="true"
               :error="errors.email"
             />
             <p v-if="errors" class="text-red-500 text-sm">
