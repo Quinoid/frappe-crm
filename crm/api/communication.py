@@ -166,6 +166,7 @@ def custom_communication_default_list_data():
     return {'columns': columns, 'rows': rows}
 
 
+
 @frappe.whitelist()
 def get_communication_data(
     doctype: str,
@@ -261,13 +262,30 @@ def get_communication_data(
         if group_by_field and group_by_field not in rows:
             rows.append(group_by_field)
 
-        data = frappe.get_list(
-            doctype,
-            fields=rows,
-            filters=filters,
-            order_by=order_by,
-            page_length=page_length,
-        ) or []
+
+        user_email = frappe.session.user
+        if user_email == "Guest":
+            return {"status": "error", "message": "Guest users cannot retrieve communications."}
+
+        user_email = user_email.lower()
+        # Construct the SQL query with OR conditions for sender, recipients, cc, or bcc
+        query = """
+            SELECT name, subject, content, sender, recipients, cc, bcc, communication_date
+            FROM `tabCommunication`
+            WHERE LOWER(sender) LIKE %s
+            OR LOWER(recipients) LIKE %s
+            OR LOWER(cc) LIKE %s
+            OR LOWER(bcc) LIKE %s
+            ORDER BY communication_date DESC
+        """
+        communications = frappe.db.sql(
+            query, 
+            (f"%{user_email}%", f"%{user_email}%", f"%{user_email}%", f"%{user_email}%"), 
+            as_dict=True
+        )
+        #return communications
+
+        data = communications
 
     if view_type == "kanban":
         if not rows:
