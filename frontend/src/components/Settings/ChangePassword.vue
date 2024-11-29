@@ -20,6 +20,7 @@
       <h2 class="flex gap-2 text-xl font-semibold leading-none h-5">
         {{ isPasswordSet ? __('Change Password') : __('Set Password') }}
       </h2>
+
       <div class="space-y-4">
         <div class="flex items-center gap-4"></div>
         <FormControl
@@ -45,7 +46,11 @@
           {{ error }}
         </p>
       </div>
-
+      <p class="text-[10px] text-gray-600">
+        Password should contain at least one uppercase letter, one lowercase
+        letter, one digit, and one special character, with a minimum length of
+        eight characters, and must not contain any spaces.
+      </p>
       <Button
         variant="solid"
         class="w-full bg-btn_primary"
@@ -99,6 +104,11 @@ function updatePassword() {
       return
     }
   }
+  const strengthError = validatePasswordStrength(passwords.value.new_password)
+  if (strengthError) {
+    passwordStrengthError.value = strengthError
+    return
+  }
   // Check if passwords match
   if (passwords.value.new_password !== passwords.value.confirm_password) {
     error.value = 'Passwords do not match.'
@@ -106,11 +116,6 @@ function updatePassword() {
   }
 
   // Check password strength
-  const strengthError = validatePasswordStrength(passwords.value.new_password)
-  if (strengthError) {
-    passwordStrengthError.value = strengthError
-    return
-  }
 
   // Proceed with password update
   loading.value = true
