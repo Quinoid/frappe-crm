@@ -75,6 +75,10 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
+  fetchIsPasswordSet: {
+    type: Function,
+    required: false,
+  },
 })
 
 const passwords = ref({
@@ -131,6 +135,7 @@ function updatePassword() {
     auto: true,
     onSuccess: () => {
       loading.value = false
+      fetchIsPasswordSet()
       createToast({
         title: 'Password updated successfully',
         icon: 'check',
