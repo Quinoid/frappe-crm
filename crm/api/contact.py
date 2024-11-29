@@ -83,6 +83,12 @@ def get_linked_deals(contact):
     # Check for read permissions on Contact
     if not frappe.has_permission("Contact", "read", contact):
         frappe.throw("Not permitted", frappe.PermissionError)
+
+     # Fetch the contact document
+    contact_doc = frappe.get_doc("Contact", contact)
+
+    # Update email and mobile number for linked deals
+    update_deals_email_mobile_no(contact_doc)
     
     # Get deal names linked to the contact
     deal_names = frappe.get_all(
