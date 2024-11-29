@@ -248,6 +248,7 @@ import { usersStore } from '@/stores/users'
 import { statusesStore } from '@/stores/statuses'
 import { getView } from '@/utils/view'
 import { createToast } from '@/utils'
+
 import {
   dateFormat,
   dateTooltipFormat,
@@ -347,28 +348,12 @@ async function changeOrganizationImage(file) {
   organization.reload()
 }
 
-// async function deleteOrganization() {
-//   $dialog({
-//     title: __('Delete organization'),
-//     message: __('Are you sure you want to delete this organization?'),
-//     actions: [
-//       {
-//         label: __('Delete'),
-//         theme: 'red',
-//         variant: 'solid',
-//         async onClick(close) {
-//           await call('frappe.client.delete', {
-//             doctype: 'CRM Organization',
-//             name: props.organizationId,
-//           })
-//           close()
-//           router.push({ name: 'Organizations' })
-//         },
-//       },
-//     ],
-//   })
-// }
+function removeATags(htmlString) {
+  return htmlString.replace(/<a [^>]*>(.*?)<\/a>/g, '$1')
+}
 async function deleteOrganization() {
+  const API_BASE_PATH = `${window.location.origin}/api/method/`
+
   $dialog({
     title: __('Delete organization'),
     message: __('Are you sure you want to delete this organization?'),
@@ -379,10 +364,26 @@ async function deleteOrganization() {
         variant: 'solid',
         async onClick(close) {
           try {
-            await call('crm.api.dashboard.custom_delete', {
-              doctype: 'CRM Organization',
-              name: props.organizationId,
-            })
+            const response = await fetch(
+              `${API_BASE_PATH}crm.api.dashboard.custom_delete`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-Frappe-CSRF-Token': window.csrf_token,
+                },
+                body: JSON.stringify({
+                  doctype: 'CRM Organization',
+                  name: props.organizationId,
+                }),
+              },
+            )
+
+            if (!response.ok) {
+              const errorData = await response.json()
+              throw new Error(errorData._server_messages || response.statusText)
+            }
+
             close()
             router.push({ name: 'Organizations' })
           } catch (error) {
@@ -390,12 +391,16 @@ async function deleteOrganization() {
               'Failed to delete the organization. Please try again.',
             )
 
-            if (error._server_messages) {
+            // Parse server error message if availablne
+            if (error.message) {
               try {
-                const serverMessages = JSON.parse(error._server_messages)
+                const serverMessages = JSON.parse(error.message)
                 if (Array.isArray(serverMessages) && serverMessages[0]) {
                   const parsedMessage = JSON.parse(serverMessages[0])
-                  errorMessage = parsedMessage.message || errorMessage
+                  if (parsedMessage.message) {
+                    // Clean the message to remove <a> tags
+                    errorMessage = removeATags(parsedMessage.message)
+                  }
                 }
               } catch (parseError) {
                 console.error(
@@ -404,6 +409,7 @@ async function deleteOrganization() {
                 )
               }
             }
+            // Show error toast
             createToast({
               title: 'Error',
               text: errorMessage,
