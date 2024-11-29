@@ -115,7 +115,7 @@ const routes = [
   {
     alias: '/communication',
     path: '/communication/view/:viewType?',
-    name: 'Email Box',
+    name: 'Emails',
     component: () => import('@/pages/Communication.vue'),
     meta: { scrollPos: { top: 0, left: 0 } },
   },
