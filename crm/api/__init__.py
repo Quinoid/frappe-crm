@@ -71,21 +71,31 @@ def check_app_permission():
 
 @frappe.whitelist(allow_guest=True)
 def accept_invitation(key: str = None):
-	if not key:
-		frappe.throw("Invalid or expired key")
+    
+    # Check if the key is provided
+    if not key:
+        frappe.local.response["type"] = "redirect"
+        frappe.local.response["location"] = "/invitation-error"
+        return  # Ensure the function exits here
 
-	result = frappe.db.get_all("CRM Invitation", filters={"key": key}, pluck="name")
-	if not result:
-		frappe.throw("Invalid or expired key")
+    # Fetch the invitation based on the key
+    result = frappe.db.get_all("CRM Invitation", filters={"key": key}, pluck="name")
+    if not result:
+        frappe.local.response["type"] = "redirect"
+        frappe.local.response["location"] = "/invitation-error"
+        return  # Ensure the function exits here if no result is found
 
-	invitation = frappe.get_doc("CRM Invitation", result[0])
-	invitation.accept()
-	invitation.reload()
+    # Proceed with the invitation if the result exists
+    invitation = frappe.get_doc("CRM Invitation", result[0])
+    invitation.accept()
+    invitation.reload()
 
-	if invitation.status == "Accepted":
-		frappe.local.login_manager.login_as(invitation.email)
-		frappe.local.response["type"] = "redirect"
-		frappe.local.response["location"] = "/crm"
+    # Check if the invitation was accepted
+    if invitation.status == "Accepted":
+        frappe.local.login_manager.login_as(invitation.email)
+        frappe.local.response["type"] = "redirect"
+        frappe.local.response["location"] = "/crm"
+        return  # Ensure the function exits after redirection
 
 
 @frappe.whitelist()
