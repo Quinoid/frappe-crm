@@ -1,7 +1,7 @@
 <template>
   <LayoutHeader>
     <template #left-header>
-      <ViewBreadcrumbs v-model="viewControls" routeName="Email Box" />
+      <ViewBreadcrumbs v-model="viewControls" routeName="Emails" />
     </template>
     <template #right-header>
       <CustomActions

@@ -291,9 +291,9 @@ const links = [
     to: 'Email Templates',
   },
   {
-    label: 'Email Box',
+    label: 'Emails',
     icon: EmailIcon,
-    to: 'Email Box',
+    to: 'Emails',
   },
   {
     label: 'Events',

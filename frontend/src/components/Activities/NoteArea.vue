@@ -52,22 +52,34 @@
 <script setup>
 import UserAvatar from '@/components/UserAvatar.vue'
 import { timeAgo, dateFormat, dateTooltipFormat } from '@/utils'
-import { Tooltip, Dropdown, TextEditor } from 'qbs-vue-ui'
+import { Tooltip, Dropdown, TextEditor, call } from 'qbs-vue-ui'
 import { usersStore } from '@/stores/users'
-
 const props = defineProps({
   note: Object,
+  modelValue: {
+    type: Object, // Ensure it's the resource object
+    required: true,
+  },
 })
-
-const notes = defineModel()
 
 const { getUser } = usersStore()
 
+// async function deleteNote(name) {
+//   await call('frappe.client.delete', {
+//     doctype: 'FCRM Note',
+//     name,
+//   })
+//   notes.reload()
+// }
 async function deleteNote(name) {
-  await call('frappe.client.delete', {
-    doctype: 'FCRM Note',
-    name,
-  })
-  notes.reload()
+  try {
+    await call('frappe.client.delete', {
+      doctype: 'FCRM Note',
+      name,
+    })
+    props.modelValue.reload() // Refresh the notes
+  } catch (error) {
+    console.error('Failed to delete note:', error)
+  }
 }
 </script>
