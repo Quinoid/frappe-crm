@@ -155,7 +155,12 @@ async function reloadContactData() {
       name: props.contact.data.name,
     })
     if (updatedContact) {
-      _contact.value = { ...updatedContact }
+      props.contact.data = updatedContact
+      _contact.value = {
+        ...updatedContact,
+        actual_mobile_no: updatedContact.mobile_no,
+        mobile_no: updatedContact.mobile_no,
+      }
     }
   } catch (error) {
     console.error('Error reloading contact data:', error)
