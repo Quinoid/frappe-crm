@@ -55,7 +55,6 @@ import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'
 import { Dropdown } from 'qbs-vue-ui'
 import { computed, ref, markRaw } from 'vue'
-
 const props = defineProps({
   isCollapsed: {
     type: Boolean,
@@ -79,14 +78,20 @@ const handleLogotut = async () => {
     showErrorAlert(msg)
   }
 }
+const { isManager } = usersStore()
+
 let dropdownOptions = ref([
   {
     group: 'Manage',
     hideLabel: true,
     items: [
-      {
-        component: markRaw(Apps),
-      },
+      ...(isManager()
+        ? [
+            {
+              component: markRaw(Apps),
+            },
+          ]
+        : []),
       {
         icon: 'life-buoy',
         label: computed(() => __('Support')),

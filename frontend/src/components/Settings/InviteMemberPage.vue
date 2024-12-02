@@ -27,7 +27,7 @@
         :description="description"
       />
       <ErrorMessage class="mt-2" v-if="error" :message="error" />
-      <template v-if="pendingInvitations.data?.length && !invitees.length">
+      <template v-if="pendingInvitations.data?.length > 0">
         <div
           class="mt-6 flex items-center justify-between py-4 text-base font-semibold"
         >
