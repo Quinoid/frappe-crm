@@ -98,6 +98,10 @@ def get_linked_deals(contact):
         distinct=True,
     )
 
+    contact_doc = frappe.get_doc("Contact", contact)
+
+    update_deals_email_mobile_no(contact_doc)
+
     # Fetch deal details
     deals = []
     for d in deal_names:
