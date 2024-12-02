@@ -65,7 +65,7 @@
   />
 
   <div
-    v-else-if="rows.length == 0 && route.params.value !== 'calendar'"
+    v-else-if="rows.length == 0 && route.params.viewType !== 'calendar'"
     class="flex h-full items-center justify-center"
   >
     <div
