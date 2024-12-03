@@ -66,8 +66,8 @@
       <Button
         :label="__('Send Invites')"
         variant="solid"
-        @click="inviteByEmail.submit()"
-        :loading="inviteByEmail.loading"
+        @click="sendInvites()"
+        :loading="isLoading"
         class="bg-btn_primary"
       />
     </div>
@@ -76,6 +76,7 @@
 <script setup>
 import MultiValueInput from '@/components/Controls/MultiValueInput.vue'
 import { validateEmail, convertArrayToString } from '@/utils'
+import { createToast } from '@/utils'
 import {
   createListResource,
   createResource,
@@ -87,7 +88,7 @@ import { ref, computed } from 'vue'
 const invitees = ref([])
 const role = ref('Sales User')
 const error = ref(null)
-
+const isLoading = ref(false)
 const description = computed(() => {
   return {
     'Sales Manager':
@@ -120,6 +121,43 @@ const inviteByEmail = createResource({
     error.value = error
   },
 })
+async function sendInvites() {
+  const API_BASE_PATH = `${window.location.origin}/api/method/`
+  isLoading.value = true
+
+  try {
+    const response = await fetch(`${API_BASE_PATH}crm.api.invite_by_email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Frappe-CSRF-Token': window.csrf_token,
+      },
+      body: JSON.stringify({
+        emails: convertArrayToString(invitees.value),
+        role: role.value,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      createToast({
+        title: 'Error',
+        text: errorData.message.message,
+        icon: 'x',
+        iconClasses: 'text-red-600',
+      })
+      isLoading.value = false
+    } else {
+      invitees.value = []
+      role.value = 'Sales User'
+      error.value = null
+      pendingInvitations.reload()
+      isLoading.value = false
+    }
+  } catch (error) {
+    // Show error toast
+  }
+}
 
 const pendingInvitations = createListResource({
   type: 'list',
