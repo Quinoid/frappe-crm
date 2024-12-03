@@ -25,7 +25,7 @@
     v-model:resizeColumn="triggerResize"
     v-model:updatedPageCount="updatedPageCount"
     doctype="Contact"
-    :filters="{ user: ['!=', ''] }"
+    :filters="{ user: ['=', ''] }"
   />
   <ContactsListView
     ref="contactsListView"
