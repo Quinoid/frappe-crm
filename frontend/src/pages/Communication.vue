@@ -63,7 +63,7 @@
       <ContactsIcon class="h-10 w-10" />
       <span>{{ __('No {0} Found', [__('Emails')]) }}</span>
       <span class="text-sm text-gray-500">{{
-        __('Setup Email account to enable accessing your emails from here')
+        __('Setup Email account to enable accessing your emails')
       }}</span>
     </div>
   </div>
