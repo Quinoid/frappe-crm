@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import frappe
+from frappe import _
 from frappe.translate import get_all_translations
 from frappe.utils import validate_email_address, split_emails, cstr
 from frappe.utils.telemetry import POSTHOG_HOST_FIELD, POSTHOG_PROJECT_FIELD
@@ -98,22 +99,82 @@ def accept_invitation(key: str = None):
         return  # Ensure the function exits after redirection
 
 
+# @frappe.whitelist()
+# def invite_by_email(emails: str, role: str):
+# 	if not emails:
+# 		return
+# 	email_string = validate_email_address(emails, throw=False)
+# 	email_list = split_emails(email_string)
+# 	if not email_list:
+# 		return
+# 	existing_members = frappe.db.get_all("User", filters={"email": ["in", email_list]}, pluck="email")
+# 	existing_invites = frappe.db.get_all(
+# 		"CRM Invitation",
+# 		filters={"email": ["in", email_list], "role": ["in", ["Sales Manager", "Sales User"]]},
+# 		pluck="email",
+# 	)
+
+# 	to_invite = list(set(email_list) - set(existing_members) - set(existing_invites))
+
+# 	for email in to_invite:
+# 		frappe.get_doc(doctype="CRM Invitation", email=email, role=role).insert(ignore_permissions=True)
+
 @frappe.whitelist()
 def invite_by_email(emails: str, role: str):
-	if not emails:
-		return
-	email_string = validate_email_address(emails, throw=False)
-	email_list = split_emails(email_string)
-	if not email_list:
-		return
-	existing_members = frappe.db.get_all("User", filters={"email": ["in", email_list]}, pluck="email")
-	existing_invites = frappe.db.get_all(
-		"CRM Invitation",
-		filters={"email": ["in", email_list], "role": ["in", ["Sales Manager", "Sales User"]]},
-		pluck="email",
-	)
+    if not emails:
+        #frappe.throw(_("No email addresses provided."))  # Throw an error if no emails are provided
+        frappe.response["http_status_code"] = 400
+        return {
+                "status": "error",
+                "message": "No email addresses provided."
+            }
 
-	to_invite = list(set(email_list) - set(existing_members) - set(existing_invites))
+    email_string = validate_email_address(emails, throw=False)
+    email_list = split_emails(email_string)
+    
+    if not email_list:
+    	frappe.response["http_status_code"] = 400
+    	return {
+                "status": "error",
+                "message": "No valid email addresses found."
+            }
+        #frappe.throw(_("No valid email addresses found."))  # Throw an error if email list is empty
 
-	for email in to_invite:
-		frappe.get_doc(doctype="CRM Invitation", email=email, role=role).insert(ignore_permissions=True)
+    frappe.log_error(f"Emails after split: {email_list}")  # Log the list for debugging
+
+    # Get existing members and invites
+    existing_members = frappe.db.get_all("User", filters={"email": ["in", email_list]}, pluck="email")
+    existing_invites = frappe.db.get_all(
+        "CRM Invitation",
+        filters={"email": ["in", email_list], "role": ["in", ["Sales Manager", "Sales User"]]},
+        pluck="email",
+    )
+
+    frappe.log_error(f"Existing members: {existing_members}")
+    frappe.log_error(f"Existing invites: {existing_invites}")
+
+    # Calculate emails to invite
+    to_invite = list(set(email_list) - set(existing_members) - set(existing_invites))
+    
+    # If no emails to invite, show a message
+    if not to_invite:
+    	frappe.response["http_status_code"] = 400
+    	return {
+                "status": "error",
+                "message": "All emails are either existing members or already invited."
+            }
+        #frappe.msgprint(_("All emails are either existing members or already invited."))  # Show message if no new invites
+
+    frappe.log_error(f"Emails to invite: {to_invite}")  # Log the emails that will be invited
+
+    # Invite the remaining emails
+    for email in to_invite:
+        try:
+            frappe.get_doc(doctype="CRM Invitation", email=email, role=role).insert(ignore_permissions=True)
+        except Exception as e:
+            frappe.log_error(f"Error inviting {email}: {str(e)}")  # Log any error encountered while inviting
+            frappe.msgprint(_("Error inviting {0}: {1}").format(email, str(e)))  # Show error message if invite fails
+
+    # Optionally, refresh the list after inviting
+    # Refresh logic goes here (e.g., re-fetch the list or notify the user that the process is complete)
+
