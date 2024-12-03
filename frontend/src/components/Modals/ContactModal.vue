@@ -128,14 +128,9 @@ let _address = ref({})
 const showAddressModal = ref(false)
 
 async function updateContact() {
-  // if (!dirty.value) {
-  //   show.value = false
-  //   return
-  // }
-  if (_contact.value.phone_nos) {
-    _contact.value.phone = _contact.value.phone_nos.filter(
-      (phone) => phone.is_primary_mobile_no == 1,
-    ).phone
+  if (!dirty.value) {
+    show.value = false
+    return
   }
 
   const values = { ..._contact.value }
@@ -153,7 +148,25 @@ async function callSetValue(values) {
   })
   return d.name
 }
-
+async function reloadContactData() {
+  try {
+    const updatedContact = await call('crm.api.contact.get_contact', {
+      doctype: 'Contact',
+      name: props.contact.data.name,
+    })
+    if (updatedContact) {
+      props.contact.data = updatedContact
+      _contact.value = {
+        ...updatedContact,
+        actual_mobile_no: updatedContact.mobile_no,
+        mobile_no: updatedContact.mobile_no,
+      }
+    }
+  } catch (error) {
+    console.error('Error reloading contact data:', error)
+    createToast('Failed to reload data. Please try again.', 'error')
+  }
+}
 async function callInsertDoc() {
   if (_contact.value.email_id) {
     _contact.value.email_ids = [{ email_id: _contact.value.email_id }]
@@ -281,12 +294,11 @@ const filteredSections = computed(() => {
                     is_primary: emails.email_id === email.email_id ? 1 : 0,
                   }),
                 )
-
-                // setAsPrimary('email', email.email_id)
+                setAsPrimary('email', email.email_id)
               },
               onSave: (option, isNew) => {
                 if (isNew) {
-                  // createNew('email', option.value)
+                  createNew('email', option.value)
                   if (props.contact.data.email_ids.length === 1) {
                     _contact.value.email_id = option.value
                   }
@@ -298,7 +310,7 @@ const filteredSections = computed(() => {
                       (emails) => emails.name === option.name,
                     ).email_id = option.value
                   }
-                  // editOption('Contact Email', option.name, option.value)
+                  editOption('Contact Email', option.name, option.value)
                 }
               },
               onDelete: async (option, isNew) => {
@@ -306,15 +318,11 @@ const filteredSections = computed(() => {
                   props.contact.data.email_ids.filter(
                     (email) => email.name !== option.name,
                   )
-                // !isNew && (await deleteOption('Contact Email', option.name))
+                !isNew && (await deleteOption('Contact Email', option.name))
                 if (_contact.value.email_id === option.value) {
                   if (props.contact.data.email_ids.length === 0) {
                     _contact.value.email_id = ''
                   } else {
-                    _contact.value.email_ids =
-                      props.contact.data.email_ids.filter(
-                        (email) => email.name !== option.name,
-                      )
                     _contact.value.email_id = props.contact.data.email_ids.find(
                       (email) => email.is_primary,
                     )?.email_id
@@ -346,17 +354,16 @@ const filteredSections = computed(() => {
               onClick: () => {
                 _contact.value.actual_mobile_no = phone.phone
                 _contact.value.mobile_no = phone.phone
-
-                // setAsPrimary('mobile_no', phone.phone)
+                setAsPrimary('mobile_no', phone.phone)
               },
               onSave: (option, isNew) => {
                 if (isNew) {
-                  // createNew('phone', option.value)
+                  createNew('phone', option.value)
                   if (props.contact.data.phone_nos.length === 1) {
                     _contact.value.actual_mobile_no = option.value
                   }
                 } else {
-                  // editOption('Contact Phone', option.name, option.value)
+                  editOption('Contact Phone', option.name, option.value)
                 }
               },
               onDelete: async (option, isNew) => {
@@ -364,15 +371,11 @@ const filteredSections = computed(() => {
                   props.contact.data.phone_nos.filter(
                     (phone) => phone.name !== option.name,
                   )
-                // !isNew && (await deleteOption('Contact Phone', option.name))
+                !isNew && (await deleteOption('Contact Phone', option.name))
                 if (_contact.value.actual_mobile_no === option.value) {
                   if (props.contact.data.phone_nos.length === 0) {
                     _contact.value.actual_mobile_no = ''
                   } else {
-                    _contact.value.phone_nos =
-                      props.contact.data.phone_nos.filter(
-                        (phone) => phone.name !== option.name,
-                      )
                     _contact.value.actual_mobile_no =
                       props.contact.data.phone_nos.find(
                         (phone) => phone.is_primary_mobile_no,
@@ -417,8 +420,7 @@ async function setAsPrimary(field, value) {
     value,
   })
   if (d) {
-    handleContactUpdate(d)
-    props.contact.reload()
+    reloadContactData()
     createToast({
       title: 'Contact updated',
       icon: 'check',
@@ -434,7 +436,7 @@ async function createNew(field, value) {
     value,
   })
   if (d) {
-    props.contact.reload()
+    reloadContactData()
     createToast({
       title: 'Contact updated',
       icon: 'check',
@@ -450,9 +452,9 @@ async function editOption(doctype, name, value) {
     fieldname: doctype == 'Contact Phone' ? 'phone' : 'email_id',
     value,
   })
-  handleContactUpdate(d)
+
   if (d) {
-    props.contact.reload()
+    reloadContactData()
     createToast({
       title: 'Contact updated',
       icon: 'check',
@@ -466,7 +468,8 @@ async function deleteOption(doctype, name) {
     doctype,
     name,
   })
-  await props.contact.reload()
+
+  reloadContactData()
   createToast({
     title: 'Contact updated',
     icon: 'check',

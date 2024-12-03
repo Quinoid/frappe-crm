@@ -65,7 +65,7 @@
   />
 
   <div
-    v-else-if="rows.length == 0 && route.params.value !== 'calendar'"
+    v-else-if="rows.length == 0 && route.params.viewType !== 'calendar'"
     class="flex h-full items-center justify-center"
   >
     <div
@@ -74,7 +74,7 @@
       <ContactsIcon class="h-10 w-10" />
       <span>{{ __('No {0} Found', [__('Event')]) }}</span>
       <span class="text-sm text-gray-500">{{
-        __('Setup Calendar account to enable accessing your events from here')
+        __('Setup Calendar account to enable accessing your events')
       }}</span>
       <Button :label="__('Create')" @click="handleCreateEvent">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
