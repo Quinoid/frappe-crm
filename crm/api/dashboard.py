@@ -14,6 +14,8 @@ def custom_dashboard():
     Lead = frappe.qb.DocType("CRM Lead")
     Deal = frappe.qb.DocType("CRM Deal")
     Event = frappe.qb.DocType("Event")
+    Contact = frappe.qb.DocType("Contact")
+    Organisation = frappe.qb.DocType("CRM Organization")
     
     current_date = nowdate()
     current_user = frappe.session.user
@@ -57,6 +59,22 @@ def custom_dashboard():
     deals = deal_query.run(as_dict=True)
     deal_total_count = len(deals)
 
+    #contact_query = frappe.qb.from_(Contact).select("*")
+    # Construct the query
+    contact_query = (
+        frappe.qb
+        .from_(Contact)
+        .select("*")
+        .where(IfNull(Field("user"), "") == "")
+    )
+    contacts = contact_query.run(as_dict=True)
+    contact_total_count = len(contacts)
+
+    organisation_query = frappe.qb.from_(Organisation).select("*")
+    organisations = organisation_query.run(as_dict=True)
+    organisation_total_count = len(organisations)
+
+
     event_query = (
         frappe.qb.from_(Event)
         .select("*")
@@ -75,6 +93,8 @@ def custom_dashboard():
         "lead_total_count": lead_total_count,
         "deal_total_count": deal_total_count,
         "event_total_count": event_total_count,
+        "contact_total_count": contact_total_count,
+        "organisation_total_count": organisation_total_count,
         "tasks": tasks,
         "events":events
     }
