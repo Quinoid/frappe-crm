@@ -78,20 +78,16 @@ const handleLogotut = async () => {
     showErrorAlert(msg)
   }
 }
-const { isManager } = usersStore()
 
 let dropdownOptions = ref([
   {
     group: 'Manage',
     hideLabel: true,
     items: [
-      ...(isManager()
-        ? [
-            {
-              component: markRaw(Apps),
-            },
-          ]
-        : []),
+      {
+        component: markRaw(Apps),
+      },
+
       {
         icon: 'life-buoy',
         label: computed(() => __('Support')),

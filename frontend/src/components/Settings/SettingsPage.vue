@@ -91,6 +91,7 @@ const data = createDocumentResource({
         title: __('Error'),
         text: err.messages[1] ?? err.messages[0],
         icon: 'x',
+        position: 'bottom-center',
         iconClasses: 'text-red-600',
       })
     },

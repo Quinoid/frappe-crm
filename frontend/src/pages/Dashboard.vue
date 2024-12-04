@@ -7,7 +7,7 @@
 
   <div v-if="!isLoading" class="p-6 space-y-6">
     <!-- Dashboard Counts -->
-    <div class="grid grid-cols-1 sm:grid-cols-6 gap-6">
+    <div class="lg:w-3/5 grid grid-cols-1 sm:grid-cols-4 gap-6">
       <!-- Leads Card -->
       <div class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center">
         <h3 class="text-lg font-semibold">Leads</h3>
@@ -26,22 +26,22 @@
 
       <!-- Tasks Card -->
       <div class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold">Tasks</h3>
+        <h3 class="text-lg font-semibold">Deals</h3>
         <p class="text-3xl font-bold text-red-600">
-          {{ dashboardData?.taskCount }}
+          {{ dashboardData?.deal_total_count }}
         </p>
       </div>
 
       <div class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold">Events</h3>
+        <h3 class="text-lg font-semibold">Contacts</h3>
         <p class="text-3xl font-bold text-purple-600">
-          {{ dashboardData?.eventCount }}
+          {{ dashboardData?.contact_total_count }}
         </p>
       </div>
     </div>
-    <div class="flex-col lg:flex-row md:flex-row gap-4 flex lg:justify-between">
+    <div class="flex-col gap-4 flex w-full lg:w-3/5">
       <!-- Task List -->
-      <div class="bg-white shadow-md rounded-lg p-6 sm:w-full lg:w-1/2">
+      <div class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full">
         <h3 class="text-lg font-medium mb-4 text-gray-900">Recent Tasks</h3>
         <ul>
           <li
@@ -82,7 +82,7 @@
           No tasks to display.
         </div>
       </div>
-      <div class="bg-white shadow-md rounded-lg p-6 sm:w-full lg:w-1/2">
+      <div class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full">
         <h3 class="text-lg font-medium mb-4 text-gray-900">Upcoming Events</h3>
         <ul>
           <li
