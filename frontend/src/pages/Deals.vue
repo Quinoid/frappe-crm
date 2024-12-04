@@ -295,7 +295,7 @@ import {
   formatNumberIntoCurrency,
   formatTime,
 } from '@/utils'
-import { Tooltip, Avatar, Dropdown,Call } from 'qbs-vue-ui'
+import { Tooltip, Avatar, Dropdown, call } from 'qbs-vue-ui'
 import { useRoute } from 'vue-router'
 import { ref, reactive, computed, h } from 'vue'
 
@@ -343,6 +343,7 @@ async function createDeal() {
     } else {
       createToast({
         title: 'Error',
+        position: 'bottom-center',
         text: `The Deal creation limit has been exceeded. Your current limit is ${res.limit_count}. Upgrade your plan to create more deals.`,
         icon: 'x',
         iconClasses: 'text-red-600',
@@ -354,6 +355,7 @@ async function createDeal() {
   } catch (error) {
     console.log(error)
   }
+}
 // Rows
 const rows = computed(() => {
   if (!deals.value?.data?.data) return []

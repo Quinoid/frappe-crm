@@ -85,7 +85,7 @@ import ViewControls from '@/components/ViewControls.vue'
 import { organizationsStore } from '@/stores/organizations.js'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { ref, computed } from 'vue'
-
+import { call } from 'qbs-vue-ui'
 const { getOrganization } = organizationsStore()
 
 const showContactModal = ref(false)
@@ -113,15 +113,16 @@ async function createContact() {
     } else {
       createToast({
         title: 'Error',
+        position: 'bottom-center',
         text: `The contact creation limit has been exceeded. Your current limit is ${res.limit_count}. Upgrade your plan to create more contacts.`,
         icon: 'x',
         iconClasses: 'text-red-600',
       })
     }
-
   } catch (error) {
     console.log(error)
   }
+}
 const rows = computed(() => {
   if (
     !contacts.value?.data?.data ||

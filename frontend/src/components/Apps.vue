@@ -11,7 +11,7 @@
         ]"
         @click.prevent="togglePopover()"
       >
-        <div class="flex gap-2">
+        <div class="flex gap-2" v-if="isManager()">
           <AppsIcon class="size-4" />
           <span class="whitespace-nowrap">
             {{ __('Apps') }}
@@ -48,10 +48,12 @@ import AppsIcon from '@/components/Icons/AppsIcon.vue'
 import { Popover, createResource } from 'qbs-vue-ui'
 import { stopRecording } from '@/telemetry'
 import { onUnmounted, onMounted, ref } from 'vue'
+import { usersStore } from '@/stores/users'
 
 const props = defineProps({
   active: Boolean,
 })
+const { isManager } = usersStore()
 
 const apps = createResource({
   url: 'frappe.apps.get_apps',
