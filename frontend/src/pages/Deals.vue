@@ -12,7 +12,7 @@
         variant="solid"
         :label="__('Create')"
         class="bg-btn_primary"
-        @click="showDealModal = true"
+        @click="createDeal"
       >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
@@ -231,7 +231,7 @@
     >
       <DealsIcon class="h-10 w-10" />
       <span>{{ __('No {0} Found', [__('Deals')]) }}</span>
-      <Button :label="__('Create')" @click="showDealModal = true">
+      <Button :label="__('Create')" @click="createDeal">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </div>
@@ -295,7 +295,7 @@ import {
   formatNumberIntoCurrency,
   formatTime,
 } from '@/utils'
-import { Tooltip, Avatar, Dropdown } from 'qbs-vue-ui'
+import { Tooltip, Avatar, Dropdown,Call } from 'qbs-vue-ui'
 import { useRoute } from 'vue-router'
 import { ref, reactive, computed, h } from 'vue'
 
@@ -329,6 +329,31 @@ function getRow(name, field) {
   return getValue(rows.value?.find((row) => row.name == name)[field])
 }
 
+async function createDeal() {
+  const url = new URL(window.location.href)
+  const domain = url.hostname
+  try {
+    // Call the API method with necessary arguments
+    const res = await call('crm.api.dashboard.custom_record_count', {
+      doctype: 'CRM Deal',
+      domain: domain,
+    })
+    if (res.limit_count > deals.value.data.total_count) {
+      showDealModal.value = true
+    } else {
+      createToast({
+        title: 'Error',
+        text: `The Deal creation limit has been exceeded. Your current limit is ${res.limit_count}. Upgrade your plan to create more deals.`,
+        icon: 'x',
+        iconClasses: 'text-red-600',
+      })
+    }
+    // Close the modal (or other related cleanup)
+
+    // Navigate to the 'Organizations' route
+  } catch (error) {
+    console.log(error)
+  }
 // Rows
 const rows = computed(() => {
   if (!deals.value?.data?.data) return []
