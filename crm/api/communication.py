@@ -467,3 +467,47 @@ def custom_get_communication_details(name):
     communication["doctype"] = "Communication"
 
     return communication
+
+
+@frappe.whitelist()
+def is_twilio_set():
+    try:
+        # Fetch the value of 'auth_token' from tabSingles for 'Twilio Settings'
+        auth_token = frappe.db.get_single_value("Twilio Settings", "auth_token")
+        account_sid = frappe.db.get_single_value("Twilio Settings", "account_sid")
+        api_key = frappe.db.get_single_value("Twilio Settings", "api_key")
+        api_secret = frappe.db.get_single_value("Twilio Settings", "api_secret")
+
+        if auth_token and account_sid and api_key and api_secret:
+            return {
+                "status": "success",
+                "is_twilio_set": True,
+                "message": "Twilio is set."
+            }
+        else:
+            return {
+                "status": "error",
+                "is_twilio_set": False,
+                "message": "No credentials are set for Twilio."
+            }
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Twilio Error")
+        return {"status": "error", "message": "An unexpected error occurred. Please try again later."}
+
+
+@frappe.whitelist()
+def custom_edit_company(name, **kwargs):
+    # Fetch the company document by name (ID)
+    company = frappe.get_doc("Company", name)
+
+    # Update main fields with the data provided in kwargs
+    for key, value in kwargs.items():
+        if hasattr(company, key):
+            setattr(company, key, value)
+
+    # Save changes to the database
+    company.save(ignore_permissions=True)
+    frappe.db.commit()  # Ensure the changes are saved
+
+    # Return confirmation message with updated company details
+    return {"message": "company updated successfully", "company_name": company.name}
