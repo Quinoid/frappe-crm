@@ -89,8 +89,9 @@ const data = createDocumentResource({
     onError: (err) => {
       createToast({
         title: __('Error'),
-        text: err.message + ': ' + err.messages[0],
+        text: err.messages[1] ?? err.messages[0],
         icon: 'x',
+        position: 'bottom-center',
         iconClasses: 'text-red-600',
       })
     },

@@ -81,6 +81,7 @@ import TwilioSettings from '@/components/Settings/TwilioSettings.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import { isWhatsappInstalled } from '@/composables/settings'
 import { Dialog, createResource } from 'qbs-vue-ui'
+import ComppanyEdit from '@/components/Settings/CompanyEdit.vue'
 import { ref, markRaw, computed, watch } from 'vue'
 import { usersStore } from '@/stores/users'
 import ChangePassword from '@/components/Settings/ChangePassword.vue'
@@ -150,6 +151,11 @@ const tabs = computed(() => {
             : __('Set Password'),
           icon: 'eye',
           component: markRaw(ChangePassword),
+        },
+        {
+          label: 'Company Settings',
+          icon: 'home',
+          component: markRaw(ComppanyEdit),
         },
         ...(isManager()
           ? [
