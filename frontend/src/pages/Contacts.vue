@@ -12,7 +12,7 @@
         variant="solid"
         :label="__('Create')"
         class="bg-btn_primary"
-        @click="showContactModal = true"
+        @click="createContact"
       >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
@@ -56,7 +56,7 @@
     >
       <ContactsIcon class="h-10 w-10" />
       <span>{{ __('No {0} Found', [__('Contacts')]) }}</span>
-      <Button :label="__('Create')" @click="showContactModal = true">
+      <Button :label="__('Create')" @click="createContact">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </div>
@@ -100,6 +100,28 @@ const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
 
+async function createContact() {
+  const url = new URL(window.location.href)
+  const domain = url.hostname
+  try {
+    const res = await call('crm.api.dashboard.custom_record_count', {
+      doctype: 'Contact',
+      domain: domain,
+    })
+    if (res.limit_count > contacts.value.data.total_count) {
+      showContactModal.value = true
+    } else {
+      createToast({
+        title: 'Error',
+        text: `The contact creation limit has been exceeded. Your current limit is ${res.limit_count}. Upgrade your plan to create more contacts.`,
+        icon: 'x',
+        iconClasses: 'text-red-600',
+      })
+    }
+
+  } catch (error) {
+    console.log(error)
+  }
 const rows = computed(() => {
   if (
     !contacts.value?.data?.data ||
