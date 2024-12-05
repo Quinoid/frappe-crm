@@ -13,6 +13,13 @@ class CRMViewSettings(Document):
 def create(view):
 	view = frappe._dict(view)
 
+	if not view.get("label"):
+		frappe.response["http_status_code"] = 400
+        return {
+            "status": "error",
+            "message": "The view name cannot be empty."
+        }
+
 	view.filters = parse_json(view.filters) or {}
 	view.columns = parse_json(view.columns or '[]')
 	view.rows = parse_json(view.rows or '[]')
