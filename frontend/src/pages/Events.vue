@@ -178,7 +178,6 @@ function onDateClick(arg) {
   console.log(arg)
 }
 function onEventClick(arg) {
-  console.log(arg.name)
   getRowRoute(arg)
 }
 </script>
