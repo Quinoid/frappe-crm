@@ -21,7 +21,9 @@
           v-model="form.website"
           :error="errors.website"
         />
-
+        <p v-if="errors.website" class="text-red-500 text-sm">
+          {{ errors.website }}
+        </p>
         <!-- City -->
         <FormControl
           label="City"
@@ -53,6 +55,9 @@
           v-model="form.gst_no"
           :error="errors.gst_no"
         />
+        <p v-if="errors.gst_no" class="text-red-500 text-sm">
+          {{ errors.gst_no }}
+        </p>
       </div>
 
       <!-- Save Button -->
@@ -83,22 +88,57 @@ const form = ref({
 const loading = ref(false)
 const errors = ref({})
 
+const validateForm = () => {
+  let isValid = true
+  const validationErrors = {}
+
+  // Website validation: must be a valid URL if provided
+  if (
+    form.value.website &&
+    !/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(
+      form.value.website,
+    )
+  ) {
+    validationErrors.website = 'Please enter a valid website URL'
+    isValid = false
+  }
+
+  // GST number validation: must follow GSTIN format if provided
+  if (
+    form.value.gst_no &&
+    !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(
+      form.value.gst_no,
+    )
+  ) {
+    validationErrors.gst_no = 'Please enter a valid GST number'
+    isValid = false
+  }
+
+  errors.value = validationErrors
+  return isValid
+}
+
 // Function to handle form submission
 const updateCompany = async () => {
   errors.value = {} // Reset errors
   loading.value = true
 
+  // Validate the form
+  if (!validateForm()) {
+    loading.value = false
+
+    return
+  }
+
   createResource({
     url: 'crm.api.communication.custom_edit_company',
     params: {
-      doctype: 'User',
       name: form.value.name,
-      email: form.value.email,
-      phone: form.value.phone,
-      address: form.value.address,
+      website: form.value.website,
       city: form.value.city,
       state: form.value.state,
-      zip: form.value.zip,
+      country: form.value.country,
+      gst_no: form.value.gst_no,
     },
     auto: true,
     onSuccess: (data) => {
@@ -120,7 +160,12 @@ const getCompany = async () => {
 
     auto: true,
     onSuccess: (data) => {
-      console.log(data)
+      form.value.name = data.name
+      form.value.website = data.website
+      form.value.city = data.city
+      form.value.state = data.state
+      form.value.country = data.country
+      form.value.gst_no = data.gst_no
     },
     onError: () => {},
   })
