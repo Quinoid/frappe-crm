@@ -41,9 +41,13 @@
             :data="_organization"
           />
         </div>
+        <p v-if="errorMessage" class="text-red-500 text-sm mt-2">
+          {{ errorMessage }}
+        </p>
       </div>
+
       <div v-if="!detailMode" class="px-4 pb-7 pt-4 sm:px-6">
-        <div class="space-y-2 ">
+        <div class="space-y-2">
           <Button
             class="w-full bg-btn_primary"
             v-for="action in dialogOptions.actions"
@@ -103,12 +107,14 @@ let _organization = ref({
   no_of_employees: '1-10',
   industry: '',
 })
+const errorMessage = ref('')
 
 const showAddressModal = ref(false)
 
 let doc = ref({})
 
 async function updateOrganization() {
+  if (!validate()) return
   const old = { ...doc.value }
   const newOrg = { ..._organization.value }
 
@@ -134,6 +140,16 @@ async function updateOrganization() {
   }
   handleOrganizationUpdate({ name }, nameChanged)
 }
+function validate() {
+  if (
+    !_organization.value.organization_name ||
+    !_organization.value.organization_name.trim()
+  ) {
+    errorMessage.value = 'Organization Name is required'
+    return false
+  }
+  return true
+}
 
 async function callRenameDoc() {
   const d = await call('frappe.client.rename_doc', {
@@ -156,6 +172,7 @@ async function callSetValue(values) {
 }
 
 async function callInsertDoc() {
+  if (!validate()) return
   const doc = await call('frappe.client.insert', {
     doc: {
       doctype: 'CRM Organization',

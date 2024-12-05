@@ -107,7 +107,10 @@
           </Dropdown>
         </div>
       </div>
-      <div class="pt-4 ">
+      <p v-if="errorMessage" class="text-red-500 text-sm">
+        {{ errorMessage }}
+      </p>
+      <div class="pt-4">
         <div class="space-y-2">
           <Button
             class="w-full bg-btn_primary"
@@ -172,6 +175,7 @@ const _task = ref({
   reference_docname: null,
 })
 
+let errorMessage = ref('')
 function updateTaskStatus(status) {
   _task.value.status = status
 }
@@ -189,12 +193,21 @@ function redirect() {
   }
   router.push({ name: name, params: params })
 }
+function validate() {
+  if (!_task.value.title || !_task.value.title.trim()) {
+    errorMessage.value = 'Title is required'
+    return false
+  }
+
+  return true
+}
 
 async function updateTask() {
   if (!_task.value.assigned_to) {
     _task.value.assigned_to = getUser().name
   }
   if (_task.value.name) {
+    if (!validate()) return
     let d = await call('frappe.client.set_value', {
       doctype: 'CRM Task',
       name: _task.value.name,
@@ -204,6 +217,7 @@ async function updateTask() {
       tasks.value.reload()
     }
   } else {
+    if (!validate()) return
     let d = await call('frappe.client.insert', {
       doc: {
         doctype: 'CRM Task',
@@ -212,6 +226,7 @@ async function updateTask() {
         ..._task.value,
       },
     })
+
     if (d.name) {
       capture('task_created')
       tasks.value.reload()

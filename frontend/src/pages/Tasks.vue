@@ -8,7 +8,12 @@
         v-if="tasksListView?.customListActions"
         :actions="tasksListView.customListActions"
       />
-      <Button variant="solid" :label="__('Create')" @click="createTask" class="bg-btn_primary">
+      <Button
+        variant="solid"
+        :label="__('Create')"
+        @click="createTask"
+        class="bg-btn_primary"
+      >
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </template>
@@ -21,7 +26,7 @@
     v-model:updatedPageCount="updatedPageCount"
     doctype="CRM Task"
     :options="{
-      allowedViews: ['list', 'kanban'],
+      allowedViews: ['list', 'kanban', 'calendar'],
     }"
   />
   <KanbanView
@@ -152,6 +157,17 @@
       </div>
     </template>
   </KanbanView>
+  <div
+    v-if="$route.params.viewType === 'calendar'"
+    class="flex flex-col h-full p-5 shadow-sm rounded-sm"
+  >
+    <TaskCalendarComponent
+      v-model="tasks"
+      :rows="rows"
+      :onDateClick="handleClick"
+      :onEventClick="handleTaskEdit"
+    />
+  </div>
   <TasksListView
     ref="tasksListView"
     v-else-if="tasks.data && rows.length"
@@ -209,6 +225,7 @@ import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { Tooltip, Avatar, TextEditor, Dropdown, call } from 'qbs-vue-ui'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import TaskCalendarComponent from '../components/TaskCalendarComponent.vue'
 
 const { getUser } = usersStore()
 
@@ -252,7 +269,9 @@ function getKanbanRows(data) {
   })
   return parseRows(_rows)
 }
-
+function handleClick() {
+  showTaskModal.value = true
+}
 function parseRows(rows) {
   return rows.map((task) => {
     let _rows = {}
@@ -303,6 +322,9 @@ function showTask(name) {
     reference_docname: t.reference_docname,
   }
   showTaskModal.value = true
+}
+function handleTaskEdit(task) {
+  showTask(task.name)
 }
 
 function createTask(column) {

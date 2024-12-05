@@ -59,7 +59,10 @@
             "
           />
         </div>
-        <div class="pt-4 ">
+        <p v-if="errorMessage" class="text-red-500 text-sm">
+          {{ errorMessage }}
+        </p>
+        <div class="pt-4">
           <div class="space-y-2">
             <Button
               variant="solid"
@@ -102,6 +105,7 @@ const show = defineModel()
 const notes = defineModel('reloadNotes')
 
 const emit = defineEmits(['after'])
+const errorMessage = ref('')
 
 const router = useRouter()
 
@@ -109,7 +113,21 @@ const title = ref(null)
 const editMode = ref(false)
 let _note = ref({})
 
+function validate() {
+  if (!_note.value.title || !_note.value.title.trim()) {
+    errorMessage.value = 'Title is required'
+    return false
+  }
+
+  if (!_note.value.content || !_note.value.content.trim()) {
+    errorMessage.value = 'Content is required'
+    return false
+  }
+
+  return true
+}
 async function updateNote() {
+  if (!validate()) return
   if (
     props.note.title === _note.value.title &&
     props.note.content === _note.value.content
