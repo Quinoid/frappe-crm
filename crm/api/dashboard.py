@@ -6,6 +6,7 @@ from frappe.query_builder import Order
 from frappe.query_builder import Field
 import json
 from frappe.query_builder import DocType
+from frappe.query_builder.functions import IfNull
 
 
 @frappe.whitelist()
