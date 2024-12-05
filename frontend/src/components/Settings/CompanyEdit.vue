@@ -116,11 +116,8 @@ const updateCompany = async () => {
 }
 const getCompany = async () => {
   createResource({
-    url: 'crm.api.custom_doctype.get_doctype_data',
-    params: {
-      name: 'Quinoid',
-      doctype: 'Company',
-    },
+    url: 'crm.api.custom_doctype.get_company_details',
+
     auto: true,
     onSuccess: (data) => {
       console.log(data)
