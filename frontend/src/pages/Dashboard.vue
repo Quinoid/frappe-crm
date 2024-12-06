@@ -41,7 +41,9 @@
     </div>
     <div class="flex-col gap-4 flex w-full lg:w-3/5">
       <!-- Task List -->
-      <div class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full">
+      <div
+        class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
+      >
         <h3 class="text-lg font-medium mb-4 text-gray-900">Recent Tasks</h3>
         <ul>
           <li
@@ -77,12 +79,21 @@
         </ul>
         <div
           v-if="dashboardData?.tasks?.length === 0"
-          class="text-center text-gray-500 mt-4"
+          class="text-center text-gray-500 mt-4 p-3"
         >
-          No tasks to display.
+          <div class="flex h-full items-center justify-center">
+            <div
+              class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
+            >
+              <TaskIcon class="h-10 w-10" />
+              <span class="text-sm text-gray-500"> No tasks to display. </span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full">
+      <div
+        class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
+      >
         <h3 class="text-lg font-medium mb-4 text-gray-900">Upcoming Events</h3>
         <ul>
           <li
@@ -117,9 +128,16 @@
         </ul>
         <div
           v-if="dashboardData?.events?.length === 0"
-          class="text-center text-gray-500 mt-4"
+          class="text-center text-gray-500 mt-4 p-3"
         >
-          No events to display.
+          <div class="flex h-full items-center justify-center">
+            <div
+              class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
+            >
+              <CalendarIcon class="h-10 w-10" />
+              <span class="text-sm text-gray-500"> No Events to display. </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -133,6 +151,8 @@
 import { computed } from 'vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import { Breadcrumbs, createResource } from 'qbs-vue-ui'
+import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
+import TaskIcon from '@/components/Icons/TaskIcon.vue'
 
 let title = 'Dashboard'
 const breadcrumbs = [{ label: title, route: { name: 'Dashboard' } }]
