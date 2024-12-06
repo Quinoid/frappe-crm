@@ -23,7 +23,7 @@ def get_users():
 def get_contacts():
 	contacts = frappe.get_all(
 		"Contact",
-		filters={"user": ["!=", ""]},
+		filters={"user": ""},
 		fields=[
 			"name",
 			"salutation",
