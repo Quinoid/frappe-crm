@@ -114,6 +114,7 @@ const showAddressModal = ref(false)
 let doc = ref({})
 
 async function updateOrganization() {
+  errorMessage.value = ''
   if (!validate()) return
   const old = { ...doc.value }
   const newOrg = { ..._organization.value }
@@ -172,6 +173,7 @@ async function callSetValue(values) {
 }
 
 async function callInsertDoc() {
+  errorMessage.value = ''
   if (!validate()) return
   const doc = await call('frappe.client.insert', {
     doc: {
