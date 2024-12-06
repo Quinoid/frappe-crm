@@ -89,6 +89,18 @@ def custom_dashboard():
     events = event_query.run(as_dict=True)
     event_total_count = len(events)
 
+    CallLog = frappe.qb.DocType("Call Log")
+
+    # Fetch the last 5 records ordered by creation or a specific field
+    call_log_data = (
+        frappe.qb.from_(CallLog)
+        .select("*")
+        .orderby(CallLog.creation, order=Order.desc) 
+        .limit(5)
+    )
+
+    call_logs = call_log_data.run(as_dict=True)
+
     return {
         "task_total_count": task_total_count,
         "lead_total_count": lead_total_count,
@@ -97,7 +109,8 @@ def custom_dashboard():
         "contact_total_count": contact_total_count,
         "organisation_total_count": organisation_total_count,
         "tasks": tasks,
-        "events":events
+        "events":events,
+        "call_logs":call_logs
     }
 
 
@@ -173,6 +186,7 @@ def custom_record_count(doctype):
             "CRM Lead": "lead_limit_count",
             "Contact": "contact_limit_count",
             "CRM Deal": "deal_limit_count",
+            "User": "user_limit_count",
         }
 
         limit_key = doctype_limit_map.get(doctype)
@@ -238,4 +252,6 @@ def custom_delete(doctype, name):
             "error_type": "GeneralError",
             "message": str(e)
         }
+
+
 
