@@ -1,5 +1,6 @@
 <template>
   <Popover
+    v-if="isManager()"
     :placement="isMobile ? 'bottom-start' : 'right-start'"
     class="flex w-full"
   >
@@ -11,7 +12,7 @@
         ]"
         @click.prevent="togglePopover()"
       >
-        <div class="flex gap-2" v-if="isManager()">
+        <div class="flex gap-2">
           <AppsIcon class="size-4" />
           <span class="whitespace-nowrap">
             {{ __('Apps') }}
@@ -54,7 +55,6 @@ const props = defineProps({
   active: Boolean,
 })
 const { isManager } = usersStore()
-
 const apps = createResource({
   url: 'frappe.apps.get_apps',
   cache: 'apps',
