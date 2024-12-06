@@ -52,7 +52,7 @@
 import IconPicker from '@/components/IconPicker.vue'
 import { call, TextInput } from 'qbs-vue-ui'
 import { ref, watch, nextTick } from 'vue'
-
+import { createToast } from '@/utils'
 const props = defineProps({
   doctype: {
     type: String,
@@ -84,24 +84,71 @@ const _view = ref({
   rows: '',
 })
 
+// async function create() {
+//   view.value.doctype = props.doctype
+//   let v = await call(
+//     'crm.fcrm.doctype.crm_view_settings.crm_view_settings.create',
+//     { view: view.value },
+//   )
+//   show.value = false
+//   props.options.afterCreate?.(v)
+// }
 async function create() {
-  view.value.doctype = props.doctype
-  let v = await call(
-    'crm.fcrm.doctype.crm_view_settings.crm_view_settings.create',
-    { view: view.value },
-  )
-  show.value = false
-  props.options.afterCreate?.(v)
+  try {
+    view.value.doctype = props.doctype
+
+    let v = await call(
+      'crm.fcrm.doctype.crm_view_settings.crm_view_settings.create',
+      { view: view.value },
+    )
+
+    show.value = false
+    props.options.afterCreate?.(v)
+  } catch (error) {
+    console.error('Error creating view:', error)
+    createToast({
+      title: 'Error Creating View',
+      message: error.message || 'An error occurred while creating the view.',
+      icon: 'error',
+      iconClasses: 'text-red-500',
+    })
+    // Display error to the user
+    errorMessage.value =
+      error.message || 'An error occurred while creating the view.'
+  }
+}
+async function update() {
+  try {
+    view.value.doctype = props.doctype
+
+    await call('crm.fcrm.doctype.crm_view_settings.crm_view_settings.update', {
+      view: view.value,
+    })
+
+    show.value = false
+    props.options.afterUpdate?.(view.value)
+  } catch (error) {
+    console.error('Error updating view:', error)
+    // Display error to the user
+    createToast({
+      title: 'Error updating view',
+      message: error.message || 'An error occurred while updating the view.',
+      icon: 'error',
+      iconClasses: 'text-red-500',
+    })
+    errorMessage.value =
+      error.message || 'An error occurred while updating the view.'
+  }
 }
 
-async function update() {
-  view.value.doctype = props.doctype
-  await call('crm.fcrm.doctype.crm_view_settings.crm_view_settings.update', {
-    view: view.value,
-  })
-  show.value = false
-  props.options.afterUpdate?.(view.value)
-}
+// async function update() {
+//   view.value.doctype = props.doctype
+//   await call('crm.fcrm.doctype.crm_view_settings.crm_view_settings.update', {
+//     view: view.value,
+//   })
+//   show.value = false
+//   props.options.afterUpdate?.(view.value)
+// }
 
 watch(show, (value) => {
   if (!value) return
