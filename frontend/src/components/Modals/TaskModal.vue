@@ -199,6 +199,11 @@ function validate() {
     return false
   }
 
+  if (!_task.value.due_date || !_task.value.due_date.trim()) {
+    errorMessage.value = 'Due Date is required'
+    return false
+  }
+
   return true
 }
 
@@ -206,6 +211,7 @@ async function updateTask() {
   if (!_task.value.assigned_to) {
     _task.value.assigned_to = getUser().name
   }
+  errorMessage.value = ''
   if (_task.value.name) {
     if (!validate()) return
     let d = await call('frappe.client.set_value', {

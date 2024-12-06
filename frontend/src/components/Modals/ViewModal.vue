@@ -43,6 +43,9 @@
           :placeholder="__('My Open Deals')"
           v-model="view.label"
         />
+        <p v-if="errorMessage" class="text-red-500 text-sm my-2">
+          {{ errorMessage }}
+        </p>
       </div>
     </template>
   </Dialog>
@@ -83,8 +86,17 @@ const _view = ref({
   columns: '',
   rows: '',
 })
-
+const errorMessage = ref('')
+function validate() {
+  if (!view.value.label || !view.value.label.trim()) {
+    errorMessage.value = 'Name is required'
+    return false
+  }
+  return true
+}
 async function create() {
+  errorMessage.value = ''
+  if (!validate()) return
   view.value.doctype = props.doctype
   let v = await call(
     'crm.fcrm.doctype.crm_view_settings.crm_view_settings.create',
@@ -95,6 +107,8 @@ async function create() {
 }
 
 async function update() {
+  errorMessage.value = ''
+  if (!validate()) return
   view.value.doctype = props.doctype
   await call('crm.fcrm.doctype.crm_view_settings.crm_view_settings.update', {
     view: view.value,

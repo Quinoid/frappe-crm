@@ -127,6 +127,7 @@ function validate() {
   return true
 }
 async function updateNote() {
+  errorMessage.value = ''
   if (!validate()) return
   if (
     props.note.title === _note.value.title &&
