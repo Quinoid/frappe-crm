@@ -151,8 +151,8 @@
 import { computed } from 'vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import { Breadcrumbs, createResource } from 'qbs-vue-ui'
-import CalendarIcon from '@/components/icons/CalendarIcon.vue'
-import TaskIcon from '@/components/icons/TaskIcon.vue'
+import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
+import TaskIcon from '@/components/Icons/TaskIcon.vue'
 
 let title = 'Dashboard'
 const breadcrumbs = [{ label: title, route: { name: 'Dashboard' } }]
