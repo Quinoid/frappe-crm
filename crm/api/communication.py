@@ -510,4 +510,4 @@ def custom_edit_company(name, **kwargs):
     frappe.db.commit()  # Ensure the changes are saved
 
     # Return confirmation message with updated company details
-    return {"message": "company updated successfully", "company_name": company.name}
+    return {"message": " Company details updated successfully", "company_name": company.name}
