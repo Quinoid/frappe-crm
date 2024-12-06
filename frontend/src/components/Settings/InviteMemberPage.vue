@@ -66,7 +66,7 @@
       <Button
         :label="__('Send Invites')"
         variant="solid"
-        @click="sendInvites()"
+        @click="checkLimit()"
         :loading="isLoading"
         class="bg-btn_primary"
       />
@@ -122,6 +122,33 @@ const inviteByEmail = createResource({
     error.value = error
   },
 })
+async function checkLimit() {
+  const url = new URL(window.location.href)
+  const domain = url.hostname
+  try {
+    // Call the API method with necessary arguments
+    const res = await call('crm.api.dashboard.custom_record_count', {
+      doctype: 'User',
+      domain: domain,
+    })
+    if (res.limit_count > 10) {
+      sendInvites()
+    } else {
+      createToast({
+        title: 'Error',
+        position: 'bottom-center',
+        text: `The lead creation limit has been exceeded. Your current limit is ${res.limit_count}. Upgrade your plan to create more leads.`,
+        icon: 'x',
+        iconClasses: 'text-red-600',
+      })
+    }
+    // Close the modal (or other related cleanup)
+
+    // Navigate to the 'Organizations' route
+  } catch (error) {
+    console.log(error)
+  }
+}
 async function sendInvites() {
   const API_BASE_PATH = `${window.location.origin}/api/method/`
   isLoading.value = true
