@@ -165,7 +165,6 @@ const selectedValue = computed({
     showOptions.value = false
   },
 })
-console.log(props.modelValue, values, selectedValue)
 
 // const selectedValue = computed({
 //   get: () => query.value || '',
@@ -195,7 +194,6 @@ const filterOptions = createResource({
   cache: [text.value, props.custom_option],
   params: { txt: text.value, docType: props.custom_option },
   transform: (data) => {
-    console.log(data)
     let allData = data.map((option) => {
       return {
         label: option.label,

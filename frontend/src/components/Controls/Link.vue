@@ -77,6 +77,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  from: {
+    type: String,
+    default: undefined,
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'change'])
@@ -106,13 +110,13 @@ watchDebounced(
     text.value = val
     reload(val)
   },
-  { debounce: 300, immediate: true }
+  { debounce: 300, immediate: true },
 )
 
 watchDebounced(
   () => props.doctype,
   () => reload(''),
-  { debounce: 300, immediate: true }
+  { debounce: 300, immediate: true },
 )
 
 const options = createResource({
@@ -126,7 +130,12 @@ const options = createResource({
   transform: (data) => {
     let allData = data.map((option) => {
       return {
-        label: option.value,
+        label:
+          props.from == 'deal_contact'
+            ? option.label && option.label !== ''
+              ? option.label
+              : option.value
+            : option.value,
         value: option.value,
       }
     })

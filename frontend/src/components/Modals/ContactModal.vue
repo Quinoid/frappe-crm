@@ -163,7 +163,6 @@ async function reloadContactData() {
       }
     }
   } catch (error) {
-    console.error('Error reloading contact data:', error)
     createToast('Failed to reload data. Please try again.', 'error')
   }
 }

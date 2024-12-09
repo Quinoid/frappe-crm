@@ -498,7 +498,7 @@ async function createLead() {
       doctype: 'CRM Lead',
       domain: domain,
     })
-    if (res.limit_count > leads.value.data.total_count) {
+    if (res.limit_count > res.record_total_count) {
       showLeadModal.value = true
     } else {
       createToast({
