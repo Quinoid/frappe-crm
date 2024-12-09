@@ -108,7 +108,7 @@ async function createContact() {
       doctype: 'Contact',
       domain: domain,
     })
-    if (res.limit_count > contacts.value.data.total_count) {
+    if (res.limit_count > res.record_total_count) {
       showContactModal.value = true
     } else {
       createToast({

@@ -132,7 +132,7 @@ import {
   ComboboxOptions,
   ComboboxOption,
 } from '@headlessui/vue'
-import { Popover, Button, FeatherIcon } from 'qbs-vue-ui'
+import { Popover, FeatherIcon } from 'qbs-vue-ui'
 import { ref, computed, useAttrs, useSlots, watch, nextTick } from 'vue'
 
 const props = defineProps({
@@ -166,7 +166,6 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['update:modelValue', 'update:query', 'change'])
-
 const query = ref('')
 const showOptions = ref(false)
 const search = ref(null)
@@ -219,7 +218,7 @@ function filterOptions(options) {
   return options.filter((option) => {
     let searchTexts = [option.label, option.value]
     return searchTexts.some((text) =>
-      (text || '').toString().toLowerCase().includes(query.value.toLowerCase())
+      (text || '').toString().toLowerCase().includes(query.value.toLowerCase()),
     )
   })
 }

@@ -125,6 +125,7 @@
                   <Link
                     value=""
                     doctype="Contact"
+                    from="deal_contact"
                     @change="(e) => addContact(e)"
                     :onCreate="
                       (value, close) => {

@@ -338,7 +338,7 @@ async function createDeal() {
       doctype: 'CRM Deal',
       domain: domain,
     })
-    if (res.limit_count > deals.value.data.total_count) {
+    if (res.limit_count > res.record_total_count) {
       showDealModal.value = true
     } else {
       createToast({
