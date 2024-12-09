@@ -6,12 +6,12 @@
     <div class="flex items-center gap-4">
       <Avatar
         class="!size-16"
-        :image="profile.user_image"
-        :label="profile.full_name"
+        :image="user.user_image"
+        :label="user.full_name"
       />
       <div class="flex flex-col gap-1">
-        <span class="text-2xl font-semibold">{{ profile.full_name }}</span>
-        <span class="text-base text-gray-700">{{ profile.email }}</span>
+        <span class="text-2xl font-semibold">{{ user.full_name }}</span>
+        <span class="text-base text-gray-700">{{ user.email }}</span>
       </div>
     </div>
     <Button :label="__('Edit profile')" @click="showProfileModal = true" />
