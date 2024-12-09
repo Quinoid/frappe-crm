@@ -1,8 +1,9 @@
 <template>
-  <button
+  <a
     class="flex h-7 cursor-pointer items-center rounded text-gray-700 duration-300 ease-in-out focus:outline-none focus:transition-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-gray-400"
     :class="isActive ? 'bg-white shadow-sm' : 'hover:bg-gray-100'"
-    @click="handleClick"
+    @click.prevent="handleClick"
+    :href="linkHref"
   >
     <div
       class="flex w-full items-center justify-between duration-300 ease-in-out"
@@ -41,7 +42,7 @@
       </div>
       <slot name="right" />
     </div>
-  </button>
+  </a>
 </template>
 
 <script setup>
@@ -82,6 +83,13 @@ function handleClick() {
     mobileSidebarOpened.value = false
   }
 }
+const linkHref = computed(() => {
+  if (!props.to) return '#'
+  if (typeof props.to === 'object') {
+    return props.to.href || router.resolve(props.to).href
+  }
+  return router.resolve({ name: props.to }).href
+})
 
 let isActive = computed(() => {
   if (route.query.view) {
