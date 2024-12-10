@@ -140,6 +140,59 @@
           </div>
         </div>
       </div>
+      <div
+        class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
+      >
+        <h3 class="text-lg font-medium mb-4 text-gray-900">Call Logs</h3>
+        <ul>
+          <li
+            v-for="calllog in dashboardData?.call_logs"
+            :key="calllog.name"
+            class="border-b last:border-none py-2"
+          >
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-semibold">{{ calllog.subject }}</p>
+                <p class="text-sm text-gray-500">
+                  {{ calllog.event_category }}
+                </p>
+                <p class="text-sm text-gray-500">
+                  {{
+                    calllog.starts_on
+                      ? new Date(event.starts_on).toLocaleString()
+                      : 'No Start Date'
+                  }}
+                </p>
+              </div>
+
+              <span
+                :class="{
+                  'bg-green-100 text-green-800': calllog.status === 'Open',
+                  'bg-gray-100 text-gray-800': calllog.status === 'Closed',
+                }"
+                class="px-2 py-1 rounded-md text-xs"
+              >
+                {{ calllog.status }}
+              </span>
+            </div>
+          </li>
+        </ul>
+        <div
+          v-if="dashboardData?.call_logs?.length === 0"
+          class="text-center text-gray-500 mt-4 p-3"
+        >
+          <div class="flex h-full items-center justify-center">
+            <div
+              class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
+            >
+              <PhoneIcon class="h-10 w-10" />
+              <span class="text-sm text-gray-500">
+                No Call Logs to display.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div v-else class="flex justify-center items-center h-full text-gray-500">
@@ -153,7 +206,7 @@ import LayoutHeader from '@/components/LayoutHeader.vue'
 import { Breadcrumbs, createResource } from 'qbs-vue-ui'
 import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
-
+import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 let title = 'Dashboard'
 const breadcrumbs = [{ label: title, route: { name: 'Dashboard' } }]
 
@@ -172,6 +225,7 @@ const dashboardResource = createResource({
       events: message?.events,
       deal_total_count: message?.deal_total_count || 0,
       contact_total_count: message?.contact_total_count || 0,
+      call_logs: message?.call_logs || [],
     }
   },
 })
