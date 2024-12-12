@@ -198,7 +198,7 @@ def custom_record_count(doctype):
         limit_count = limits.get(limit_key, 0)
 
         DocType = frappe.qb.DocType(doctype)
-        record_query = frappe.qb.from_(DocType).select("*")
+        record_query = frappe.qb.from_(DocType).select("*").where(DocType.docstatus != 2)
         records = record_query.run(as_dict=True)
         record_total_count = len(records)
 
