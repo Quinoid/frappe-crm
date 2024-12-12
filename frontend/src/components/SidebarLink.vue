@@ -92,9 +92,11 @@ const linkHref = computed(() => {
 })
 
 let isActive = computed(() => {
+  console.log(route.name, props.to)
   if (route.query.view) {
     return route.query.view == props.to?.query?.view
   }
-  return route.name === props.to
+
+  return route.name === props.to || `${route.name}s` === props.to
 })
 </script>
