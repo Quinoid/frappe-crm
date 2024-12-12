@@ -141,8 +141,10 @@
         </div>
       </div>
       <div
+        v-if="callEnabled"
         class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
       >
+        >
         <h3 class="text-lg font-medium mb-4 text-gray-900">Call Logs</h3>
         <ul>
           <li
@@ -206,6 +208,8 @@ import LayoutHeader from '@/components/LayoutHeader.vue'
 import { Breadcrumbs, createResource } from 'qbs-vue-ui'
 import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
+import { callEnabled } from '@/composables/settings'
+
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 let title = 'Dashboard'
 const breadcrumbs = [{ label: title, route: { name: 'Dashboard' } }]
