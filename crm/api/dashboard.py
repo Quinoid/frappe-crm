@@ -199,6 +199,10 @@ def custom_record_count(doctype):
 
         DocType = frappe.qb.DocType(doctype)
         record_query = frappe.qb.from_(DocType).select("*")
+        if DocType == "CRM Lead":
+            record_query = frappe.qb.from_(DocType).select("*").where(Field("converted") != 1)
+        else:
+            record_query = frappe.qb.from_(DocType).select("*")
         records = record_query.run(as_dict=True)
         record_total_count = len(records)
 
