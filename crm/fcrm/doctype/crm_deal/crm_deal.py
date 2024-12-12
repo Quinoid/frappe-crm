@@ -16,7 +16,7 @@ class CRMDeal(Document):
         self.set_sla()
 
     def validate(self):
-        #self.set_primary_contact()
+        self.set_primary_contact()
         self.set_primary_email_mobile_no()
         if self.deal_owner and not self.is_new():
             self.share_with_agent(self.deal_owner)
@@ -50,8 +50,12 @@ class CRMDeal(Document):
             return
             
         contact_name = contact.get('name') if isinstance(contact, dict) else contact
+        # Reset all contacts to non-primary
+        for d in self.contacts:
+            d.is_primary = 0
 
         if not contact_name and len(self.contacts) == 1:
+
             self.contacts[0].is_primary = 1
         else:
             for d in self.contacts:
