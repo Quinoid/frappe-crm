@@ -234,6 +234,8 @@ import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import DashboardIcon from '@/components/Icons/DashboardIcon.vue'
 import Notifications from '@/components/Notifications.vue'
 import { viewsStore } from '@/stores/views'
+import { callEnabled } from '@/composables/settings'
+
 import { notificationsStore } from '@/stores/notifications'
 import { FeatherIcon } from 'qbs-vue-ui'
 import { useStorage } from '@vueuse/core'
@@ -280,11 +282,15 @@ const links = [
     icon: TaskIcon,
     to: 'Tasks',
   },
-  {
-    label: 'Call Logs',
-    icon: PhoneIcon,
-    to: 'Call Logs',
-  },
+  ...(callEnabled.value
+    ? [
+        {
+          label: 'Call Logs',
+          icon: PhoneIcon,
+          to: 'Call Logs',
+        },
+      ]
+    : []),
   {
     label: 'Email Templates',
     icon: Email2Icon,
