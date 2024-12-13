@@ -48,21 +48,26 @@ class CRMDeal(Document):
         # Exit if no contacts
         if not self.contacts:
             return
-            
-        contact_name = contact.get('name') if isinstance(contact, dict) else contact
+
+        contact_name = contact.get('name') if isinstance(contact, dict) else None
+        
         # Reset all contacts to non-primary
         for d in self.contacts:
             d.is_primary = 0
 
-        if not contact_name and len(self.contacts) == 1:
-            self.contacts[0].is_primary = 1
-
-        if contact_name and len(self.contacts) >= 1:
+        if contact_name is None:
+            # Handle case where no specific contact is provided
+            if len(self.contacts) == 1:
+                self.contacts[0].is_primary = 1
+            else:
+                # Fallback to the first contact for multiple contacts
+                self.contacts[0].is_primary = 1
+        else:
+            # Set the specified contact as primary
             for d in self.contacts:
-                if d.contact == contact_name: 
-                    d.is_primary = 1 
-                else:
-                    d.is_primary = 0
+                if d.contact == contact_name:
+                    d.is_primary = 1
+                    return
 
 
     def set_primary_email_mobile_no(self):
