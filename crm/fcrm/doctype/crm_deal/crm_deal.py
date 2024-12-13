@@ -55,9 +55,9 @@ class CRMDeal(Document):
             d.is_primary = 0
 
         if not contact_name and len(self.contacts) == 1:
-
             self.contacts[0].is_primary = 1
-        else:
+
+        if contact_name and len(self.contacts) >= 1:
             for d in self.contacts:
                 if d.contact == contact_name: 
                     d.is_primary = 1 
