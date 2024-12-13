@@ -16,7 +16,7 @@ class CRMDeal(Document):
         self.set_sla()
 
     def validate(self):
-        self.set_primary_contact()
+        #self.set_primary_contact()
         self.set_primary_email_mobile_no()
         if self.deal_owner and not self.is_new():
             self.share_with_agent(self.deal_owner)
