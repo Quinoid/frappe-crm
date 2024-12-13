@@ -240,6 +240,8 @@ def add_contact(deal, contact):
 
     deal = frappe.get_cached_doc("CRM Deal", deal)
     deal.append("contacts", {"contact": contact})
+    if len(deal.contacts) == 1:
+        deal.contacts[0].is_primary = 1
     deal.save()
     return True
 
@@ -250,6 +252,8 @@ def remove_contact(deal, contact):
 
     deal = frappe.get_cached_doc("CRM Deal", deal)
     deal.contacts = [d for d in deal.contacts if d.contact != contact]
+    if len(deal.contacts) == 1:
+        deal.contacts[0].is_primary = 1
     deal.save()
     return True
 
