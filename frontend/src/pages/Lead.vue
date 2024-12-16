@@ -51,10 +51,13 @@
         :tabs="tabs"
         v-model:reload="reload"
         v-model:tabIndex="tabIndex"
+        :fieldsLayout="fieldsLayout"
         v-model="lead"
+        :updateField="updateField"
+        :openEmailBox="openEmailBox"
       />
     </Tabs>
-    <Resizer class="flex flex-col justify-between border-l" side="right">
+    <!-- <Resizer class="flex flex-col justify-between border-l" side="right">
       <div
         class="flex h-10.5 cursor-copy items-center border-b px-5 py-2.5 text-lg font-medium"
         @click="copyToClipboard(lead.data.name)"
@@ -195,7 +198,7 @@
           </div>
         </div>
       </div>
-    </Resizer>
+    </Resizer> -->
   </div>
   <AssignmentModal
     v-if="showAssignmentModal"
@@ -279,19 +282,14 @@
 </template>
 <script setup>
 import Icon from '@/components/Icon.vue'
-import Resizer from '@/components/Resizer.vue'
-import EditIcon from '@/components/Icons/EditIcon.vue'
 import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
 import EmailIcon from '@/components/Icons/EmailIcon.vue'
-import Email2Icon from '@/components/Icons/Email2Icon.vue'
 import CommentIcon from '@/components/Icons/CommentIcon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import NoteIcon from '@/components/Icons/NoteIcon.vue'
 import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
 import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import CameraIcon from '@/components/Icons/CameraIcon.vue'
-import LinkIcon from '@/components/Icons/LinkIcon.vue'
 import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'
 import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
@@ -300,18 +298,8 @@ import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
 import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
 import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import Link from '@/components/Controls/Link.vue'
-import Section from '@/components/Section.vue'
-import SectionFields from '@/components/SectionFields.vue'
-import SLASection from '@/components/SLASection.vue'
 import CustomActions from '@/components/CustomActions.vue'
-import {
-  openWebsite,
-  createToast,
-  setupAssignees,
-  setupCustomizations,
-  errorMessage,
-  copyToClipboard,
-} from '@/utils'
+import { createToast, setupAssignees, setupCustomizations } from '@/utils'
 import { getView } from '@/utils/view'
 import { globalStore } from '@/stores/global'
 import { contactsStore } from '@/stores/contacts'
@@ -319,12 +307,10 @@ import { statusesStore } from '@/stores/statuses'
 import { usersStore } from '@/stores/users'
 import { whatsappEnabled, callEnabled } from '@/composables/settings'
 import { capture } from '@/telemetry'
+import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
 import {
   createResource,
-  FileUploader,
   Dropdown,
-  Tooltip,
-  Avatar,
   Tabs,
   Switch,
   Breadcrumbs,
@@ -471,6 +457,11 @@ const tabIndex = ref(0)
 const tabs = computed(() => {
   let tabOptions = [
     {
+      name: 'Details',
+      label: __('Details'),
+      icon: DocumentIcon,
+    },
+    {
       name: 'Activity',
       label: __('Activity'),
       icon: ActivityIcon,
@@ -538,7 +529,6 @@ const fieldsLayout = createResource({
 
 function updateField(name, value, callback) {
   let request = value
-  console.log('updateField', name, value)
   if (name === 'interested_services_for_lead' && value) {
     request = value?.map((item) => {
       return {
