@@ -3,9 +3,10 @@
     <div v-if="!hide" class="flex items-center justify-between">
       <div
         class="flex h-7 max-w-fit cursor-pointer items-center gap-2 pl-2 pr-3 text-base font-semibold leading-5"
-        @click="toggle()"
+        @click="!hideDrillDown && toggle()"
       >
         <FeatherIcon
+          v-if="!hideDrillDown"
           name="chevron-right"
           class="h-4 text-gray-900 transition-all duration-300 ease-in-out"
           :class="{ 'rotate-90': opened }"
@@ -42,6 +43,10 @@ const props = defineProps({
   isOpened: {
     type: Boolean,
     default: true,
+  },
+  hideDrillDown: {
+    type: Boolean,
+    default: false,
   },
 })
 function toggle() {

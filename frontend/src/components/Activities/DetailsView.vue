@@ -117,7 +117,7 @@
         :key="section.label"
         class="flex flex-col p-3 shadow-sm rounded-md bg-white"
       >
-        <Section :is-opened="section.opened" :label="section.label">
+        <Section :is-opened="section.opened" :label="section.label" :hideDrillDown="true">
           <SectionFields
             :fields="section.fields"
             :isLastSection="true"
