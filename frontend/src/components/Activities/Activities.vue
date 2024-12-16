@@ -1,5 +1,6 @@
 <template>
   <ActivityHeader
+    v-if="title != 'Details'"
     v-model="tabIndex"
     v-model:showWhatsappTemplates="showWhatsappTemplates"
     :tabs="tabs"
@@ -23,6 +24,7 @@
     <div
       v-else-if="
         activities?.length ||
+        fieldsLayout ||
         (whatsappMessages.data?.length && title == 'WhatsApp')
       "
       class="activities"
@@ -60,6 +62,20 @@
             </div>
             <CommentArea class="mb-4" :activity="comment" />
           </div>
+        </div>
+      </div>
+      <div
+        v-else-if="title == 'Details'"
+        class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)]"
+      >
+        <div class="">
+          <DetailsView
+            class="mb-4"
+            :doc="doc"
+            :fieldsLayout="fieldsLayout"
+            :updateField="updateField"
+            :openEmailBox="openEmailBox"
+          />
         </div>
       </div>
       <div
@@ -440,6 +456,7 @@ import { whatsappEnabled } from '@/composables/settings'
 import { capture } from '@/telemetry'
 import { Button, Tooltip, createResource } from 'qbs-vue-ui'
 import { useElementVisibility } from '@vueuse/core'
+import DetailsView from './DetailsView.vue'
 import {
   ref,
   computed,
@@ -469,6 +486,18 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  fieldsLayout: {
+    type: Object,
+    default: () => ({}),
+  },
+  updateField: {
+    type: Function,
+    default: () => {},
+  },
+  openEmailBox: {
+    type: Function,
+    default: () => {},
+  },
 })
 
 const doc = defineModel()
@@ -477,7 +506,6 @@ const tabIndex = defineModel('tabIndex')
 
 const reload_email = ref(false)
 const modalRef = ref(null)
-
 const all_activities = createResource({
   url: 'crm.api.activities.get_activities',
   params: { name: doc.value.data.name },
