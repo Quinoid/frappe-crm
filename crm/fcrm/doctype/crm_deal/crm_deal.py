@@ -48,21 +48,34 @@ class CRMDeal(Document):
         # Exit if no contacts
         if not self.contacts:
             return
-            
-        contact_name = contact.get('name') if isinstance(contact, dict) else contact
+
+        # Extract the contact name if provided
+        contact_name = contact.get('name') if isinstance(contact, dict) else None
+
+        # Determine if a primary contact already exists
+        primary_contact_exists = any(d.is_primary for d in self.contacts)
+
         # Reset all contacts to non-primary
         for d in self.contacts:
             d.is_primary = 0
 
-        if not contact_name and len(self.contacts) == 1:
-
-            self.contacts[0].is_primary = 1
+        if contact_name is None:
+            # No specific contact provided
+            if len(self.contacts) == 1:
+                # Only one contact: Make it primary
+                self.contacts[0].is_primary = 1
+            elif not primary_contact_exists and len(self.contacts) > 1:
+                # Multiple contacts but no primary yet: Default to the first contact
+                self.contacts[0].is_primary = 1
         else:
+            # A specific contact is provided
             for d in self.contacts:
-                if d.contact == contact_name: 
-                    d.is_primary = 1 
-                else:
-                    d.is_primary = 0
+                if d.contact == contact_name:
+                    # Set the specified contact as primary
+                    d.is_primary = 1
+                    return
+
+            # If the specified contact is not found, no changes are made
 
 
     def set_primary_email_mobile_no(self):
@@ -226,6 +239,8 @@ def add_contact(deal, contact):
 
     deal = frappe.get_cached_doc("CRM Deal", deal)
     deal.append("contacts", {"contact": contact})
+    if len(deal.contacts) == 1:
+        deal.contacts[0].is_primary = 1
     deal.save()
     return True
 
@@ -236,6 +251,8 @@ def remove_contact(deal, contact):
 
     deal = frappe.get_cached_doc("CRM Deal", deal)
     deal.contacts = [d for d in deal.contacts if d.contact != contact]
+    if len(deal.contacts) == 1:
+        deal.contacts[0].is_primary = 1
     deal.save()
     return True
 
