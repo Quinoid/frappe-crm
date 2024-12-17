@@ -24,7 +24,7 @@
     <div
       v-else-if="
         activities?.length ||
-        fieldsLayout ||
+        (fieldsLayout && title == 'Details') ||
         (whatsappMessages.data?.length && title == 'WhatsApp')
       "
       class="activities"
@@ -68,13 +68,30 @@
         v-else-if="title == 'Details'"
         class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)]"
       >
-        <div class="">
+        <div class="" v-if="doctype == 'CRM Lead'">
           <DetailsView
             class="mb-4"
             :doc="doc"
             :fieldsLayout="fieldsLayout"
             :updateField="updateField"
             :openEmailBox="openEmailBox"
+          />
+        </div>
+        <div class="" v-else>
+          <DealDetails
+            class="mb-4"
+            :doc="doc"
+            :fieldsLayout="fieldsLayout"
+            :updateField="updateField"
+            :openEmailBox="openEmailBox"
+            :dealContacts="dealContacts"
+            :doctype="doctype"
+            :organization="organization"
+            :addContact="addContact"
+            :contactOptions="contactOptions"
+            :togglePopover="togglePopover"
+            :showContactModal="showContactModal"
+            :_contact="_contact"
           />
         </div>
       </div>
@@ -468,7 +485,7 @@ import {
   onBeforeUnmount,
 } from 'vue'
 import { useRoute } from 'vue-router'
-
+import DealDetails from '@/components/Activities/DealDetails.vue'
 const { makeCall, $socket } = globalStore()
 const { getUser } = usersStore()
 const { getContact, getLeadContact } = contactsStore()
@@ -497,6 +514,34 @@ const props = defineProps({
   openEmailBox: {
     type: Function,
     default: () => {},
+  },
+  organization: {
+    type: Object,
+    default: () => ({}),
+  },
+  dealContacts: {
+    type: Object,
+    default: () => ({}),
+  },
+  addContact: {
+    type: Function,
+    default: () => {},
+  },
+  contactOptions: {
+    type: Function,
+    default: () => {},
+  },
+  togglePopover: {
+    type: Function,
+    default: () => {},
+  },
+  showContactModal: {
+    type: Function,
+    default: () => {},
+  },
+   _contact: {
+    type: Object,
+    default: () => ({}),
   },
 })
 

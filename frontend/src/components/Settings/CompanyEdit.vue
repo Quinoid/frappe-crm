@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-full flex-col gap-8 p-8 items-center">
-    <div class="w-1/2 flex flex-col gap-4 mt-8">
+  <div class="flex h-full flex-col gap-8 p-8">
+    <div class="flex flex-1 flex-col gap-4">
       <h2 class="text-xl font-semibold">Edit Company Details</h2>
 
       <div class="space-y-4">
@@ -61,9 +61,11 @@
       </div>
 
       <!-- Save Button -->
+    </div>
+    <div class="flex !flex-row-reverse">
       <Button
         variant="solid"
-        class="w-full bg-btn_primary"
+        class=" bg-btn_primary"
         :loading="loading"
         @click="updateCompany"
         label="Save"

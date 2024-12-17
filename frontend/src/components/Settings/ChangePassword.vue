@@ -15,8 +15,8 @@
     "
   >
    -->
-  <div class="flex h-full flex-col gap-8 p-8 items-center">
-    <div class="w-1/2 flex flex-col gap-4 mt-8">
+  <div class="flex h-full flex-col gap-8 p-8">
+    <div class="flex flex-1 flex-col gap-4">
       <h2 class="flex gap-2 text-xl font-semibold leading-none h-5">
         {{ isPasswordSet ? __('Change Password') : __('Set Password') }}
       </h2>
@@ -51,9 +51,11 @@
         letter, one digit, and one special character, with a minimum length of
         eight characters, and must not contain any spaces.
       </p>
+    </div>
+    <div class="flex flex-row-reverse">
       <Button
         variant="solid"
-        class="w-full bg-btn_primary"
+        class="bg-btn_primary"
         :loading="loading"
         @click="updatePassword"
         :label="__('Save')"

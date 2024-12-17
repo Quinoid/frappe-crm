@@ -57,7 +57,11 @@
         :openEmailBox="openEmailBox"
       />
     </Tabs>
-    <!-- <Resizer class="flex flex-col justify-between border-l" side="right">
+    <Resizer
+      v-if="tabIndex !== 0"
+      class="flex flex-col justify-between border-l"
+      side="right"
+    >
       <div
         class="flex h-10.5 cursor-copy items-center border-b px-5 py-2.5 text-lg font-medium"
         @click="copyToClipboard(lead.data.name)"
@@ -198,7 +202,7 @@
           </div>
         </div>
       </div>
-    </Resizer> -->
+    </Resizer>
   </div>
   <AssignmentModal
     v-if="showAssignmentModal"
@@ -319,7 +323,15 @@ import {
 } from 'qbs-vue-ui'
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-
+import Resizer from '@/components/Resizer.vue'
+import Section from '@/components/Section.vue'
+import SectionFields from '@/components/SectionFields.vue'
+import EditIcon from '@/components/Icons/EditIcon.vue'
+import { FileUploader, Tooltip, Avatar } from 'qbs-vue-ui'
+import CameraIcon from '@/components/Icons/CameraIcon.vue'
+import LinkIcon from '@/components/Icons/LinkIcon.vue'
+import Email2Icon from '@/components/Icons/Email2Icon.vue'
+import { errorMessage, openWebsite, copyToClipboard } from '@/utils'
 const { $dialog, $socket, makeCall } = globalStore()
 const { getContactByName, contacts } = contactsStore()
 const { statusOptions, getLeadStatus } = statusesStore()
@@ -461,11 +473,7 @@ const tabs = computed(() => {
       label: __('Details'),
       icon: DocumentIcon,
     },
-    {
-      name: 'Activity',
-      label: __('Activity'),
-      icon: ActivityIcon,
-    },
+
     {
       name: 'Emails',
       label: __('Emails'),
@@ -497,6 +505,11 @@ const tabs = computed(() => {
       label: __('WhatsApp'),
       icon: WhatsAppIcon,
       condition: () => whatsappEnabled.value,
+    },
+    {
+      name: 'Activity',
+      label: __('Activity'),
+      icon: ActivityIcon,
     },
   ]
   return tabOptions.filter((tab) => (tab.condition ? tab.condition() : true))
