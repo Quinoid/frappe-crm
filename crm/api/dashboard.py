@@ -89,7 +89,7 @@ def custom_dashboard():
     events = event_query.run(as_dict=True)
     event_total_count = len(events)
 
-    CallLog = frappe.qb.DocType("Call Log")
+    CallLog = frappe.qb.DocType("CRM Call Log")
 
     # Fetch the last 5 records ordered by creation or a specific field
     call_log_data = (
