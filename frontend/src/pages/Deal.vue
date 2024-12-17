@@ -44,9 +44,25 @@
         v-model:reload="reload"
         v-model:tabIndex="tabIndex"
         v-model="deal"
+        :updateField="updateField"
+        :openEmailBox="openEmailBox"
+        :fieldsLayout="fieldsLayout"
+        :organization="organization"
+        :dealContacts="dealContacts"
+        :addContact="addContact"
+        :contactOptions="contactOptions"
+        :togglePopover="togglePopover"
+        :showContactModal="showContactModal"
+        :_contact="_contact"
+
+       
       />
     </Tabs>
-    <Resizer side="right" class="flex flex-col justify-between border-l">
+    <Resizer
+      v-if="tabIndex !== 0"
+      side="right"
+      class="flex flex-col justify-between border-l"
+    >
       <div
         class="flex h-10.5 cursor-copy items-center border-b px-5 py-2.5 text-lg font-medium"
         @click="copyToClipboard(deal.data.name)"
@@ -342,6 +358,7 @@ import { getView } from '@/utils/view'
 import { globalStore } from '@/stores/global'
 import { statusesStore } from '@/stores/statuses'
 import { usersStore } from '@/stores/users'
+import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
 import { whatsappEnabled, callEnabled } from '@/composables/settings'
 import {
   createResource,
@@ -518,10 +535,11 @@ const tabIndex = ref(0)
 const tabs = computed(() => {
   let tabOptions = [
     {
-      name: 'Activity',
-      label: __('Activity'),
-      icon: ActivityIcon,
+      name: 'Details',
+      label: __('Details'),
+      icon: DocumentIcon,
     },
+
     {
       name: 'Emails',
       label: __('Emails'),
@@ -553,6 +571,11 @@ const tabs = computed(() => {
       label: __('WhatsApp'),
       icon: WhatsAppIcon,
       condition: () => whatsappEnabled.value,
+    },
+    {
+      name: 'Activity',
+      label: __('Activity'),
+      icon: ActivityIcon,
     },
   ]
   return tabOptions.filter((tab) => (tab.condition ? tab.condition() : true))

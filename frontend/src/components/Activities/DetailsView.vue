@@ -110,6 +110,11 @@
           </div>
         </template>
       </FileUploader>
+      <SLASection
+        v-if="doc.data.sla_status"
+        v-model="doc.data"
+        @updateField="updateField"
+      />
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-4 w-full">
       <div
@@ -117,7 +122,11 @@
         :key="section.label"
         class="flex flex-col p-3 shadow-sm rounded-md bg-white"
       >
-        <Section :is-opened="section.opened" :label="section.label" :hideDrillDown="true">
+        <Section
+          :is-opened="section.opened"
+          :label="section.label"
+          :hideDrillDown="true"
+        >
           <SectionFields
             :fields="section.fields"
             :isLastSection="true"
@@ -158,6 +167,7 @@ import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import { errorMessage, openWebsite, copyToClipboard } from '@/utils'
 import { globalStore } from '@/stores/global'
 import { callEnabled } from '@/composables/settings'
+import SLASection from '@/components/SLASection.vue'
 const props = defineProps({
   doctype: {
     type: String,

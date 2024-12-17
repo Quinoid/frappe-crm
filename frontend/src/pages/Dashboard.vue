@@ -144,7 +144,6 @@
         v-if="callEnabled"
         class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
       >
-        >
         <h3 class="text-lg font-medium mb-4 text-gray-900">Call Logs</h3>
         <ul>
           <li
@@ -154,14 +153,14 @@
           >
             <div class="flex justify-between items-center">
               <div>
-                <p class="font-semibold">{{ calllog.subject }}</p>
+                <p class="font-semibold">{{ calllog.caller }}</p>
                 <p class="text-sm text-gray-500">
-                  {{ calllog.event_category }}
+                  {{ calllog.medium }}
                 </p>
                 <p class="text-sm text-gray-500">
                   {{
-                    calllog.starts_on
-                      ? new Date(event.starts_on).toLocaleString()
+                    calllog.creation
+                      ? new Date(calllog.creation).toLocaleString()
                       : 'No Start Date'
                   }}
                 </p>
