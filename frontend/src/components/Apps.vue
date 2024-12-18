@@ -69,7 +69,7 @@ const apps = createResource({
       },
     ]
     data.map((app) => {
-      if (app.name === 'crm' || app.name === 'ERPNext') return
+      if (app.name === 'crm' || app.title === 'ERPNext') return
       _apps.push({
         name: app.name,
         logo: app.logo,
