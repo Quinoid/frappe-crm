@@ -64,12 +64,12 @@ const apps = createResource({
       {
         name: 'frappe',
         logo: '/assets/frappe/images/framework.png',
-        title: __('Desk'),
+        title: 'Admin',
         route: '/app',
       },
     ]
     data.map((app) => {
-      if (app.name === 'crm') return
+      if (app.name === 'crm' || app.title === 'ERPNext') return
       _apps.push({
         name: app.name,
         logo: app.logo,

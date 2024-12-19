@@ -166,8 +166,9 @@ def custom_task_details(name):
 
 
 @frappe.whitelist()
-def custom_record_count(doctype):
+def custom_record_count():
     try:
+        import json
 
         file_path = frappe.get_site_path("domain_limit.json")
 
@@ -189,28 +190,40 @@ def custom_record_count(doctype):
             "User": "user_limit_count",
         }
 
-        limit_key = doctype_limit_map.get(doctype)
-        if not limit_key:
-            frappe.response["http_status_code"] = 400
-            frappe.throw(_(f"Invalid doctype '{doctype}' for this function."), frappe.ValidationError)
+        result = {}
 
+        for doctype, limit_key in doctype_limit_map.items():
+            limit_count = limits.get(limit_key, 0)
 
-        limit_count = limits.get(limit_key, 0)
+            DocType = frappe.qb.DocType(doctype)
+            
+            if doctype == "CRM Lead":
+                record_query = frappe.qb.from_(DocType).select("*").where(frappe.qb.Field("converted") != 1)
+            else:
+                record_query = frappe.qb.from_(DocType).select("*")
 
-        DocType = frappe.qb.DocType(doctype)
-        record_query = frappe.qb.from_(DocType).select("*")
-        if DocType == "CRM Lead":
-            record_query = frappe.qb.from_(DocType).select("*").where(Field("converted") != 1)
-        else:
-            record_query = frappe.qb.from_(DocType).select("*")
-        records = record_query.run(as_dict=True)
-        record_total_count = len(records)
+            records = record_query.run(as_dict=True)
+            record_total_count = len(records)
 
-        return {
-            "status": 200,
-            "record_total_count": record_total_count,
-            "limit_count": limit_count
-        }
+            result[doctype.split()[-1].lower()] = {
+                limit_key: limit_count,
+                "record_total_count": record_total_count,
+            }
+
+        # Add additional features to the response
+        result.update({
+            "email_feature": limits.get("email_feature", 1),
+            "calendar_feature": limits.get("calendar_feature", 1),
+            "twilio_feature": limits.get("twilio_feature", 1),
+            "whatsapp_feature": limits.get("whatsapp_feature", 1),
+            "custom_view_setup": limits.get("custom_view_setup", 1),
+            "custom_field_setup": limits.get("custom_field_setup", 1),
+            "custom_reports": limits.get("custom_reports", 1),
+            "attachment_size": limits.get("attachment_size", 5),
+            "total_storage": limits.get("total_storage", 10),
+        })
+
+        return {"limits": result}
 
     except FileNotFoundError:
         frappe.response["http_status_code"] = 500
@@ -223,6 +236,7 @@ def custom_record_count(doctype):
     except Exception as e:
         frappe.log_error(message=str(e), title="Custom Record Count Error")
         frappe.throw(_("An error occurred while fetching the record count."), frappe.ValidationError)
+
 
 
 
@@ -258,4 +272,39 @@ def custom_delete(doctype, name):
         }
 
 
+@frappe.whitelist()
+def get_users_with_roles():
+    """
+    Fetch all users along with their assigned roles who have either 'Sales Manager' or 'Sales User' roles.
+    """
+    users = frappe.get_all("User", fields=["name", "full_name", "email", "enabled"])
 
+    filtered_users = []
+    
+    for user in users:
+        # Fetch roles directly from the User's child table
+        roles = [role.role for role in frappe.get_all("Has Role", filters={"parent": user["name"]}, fields=["role"])]
+        
+        # Check if the user has 'Sales Manager' or 'Sales User' role
+        if "Sales Manager" in roles or "Sales User" in roles:
+            user["roles"] = roles
+            filtered_users.append(user)
+    
+    return filtered_users
+
+
+
+@frappe.whitelist()
+def set_user_status(user_email, enabled):
+    """
+    Enable or disable a user based on the `enabled` flag.
+    :param user_email: Email ID of the user to update
+    :param enabled: 1 to enable, 0 to disable
+    """
+    if not frappe.db.exists("User", user_email):
+        frappe.throw(f"User with email {user_email} does not exist.")
+    
+    enabled_flag = int(enabled)
+    frappe.db.set_value("User", user_email, "enabled", enabled_flag)
+    frappe.db.commit()
+    return {"message": f"User {user_email} {'enabled' if enabled_flag else 'disabled'} successfully."}
