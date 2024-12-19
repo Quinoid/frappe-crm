@@ -277,7 +277,7 @@ def get_users_with_roles():
     """
     Fetch all users along with their assigned roles who have either 'Sales Manager' or 'Sales User' roles.
     """
-    users = frappe.get_all("User", fields=["name", "email", "enabled"])
+    users = frappe.get_all("User", fields=["name", "full_name", "email", "enabled"])
     filtered_users = []
     
     for user in users:
