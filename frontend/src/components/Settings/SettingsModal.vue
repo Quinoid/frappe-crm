@@ -74,6 +74,7 @@ import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
 import ERPNextIcon from '@/components/Icons/ERPNextIcon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import InviteMemberPage from '@/components/Settings/InviteMemberPage.vue'
+import UserListing from '@/components/Settings/UserListing.vue'
 import ProfileSettings from '@/components/Settings/ProfileSettings.vue'
 import WhatsAppSettings from '@/components/Settings/WhatsAppSettings.vue'
 import ERPNextSettings from '@/components/Settings/ERPNextSettings.vue'
@@ -163,6 +164,11 @@ const tabs = computed(() => {
                 label: __('Invite Members'),
                 icon: 'user-plus',
                 component: markRaw(InviteMemberPage),
+              },
+              {
+                label: __('User Listing'),
+                icon: 'user-plus',
+                component: markRaw(UserListing),
               },
             ]
           : []),

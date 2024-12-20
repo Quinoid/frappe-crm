@@ -338,13 +338,14 @@ async function createDeal() {
       doctype: 'CRM Deal',
       domain: domain,
     })
-    if (res.limit_count > res.record_total_count) {
+    const { limits } = res
+    if (limits.deal.deal_limit_count > limits.deal.record_total_count) {
       showDealModal.value = true
     } else {
       createToast({
         title: 'Error',
         position: 'bottom-center',
-        text: `The Deal creation limit has been exceeded. Your current limit is ${res.limit_count}. Upgrade your plan to create more deals.`,
+        text: `The Deal creation limit has been exceeded. Your current limit is ${limits.deal.deal_limit_count}. Upgrade your plan to create more deals.`,
         icon: 'x',
         iconClasses: 'text-red-600',
       })

@@ -108,13 +108,16 @@ async function createContact() {
       doctype: 'Contact',
       domain: domain,
     })
-    if (res.limit_count > res.record_total_count) {
+    const { limits } = res
+    if (
+      limits.contact.contact_limit_count > limits.contact.record_total_count
+    ) {
       showContactModal.value = true
     } else {
       createToast({
         title: 'Error',
         position: 'bottom-center',
-        text: `The contact creation limit has been exceeded. Your current limit is ${res.limit_count}. Upgrade your plan to create more contacts.`,
+        text: `The contact creation limit has been exceeded. Your current limit is ${limits.contact.contact_limit_count}. Upgrade your plan to create more contacts.`,
         icon: 'x',
         iconClasses: 'text-red-600',
       })
