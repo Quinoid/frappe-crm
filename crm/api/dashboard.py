@@ -227,6 +227,8 @@ def custom_record_count(doctype):
 
 
 
+
+
 @frappe.whitelist()
 def custom_delete(doctype, name):
     try:
@@ -258,4 +260,38 @@ def custom_delete(doctype, name):
         }
 
 
+@frappe.whitelist()
+def get_users_with_roles():
+    """
+    Fetch all users along with their assigned roles who have either 'Sales Manager' or 'Sales User' roles.
+    """
+    users = frappe.get_all("User", fields=["name", "full_name", "email", "enabled"])
+    filtered_users = []
+    
+    for user in users:
+        # Fetch roles directly from the User's child table
+        roles = [role.role for role in frappe.get_all("Has Role", filters={"parent": user["name"]}, fields=["role"])]
+        
+        # Check if the user has 'Sales Manager' or 'Sales User' role
+        if "Sales Manager" in roles or "Sales User" in roles:
+            user["roles"] = roles
+            filtered_users.append(user)
+    
+    return filtered_users
 
+
+
+@frappe.whitelist()
+def set_user_status(user_email, enabled):
+    """
+    Enable or disable a user based on the `enabled` flag.
+    :param user_email: Email ID of the user to update
+    :param enabled: 1 to enable, 0 to disable
+    """
+    if not frappe.db.exists("User", user_email):
+        frappe.throw(f"User with email {user_email} does not exist.")
+    
+    enabled_flag = int(enabled)
+    frappe.db.set_value("User", user_email, "enabled", enabled_flag)
+    frappe.db.commit()
+    return {"message": f"User {user_email} {'enabled' if enabled_flag else 'disabled'} successfully."}
