@@ -131,13 +131,14 @@ async function checkLimit() {
       doctype: 'User',
       domain: domain,
     })
-    if (res.limit_count > res.record_total_count) {
+    const { limits } = res
+    if (limits.user.user_limit_count > limits.user.record_total_count) {
       sendInvites()
     } else {
       createToast({
         title: 'Error',
         position: 'bottom-center',
-        text: `The  email invite limit has been exceeded. Your current limit is ${res.limit_count}. Upgrade your plan to invite more emails.`,
+        text: `The  email invite limit has been exceeded. Your current limit is ${limits.user.user_limit_count}. Upgrade your plan to invite more emails.`,
         icon: 'x',
         iconClasses: 'text-red-600',
       })
