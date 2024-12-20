@@ -16,7 +16,6 @@ const twiloSet = ref(false)
 async function validateTwillo() {
   try {
     const res = await call('crm.api.communication.is_twilio_set')
-    console.log(res)
     twiloSet.value = res.is_twilio_set
   } catch (error) {
     console.log(error)

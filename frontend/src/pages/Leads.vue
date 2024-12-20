@@ -498,13 +498,14 @@ async function createLead() {
       doctype: 'CRM Lead',
       domain: domain,
     })
-    if (res.limit_count > res.record_total_count) {
+    const { limits } = res
+    if (limits.lead.lead_limit_count > limits.lead.record_total_count) {
       showLeadModal.value = true
     } else {
       createToast({
         title: 'Error',
         position: 'bottom-center',
-        text: `The lead creation limit has been exceeded. Your current limit is ${res.limit_count}. Upgrade your plan to create more leads.`,
+        text: `The lead creation limit has been exceeded. Your current limit is ${limits.lead.lead_limit_count}. Upgrade your plan to create more leads.`,
         icon: 'x',
         iconClasses: 'text-red-600',
       })
