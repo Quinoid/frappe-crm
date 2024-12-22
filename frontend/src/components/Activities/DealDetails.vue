@@ -256,6 +256,8 @@ import Link from '@/components/Controls/Link.vue'
 import SLASection from '@/components/SLASection.vue'
 import { Dropdown } from 'qbs-vue-ui'
 import ArrowUpRightIcon from '@/components/Icons/ArrowUpRightIcon.vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const props = defineProps({
   doctype: {
     type: String,

@@ -81,7 +81,7 @@ import ERPNextSettings from '@/components/Settings/ERPNextSettings.vue'
 import TwilioSettings from '@/components/Settings/TwilioSettings.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import { isWhatsappInstalled } from '@/composables/settings'
-import { Dialog, createResource } from 'qbs-vue-ui'
+import { Dialog, createResource, call } from 'qbs-vue-ui'
 import ComppanyEdit from '@/components/Settings/CompanyEdit.vue'
 import { ref, markRaw, computed, watch } from 'vue'
 import { usersStore } from '@/stores/users'
@@ -130,9 +130,23 @@ const fetchIsPasswordSet = async () => {
     isPasswordSet.value = false
   }
 }
+const visibilityCheck = async () => {
+  try {
+    // Call the API method with necessary arguments
+    const res = await call('crm.api.dashboard.custom_record_count', {})
+    const { limits } = res
+    isWhatsapp.value = limits.whatsapp_feature === 1 ? true : false
+    isTwilio.value = limits.twilio_feature === 1 ? true : false
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // Call the function to fetch the value initially
 fetchIsPasswordSet()
+visibilityCheck()
+const isWhatsapp = ref(false)
+const isTwilio = ref(false)
 
 const tabs = computed(() => {
   return [
@@ -178,18 +192,27 @@ const tabs = computed(() => {
       ? [
           {
             label: __('Integrations'),
+
             items: [
-              {
-                label: __('Twilio'),
-                icon: PhoneIcon,
-                component: markRaw(TwilioSettings),
-              },
-              {
-                label: __('WhatsApp'),
-                icon: WhatsAppIcon,
-                component: markRaw(WhatsAppSettings),
-                condition: () => isWhatsappInstalled.value,
-              },
+              ...(isTwilio.value
+                ? [
+                    {
+                      label: __('Twilio'),
+                      icon: PhoneIcon,
+                      component: markRaw(TwilioSettings),
+                    },
+                  ]
+                : []),
+              ...(isWhatsapp.value
+                ? [
+                    {
+                      label: __('WhatsApp'),
+                      icon: WhatsAppIcon,
+                      component: markRaw(WhatsAppSettings),
+                      condition: () => isWhatsappInstalled.value,
+                    },
+                  ]
+                : []),
             ],
           },
         ]
