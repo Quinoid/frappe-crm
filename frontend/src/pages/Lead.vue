@@ -549,7 +549,6 @@ function updateField(name, value, callback) {
       }
     })
   }
-  console.log('request', request)
   updateLead(name, request, () => {
     lead.data[name] = value
     callback?.()

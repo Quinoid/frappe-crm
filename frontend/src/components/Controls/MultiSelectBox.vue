@@ -16,7 +16,7 @@
         :label="value"
         theme="gray"
         variant="subtle"
-        class="rounded"
+        class="rounded !items-start !justify-start"
         @keydown.delete.capture.stop="removeLastValue"
       >
         <template #suffix>
