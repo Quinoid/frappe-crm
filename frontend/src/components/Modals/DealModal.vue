@@ -175,9 +175,31 @@ function createDeal() {
   if (deal.website && !deal.website.startsWith('http')) {
     deal.website = 'https://' + deal.website
   }
+  let request = { ...deal }
+  if (
+    request.interested_services_for_lead &&
+    request.interested_services_for_lead.length > 0
+  ) {
+    request.interested_services_for_lead =
+      deal.interested_services_for_lead.map((s) => {
+        return {
+          link_field: s,
+        }
+      })
+  } else if (
+    request.interested_services_for_deal &&
+    request.interested_services_for_deal.length > 0
+  ) {
+    request.interested_services_for_deal =
+      deal.interested_services_for_deal.map((s) => {
+        return {
+          link_field: s,
+        }
+      })
+  }
   createResource({
     url: 'crm.fcrm.doctype.crm_deal.crm_deal.create_deal',
-    params: { args: deal },
+    params: { args: request },
     auto: true,
     validate() {
       error.value = null

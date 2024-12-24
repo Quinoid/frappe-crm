@@ -1,5 +1,7 @@
 <template>
   <div class="container mx-auto p-4 relative">
+    <h2 class="text-xl font-semibold">Users</h2>
+
     <div class="overflow-auto max-h-[calc(100vh_-_10rem)]">
       <table class="min-w-full border-collapse border border-gray-300">
         <thead class="sticky top-0 bg-white z-10">

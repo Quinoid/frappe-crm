@@ -54,8 +54,6 @@
         :togglePopover="togglePopover"
         :showContactModal="showContactModal"
         :_contact="_contact"
-
-       
       />
     </Tabs>
     <Resizer
@@ -709,7 +707,18 @@ function triggerCall() {
 }
 
 function updateField(name, value, callback) {
-  updateDeal(name, value, () => {
+  let request = value
+  if (
+    (name === 'interested_services_for_lead' && value) ||
+    (name === 'interested_services_for_deal' && value)
+  ) {
+    request = value?.map((item) => {
+      return {
+        link_field: item,
+      }
+    })
+  }
+  updateDeal(name, request, () => {
     deal.data[name] = value
     callback?.()
   })
