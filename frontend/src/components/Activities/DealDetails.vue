@@ -78,7 +78,7 @@
         @updateField="updateField"
       />
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-4 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-4 w-full">
       <div
         v-for="(section, i) in fieldsLayout.data"
         :key="section.label"

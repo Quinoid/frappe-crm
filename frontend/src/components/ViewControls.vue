@@ -610,18 +610,32 @@ const viewsDropdownOptions = computed(() => {
     group: __('Actions'),
     hideLabel: true,
     items: [
-      {
-        label: __('Create View'),
-        icon: 'plus',
-        class: 'bg-btn_primary hover:bg-btn_primary',
-        onClick: () => createView(),
-      },
+      ...(isCreateView.value
+        ? [
+            {
+              label: __('Create View'),
+              icon: 'plus',
+              class: 'bg-btn_primary hover:bg-btn_primary',
+              onClick: () => createView(),
+            },
+          ]
+        : []),
     ],
   })
 
   return _views
 })
-
+const isCreateView = ref(false)
+const visibilityCheck = async () => {
+  try {
+    const res = await call('crm.api.dashboard.custom_record_count', {})
+    const { limits } = res
+    isCreateView.value = limits.custom_view_setup === 1 ? true : false
+  } catch (error) {
+    console.log(error)
+  }
+}
+visibilityCheck()
 const quickFilterList = computed(() => {
   let nameField
   let labelField

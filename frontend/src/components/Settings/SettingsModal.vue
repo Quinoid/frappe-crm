@@ -180,7 +180,7 @@ const tabs = computed(() => {
                 component: markRaw(InviteMemberPage),
               },
               {
-                label: __('User Listing'),
+                label: __('Users'),
                 icon: 'user-plus',
                 component: markRaw(UserListing),
               },

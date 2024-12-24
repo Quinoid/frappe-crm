@@ -1,5 +1,6 @@
 <template>
   <a
+    v-if="shouldShowComponent"
     class="flex h-7 cursor-pointer items-center rounded text-gray-700 duration-300 ease-in-out focus:outline-none focus:transition-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-gray-400"
     :class="isActive ? 'bg-white shadow-sm' : 'hover:bg-gray-100'"
     @click.prevent="handleClick"
@@ -47,10 +48,10 @@
 
 <script setup>
 import { Tooltip } from 'qbs-vue-ui'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { isMobileView, mobileSidebarOpened } from '@/composables/settings'
-
+import { call } from 'qbs-vue-ui'
 const router = useRouter()
 const route = useRoute()
 
@@ -83,6 +84,21 @@ function handleClick() {
     mobileSidebarOpened.value = false
   }
 }
+const isTwilio = ref(false)
+const isCalendar = ref(false)
+
+const visibilityCheck = async () => {
+  try {
+    // Call the API method with necessary arguments
+    const res = await call('crm.api.dashboard.custom_record_count', {})
+    const { limits } = res
+    isCalendar.value = limits.calendar_feature === 1 ? true : false
+    isTwilio.value = limits.twilio_feature === 1 ? true : false
+  } catch (error) {
+    console.log(error)
+  }
+}
+visibilityCheck()
 const linkHref = computed(() => {
   if (!props.to) return '#'
   if (typeof props.to === 'object') {
@@ -98,5 +114,10 @@ let isActive = computed(() => {
   }
 
   return route.name === props.to || `${route.name}s` === props.to
+})
+const shouldShowComponent = computed(() => {
+  if (!isTwilio.value && props.label === 'Call Logs') return false
+  if (!isCalendar.value && props.label === 'Events') return false
+  return true
 })
 </script>
