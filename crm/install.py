@@ -13,7 +13,7 @@ def after_install():
 	add_default_lead_statuses()
 	add_default_deal_statuses()
 	add_default_communication_statuses()
-	add_default_fields_layout()
+	#add_default_fields_layout()
 	add_property_setter()
 	add_email_template_custom_fields()
 	add_default_industries()
