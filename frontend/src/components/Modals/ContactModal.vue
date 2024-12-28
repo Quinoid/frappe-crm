@@ -60,6 +60,7 @@
           <Fields
             v-else-if="filteredSections"
             :sections="filteredSections"
+            class="border-t pt-4"
             :data="_contact"
           />
         </div>

@@ -268,6 +268,7 @@ const props = defineProps({
   sections: Array,
   data: Object,
 })
+console.log(props.sections)
 </script>
 
 <style scoped>
