@@ -17,7 +17,7 @@
         />
       </component>
       <Dropdown
-        :options="statusOptions('organisation', updateField, customStatuses)"
+        :options="statusOptions('organization', updateField, customStatuses)"
       >
         <template #default="{ open }">
           <Button

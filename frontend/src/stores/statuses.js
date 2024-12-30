@@ -9,6 +9,7 @@ export const statusesStore = defineStore('crm-statuses', () => {
   let dealStatusesByName = reactive({})
   let contactStatusesByName = reactive({})
   let communicationStatusesByName = reactive({})
+  let organizationStatusesByName = reactive({})
 
   const leadStatuses = createListResource({
     doctype: 'CRM Lead Status',
@@ -38,6 +39,22 @@ export const statusesStore = defineStore('crm-statuses', () => {
         status.colorClass = colorClasses(status.color)
         status.iconColorClass = colorClasses(status.color, true)
         contactStatusesByName[status.name] = status
+      }
+      return statuses
+    },
+  })
+  const organizationStatuses = createListResource({
+    doctype: 'CRM Organization Status',
+    fields: ['name', 'color', 'position'],
+    orderBy: 'position asc',
+    cache: 'organization-statuses',
+    initialData: [],
+    auto: true,
+    transform(statuses) {
+      for (let status of statuses) {
+        status.colorClass = colorClasses(status.color)
+        status.iconColorClass = colorClasses(status.color, true)
+        organizationStatusesByName[status.name] = status
       }
       return statuses
     },
@@ -112,6 +129,12 @@ export const statusesStore = defineStore('crm-statuses', () => {
     }
     return communicationStatuses[name]
   }
+  function getOrganizationStatus(name) {
+    if (!name) {
+      name = organizationStatuses.data[0].name
+    }
+    return organizationStatusesByName[name]
+  }
 
   function statusOptions(doctype, action, statuses = []) {
     let statusesByName =
@@ -119,7 +142,9 @@ export const statusesStore = defineStore('crm-statuses', () => {
         ? dealStatusesByName
         : doctype == 'contact'
           ? contactStatusesByName
-          : leadStatusesByName
+          : doctype == 'organization'
+            ? organizationStatusesByName
+            : leadStatusesByName
 
     if (statuses.length) {
       statusesByName = statuses.reduce((acc, status) => {
@@ -155,5 +180,7 @@ export const statusesStore = defineStore('crm-statuses', () => {
     getDealStatus,
     getCommunicationStatus,
     statusOptions,
+    getOrganizationStatus,
+    organizationStatuses,
   }
 })
