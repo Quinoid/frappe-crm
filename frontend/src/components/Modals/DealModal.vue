@@ -133,7 +133,7 @@ const filteredSections = computed(() => {
     )
   } else {
     _filteredSections.push(
-      allSections.find((s) => s.label === 'Deal Organisation'),
+      allSections.find((s) => s.label === 'Organization Details'),
     )
   }
 
@@ -142,28 +142,25 @@ const filteredSections = computed(() => {
       allSections.find((s) => s.label === 'Select Contact'),
     )
   } else {
-    _filteredSections.push(allSections.find((s) => s.label === 'Deal Contacts'))
+    _filteredSections.push(
+      allSections.find((s) => s.label === 'Contact Details'),
+    )
   }
 
   allSections.forEach((s) => {
     if (
-      s.label !== 'Deal Contact' &&
-      s.label !== 'Deal Organisation' &&
-      s.label !== 'Select Organization' &&
-      s.label !== 'Select Contact'
-      // ![
-      //   'Select Organization',
-      //   'Organization Details',
-      //   'Select Contact',
-      //   'Contact Details',
-      // ].includes(s.label)
+      ![
+        'Select Organization',
+        'Organization Details',
+        'Select Contact',
+        'Contact Details',
+      ].includes(s.label)
     ) {
       _filteredSections.push(s)
     }
   })
-  const clearUndefined = _filteredSections.filter((item) => item !== undefined)
-  console.log(clearUndefined)
-  return clearUndefined
+
+  return _filteredSections
 })
 
 const dealStatuses = computed(() => {

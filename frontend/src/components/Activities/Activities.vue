@@ -1,6 +1,6 @@
 <template>
   <ActivityHeader
-    v-if="title != 'Details' && title != 'Deals'"
+    v-if="title != 'Details'"
     v-model="tabIndex"
     v-model:showWhatsappTemplates="showWhatsappTemplates"
     :tabs="tabs"
@@ -25,7 +25,6 @@
       v-else-if="
         activities?.length ||
         (fieldsLayout && title == 'Details') ||
-        title == 'Deals' ||
         (whatsappMessages.data?.length && title == 'WhatsApp')
       "
       class="activities"
@@ -67,7 +66,7 @@
       </div>
       <div
         v-else-if="title == 'Details'"
-        class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)] overflow-auto"
+        class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)]"
       >
         <div class="" v-if="doctype == 'CRM Lead'">
           <DetailsView
@@ -76,15 +75,6 @@
             :fieldsLayout="fieldsLayout"
             :updateField="updateField"
             :openEmailBox="openEmailBox"
-          />
-        </div>
-        <div class="" v-else-if="doctype == 'Contact'">
-          <ContactEdit
-            class="mb-4"
-            :doc="doc"
-            :fieldsLayout="fieldsLayout"
-            :updateField="updateField"
-            :deleteContact="deleteContact"
           />
         </div>
         <div class="" v-else>
@@ -104,12 +94,6 @@
             :_contact="_contact"
           />
         </div>
-      </div>
-      <div
-        v-else-if="title == 'Deals'"
-        class="pb-3 overflow-x-auto sm:w-full w-max"
-      >
-        <ContactDeals :tab="tab" :contactId="contactId" />
       </div>
       <div
         v-else-if="title == 'Tasks'"
@@ -463,6 +447,7 @@ import WhatsAppArea from '@/components/Activities/WhatsAppArea.vue'
 import WhatsAppBox from '@/components/Activities/WhatsAppBox.vue'
 import LoadingIndicator from '@/components/Icons/LoadingIndicator.vue'
 import LeadsIcon from '@/components/Icons/LeadsIcon.vue'
+import DealsIcon from '@/components/Icons/DealsIcon.vue'
 import DotIcon from '@/components/Icons/DotIcon.vue'
 import CommentIcon from '@/components/Icons/CommentIcon.vue'
 import SelectIcon from '@/components/Icons/SelectIcon.vue'
@@ -489,7 +474,6 @@ import { capture } from '@/telemetry'
 import { Button, Tooltip, createResource } from 'qbs-vue-ui'
 import { useElementVisibility } from '@vueuse/core'
 import DetailsView from './DetailsView.vue'
-import ContactEdit from '@/components/Activities/ContactEdit.vue'
 import {
   ref,
   computed,
@@ -501,9 +485,7 @@ import {
   onBeforeUnmount,
 } from 'vue'
 import { useRoute } from 'vue-router'
-import ContactDeals from '@/components/Activities/ContactDeals.vue'
 import DealDetails from '@/components/Activities/DealDetails.vue'
-import DealsIcon from '@/components/Icons/DealsIcon.vue'
 const { makeCall, $socket } = globalStore()
 const { getUser } = usersStore()
 const { getContact, getLeadContact } = contactsStore()
@@ -557,17 +539,9 @@ const props = defineProps({
     type: Function,
     default: () => {},
   },
-  _contact: {
+   _contact: {
     type: Object,
     default: () => ({}),
-  },
-  contactId: {
-    type: String,
-    default: '',
-  },
-  deleteContact: {
-    type: Function,
-    default: () => {},
   },
 })
 
@@ -577,54 +551,49 @@ const tabIndex = defineModel('tabIndex')
 
 const reload_email = ref(false)
 const modalRef = ref(null)
-const all_activities =
-  props.doctype === 'Contact'
-    ? null
-    : createResource({
-        url: 'crm.api.activities.get_activities',
-        params: { name: doc.value.data.name },
-        cache: ['activity', doc.value.data.name],
-        auto: true,
-        transform: ([versions, calls, notes, tasks]) => {
-          if (calls?.length) {
-            calls.forEach((doc) => {
-              doc.show_recording = false
-              doc.activity_type =
-                doc.type === 'Incoming' ? 'incoming_call' : 'outgoing_call'
-              doc.duration = secondsToDuration(doc.duration)
-              if (doc.type === 'Incoming') {
-                doc.caller = {
-                  label:
-                    getContact(doc.from)?.full_name ||
-                    getLeadContact(doc.from)?.full_name ||
-                    'Unknown',
-                  image:
-                    getContact(doc.from)?.image ||
-                    getLeadContact(doc.from)?.image,
-                }
-                doc.receiver = {
-                  label: getUser(doc.receiver).full_name,
-                  image: getUser(doc.receiver).user_image,
-                }
-              } else {
-                doc.caller = {
-                  label: getUser(doc.caller).full_name,
-                  image: getUser(doc.caller).user_image,
-                }
-                doc.receiver = {
-                  label:
-                    getContact(doc.to)?.full_name ||
-                    getLeadContact(doc.to)?.full_name ||
-                    'Unknown',
-                  image:
-                    getContact(doc.to)?.image || getLeadContact(doc.to)?.image,
-                }
-              }
-            })
+const all_activities = createResource({
+  url: 'crm.api.activities.get_activities',
+  params: { name: doc.value.data.name },
+  cache: ['activity', doc.value.data.name],
+  auto: true,
+  transform: ([versions, calls, notes, tasks]) => {
+    if (calls?.length) {
+      calls.forEach((doc) => {
+        doc.show_recording = false
+        doc.activity_type =
+          doc.type === 'Incoming' ? 'incoming_call' : 'outgoing_call'
+        doc.duration = secondsToDuration(doc.duration)
+        if (doc.type === 'Incoming') {
+          doc.caller = {
+            label:
+              getContact(doc.from)?.full_name ||
+              getLeadContact(doc.from)?.full_name ||
+              'Unknown',
+            image:
+              getContact(doc.from)?.image || getLeadContact(doc.from)?.image,
           }
-          return { versions, calls, notes, tasks }
-        },
+          doc.receiver = {
+            label: getUser(doc.receiver).full_name,
+            image: getUser(doc.receiver).user_image,
+          }
+        } else {
+          doc.caller = {
+            label: getUser(doc.caller).full_name,
+            image: getUser(doc.caller).user_image,
+          }
+          doc.receiver = {
+            label:
+              getContact(doc.to)?.full_name ||
+              getLeadContact(doc.to)?.full_name ||
+              'Unknown',
+            image: getContact(doc.to)?.image || getLeadContact(doc.to)?.image,
+          }
+        }
       })
+    }
+    return { versions, calls, notes, tasks }
+  },
+})
 
 const showWhatsappTemplates = ref(false)
 
@@ -681,7 +650,6 @@ function get_activities() {
 
 const activities = computed(() => {
   let activities = []
-
   if (props.title == 'Activity') {
     activities = get_activities()
   } else if (props.title == 'Emails') {
@@ -766,8 +734,6 @@ const emptyText = computed(() => {
     text = 'No Tasks'
   } else if (props.title == 'WhatsApp') {
     text = 'No WhatsApp Messages'
-  } else if (props.title == 'Deals') {
-    text = 'No Deals'
   }
   return text
 })
@@ -786,8 +752,6 @@ const emptyTextIcon = computed(() => {
     icon = TaskIcon
   } else if (props.title == 'WhatsApp') {
     icon = WhatsAppIcon
-  } else if (props.title == ' Deals') {
-    icon = DealsIcon
   }
   return h(icon, { class: 'text-gray-500' })
 })
