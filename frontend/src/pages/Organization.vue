@@ -1,5 +1,5 @@
 <template>
-  <LayoutHeader v-if="organization.doc">
+  <LayoutHeader v-if="organization.data">
     <template #left-header>
       <Breadcrumbs :items="breadcrumbs">
         <template #prefix="{ item }">
@@ -7,8 +7,96 @@
         </template>
       </Breadcrumbs>
     </template>
+    <template #right-header>
+      <component
+        :is="organization.data._assignedTo?.length == 1 ? 'Button' : 'div'"
+      >
+        <MultipleAvatar
+          :avatars="organization.data._assignedTo"
+          @click="showAssignmentModal = true"
+        />
+      </component>
+      <Dropdown
+        :options="statusOptions('organisation', updateField, customStatuses)"
+      >
+        <template #default="{ open }">
+          <Button
+            :label="organization.data.organization_status"
+            :class="'grey'"
+          >
+            <template #prefix>
+              <IndicatorIcon />
+            </template>
+            <template #suffix>
+              <FeatherIcon
+                :name="open ? 'chevron-up' : 'chevron-down'"
+                class="h-4"
+              />
+            </template>
+          </Button>
+        </template>
+      </Dropdown>
+    </template>
   </LayoutHeader>
-  <div v-if="organization.doc" class="flex flex-1 flex-col overflow-hidden">
+  <div v-if="organization.data" class="flex h-full overflow-hidden">
+    <Tabs v-model="tabIndex" :tabs="tabs">
+      <template #tab="{ tab, selected }">
+        <button
+          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-base text-gray-600 duration-300 ease-in-out hover:border-gray-400 hover:text-gray-900"
+          :class="{ 'text-gray-900': selected }"
+        >
+          <component v-if="tab.icon" :is="tab.icon" class="h-5" />
+          {{ __(tab.label) }}
+          <Badge
+            v-if="tab.label !== 'Details'"
+            class="group-hover:bg-gray-900"
+            :class="[selected ? 'bg-gray-900' : 'bg-gray-600']"
+            variant="solid"
+            theme="gray"
+            size="sm"
+          >
+            {{ tab.count }}
+          </Badge>
+        </button>
+      </template>
+      <template #default="{ tab }">
+        <div class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)] overflow-auto">
+          <OrgEdit
+            class="mb-4"
+            :doc="organization"
+            v-if="tab.label === 'Details'"
+            :fieldsLayout="fieldsLayout"
+            :updateField="updateField"
+            :deleteContact="deleteOrganization"
+          />
+        </div>
+        <DealsListView
+          class="mt-4"
+          v-if="tab.label === 'Deals' && rows.length"
+          :rows="rows"
+          :columns="columns"
+          :options="{ selectable: false, showTooltip: false }"
+        />
+        <ContactsListView
+          class="mt-4"
+          v-if="tab.label === 'Contacts' && rows.length"
+          :rows="rows"
+          :columns="columns"
+          :options="{ selectable: false, showTooltip: false }"
+        />
+        <div
+          v-if="!rows.length && tab.label !== 'Details'"
+          class="grid flex-1 place-items-center text-xl font-medium text-gray-500"
+        >
+          <div class="flex flex-col items-center justify-center space-y-3">
+            <component :is="tab.icon" class="!h-10 !w-10" />
+            <div>{{ __('No {0} Found', [__(tab.label)]) }}</div>
+          </div>
+        </div>
+      </template>
+    </Tabs>
+  </div>
+  <div v-if="organization.data" class="flex flex-1 flex-col overflow-hidden">
     <FileUploader
       @success="changeOrganizationImage"
       :validateFile="validateFile"
@@ -18,19 +106,19 @@
           <div class="group relative h-24 w-24">
             <Avatar
               size="3xl"
-              :image="organization.doc.organization_logo"
-              :label="organization.doc.name"
+              :image="organization.data.organization_logo"
+              :label="organization.data.name"
               class="!h-24 !w-24"
             />
             <component
-              :is="organization.doc.organization_logo ? Dropdown : 'div'"
+              :is="organization.data.organization_logo ? Dropdown : 'div'"
               v-bind="
-                organization.doc.organization_logo
+                organization.data.organization_logo
                   ? {
                       options: [
                         {
                           icon: 'upload',
-                          label: organization.doc.organization_logo
+                          label: organization.data.organization_logo
                             ? __('Change image')
                             : __('Upload image'),
                           onClick: openFileSelector,
@@ -59,74 +147,74 @@
           </div>
           <div class="flex flex-col justify-center gap-2 sm:gap-0.5">
             <div class="text-3xl font-semibold text-gray-900">
-              {{ organization.doc.name }}
+              {{ organization.data.name }}
             </div>
             <div
               class="flex flex-col flex-wrap gap-3 text-base text-gray-700 sm:flex-row sm:items-center sm:gap-2"
             >
               <div
-                v-if="organization.doc.website"
+                v-if="organization.data.website"
                 class="flex items-center gap-1.5"
               >
                 <WebsiteIcon class="h-4 w-4" />
-                <span class="">{{ website(organization.doc.website) }}</span>
+                <span class="">{{ website(organization.data.website) }}</span>
               </div>
               <span
-                v-if="organization.doc.website"
+                v-if="organization.data.website"
                 class="hidden text-3xl leading-[0] text-gray-600 sm:flex"
               >
                 &middot;
               </span>
               <div
-                v-if="organization.doc.industry"
+                v-if="organization.data.industry"
                 class="flex items-center gap-1.5"
               >
                 <FeatherIcon name="briefcase" class="h-4 w-4" />
-                <span class="">{{ organization.doc.industry }}</span>
+                <span class="">{{ organization.data.industry }}</span>
               </div>
               <span
-                v-if="organization.doc.industry"
+                v-if="organization.data.industry"
                 class="hidden text-3xl leading-[0] text-gray-600 sm:flex"
               >
                 &middot;
               </span>
               <div
-                v-if="organization.doc.territory"
+                v-if="organization.data.territory"
                 class="flex items-center gap-1.5"
               >
                 <TerritoryIcon class="h-4 w-4" />
-                <span class="">{{ organization.doc.territory }}</span>
+                <span class="">{{ organization.data.territory }}</span>
               </div>
               <span
-                v-if="organization.doc.territory"
+                v-if="organization.data.territory"
                 class="hidden text-3xl leading-[0] text-gray-600 sm:flex"
               >
                 &middot;
               </span>
               <div
-                v-if="organization.doc.annual_revenue"
+                v-if="organization.data.annual_revenue"
                 class="flex items-center gap-1.5"
               >
                 <MoneyIcon class="size-4" />
                 <span class="">{{
                   formatNumberIntoCurrency(
-                    organization.doc.annual_revenue,
-                    organization.doc.currency,
+                    organization.data.annual_revenue,
+                    organization.data.currency,
                   )
                 }}</span>
               </div>
               <span
-                v-if="organization.doc.annual_revenue"
+                v-if="organization.data.annual_revenue"
                 class="hidden text-3xl leading-[0] text-gray-600 sm:flex"
               >
                 &middot;
               </span>
               <Button
                 v-if="
-                  organization.doc.website ||
-                  organization.doc.industry ||
-                  organization.doc.territory ||
-                  organization.doc.annual_revenue
+                  organization.data.website ||
+                  organization.data.industry ||
+                  organization.data.territory ||
+                  organization.data.annual_revenue
                 "
                 variant="ghost"
                 :label="__('More')"
@@ -170,51 +258,6 @@
         </div>
       </template>
     </FileUploader>
-    <Tabs v-model="tabIndex" :tabs="tabs">
-      <template #tab="{ tab, selected }">
-        <button
-          class="group flex items-center gap-2 border-b border-transparent py-2.5 text-base text-gray-600 duration-300 ease-in-out hover:border-gray-400 hover:text-gray-900"
-          :class="{ 'text-gray-900': selected }"
-        >
-          <component v-if="tab.icon" :is="tab.icon" class="h-5" />
-          {{ __(tab.label) }}
-          <Badge
-            class="group-hover:bg-gray-900"
-            :class="[selected ? 'bg-gray-900' : 'bg-gray-600']"
-            variant="solid"
-            theme="gray"
-            size="sm"
-          >
-            {{ tab.count }}
-          </Badge>
-        </button>
-      </template>
-      <template #default="{ tab }">
-        <DealsListView
-          class="mt-4"
-          v-if="tab.label === 'Deals' && rows.length"
-          :rows="rows"
-          :columns="columns"
-          :options="{ selectable: false, showTooltip: false }"
-        />
-        <ContactsListView
-          class="mt-4"
-          v-if="tab.label === 'Contacts' && rows.length"
-          :rows="rows"
-          :columns="columns"
-          :options="{ selectable: false, showTooltip: false }"
-        />
-        <div
-          v-if="!rows.length"
-          class="grid flex-1 place-items-center text-xl font-medium text-gray-500"
-        >
-          <div class="flex flex-col items-center justify-center space-y-3">
-            <component :is="tab.icon" class="!h-10 !w-10" />
-            <div>{{ __('No {0} Found', [__(tab.label)]) }}</div>
-          </div>
-        </div>
-      </template>
-    </Tabs>
   </div>
   <OrganizationModal
     v-model="showOrganizationModal"
@@ -225,6 +268,13 @@
   <QuickEntryModal
     v-if="showQuickEntryModal"
     v-model="showQuickEntryModal"
+    doctype="CRM Organization"
+  />
+  <AssignmentModal
+    v-if="showAssignmentModal"
+    v-model="showAssignmentModal"
+    v-model:assignees="organization.data._assignedTo"
+    :doc="organization.data"
     doctype="CRM Organization"
   />
 </template>
@@ -246,8 +296,13 @@ import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import { globalStore } from '@/stores/global'
 import { usersStore } from '@/stores/users'
 import { statusesStore } from '@/stores/statuses'
+import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
+import MultipleAvatar from '../components/MultipleAvatar.vue'
+import { Dropdown, Button } from 'qbs-vue-ui'
 import { getView } from '@/utils/view'
 import { createToast } from '@/utils'
+import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
+import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
 
 import {
   dateFormat,
@@ -259,23 +314,23 @@ import {
   Breadcrumbs,
   Avatar,
   FileUploader,
-  Dropdown,
   Tabs,
   call,
   createListResource,
-  createDocumentResource,
   usePageMeta,
+  createResource,
 } from 'qbs-vue-ui'
 import { h, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
+import OrgEdit from '@/components/Activities/OrgEdit.vue'
 const props = defineProps({
   organizationId: {
     type: String,
     required: true,
   },
 })
-
+const { statusOptions, getContactStatus } = statusesStore()
+const showAssignmentModal = ref(false)
 const { $dialog } = globalStore()
 const { getDealStatus } = statusesStore()
 const showOrganizationModal = ref(false)
@@ -285,14 +340,83 @@ const detailMode = ref(false)
 const route = useRoute()
 const router = useRouter()
 
-const organization = createDocumentResource({
-  doctype: 'CRM Organization',
-  name: props.organizationId,
-  cache: ['organization', props.organizationId],
-  fields: ['*'],
+const organization = createResource({
+  url: 'crm.fcrm.doctype.crm_organization.api.get_organization',
+  cache: ['CRM Organization', props.organizationId],
+  params: {
+    name: props.organizationId,
+  },
+  auto: true,
+  transform: (data) => {
+    let assignees = data._assign || []
+    const nexData = data
+
+    return {
+      ...nexData,
+      _assignedTo: assignees.map((user) => ({
+        name: user,
+        image: getUser(user).user_image,
+        label: getUser(user).full_name,
+      })),
+    }
+  },
+})
+console.log(organization, 'sdfsdf')
+const fieldsLayout = createResource({
+  url: 'crm.api.doc.get_sidebar_fields',
+  cache: ['fieldsLayout', props.organizationId],
+  params: { doctype: 'CRM Organization', name: props.organizationId },
   auto: true,
 })
+function updateContact(fieldname, value, callback) {
+  value = Array.isArray(fieldname) ? '' : value
 
+  createResource({
+    url: 'frappe.client.set_value',
+    params: {
+      doctype: 'CRM Organization',
+      name: props.organizationId,
+      fieldname: fieldname === 'status' ? 'organization_status' : fieldname,
+      value,
+    },
+    auto: true,
+    onSuccess: () => {
+      organization.reload()
+      createToast({
+        title: __('Organization updated'),
+        icon: 'check',
+        iconClasses: 'text-green-600',
+      })
+      callback?.()
+    },
+    onError: (err) => {
+      createToast({
+        title: __('Error updating Organization'),
+        text: __(err.messages?.[0]),
+        icon: 'x',
+        iconClasses: 'text-red-600',
+      })
+    },
+  })
+}
+function updateField(name, value, callback) {
+  let request = value
+  if (
+    (name === 'interested_services_for_lead' && value) ||
+    (name === 'interested_services_for_deal' && value)
+  ) {
+    request = value?.map((item) => {
+      return {
+        link_field: item,
+      }
+    })
+  }
+
+  updateContact(name, request, () => {
+    organization.data[name] = value
+    callback?.()
+  })
+}
 const breadcrumbs = computed(() => {
   let items = [{ label: __('Organizations'), route: { name: 'Organizations' } }]
 
@@ -431,6 +555,10 @@ function website(url) {
 const tabIndex = ref(0)
 const tabs = [
   {
+    label: 'Details',
+    icon: DocumentIcon,
+  },
+  {
     label: 'Deals',
     icon: h(DealsIcon, { class: 'h-4 w-4' }),
     count: computed(() => deals.data?.length),
@@ -490,7 +618,7 @@ const contacts = createListResource({
 
 const rows = computed(() => {
   let list = []
-  list = !tabIndex.value ? deals : contacts
+  list = tabIndex.value == 1 ? deals : contacts
 
   if (!list.data) return []
 

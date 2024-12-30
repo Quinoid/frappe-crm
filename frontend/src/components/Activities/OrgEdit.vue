@@ -13,7 +13,7 @@
 
       <div class="flex items-center justify-start gap-5 border-b p-5">
         <FileUploader
-          @success="(file) => updateField('image', file.file_url)"
+          @success="(file) => updateField('organization_logo', file.file_url)"
           :validateFile="validateFile"
         >
           <template #default="{ openFileSelector, error }">
@@ -24,18 +24,18 @@
                 <Avatar
                   size="3xl"
                   class="size-12"
-                  :label="doc.data.first_name || __('Untitled')"
-                  :image="doc.data.image"
+                  :label="doc.data.name || __('Untitled')"
+                  :image="doc.data.organization_logo"
                 />
                 <component
-                  :is="doc.data.image ? Dropdown : 'div'"
+                  :is="doc.data.organization_logo ? Dropdown : 'div'"
                   v-bind="
-                    doc.data.image
+                    doc.data.organization_logo
                       ? {
                           options: [
                             {
                               icon: 'upload',
-                              label: doc.data.image
+                              label: doc.data.organization_logo
                                 ? __('Change image')
                                 : __('Upload image'),
                               onClick: openFileSelector,
@@ -43,7 +43,7 @@
                             {
                               icon: 'trash-2',
                               label: __('Remove image'),
-                              onClick: () => updateField('image', ''),
+                              onClick: () => updateField('organization_logo', ''),
                             },
                           ],
                         }
@@ -69,7 +69,7 @@
         <div class="flex flex-col gap-2.5 truncate">
           <Tooltip :text="doc.data?.full_name">
             <div class="truncate text-2xl font-medium">
-              {{ doc.data?.full_name || __('Untitled') }}
+              {{ doc.data?.name || __('Untitled') }}
             </div>
           </Tooltip>
           <div class="flex justify-between items-center">
@@ -160,7 +160,7 @@
     <SidePanelModal
       v-if="showSidePanelModal"
       v-model="showSidePanelModal"
-      doctype="Contact"
+      doctype="CRM Organization"
       @reload="() => props.fieldsLayout.reload()"
     />
   </div>

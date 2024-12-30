@@ -7,6 +7,7 @@ import { reactive, h } from 'vue'
 export const statusesStore = defineStore('crm-statuses', () => {
   let leadStatusesByName = reactive({})
   let dealStatusesByName = reactive({})
+  let contactStatusesByName = reactive({})
   let communicationStatusesByName = reactive({})
 
   const leadStatuses = createListResource({
@@ -21,6 +22,22 @@ export const statusesStore = defineStore('crm-statuses', () => {
         status.colorClass = colorClasses(status.color)
         status.iconColorClass = colorClasses(status.color, true)
         leadStatusesByName[status.name] = status
+      }
+      return statuses
+    },
+  })
+  const contactStatuses = createListResource({
+    doctype: 'Contact Status',
+    fields: ['name', 'color', 'position'],
+    orderBy: 'position asc',
+    cache: 'contact-statuses',
+    initialData: [],
+    auto: true,
+    transform(statuses) {
+      for (let status of statuses) {
+        status.colorClass = colorClasses(status.color)
+        status.iconColorClass = colorClasses(status.color, true)
+        contactStatusesByName[status.name] = status
       }
       return statuses
     },
@@ -76,7 +93,12 @@ export const statusesStore = defineStore('crm-statuses', () => {
     }
     return leadStatusesByName[name]
   }
-
+  function getContactStatus(name) {
+    if (!name) {
+      name = contactStatuses.data[0].name
+    }
+    return contactStatusesByName[name]
+  }
   function getDealStatus(name) {
     if (!name) {
       name = dealStatuses.data[0].name
@@ -93,7 +115,11 @@ export const statusesStore = defineStore('crm-statuses', () => {
 
   function statusOptions(doctype, action, statuses = []) {
     let statusesByName =
-      doctype == 'deal' ? dealStatusesByName : leadStatusesByName
+      doctype == 'deal'
+        ? dealStatusesByName
+        : doctype == 'contact'
+          ? contactStatusesByName
+          : leadStatusesByName
 
     if (statuses.length) {
       statusesByName = statuses.reduce((acc, status) => {
@@ -125,6 +151,7 @@ export const statusesStore = defineStore('crm-statuses', () => {
     dealStatuses,
     communicationStatuses,
     getLeadStatus,
+    getContactStatus,
     getDealStatus,
     getCommunicationStatus,
     statusOptions,

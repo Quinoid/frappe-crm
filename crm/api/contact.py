@@ -1,5 +1,7 @@
 import frappe
 from frappe import _
+from crm.api.doc import get_fields_meta, get_assigned_users
+
 
 
 def validate(doc, method):
@@ -74,6 +76,8 @@ def get_contact(name):
 	contact["phone_nos"] = frappe.get_all(
 		"Contact Phone", filters={"parent": name}, fields=["name", "phone", "is_primary_mobile_no"]
 	)
+	contact["_assign"] = get_assigned_users("Contact", contact.name, contact.owner)
+
 	return contact
 
 @frappe.whitelist()

@@ -18,10 +18,7 @@
         :options="statusOptions('contact', updateField, customStatuses)"
       >
         <template #default="{ open }">
-          <Button
-            :label="contact.data.status"
-            :class="getLeadStatus(contact.data.status).colorClass"
-          >
+          <Button :label="contact.data.contact_status" :class="'grey'">
             <template #prefix>
               <IndicatorIcon />
             </template>
@@ -53,6 +50,13 @@
       />
     </Tabs>
   </div>
+  <AssignmentModal
+    v-if="showAssignmentModal"
+    v-model="showAssignmentModal"
+    v-model:assignees="contact.data._assignedTo"
+    :doc="contact.data"
+    doctype="Contact"
+  />
 </template>
 
 <script setup>
@@ -60,18 +64,26 @@ import Icon from '@/components/Icon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import DealsIcon from '@/components/Icons/DealsIcon.vue'
 import { getView } from '@/utils/view'
+import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
 import { globalStore } from '@/stores/global.js'
-import { Breadcrumbs, Tabs, createResource, usePageMeta } from 'qbs-vue-ui'
-import { ref, computed, h } from 'vue'
+import {
+  Breadcrumbs,
+  Tabs,
+  createResource,
+  usePageMeta,
+  Dropdown,
+} from 'qbs-vue-ui'
+import { ref, computed, h, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { createToast } from '@/utils'
 import Activities from '@/components/Activities/Activities.vue'
 import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
 import { statusesStore } from '@/stores/statuses'
+import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
+import { usersStore } from '@/stores/users'
 import MultipleAvatar from '@/components/MultipleAvatar.vue'
-
 const { $dialog } = globalStore()
-const { statusOptions, getLeadStatus } = statusesStore()
+const { statusOptions, getContactStatus } = statusesStore()
 
 const props = defineProps({
   contactId: {
@@ -80,9 +92,11 @@ const props = defineProps({
   },
 })
 
+let { getUser } = usersStore()
+
 const route = useRoute()
 const router = useRouter()
-
+const showAssignmentModal = ref(false)
 const contact = createResource({
   url: 'crm.api.contact.get_contact',
   cache: ['contact', props.contactId],
@@ -91,13 +105,26 @@ const contact = createResource({
   },
   auto: true,
   transform: (data) => {
+    let assignees = data._assign || []
+    const nexData = data
+
     return {
-      ...data,
+      ...nexData,
       actual_mobile_no: data.mobile_no,
       mobile_no: data.mobile_no,
+      _assignedTo: assignees.map((user) => ({
+        name: user,
+        image: getUser(user).user_image,
+        label: getUser(user).full_name,
+      })),
     }
   },
 })
+onMounted(() => {
+  if (contact.data) return
+  contact.fetch()
+})
+console.log(contact)
 function updateContact(fieldname, value, callback) {
   value = Array.isArray(fieldname) ? '' : value
 
@@ -106,7 +133,7 @@ function updateContact(fieldname, value, callback) {
     params: {
       doctype: 'Contact',
       name: props.contactId,
-      fieldname,
+      fieldname: fieldname === 'status' ? 'contact_status' : fieldname,
       value,
     },
     auto: true,
@@ -141,6 +168,7 @@ function updateField(name, value, callback) {
       }
     })
   }
+
   updateContact(name, request, () => {
     contact.data[name] = value
     callback?.()
