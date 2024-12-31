@@ -116,6 +116,7 @@ class CRMLead(Document):
 				"salutation": self.salutation,
 				"gender": self.gender,
 				"designation": self.job_title,
+				"job_title": self.job_title,
 				"company_name": self.organization,
 				"image": self.image or "",
 				"owner": self.owner or "",
