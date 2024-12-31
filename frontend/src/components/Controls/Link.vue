@@ -10,6 +10,7 @@
       :size="attrs.size || 'sm'"
       :variant="attrs.variant"
       :placeholder="attrs.placeholder"
+      :doctype="doctype"
       :filterable="false"
     >
       <template #target="{ open, togglePopover }">
@@ -131,7 +132,7 @@ const options = createResource({
     let allData = data.map((option) => {
       return {
         label:
-          props.from == 'deal_contact'
+          props.from == 'deal_contact' || props.doctype == 'Language'
             ? option.label && option.label !== ''
               ? option.label
               : option.value

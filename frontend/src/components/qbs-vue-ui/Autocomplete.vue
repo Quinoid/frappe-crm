@@ -164,6 +164,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  doctype: {
+    type: String, 
+    default: null
+  }
 })
 const emit = defineEmits(['update:modelValue', 'update:query', 'change'])
 const query = ref('')
