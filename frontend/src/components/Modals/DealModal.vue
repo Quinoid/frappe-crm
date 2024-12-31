@@ -147,7 +147,7 @@ const filteredSections = computed(() => {
 
   allSections.forEach((s) => {
     if (
-      s.label !== 'Deal Contact' &&
+      s.label !== 'Deal Contacts' &&
       s.label !== 'Deal Organisation' &&
       s.label !== 'Select Organization' &&
       s.label !== 'Select Contact'
