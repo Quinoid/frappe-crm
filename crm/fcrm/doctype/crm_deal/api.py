@@ -30,14 +30,14 @@ def get_deal(name):
 	deal["doctype"] = "CRM Deal"
 
 	# Fetch the interested services from the Custom Lead Service table
-    services_query = (
-        frappe.qb.from_(CustomLeadService)
-        .select(CustomLeadService.link_field) 
-        .where(CustomLeadService.parent == name)
-    )
-    services = services_query.run(as_dict=True)
-    
-    deal["interested_services_for_lead"] = [service["link_field"] for service in services]
+	services_query = (
+		frappe.qb.from_(CustomLeadService)
+		.select(CustomLeadService.link_field) 
+		.where(CustomLeadService.parent == name)
+	)
+	services = services_query.run(as_dict=True)
+	
+	deal["interested_services_for_lead"] = [service["link_field"] for service in services]
 
 	deal["fields_meta"] = get_fields_meta("CRM Deal") 
 	deal["_form_script"] = get_form_script('CRM Deal')
