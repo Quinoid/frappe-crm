@@ -7,6 +7,7 @@ from crm.fcrm.doctype.crm_form_script.crm_form_script import get_form_script
 @frappe.whitelist()
 def get_deal(name):
 	Deal = frappe.qb.DocType("CRM Deal")
+	CustomLeadService = frappe.qb.DocType("Custom Lead Service")
 
 	query = (
 		frappe.qb.from_(Deal)
