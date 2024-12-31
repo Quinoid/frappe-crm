@@ -118,6 +118,17 @@ class CRMLead(Document):
 				"designation": self.job_title,
 				"company_name": self.organization,
 				"image": self.image or "",
+				"owner": self.owner or "",
+				"email_id": self.email or "",
+				"phone": self.phone or "",
+				"mobile_no": self.mobile_no or "",
+				"linkedin_profile": self.linkedin_profile or "",
+				"preferred_language": self.preferred_language or "",
+				"address_line_1": self.address_line_1 or "",
+				"address_line_2": self.address_line_2 or "",
+				"country": self.country or "",
+				"state": self.state or "",
+				"city": self.city or "",
 			}
 		)
 
@@ -150,7 +161,20 @@ class CRMLead(Document):
 				"website": self.website,
 				"territory": self.territory,
 				"industry": self.industry,
+				"currency": self.currency,
 				"annual_revenue": self.annual_revenue,
+				"owner": self.owner or "",
+				"email": self.email or "",
+				"phone": self.phone or "",
+				"mobile_no": self.mobile_no or "",
+				"no_of_employees": self.no_of_employees or "",
+				"type_of_business": self.type_of_business or "",
+				"sector": self.sector or "",
+				"address_line_1": self.address_line_1 or "",
+				"address_line_2": self.address_line_2 or "",
+				"country": self.country or "",
+				"state": self.state or "",
+				"city": self.city or "",
 			}
 		)
 		organization.insert(ignore_permissions=True)
