@@ -131,7 +131,6 @@ class CRMLead(Document):
 				"state": self.state or "",
 				"city": self.city or "",
 				"pin_code": self.pin_code or "",
-				
 			}
 		)
 
@@ -179,7 +178,6 @@ class CRMLead(Document):
 				"state": self.state or "",
 				"city": self.city or "",
 				"pin_code": self.pin_code or "",
-
 			}
 		)
 		organization.insert(ignore_permissions=True)
@@ -380,3 +378,5 @@ def convert_to_deal(lead, doc=None):
 	organization = lead.create_organization()
 	deal = lead.create_deal(contact, organization)
 	return deal
+
+
