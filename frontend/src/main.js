@@ -23,6 +23,7 @@ import {
   frappeRequest,
   FeatherIcon,
 } from 'qbs-vue-ui'
+import CanvasJSStockChart from '@canvasjs/vue-stockcharts'
 
 let globalComponents = {
   Button,
@@ -46,6 +47,7 @@ app.use(FrappeUI)
 app.use(pinia)
 app.use(router)
 app.use(translationPlugin)
+app.use(CanvasJSStockChart)
 app.use(posthogPlugin)
 for (let key in globalComponents) {
   app.component(key, globalComponents[key])

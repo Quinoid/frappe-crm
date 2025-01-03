@@ -83,3 +83,6 @@
   scrollbar-width: 3px; /* Width of the scrollbar (thin or auto) */
   scrollbar-color: #f3f3f3 #ffffff; /* Thumb color and track color */
 }
+.canvasjs-chart-credit{
+  display: none;
+}
