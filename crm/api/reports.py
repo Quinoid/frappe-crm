@@ -66,8 +66,6 @@ def get_deal_summary_data(start_date, end_date, category_name="Open"):
     return data
 
 
-
-
 @frappe.whitelist()
 def get_task_summary_data(start_date, end_date):
 
@@ -90,13 +88,13 @@ def get_task_summary_data(start_date, end_date):
         GROUP BY 
             users.full_name
         ORDER BY 
-            TotalTasks DESC
+            CompletedTasks DESC
+        LIMIT 10
     """
     
     data = frappe.db.sql(query, (start_date, end_date), as_dict=True)
     
     return data
-
 
 
 @frappe.whitelist()
@@ -175,7 +173,7 @@ def get_user_summary(start_date, end_date):
             `tabCustom User` AS participant_events ON participant_events.parent = events.name 
             AND participant_events.link_field = users.email
         WHERE 
-            tasks.completion_date BETWEEN %s AND %s
+            tasks.task_completion_date BETWEEN %s AND %s
             OR deals.close_date BETWEEN %s AND %s
             OR communications.creation BETWEEN %s AND %s
             OR calls.creation BETWEEN %s AND %s
@@ -183,8 +181,8 @@ def get_user_summary(start_date, end_date):
         GROUP BY 
             users.full_name
         ORDER BY 
-            TotalDealValue DESC
-        LIMIT 100
+            CompletedTasks DESC
+        LIMIT 10
     """
 
     data = frappe.db.sql(query, (
