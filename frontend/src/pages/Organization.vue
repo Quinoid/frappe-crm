@@ -60,7 +60,10 @@
         </button>
       </template>
       <template #default="{ tab }">
-        <div class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)] overflow-auto">
+        <div
+          v-if="tab.label === 'Details'"
+          class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)] overflow-auto"
+        >
           <OrgEdit
             class="mb-4"
             :doc="organization"
@@ -72,20 +75,29 @@
         </div>
         <DealsListView
           class="mt-4"
-          v-if="tab.label === 'Deals' && rows.length"
-          :rows="rows"
-          :columns="columns"
+          v-if="tab.label === 'Deals' && dealRows.length"
+          :rows="dealRows"
+          :columns="dealColumns"
           :options="{ selectable: false, showTooltip: false }"
         />
         <ContactsListView
           class="mt-4"
-          v-if="tab.label === 'Contacts' && rows.length"
-          :rows="rows"
-          :columns="columns"
+          v-if="tab.label === 'Contacts' && contactRows.length"
+          :rows="contactRows"
+          :columns="contactColumns"
           :options="{ selectable: false, showTooltip: false }"
         />
         <div
-          v-if="!rows.length && tab.label !== 'Details'"
+          v-if="!contactRows.length && tab.label === 'Contacts'"
+          class="grid flex-1 place-items-center text-xl font-medium text-gray-500"
+        >
+          <div class="flex flex-col items-center justify-center space-y-3">
+            <component :is="tab.icon" class="!h-10 !w-10" />
+            <div>{{ __('No {0} Found', [__(tab.label)]) }}</div>
+          </div>
+        </div>
+        <div
+          v-if="!dealRows.length && tab.label === 'Deals'"
           class="grid flex-1 place-items-center text-xl font-medium text-gray-500"
         >
           <div class="flex flex-col items-center justify-center space-y-3">
@@ -361,7 +373,6 @@ const organization = createResource({
     }
   },
 })
-console.log(organization, 'sdfsdf')
 const fieldsLayout = createResource({
   url: 'crm.api.doc.get_sidebar_fields',
   cache: ['fieldsLayout', props.organizationId],
@@ -616,19 +627,26 @@ const contacts = createListResource({
   auto: true,
 })
 
-const rows = computed(() => {
+const dealRows = computed(() => {
   let list = []
-  list = tabIndex.value == 1 ? deals : contacts
+  list = deals
 
   if (!list.data) return []
 
   return list.data.map((row) => {
-    return !tabIndex.value ? getDealRowObject(row) : getContactRowObject(row)
+    return getDealRowObject(row)
   })
 })
 
-const columns = computed(() => {
-  return tabIndex.value === 0 ? dealColumns : contactColumns
+const contactRows = computed(() => {
+  let list = []
+  list = contacts
+
+  if (!list.data) return []
+
+  return list.data.map((row) => {
+    return getContactRowObject(row)
+  })
 })
 
 function getDealRowObject(deal) {
@@ -636,7 +654,7 @@ function getDealRowObject(deal) {
     name: deal.name,
     organization: {
       label: deal.organization,
-      logo: props.organization?.organization_logo,
+      logo: deal?.organization_logo,
     },
     annual_revenue: formatNumberIntoCurrency(
       deal.annual_revenue,
@@ -658,7 +676,7 @@ function getDealRowObject(deal) {
     },
   }
 }
-
+console.log(organization.data, organization)
 function getContactRowObject(contact) {
   return {
     name: contact.name,
@@ -671,7 +689,7 @@ function getContactRowObject(contact) {
     mobile_no: contact.mobile_no,
     company_name: {
       label: contact.company_name,
-      logo: props.organization?.organization_logo,
+      logo: contact?.organization_logo,
     },
     modified: {
       label: dateFormat(contact.modified, dateTooltipFormat),

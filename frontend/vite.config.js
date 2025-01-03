@@ -81,6 +81,9 @@ export default defineConfig({
     },
   },
   build: {
+    rollupOptions: {
+      external: ['chartjs-chart-funnel'],
+    },
     outDir: '../crm/public/frontend',
     emptyOutDir: true,
     commonjsOptions: {

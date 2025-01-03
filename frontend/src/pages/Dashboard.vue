@@ -26,9 +26,9 @@
 
       <!-- Tasks Card -->
       <div class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold">Deals</h3>
+        <h3 class="text-lg font-semibold">Tasks</h3>
         <p class="text-3xl font-bold text-red-600">
-          {{ dashboardData?.deal_total_count }}
+          {{ dashboardData?.taskCount }}
         </p>
       </div>
 
@@ -39,7 +39,11 @@
         </p>
       </div>
     </div>
+
     <div class="flex-col gap-4 flex w-full lg:w-3/5">
+      <!-- <FunnelChart />
+      <BarChart /> -->
+      <LineChart />
       <!-- Task List -->
       <div
         class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
@@ -90,6 +94,27 @@
             </div>
           </div>
         </div>
+      </div>
+      <div
+        class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full overflow-y-auto"
+      >
+        <h3 class="text-lg font-medium mb-4 text-gray-900">Upcoming Events</h3>
+
+        <BarChart />
+      </div>
+      <div
+        class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full overflow-y-auto"
+      >
+        <h3 class="text-lg font-medium mb-4 text-gray-900">Upcoming Events</h3>
+
+        <LineChart />
+      </div>
+      <div
+        class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full overflow-y-auto"
+      >
+        <h3 class="text-lg font-medium mb-4 text-gray-900">Upcoming Events</h3>
+
+        <FunnelChart />
       </div>
       <div
         class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
@@ -208,8 +233,10 @@ import { Breadcrumbs, createResource } from 'qbs-vue-ui'
 import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import { callEnabled } from '@/composables/settings'
-
+import BarChart from '@/components/Dashboard/BarChart.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import LineChart from '@/components/Dashboard/LineChart.vue'
+import FunnelChart from '@/components/Dashboard/FunnelChart.vue'
 let title = 'Dashboard'
 const breadcrumbs = [{ label: title, route: { name: 'Dashboard' } }]
 
@@ -232,6 +259,93 @@ const dashboardResource = createResource({
     }
   },
 })
+const leadConversionReport = createResource({
+  url: 'crm.api.reports.get_lead_conversion_data',
+  cache: ['leadConversionReport'],
+  auto: true,
+  params: {
+    start_date: '2023-01-01',
+    end_date: '2026-01-31',
+  },
+  transform: (data) => {
+    const message = data || {}
+    console.log(message)
+    return {
+      ...message,
+    }
+  },
+})
+const dealSummaryReport = createResource({
+  url: 'crm.api.reports.get_deal_summary_data',
+  cache: ['dealConversionReport'],
+  auto: true,
+  params: {
+    start_date: '2023-01-01',
+    end_date: '2026-01-31',
+  },
+  transform: (data) => {
+    const message = data || {}
+    console.log(message)
+    return {
+      ...message,
+    }
+  },
+})
+const taskCompletionReport = createResource({
+  url: 'crm.api.reports.get_task_summary_data',
+  cache: ['taskCompletionReport'],
+  auto: true,
+  params: {
+    start_date: '2023-01-01',
+    end_date: '2026-01-31',
+  },
+  transform: (data) => {
+    const message = data || {}
+    console.log(message)
+    return {
+      ...message,
+    }
+  },
+})
+const salesFunnelReport = createResource({
+  url: 'crm.api.reports.get_funnel_data',
+  cache: ['salesFunnelReport'],
+  auto: true,
+  params: {
+    start_date: '2023-01-01',
+    end_date: '2026-01-31',
+  },
+  transform: (data) => {
+    const message = data || {}
+    console.log(message)
+    return {
+      ...message,
+    }
+  },
+})
+const teamPerformanceReport = createResource({
+  url: 'crm.api.reports.get_user_summary',
+  cache: ['teamPerformanceReport'],
+  params: {
+    start_date: '2023-01-01',
+    end_date: '2026-01-31',
+  },
+  auto: true,
+  transform: (data) => {
+    const message = data || {}
+    console.log(message)
+    return {
+      ...message,
+    }
+  },
+})
+console.log(
+  salesFunnelReport,
+  teamPerformanceReport,
+  taskCompletionReport,
+  leadConversionReport,
+  dealSummaryReport,
+)
 
 const dashboardData = computed(() => dashboardResource.data)
 const isLoading = computed(() => dashboardResource.isLoading)

@@ -821,7 +821,7 @@ const emailBox = ref(null)
 const whatsappBox = ref(null)
 
 watch([reload, reload_email], ([reload_value, reload_email_value]) => {
-  if (reload_value || reload_email_value) {
+  if ((reload_value || reload_email_value )&&title!=='Details') {
     all_activities.reload()
     reload.value = false
     reload_email.value = false
