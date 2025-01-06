@@ -19,7 +19,6 @@
   </div>
 </template>
 <script setup>
-
 import HorizondalBarGraph from '@/components/Dashboard/HorizondalBarGraph.vue'
 
 import { ref } from 'vue'
@@ -49,7 +48,7 @@ const get_SalesFunnelReport = async () => {
       const errorData = await response.json()
       throw new Error(errorData._server_messages || response.statusText)
     } else {
-        const data = await response.json()
+      const data = await response.json()
       salesFunnelData.value = convertSalesFunnelData(data.message)
       salsFunnelUpdateKey.value.value = new Date().getTime()
     }
@@ -67,8 +66,8 @@ function convertSalesFunnelData(message) {
   return data.map((item) => ({
     type: 'bar',
     showInLegend: true,
-    name: item.DealStage, // Use DealStage as the name
-    color: generateSalesFunnelColor(item.DealStage), // Optional: Generate a unique color for each DealStage
+    name: item.FunnelStage, // Use DealStage as the name
+    color: generateSalesFunnelColor(item.FunnelStage), // Optional: Generate a unique color for each DealStage
     dataPoints: [
       { y: item.TotalLeads || 0, label: 'Total Deals' }, // Replace undefined/null with 0
       { y: item.TotalDealValue || 0, label: 'Total Deal Value' },
@@ -81,8 +80,9 @@ function convertSalesFunnelData(message) {
 // Optional: Generate a color based on the DealStage
 function generateSalesFunnelColor(dealStage) {
   const colors = {
-    Campaign: '#2196F3',
-    Advertisement: '#81D4FA',
+    New: '#2196F3',
+    Qualified: '#81D4FA',
+    Contacted: '#81D4FA',
   }
   return colors[dealStage] || '#CCCCCC' // Default color if not specified
 }

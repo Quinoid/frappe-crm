@@ -94,11 +94,11 @@
           </div>
         </div>
       </div>
-      <LeadConversionReport />
-      <DealConversionReportData />
+      <!-- <LeadConversionReport />
+      <DealConversionReportData /> -->
       <SaleFunnelReport />
-      <TaskCompletionReport />
-      <TeamPerformanceReport />
+      <!-- <TaskCompletionReport />
+      <TeamPerformanceReport /> -->
 
       <div
         class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
@@ -218,11 +218,11 @@ import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import { callEnabled } from '@/composables/settings'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import DealConversionReportData from '../components/Dashboard/DealConversionReportData.vue'
-import LeadConversionReport from '../components/Dashboard/LeadConversionReport.vue'
+// import DealConversionReportData from '../components/Dashboard/DealConversionReportData.vue'
+// import LeadConversionReport from '../components/Dashboard/LeadConversionReport.vue'
 import SaleFunnelReport from '../components/Dashboard/SaleFunnelReport.vue'
-import TaskCompletionReport from '../components/Dashboard/TaskCompletionReport.vue'
-import TeamPerformanceReport from '../components/Dashboard/TeamPerformanceReport.vue'
+// import TaskCompletionReport from '../components/Dashboard/TaskCompletionReport.vue'
+// import TeamPerformanceReport from '../components/Dashboard/TeamPerformanceReport.vue'
 let title = 'Dashboard'
 const breadcrumbs = [{ label: title, route: { name: 'Dashboard' } }]
 
