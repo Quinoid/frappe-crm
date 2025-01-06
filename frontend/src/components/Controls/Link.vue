@@ -119,7 +119,16 @@ watchDebounced(
   () => reload(''),
   { debounce: 300, immediate: true },
 )
-
+const handleCheckDocType = (value) => {
+  return value === 'Lead Quality' ||
+    value === 'Lead Priority' ||
+    value === 'Type Of Business' ||
+    value === 'CRM Organization Status' ||
+    value === 'Contact Status' ||
+    value === 'CRM Deal Probability'
+    ? true
+    : false
+}
 const options = createResource({
   url: 'frappe.desk.search.search_link',
   cache: [props.doctype, text.value, props.hideMe],
@@ -132,7 +141,9 @@ const options = createResource({
     let allData = data.map((option) => {
       return {
         label:
-          props.from == 'deal_contact' || props.doctype == 'Language'
+          props.from == 'deal_contact' ||
+          props.doctype == 'Language' ||
+          handleCheckDocType(props.doctype)
             ? option.label && option.label !== ''
               ? option.label
               : option.value

@@ -101,18 +101,7 @@
                   />
                 </Button>
               </Tooltip>
-              <Tooltip :text="__('Go to website')">
-                <Button class="h-7 w-7">
-                  <LinkIcon
-                    class="h-4 w-4"
-                    @click="
-                      doc.data.website
-                        ? openWebsite(doc.data.website)
-                        : errorMessage(__('No website set'))
-                    "
-                  />
-                </Button>
-              </Tooltip>
+            
             </div>
             <template v-if="i == 0 && isManager()">
               <Button

@@ -24,6 +24,7 @@ import {
   FeatherIcon,
 } from 'qbs-vue-ui'
 import CanvasJSStockChart from '@canvasjs/vue-stockcharts'
+import CanvasJSChart from '@canvasjs/vue-charts'
 
 let globalComponents = {
   Button,
@@ -46,6 +47,8 @@ setConfig('resourceFetcher', frappeRequest)
 app.use(FrappeUI)
 app.use(pinia)
 app.use(router)
+app.use(CanvasJSChart) // install the CanvasJS Vuejs Chart Plugin
+
 app.use(translationPlugin)
 app.use(CanvasJSStockChart)
 app.use(posthogPlugin)
