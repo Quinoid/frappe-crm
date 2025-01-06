@@ -49,48 +49,46 @@
         />
       </template>
       <template v-else>
-        <template>
-          <div class="data-table">
-            <table
-              class="table-auto border-collapse border border-gray-400 w-full text-left"
-            >
-              <thead>
-                <tr class="bg-gray-100">
-                  <th class="border border-gray-300 px-4 py-2">Deal Stage</th>
-                  <th class="border border-gray-300 px-4 py-2">Total Deals</th>
-                  <th class="border border-gray-300 px-4 py-2">
-                    Total Deal Value
-                  </th>
-                  <th class="border border-gray-300 px-4 py-2">
-                    Weighted Deal Value
-                  </th>
-                  <th class="border border-gray-300 px-4 py-2">
-                    Avg Close Probability (%)
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in tableData" :key="index">
-                  <td class="border border-gray-300 px-4 py-2">
-                    {{ item.DealStage }}
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2">
-                    {{ item.TotalDeals }}
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2">
-                    {{ formatCurrency(item.TotalDealValue) }}
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2">
-                    {{ formatCurrency(item.WeightedDealValue) }}
-                  </td>
-                  <td class="border border-gray-300 px-4 py-2">
-                    {{ item.AvgCloseProbability }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </template>
+        <div class="data-table">
+          <table
+            class="table-auto border-collapse border border-gray-400 w-full text-left"
+          >
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-4 py-2">Deal Stage</th>
+                <th class="border border-gray-300 px-4 py-2">Total Deals</th>
+                <th class="border border-gray-300 px-4 py-2">
+                  Total Deal Value
+                </th>
+                <th class="border border-gray-300 px-4 py-2">
+                  Weighted Deal Value
+                </th>
+                <th class="border border-gray-300 px-4 py-2">
+                  Avg Close Probability (%)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in tableData" :key="index">
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ item.DealStage }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ item.TotalDeals }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ formatCurrency(item.TotalDealValue) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ formatCurrency(item.WeightedDealValue) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ item.AvgCloseProbability }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </template>
     </div>
   </div>
@@ -131,6 +129,7 @@ const get_dealSummaryData = async () => {
       const data = await response.json()
       dealSummaryReportData.value = convertToChartData(data.message)
       tableData.value = data.message
+      console.log(tableData.value, data.message)
       dealSummaryUpdateKey.value.value = new Date().getTime()
     }
   } catch (error) {
@@ -173,14 +172,3 @@ function formatCurrency(value) {
   })
 }
 </script>
-
-<style scoped>
-.data-table {
-  margin: 20px 0;
-  overflow-x: auto;
-}
-
-.table-auto {
-  font-family: Arial, sans-serif;
-}
-</style>
