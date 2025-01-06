@@ -144,7 +144,7 @@ function transformLeadData(inputData) {
       generateRandomColor(),
     ),
   }
-  const datasets = categories.map((category) => ({
+  const datasets = categories.map((category,index) => ({
     label: category,
     data: inputData?.map((item) => item[category]),
     backgroundColor: colors.backgroundColor[index],

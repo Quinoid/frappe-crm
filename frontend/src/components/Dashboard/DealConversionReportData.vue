@@ -145,7 +145,7 @@ function convertToChartData(message) {
     type: 'bar',
     showInLegend: true,
     name: item.DealStage, // Use DealStage as the name
-    color: generateRandomColor, // Optional: Generate a unique color for each DealStage
+    color: generateRandomColor(), // Optional: Generate a unique color for each DealStage
     dataPoints: [
       { y: item.TotalDeals, label: 'Total Deals' },
       { y: item.TotalDealValue, label: 'Total Deal Value' },

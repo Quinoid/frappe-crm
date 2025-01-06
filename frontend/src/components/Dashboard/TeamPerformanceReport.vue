@@ -7,7 +7,7 @@
         Team Performance Report
       </h3>
       <div class="flex gap-1">
-       <span @click="graphView = true" class="cursor-pointer">
+        <span @click="graphView = true" class="cursor-pointer">
           <GraphIcon
             class="h-4 w-4"
             :class="graphView ? 'text-green-600' : 'text-gray-600'"
@@ -143,6 +143,7 @@ const get_teamPerformanceReport = async () => {
       teamPerformanceReportData.value = transformteamPerformanceReport(
         data.message?.summary,
       )
+
       teamPerformanceUpdateKey.value.value = new Date().getTime()
     }
   } catch (error) {
@@ -171,7 +172,8 @@ function transformteamPerformanceReport(inputData) {
       generateRandomColor(),
     ),
   }
-  const datasets = categories.map((category) => ({
+
+  const datasets = categories.map((category, index) => ({
     label: category,
     data: inputData.map((item) => item[category]),
     backgroundColor: colors.backgroundColor[index],

@@ -77,7 +77,7 @@ export default {
   },
 }
 </script> -->
-<template>
+<template v-if="chartData.labels.length > 0">
   <Bar
     class="h-full w-full"
     id="my-chart-id"
@@ -122,7 +122,6 @@ export default defineComponent({
   setup(props) {
     // Destructure props for reactivity
     const { chartData } = toRefs(props)
-    console.log(chartData.value, 'chartData')
     const chartOptions = {
       responsive: true,
       plugins: {
