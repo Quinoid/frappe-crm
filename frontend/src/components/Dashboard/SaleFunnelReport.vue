@@ -67,7 +67,7 @@ function convertSalesFunnelData(message) {
     type: 'bar',
     showInLegend: true,
     name: item.FunnelStage, // Use DealStage as the name
-    color: generateSalesFunnelColor(item.FunnelStage), // Optional: Generate a unique color for each DealStage
+    color: generateRandomColor(), // Optional: Generate a unique color for each DealStage
     dataPoints: [
       { y: item.TotalLeads || 0, label: 'Total Deals' }, // Replace undefined/null with 0
       { y: item.TotalDealValue || 0, label: 'Total Deal Value' },
@@ -77,13 +77,14 @@ function convertSalesFunnelData(message) {
   }))
 }
 
-// Optional: Generate a color based on the DealStage
-function generateSalesFunnelColor(dealStage) {
-  const colors = {
-    New: '#2196F3',
-    Qualified: '#81D4FA',
-    Contacted: '#81D4FA',
-  }
-  return colors[dealStage] || '#CCCCCC' // Default color if not specified
+function generateRandomColor() {
+  // Generate a random hue (0-360 degrees)
+  const hue = Math.floor(Math.random() * 360)
+  // High saturation (70-100%) and brightness (50-70%)
+  const saturation = Math.floor(Math.random() * 31) + 70 // 70% to 100%
+  const lightness = Math.floor(Math.random() * 21) + 50 // 50% to 70%
+
+  // Convert HSL to a CSS-compatible string
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
 }
 </script>

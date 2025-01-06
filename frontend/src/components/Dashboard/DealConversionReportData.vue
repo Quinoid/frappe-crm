@@ -48,7 +48,7 @@ const get_dealSummaryData = async () => {
       const errorData = await response.json()
       throw new Error(errorData._server_messages || response.statusText)
     } else {
-        const data = await response.json()
+      const data = await response.json()
       dealSummaryReportData.value = convertToChartData(data.message)
       dealSummaryUpdateKey.value.value = new Date().getTime()
     }
@@ -65,7 +65,7 @@ function convertToChartData(message) {
     type: 'bar',
     showInLegend: true,
     name: item.DealStage, // Use DealStage as the name
-    color: generateColor(item.DealStage), // Optional: Generate a unique color for each DealStage
+    color: generateRandomColor, // Optional: Generate a unique color for each DealStage
     dataPoints: [
       { y: item.TotalDeals, label: 'Total Deals' },
       { y: item.TotalDealValue, label: 'Total Deal Value' },
@@ -75,12 +75,14 @@ function convertToChartData(message) {
   }))
 }
 
-// Optional: Generate a color based on the DealStage
-function generateColor(dealStage) {
-  const colors = {
-    Campaign: '#2196F3',
-    Advertisement: '#81D4FA',
-  }
-  return colors[dealStage] || '#CCCCCC' // Default color if not specified
+function generateRandomColor() {
+  // Generate a random hue (0-360 degrees)
+  const hue = Math.floor(Math.random() * 360)
+  // High saturation (70-100%) and brightness (50-70%)
+  const saturation = Math.floor(Math.random() * 31) + 70 // 70% to 100%
+  const lightness = Math.floor(Math.random() * 21) + 50 // 50% to 70%
+
+  // Convert HSL to a CSS-compatible string
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
 }
 </script>

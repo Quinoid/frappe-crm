@@ -50,7 +50,7 @@ const getTaskCompletionData = async () => {
       const errorData = await response.json()
       throw new Error(errorData._server_messages || response.statusText)
     } else {
-        const data = await response.json()
+      const data = await response.json()
       taskCompletionReportData.value = transformTaskData(data.message)
       taskCompletionUpdateKey.value.value = new Date().getTime()
     }
@@ -70,19 +70,34 @@ function transformTaskData(inputData) {
     'AvgCompletionTime',
   ]
   const colors = {
-    backgroundColor: ['#3498db'], // Colors for the bars
-    borderColor: ['#2980b9'], // Border colors
+    backgroundColor: Array.from({ length: categories.length }, () =>
+      generateRandomColor(),
+    ),
+    borderColor: Array.from({ length: categories.length }, () =>
+      generateRandomColor(),
+    ),
   }
+
   const datasets = categories.map((category) => ({
     label: category,
     data: inputData.map((item) => item[category]),
-    backgroundColor: colors.backgroundColor,
-    borderColor: colors.borderColor,
+    backgroundColor: colors.backgroundColor[index],
+    borderColor: colors.borderColor[index],
     borderWidth: 2, // Border thickness
   }))
   return {
     labels: inputData?.map((item) => item.AssignedTo),
     datasets: datasets,
   }
+}
+function generateRandomColor() {
+  // Generate a random hue (0-360 degrees)
+  const hue = Math.floor(Math.random() * 360)
+  // High saturation (70-100%) and brightness (50-70%)
+  const saturation = Math.floor(Math.random() * 31) + 70 // 70% to 100%
+  const lightness = Math.floor(Math.random() * 21) + 50 // 50% to 70%
+
+  // Convert HSL to a CSS-compatible string
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
 }
 </script>
