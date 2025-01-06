@@ -83,7 +83,13 @@ export default {
     id="my-chart-id"
     :options="chartOptions"
     :data="chartData"
+    v-if="chartData.datasets.length > 0"
   />
+  <div v-else>
+    <div class="flex flex-col items-center justify-center">
+      <div class="text-gray-500 text-2xl">No data available</div>
+    </div>
+  </div>
 </template>
 
 <script>

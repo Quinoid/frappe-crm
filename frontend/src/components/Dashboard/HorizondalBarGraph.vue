@@ -115,7 +115,11 @@ export default {
       ref="chartContainer"
       style="width: 100%; height: 360px"
     ></div>
-    <div v-else>No data available</div>
+    <div v-else>
+      <div class="flex flex-col items-center justify-center">
+        <div class="text-gray-500 text-2xl">No data available</div>
+      </div>
+    </div>
   </div>
 </template>
 
