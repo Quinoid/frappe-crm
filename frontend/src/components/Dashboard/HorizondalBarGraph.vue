@@ -156,7 +156,7 @@ export default {
       animationEnabled: true,
       theme: 'light2',
       axisY: {
-        title: 'Users',
+        title: '',
         includeZero: true,
       },
       legend: {
