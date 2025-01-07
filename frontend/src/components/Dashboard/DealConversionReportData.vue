@@ -2,10 +2,20 @@
   <div
     class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full overflow-y-auto"
   >
-    <div class="flex justify-between items-center">
-      <h3 class="text-lg font-medium mb-4 text-gray-900">
+   
+    <div class="flex justify-between items-center mb-4 ">
+      <div class="flex gap-2 items-center">
+      <h3 class="text-lg font-medium  text-gray-900">
         Deal Pipeline Report
       </h3>
+      <DateRangePicker
+        v-model="filterData"
+        variant="subtle"
+        class="!w-[210px]"
+        placeholder="Placeholder"
+        :disabled="false"
+      />
+    </div>
       <div class="flex gap-2">
         <Tooltip :text="__('Graph View')">
         <span @click="graphView = true" class="cursor-pointer">
@@ -108,10 +118,10 @@
 </template>
 <script setup>
 import HorizondalBarGraph from '@/components/Dashboard/HorizondalBarGraph.vue'
-import { ref } from 'vue'
+import { ref ,watch} from 'vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
-import { Tooltip } from 'qbs-vue-ui'
+import { Tooltip,DateRangePicker } from 'qbs-vue-ui'
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { generateRandomColor } from '@/utils/colors'
@@ -120,8 +130,11 @@ const dealSummaryUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
 const graphView = ref(true)
 const tableData = ref([])
-
+const dateRange = ref([new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],new Date().toISOString().split('T')[0]])
+const filterData = ref(dateRange.value.join(','));
 const get_dealSummaryData = async () => {
+    const filters=filterData.value.split(',')
+
   dealSummaryUpdateKey.value.isLoading = true
   try {
     const response = await fetch(
@@ -133,8 +146,8 @@ const get_dealSummaryData = async () => {
           'X-Frappe-CSRF-Token': window.csrf_token,
         },
         body: JSON.stringify({
-          start_date: '2023-01-01',
-          end_date: '2026-01-31',
+           start_date: filters[0],
+          end_date: filters[1],
         }),
       },
     )
@@ -156,7 +169,14 @@ const get_dealSummaryData = async () => {
   }
 }
 get_dealSummaryData()
+watch(
+  () => filterData.value, // Watching the entire array
+  (newVal, oldVal) => {
 
+    get_dealSummaryData(); // Call the API whenever the object changes
+  },
+  { deep: true } // Ensure nested changes are detected
+);
 function convertToChartData(message) {
   return message.map((item) => ({
     type: 'bar',

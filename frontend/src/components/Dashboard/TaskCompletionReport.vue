@@ -2,10 +2,20 @@
   <div
     class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full overflow-y-auto"
   >
-    <div class="flex justify-between items-center">
-      <h3 class="text-lg font-medium mb-4 text-gray-900">
+  
+        <div class="flex justify-between items-center mb-4 ">
+      <div class="flex gap-2 items-center">
+      <h3 class="text-lg font-medium  text-gray-900">
         Task Completion Report
       </h3>
+      <DateRangePicker
+        v-model="filterData"
+        variant="subtle"
+        placeholder="Placeholder"
+        class="!w-[210px]"
+        :disabled="false"
+     />
+    </div>
       <div class="flex gap-2">
         <Tooltip :text="__('Graph View')">
         <span @click="graphView = true" class="cursor-pointer">
@@ -108,8 +118,8 @@
 import BarChart from '@/components/Dashboard/BarChart.vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
-import { ref } from 'vue'
-import { Tooltip } from 'qbs-vue-ui'
+import { ref ,watch} from 'vue'
+import { Tooltip,DateRangePicker } from 'qbs-vue-ui'
 import jsPDF from 'jspdf';
 import { generateRandomColor } from '@/utils/colors'
 import autoTable from 'jspdf-autotable';
@@ -118,7 +128,11 @@ const taskCompletionUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
 const graphView = ref(true)
 const tableData = ref([])
+const dateRange = ref([new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],new Date().toISOString().split('T')[0]])
+const filterData = ref(dateRange.value.join(','));
 const getTaskCompletionData = async () => {
+    const filters=filterData.value.split(',')
+
   taskCompletionUpdateKey.value.isLoading = true
   try {
     const response = await fetch(
@@ -130,8 +144,8 @@ const getTaskCompletionData = async () => {
           'X-Frappe-CSRF-Token': window.csrf_token,
         },
         body: JSON.stringify({
-          start_date: '2023-01-01',
-          end_date: '2026-01-31',
+          start_date: filters[0],
+          end_date: filters[1],
         }),
       },
     )
@@ -152,7 +166,14 @@ const getTaskCompletionData = async () => {
   }
 }
 getTaskCompletionData()
+watch(
+  () => filterData.value, // Watching the entire array
+  (newVal, oldVal) => {
 
+    getTaskCompletionData(); // Call the API whenever the object changes
+  },
+  { deep: true } // Ensure nested changes are detected
+);
 function transformTaskData(inputData) {
   const categories = [
     'TotalTasks',
