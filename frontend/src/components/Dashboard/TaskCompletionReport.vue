@@ -6,18 +6,31 @@
       <h3 class="text-lg font-medium mb-4 text-gray-900">
         Task Completion Report
       </h3>
-      <div class="flex gap-1">
+      <div class="flex gap-2">
+        <Tooltip :text="__('Graph View')">
         <span @click="graphView = true" class="cursor-pointer">
           <GraphIcon
             class="h-4 w-4"
             :class="graphView ? 'text-green-600' : 'text-gray-600'"
           />
         </span>
+        </Tooltip>
+        <Tooltip :text="__('Grid View')">
         <span @click="graphView = false" class="cursor-pointer">
           <GridIcon
             class="h-4 w-4"
             :class="!graphView ? 'text-green-600' : 'text-gray-600'"
         /></span>
+        </Tooltip>
+        <Tooltip :text="__('Download PDF')">
+          <a
+            class="cursor-pointer hover:text-green-600"
+            @click="exportToPDF()"
+            target="_blank"
+          >
+            <FeatherIcon name="download" class="h-4 w-4" />
+          </a>
+        </Tooltip>
       </div>
     </div>
     <div v-if="taskCompletionUpdateKey.isLoading" class="flex justify-center">
@@ -49,7 +62,7 @@
         />
       </template>
       <template v-else>
-        <div class="data-table">
+        <div class="data-table overflow-auto table-container">
           <table
             class="table-auto border-collapse border border-gray-400 w-full text-left"
           >
@@ -96,6 +109,10 @@ import BarChart from '@/components/Dashboard/BarChart.vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
 import { ref } from 'vue'
+import { Tooltip } from 'qbs-vue-ui'
+import jsPDF from 'jspdf';
+import { generateRandomColor } from '@/utils/colors'
+import autoTable from 'jspdf-autotable';
 const taskCompletionReportData = ref([])
 const taskCompletionUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
@@ -164,14 +181,19 @@ function transformTaskData(inputData) {
     datasets: datasets,
   }
 }
-function generateRandomColor() {
-  // Generate a random hue (0-360 degrees)
-  const hue = Math.floor(Math.random() * 360)
-  // High saturation (70-100%) and brightness (50-70%)
-  const saturation = Math.floor(Math.random() * 31) + 70 // 70% to 100%
-  const lightness = Math.floor(Math.random() * 21) + 50 // 50% to 70%
+ function exportToPDF() {
+      const doc = new jsPDF();
+      const columns = ['Assigned To', 'Total Tasks', 'Completed Tasks', 'Overdue Tasks', 'Avg Completion Time'];
+      const rows = tableData.value.map((user) => [user.AssignedTo, user.TotalTasks, user.CompletedTasks, user.OverdueTasks, user.AvgCompletionTime]);
 
-  // Convert HSL to a CSS-compatible string
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
-}
+      doc.text('Task Completion Report', 14, 10);
+      autoTable(doc, {
+        head: [columns],
+        body: rows,
+      });
+      const date=new Date();
+      const filename = "task-completion-report-" + date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + ".pdf";
+      doc.save(filename);
+    } 
+
 </script>

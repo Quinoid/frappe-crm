@@ -6,18 +6,31 @@
       <h3 class="text-lg font-medium mb-4 text-gray-900">
         Deal Pipeline Report
       </h3>
-      <div class="flex gap-1">
+      <div class="flex gap-2">
+        <Tooltip :text="__('Graph View')">
         <span @click="graphView = true" class="cursor-pointer">
           <GraphIcon
             class="h-4 w-4"
             :class="graphView ? 'text-green-600' : 'text-gray-600'"
           />
         </span>
+        </Tooltip>
+        <Tooltip :text="__('Grid View')">
         <span @click="graphView = false" class="cursor-pointer">
           <GridIcon
             class="h-4 w-4"
             :class="!graphView ? 'text-green-600' : 'text-gray-600'"
         /></span>
+        </Tooltip>
+        <Tooltip :text="__('Download PDF')">
+          <a
+            class="cursor-pointer hover:text-green-600"
+            @click="exportToPDF()"
+            target="_blank"
+          >
+            <FeatherIcon name="download" class="h-4 w-4" />
+          </a>
+        </Tooltip>
       </div>
     </div>
     <div v-if="dealSummaryUpdateKey.isLoading" class="flex justify-center">
@@ -49,7 +62,7 @@
         />
       </template>
       <template v-else>
-        <div class="data-table">
+        <div class="data-table overflow-auto table-container">
           <table
             class="table-auto border-collapse border border-gray-400 w-full text-left"
           >
@@ -98,6 +111,10 @@ import HorizondalBarGraph from '@/components/Dashboard/HorizondalBarGraph.vue'
 import { ref } from 'vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
+import { Tooltip } from 'qbs-vue-ui'
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { generateRandomColor } from '@/utils/colors'
 const dealSummaryReportData = ref([])
 const dealSummaryUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
@@ -155,16 +172,21 @@ function convertToChartData(message) {
   }))
 }
 
-function generateRandomColor() {
-  // Generate a random hue (0-360 degrees)
-  const hue = Math.floor(Math.random() * 360)
-  // High saturation (70-100%) and brightness (50-70%)
-  const saturation = Math.floor(Math.random() * 31) + 70 // 70% to 100%
-  const lightness = Math.floor(Math.random() * 21) + 50 // 50% to 70%
+ function exportToPDF() {
+      const doc = new jsPDF();
+      const columns = ['Deal Stage', 'Total Deals', 'Total Deal Value', 'Weighted Deal Value', 'Avg Close Probability'];
+      const rows = tableData.value.map((user) => [user.DealStage, user.TotalDeals, user.TotalDealValue, user.WeightedDealValue, user.AvgCloseProbability]);
 
-  // Convert HSL to a CSS-compatible string
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
-}
+      doc.text('Deal Pipeline Report', 14, 10);
+      autoTable(doc, {
+        head: [columns],
+        body: rows,
+      });
+      const date=new Date();
+      const filename = "deal-pipeline-report-" + date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + ".pdf";
+      doc.save(filename);
+    }
+  
 function formatCurrency(value) {
   return Number(value).toLocaleString('en-US', {
     minimumFractionDigits: 2,

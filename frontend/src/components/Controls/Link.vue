@@ -120,8 +120,8 @@ watchDebounced(
   { debounce: 300, immediate: true },
 )
 const handleCheckDocType = (value) => {
-  return value === 'Lead Quality' ||
-    value === 'Lead Priority' ||
+  return value === 'CRM Lead Quality' ||
+    value === 'CRM Priority' ||
     value === 'Type Of Business' ||
     value === 'CRM Organization Status' ||
     value === 'Contact Status' ||
@@ -157,9 +157,22 @@ const options = createResource({
         value: '@me',
       })
     }
+    if (props.doctype == 'Language') {
+      allData = moveToTopByValue(allData, 'en-GB')
+    }if (props.doctype == 'Currency') {
+      allData = moveToTopByValue(allData, 'INR')
+    }if (props.doctype == 'Country') {
+      allData = moveToTopByValue(allData, 'India')
+    }
     return allData
   },
 })
+function moveToTopByValue(arr, targetValue) {
+  if (!Array.isArray(arr)) return [];
+  const targetItem = arr.find((item) => item.value === targetValue);
+  const filtered = arr.filter((item) => item.value !== targetValue);
+  return targetItem ? [targetItem, ...filtered] : filtered;
+}
 
 function reload(val) {
   if (

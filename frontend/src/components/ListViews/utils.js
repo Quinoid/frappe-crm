@@ -20,3 +20,4 @@ export const alignmentMap = {
   right: 'justify-end',
   end: 'justify-end',
 }
+

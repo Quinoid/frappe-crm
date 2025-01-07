@@ -6,18 +6,32 @@
       <h3 class="text-lg font-medium mb-4 text-gray-900">
         Team Performance Report
       </h3>
-      <div class="flex gap-1">
+      <div class="flex gap-2">
         <span @click="graphView = true" class="cursor-pointer">
+          <Tooltip :text="__('Graph View')">
           <GraphIcon
             class="h-4 w-4"
             :class="graphView ? 'text-green-600' : 'text-gray-600'"
           />
+          </Tooltip>
         </span>
         <span @click="graphView = false" class="cursor-pointer">
+          <Tooltip :text="__('Grid View')">
           <GridIcon
             class="h-4 w-4"
             :class="!graphView ? 'text-green-600' : 'text-gray-600'"
-        /></span>
+        />
+              </Tooltip>
+        </span>
+        <Tooltip :text="__('Download PDF')">
+          <a
+            class="cursor-pointer hover:text-green-600"
+            @click="exportToPDF()"
+            target="_blank"
+          >
+            <FeatherIcon name="download" class="h-4 w-4" />
+          </a>
+        </Tooltip>
       </div>
     </div>
 
@@ -50,7 +64,7 @@
         />
       </template>
       <template v-else>
-        <div class="data-table">
+        <div class="data-table overflow-auto table-container">
           <table
             class="table-auto border-collapse border border-gray-400 w-full text-left"
           >
@@ -111,6 +125,11 @@ import BarChart from '@/components/Dashboard/BarChart.vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
 import { ref } from 'vue'
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { Tooltip } from 'qbs-vue-ui'
+import { generateRandomColor } from '@/utils/colors'
+
 const teamPerformanceReportData = ref([])
 const teamPerformanceUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
@@ -191,14 +210,21 @@ function formatCurrency(value) {
     maximumFractionDigits: 2,
   })
 }
-function generateRandomColor() {
-  // Generate a random hue (0-360 degrees)
-  const hue = Math.floor(Math.random() * 360)
-  // High saturation (70-100%) and brightness (50-70%)
-  const saturation = Math.floor(Math.random() * 31) + 70 // 70% to 100%
-  const lightness = Math.floor(Math.random() * 21) + 50 // 50% to 70%
+ function exportToPDF() {
+      const doc = new jsPDF();
+      const columns = ['User Name', 'Total Tasks', 'Completed Tasks', 'Total Deals', 'Total Deal Value', 'Total Emails Sent', 'Total Calls', 'Total Meetings'];
+      const rows = tableData.value.map((user) => [user.UserName, user.TotalTasks, user.CompletedTasks, user.TotalDeals, user.TotalDealValue, user.TotalEmailsSent, user.TotalCalls, user.TotalMeetings]);
 
-  // Convert HSL to a CSS-compatible string
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
-}
+      doc.text('Team Performance Report', 14, 10);
+      autoTable(doc, {
+        head: [columns],
+        body: rows,
+      });
+      const date=new Date();
+      const filename = "team-performance-report-" + date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + ".pdf";
+      doc.save(filename);
+    } 
+
+
+
 </script>

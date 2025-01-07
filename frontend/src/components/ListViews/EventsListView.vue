@@ -104,6 +104,7 @@
                 <HeartIcon class="h-4 w-4" />
               </Button>
             </div>
+         
             <div
               v-else
               class="truncate text-base"

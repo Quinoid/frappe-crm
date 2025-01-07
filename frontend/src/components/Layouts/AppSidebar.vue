@@ -71,22 +71,23 @@
               class="mx-2 my-0.5"
             />
           </nav>
-          <a
+         
+        </Section>
+      </div>
+    </div>
+    <div class="m-2 flex flex-col gap-1">
+       <a
             href="https://quinoid.com/"
             target="_blank"
             rel="noopener noreferrer"
             v-if="!isSidebarCollapsed"
             :class="[
-              'absolute bottom-11 mt-auto flex items-center px-[14px] py-1 text-sm text-gray-700',
+              ' mt-auto flex items-center pl-[4px] pr-[14px] py-1 text-sm text-gray-700',
               !isSidebarCollapsed ? 'left-[2px]' : 'left-0',
             ]"
           >
             <SideBarIcon />
           </a>
-        </Section>
-      </div>
-    </div>
-    <div class="m-2 flex flex-col gap-1">
       <SidebarLink
         :label="isSidebarCollapsed ? __('Expand') : __('Collapse')"
         :isCollapsed="isSidebarCollapsed"

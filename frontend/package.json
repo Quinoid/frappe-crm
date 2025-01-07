@@ -30,6 +30,8 @@
     "frappe": "^0.0.1",
     "frappe-ui": "^0.1.66",
     "gemoji": "^8.1.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "lodash": "^4.17.21",
     "mime": "^4.0.1",
     "pinia": "^2.0.33",
