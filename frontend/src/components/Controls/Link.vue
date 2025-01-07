@@ -125,7 +125,7 @@ const handleCheckDocType = (value) => {
     value === 'Type Of Business' ||
     value === 'CRM Organization Status' ||
     value === 'Contact Status' ||
-    value === 'CRM Deal Probability'
+    value === 'CRM Deal Probability'||'CRM Lead Status'
     ? true
     : false
 }
