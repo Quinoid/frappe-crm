@@ -2,7 +2,7 @@ import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
 import { capture } from '@/telemetry'
 import { defineStore } from 'pinia'
 import { createListResource } from 'qbs-vue-ui'
-import { reactive, h } from 'vue'
+import { h, reactive } from 'vue'
 
 export const statusesStore = defineStore('crm-statuses', () => {
   let leadStatusesByName = reactive({})
@@ -13,7 +13,7 @@ export const statusesStore = defineStore('crm-statuses', () => {
 
   const leadStatuses = createListResource({
     doctype: 'CRM Lead Status',
-    fields: ['name', 'color', 'position'],
+    fields: ['name', 'color', 'position', 'lead_status'],
     orderBy: 'position asc',
     cache: 'lead-statuses',
     initialData: [],
@@ -22,6 +22,7 @@ export const statusesStore = defineStore('crm-statuses', () => {
       for (let status of statuses) {
         status.colorClass = colorClasses(status.color)
         status.iconColorClass = colorClasses(status.color, true)
+        status.name = status.lead_status
         leadStatusesByName[status.name] = status
       }
       return statuses

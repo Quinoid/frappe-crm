@@ -3859,10 +3859,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.1.tgz#027422e2faec0b25e1549c3e1bd8309b9133b6e5"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
 
-qbs-vue-ui@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/qbs-vue-ui/-/qbs-vue-ui-1.0.7.tgz#03f5ff0a2022cec75d98ed24074c0005da7d183c"
-  integrity sha512-7Q95uzI3ZTWToEOX9jDw3wRL2E4mWah69tl0oPFC0lXal/6rZTNtIBpXOEa0huYgD4+1hf8DnS027Lk/gXwF/w==
+qbs-vue-ui@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/qbs-vue-ui/-/qbs-vue-ui-1.0.8.tgz#f61f582cb0c1bdc290fe65d2f9e6387c34a30610"
+  integrity sha512-05CgBCLRelRXSSIDwoQiAulQEhiLNo6aON/pSBTF9fkHIQCxUV2iJL+8GV8Z/LBAcsTNPv1ok1oQVx5RluCpOg==
   dependencies:
     "@headlessui/vue" "^1.7.14"
     "@popperjs/core" "^2.11.2"

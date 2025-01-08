@@ -11,7 +11,7 @@
       <DateRangePicker
         v-model="filterData"
         variant="subtle"
-        class="!w-[210px]"
+        class="!w-[230px]"
         placeholder="Placeholder"
         :disabled="false"
       />
@@ -118,22 +118,22 @@
 </template>
 <script setup>
 import HorizondalBarGraph from '@/components/Dashboard/HorizondalBarGraph.vue'
-import { ref ,watch} from 'vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
-import { Tooltip,DateRangePicker } from 'qbs-vue-ui'
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { generateRandomColor } from '@/utils/colors'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import { DateRangePicker, Tooltip } from 'qbs-vue-ui'
+import { ref, watch } from 'vue'
 const dealSummaryReportData = ref([])
 const dealSummaryUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
 const graphView = ref(true)
 const tableData = ref([])
 const dateRange = ref([new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],new Date().toISOString().split('T')[0]])
-const filterData = ref(dateRange.value.join(','));
+const filterData = ref(dateRange.value.join(' to '));
 const get_dealSummaryData = async () => {
-    const filters=filterData.value.split(',')
+  const filters=filterData.value.split(' to ')
 
   dealSummaryUpdateKey.value.isLoading = true
   try {
@@ -172,7 +172,10 @@ get_dealSummaryData()
 watch(
   () => filterData.value, // Watching the entire array
   (newVal, oldVal) => {
-
+  const filters = newVal.split(',');
+    if (filters.length === 2) {
+      filterData.value = filters.join(' to '); // Ensure the delimiter is "to"
+    }
     get_dealSummaryData(); // Call the API whenever the object changes
   },
   { deep: true } // Ensure nested changes are detected

@@ -10,6 +10,6 @@
         "build": "cd frontend && yarn build"
     },
     "dependencies": {
-        "qbs-vue-ui": "^1.0.7"
+        "qbs-vue-ui": "^1.0.8"
     }
 }
