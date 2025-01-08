@@ -85,7 +85,7 @@
                 </th>
                 <th class="border border-gray-300 px-4 py-2">Overdue Tasks</th>
                 <th class="border border-gray-300 px-4 py-2">
-                  AvgCompletion Time
+                  Avg Completion Time
                 </th>
               </tr>
             </thead>
@@ -177,6 +177,10 @@ watch(
   },
   { deep: true } // Ensure nested changes are detected
 );
+const formatCamelCase = (str) => {
+  return str.replace(/([a-z])([A-Z])/g, '$1 $2');
+};
+
 function transformTaskData(inputData) {
   const categories = [
     'TotalTasks',
@@ -194,7 +198,7 @@ function transformTaskData(inputData) {
   }
 
   const datasets = categories.map((category,index) => ({
-    label: category,
+    label: formatCamelCase(category),
     data: inputData.map((item) => item[category]),
     backgroundColor: colors.backgroundColor[index],
     borderColor: ['#ffffff'],

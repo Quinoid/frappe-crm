@@ -186,6 +186,9 @@ const get_teamPerformanceReport = async () => {
   }
 }
 get_teamPerformanceReport()
+const formatCamelCase = (str) => {
+  return str.replace(/([a-z])([A-Z])/g, '$1 $2');
+};
 
 function transformteamPerformanceReport(inputData) {
   const categories = [
@@ -207,7 +210,7 @@ function transformteamPerformanceReport(inputData) {
   }
 
   const datasets = categories.map((category, index) => ({
-    label: category,
+    label: formatCamelCase(category),
     data: inputData.map((item) => item[category]),
     backgroundColor: colors.backgroundColor[index],
     borderColor: ['#ffffff'],

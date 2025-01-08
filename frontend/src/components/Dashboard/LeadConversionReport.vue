@@ -175,6 +175,10 @@ watch(
   },
   { deep: true } // Ensure nested changes are detected
 );
+const formatCamelCase = (str) => {
+  return str.replace(/([a-z])([A-Z])/g, '$1 $2');
+};
+
 function transformLeadData(inputData) {
   const categories = ['ConvertedLeads', 'AvgConversionTime', 'TotalDealValue']
   const colors = {
@@ -186,7 +190,7 @@ function transformLeadData(inputData) {
     ),
   }
   const datasets = categories.map((category,index) => ({
-    label: category,
+    label: formatCamelCase(category),
     data: inputData?.map((item) => item[category]),
     backgroundColor: colors.backgroundColor[index],
     borderColor: ['#ffffff'],
