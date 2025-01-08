@@ -30,7 +30,7 @@ export const statusesStore = defineStore('crm-statuses', () => {
   })
   const contactStatuses = createListResource({
     doctype: 'Contact Status',
-    fields: ['name', 'color', 'position'],
+    fields: ['name', 'color', 'position', 'status_name'],
     orderBy: 'position asc',
     cache: 'contact-statuses',
     initialData: [],
@@ -39,6 +39,7 @@ export const statusesStore = defineStore('crm-statuses', () => {
       for (let status of statuses) {
         status.colorClass = colorClasses(status.color)
         status.iconColorClass = colorClasses(status.color, true)
+        status.name = status.status_name
         contactStatusesByName[status.name] = status
       }
       return statuses
@@ -46,7 +47,7 @@ export const statusesStore = defineStore('crm-statuses', () => {
   })
   const organizationStatuses = createListResource({
     doctype: 'CRM Organization Status',
-    fields: ['name', 'color', 'position'],
+    fields: ['name', 'color', 'position', 'status_name'],
     orderBy: 'position asc',
     cache: 'organization-statuses',
     initialData: [],
@@ -55,6 +56,7 @@ export const statusesStore = defineStore('crm-statuses', () => {
       for (let status of statuses) {
         status.colorClass = colorClasses(status.color)
         status.iconColorClass = colorClasses(status.color, true)
+        status.name = status.status_name
         organizationStatusesByName[status.name] = status
       }
       return statuses
