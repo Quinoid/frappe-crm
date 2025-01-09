@@ -214,12 +214,18 @@ def get_funnel_data(start_date, end_date):
                     THEN (TotalLeads * 100.0) / LAG(TotalLeads) OVER (ORDER BY FIELD(FunnelStage, 'New', 'Engaged', 'Qualified', 'Ongoing', 'Negotiation', 'Closed Won'))
                     ELSE 100.0
                 END, 2
-            ) AS ConversionRate
+            ) AS ConversionRate,
+            ROUND(
+                CASE
+                    WHEN LAG(TotalLeads) OVER (ORDER BY FIELD(FunnelStage, 'New', 'Engaged', 'Qualified', 'Ongoing', 'Negotiation', 'Closed Won')) IS NOT NULL
+                    THEN (((TotalLeads * 100.0) / LAG(TotalLeads) OVER (ORDER BY FIELD(FunnelStage, 'New', 'Engaged', 'Qualified', 'Ongoing', 'Negotiation', 'Closed Won'))) - TotalLeads ) 
+                    ELSE 0.0
+                END, 2
+            ) AS DropOffRate
         FROM 
             FunnelData
         ORDER BY 
             FIELD(FunnelStage, 'New', 'Engaged', 'Qualified', 'Ongoing', 'Negotiation', 'Closed Won');
-
 
     """
     
