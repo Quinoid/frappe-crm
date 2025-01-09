@@ -185,7 +185,6 @@ def get_funnel_data(start_date, end_date):
                     WHEN deals.status IN ('Follow-up Required', 'Demo/Trial', 'Proposal/Quotation Sent') THEN 'Ongoing'
                     WHEN deals.status IN ('Negotiation', 'Ready to Close') THEN 'Negotiation'
                     WHEN deals.status = 'Closed Won' THEN 'Closed Won'
-                    ELSE 'Unknown'
                 END AS FunnelStage,
                 COUNT(DISTINCT leads.name) AS TotalLeads,
                 SUM(
@@ -200,6 +199,15 @@ def get_funnel_data(start_date, end_date):
                 `tabCRM Deal` AS deals ON leads.name = deals.lead
             WHERE 
                 (leads.creation BETWEEN %s AND %s OR leads.creation IS NULL)
+                AND (
+                    leads.status IN ('New', 'Contacted', 'Nurture')
+                    OR deals.status IN (
+                        'New', 'Qualification', 'Follow-up Required', 
+                        'Demo/Trial', 'Proposal/Quotation Sent', 
+                        'Negotiation', 'Ready to Close', 'Closed Won'
+                    )
+                )
+
             GROUP BY 
                 FunnelStage
         )
