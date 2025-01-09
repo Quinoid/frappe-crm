@@ -180,7 +180,7 @@ def get_funnel_data(start_date, end_date):
             SELECT 
                 CASE
                     WHEN leads.status = 'New' THEN 'New'
-                    WHEN leads.status IN ('Contacted', 'Nurtured') THEN 'Engaged'
+                    WHEN leads.status IN ('Contacted', 'Nurture') THEN 'Engaged'
                     WHEN deals.status IN ('New', 'Qualification') THEN 'Qualified'
                     WHEN deals.status IN ('Follow-up Required', 'Demo/Trial', 'Proposal/Quotation Sent') THEN 'Ongoing'
                     WHEN deals.status IN ('Negotiation', 'Ready to Close') THEN 'Negotiation'
