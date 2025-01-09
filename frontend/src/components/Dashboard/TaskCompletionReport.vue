@@ -15,6 +15,8 @@
         class="!w-[230px]"
         :disabled="false"
      />
+           <ToolTipInfo />
+
     </div>
       <div class="flex gap-2">
         <Tooltip :text="__('Graph View')">
@@ -79,13 +81,13 @@
             <thead>
               <tr class="bg-gray-100">
                 <th class="border border-gray-300 px-4 py-2">Assigned To</th>
-                <th class="border border-gray-300 px-4 py-2">Total Tasks</th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">Total Tasks</th>
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Completed Tasks
                 </th>
-                <th class="border border-gray-300 px-4 py-2">Overdue Tasks</th>
-                <th class="border border-gray-300 px-4 py-2">
-                  Avg Completion Time
+                <th class="border border-gray-300 px-4 py-2 text-right">Overdue Tasks</th>
+                <th class="border border-gray-300 px-4 py-2 text-right">
+                  Avg Completion Time (Days)
                 </th>
               </tr>
             </thead>
@@ -94,16 +96,16 @@
                 <td class="border border-gray-300 px-4 py-2">
                   {{ item.AssignedTo }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.TotalTasks }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.CompletedTasks }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right" >
                   {{ item.OverdueTasks }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.AvgCompletionTime }}
                 </td>
               </tr>
@@ -116,6 +118,7 @@
 </template>
 <script setup>
 import BarChart from '@/components/Dashboard/BarChart.vue'
+import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
 import { generateRandomColor } from '@/utils/colors'
@@ -211,7 +214,7 @@ function transformTaskData(inputData) {
 }
  function exportToPDF() {
       const doc = new jsPDF();
-      const columns = ['Assigned To', 'Total Tasks', 'Completed Tasks', 'Overdue Tasks', 'Avg Completion Time'];
+      const columns = ['Assigned To', 'Total Tasks', 'Completed Tasks', 'Overdue Tasks', 'Avg Completion Time (Days)'];
       const rows = tableData.value.map((user) => [user.AssignedTo, user.TotalTasks, user.CompletedTasks, user.OverdueTasks, user.AvgCompletionTime]);
 
       doc.text('Task Completion Report', 14, 10);

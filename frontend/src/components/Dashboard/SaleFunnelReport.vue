@@ -14,6 +14,8 @@
         class="!w-[230px]"
         :disabled="false"
       />
+            <ToolTipInfo />
+
      </div>
       <div class="flex gap-2 ">
           
@@ -80,15 +82,15 @@
             <thead>
               <tr class="bg-gray-100">
                 <th class="border border-gray-300 px-4 py-2">Funnel Stage</th>
-                <th class="border border-gray-300 px-4 py-2">Total Leads</th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">Total Leads / Deals </th>
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Total Deal Value
                 </th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Previous Stage Leads
                 </th>
-                <th class="border border-gray-300 px-4 py-2">
-                  Conversion Rate
+                <th class="border border-gray-300 px-4 py-2 text-right">
+                  Conversion Rate (in %)
                 </th>
               </tr>
             </thead>
@@ -97,16 +99,16 @@
                 <td class="border border-gray-300 px-4 py-2">
                   {{ item.FunnelStage }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.TotalLeads }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ formatCurrency(item.TotalDealValue) }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.PreviousStageLeads }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.ConversionRate }}
                 </td>
               </tr>
@@ -119,6 +121,7 @@
 </template>
 <script setup>
 import HorizondalBarGraph from '@/components/Dashboard/HorizondalBarGraph.vue';
+import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import GraphIcon from '@/components/GraphIcon.vue';
 import GridIcon from '@/components/GridIcon.vue';
 import { generateRandomColor } from '@/utils/colors';
@@ -159,32 +162,34 @@ const get_SalesFunnelReport = async () => {
     } else {
       const data = await response.json()
       tableData.value = data.message
-      salesFunnelData.value = convertSalesFunnelData(data.message)
+      salesFunnelData.value = convertToFunnelData(data.message)
       salsFunnelUpdateKey.value.value = new Date().getTime()
     }
   } catch (error) {
-    console.error('Failed to parse server error message:', parseError)
+    console.error('Failed to parse server error message:', error)
   } finally {
     salsFunnelUpdateKey.value.isLoading = false
   }
 }
 get_SalesFunnelReport()
 
-function convertSalesFunnelData(message) {
-  // Ensure message is an array before mapping
-  const data = Array.isArray(message) ? message : []
-  return data.map((item) => ({
-    type: 'bar',
-    showInLegend: true,
-    name: item.FunnelStage, // Use DealStage as the name
-    color: generateRandomColor(), // Optional: Generate a unique color for each DealStage
-    dataPoints: [
-      { y: item.TotalLeads || 0, label: 'Total Deals' }, // Replace undefined/null with 0
-      { y: item.TotalDealValue || 0, label: 'Total Deal Value' },
-      { y: item.PreviousStageLeads || 0, label: 'Previous Stage Leads' },
-      { y: item.ConversionRate || 0, label: 'Conversion Rate' },
-    ],
-  }))
+
+function convertToFunnelData(inputData) {
+    const sortedData = inputData.sort((a, b) => b.TotalLeads - a.TotalLeads);
+
+  return [
+    {
+      type: "funnel",
+      yValueFormatString: "#,###\"\"",
+      indexLabel: "{label} - {y}",
+      neckHeight: 0,
+      dataPoints: sortedData.map(item => ({
+        y: item.TotalLeads,
+        label: item.FunnelStage,
+        color: generateRandomColor(),
+      }))
+    }
+  ];
 }
 watch(
   () => filterData.value, // Watching the entire array
@@ -200,7 +205,7 @@ watch(
 );
   function exportToPDF() {
       const doc = new jsPDF();
-      const columns = ['Funnel Stage', 'Total Leads', 'Total Deal Value', 'Previous Stage Leads', 'Conversion Rate'];
+      const columns = ['Funnel Stage', 'Total Leads / Deals ', 'Total Deal Value', 'Previous Stage Leads', 'Conversion Rate (in %)'];
       const rows = tableData.value.map((user) => [user.FunnelStage, user.TotalLeads, user.TotalDealValue, user.PreviousStageLeads, user.ConversionRate]);
 
       doc.text('Sales Funnel Report', 14, 10);
