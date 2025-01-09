@@ -89,6 +89,7 @@
                 <th class="border border-gray-300 px-4 py-2 text-right">
                   Previous Stage Leads
                 </th>
+                <th class="border border-gray-300 px-4 py-2 text-right">Drop-off Rate (in %)</th>
                 <th class="border border-gray-300 px-4 py-2 text-right">
                   Conversion Rate (in %)
                 </th>
@@ -108,6 +109,7 @@
                 <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.PreviousStageLeads }}
                 </td>
+                <td class="border border-gray-300 px-4 py-2 text-right">{{ item.DropOffRate }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.ConversionRate }}
                 </td>
@@ -205,8 +207,8 @@ watch(
 );
   function exportToPDF() {
       const doc = new jsPDF();
-      const columns = ['Funnel Stage', 'Total Leads / Deals ', 'Total Deal Value', 'Previous Stage Leads', 'Conversion Rate (in %)'];
-      const rows = tableData.value.map((user) => [user.FunnelStage, user.TotalLeads, user.TotalDealValue, user.PreviousStageLeads, user.ConversionRate]);
+      const columns = ['Funnel Stage', 'Total Leads / Deals ', 'Total Deal Value', 'Previous Stage Leads', 'Drop-off Rate (in %)', 'Conversion Rate (in %)'];
+      const rows = tableData.value.map((user) => [user.FunnelStage, user.TotalLeads, user.TotalDealValue, user.PreviousStageLeads,user.DropOffRate, user.ConversionRate]);
 
       doc.text('Sales Funnel Report', 14, 10);
       autoTable(doc, {
