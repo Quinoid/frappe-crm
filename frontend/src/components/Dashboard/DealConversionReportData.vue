@@ -15,6 +15,7 @@
         placeholder="Placeholder"
         :disabled="false"
       />
+      <ToolTipInfo />
     </div>
       <div class="flex gap-2">
         <Tooltip :text="__('Graph View')">
@@ -66,7 +67,8 @@
     </div>
     <div v-else>
       <template v-if="graphView">
-        <HorizondalBarGraph
+      
+          <BarChart
           :chartData="dealSummaryReportData || []"
           :key="dealSummaryUpdateKey.value"
         />
@@ -78,15 +80,15 @@
           >
             <thead>
               <tr class="bg-gray-100">
-                <th class="border border-gray-300 px-4 py-2">Deal Stage</th>
-                <th class="border border-gray-300 px-4 py-2">Total Deals</th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2">Deal Source</th>
+                <th class="border border-gray-300 px-4 py-2 text-right">Total Deals</th>
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Total Deal Value
                 </th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Weighted Deal Value
                 </th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Avg Close Probability (%)
                 </th>
               </tr>
@@ -96,16 +98,16 @@
                 <td class="border border-gray-300 px-4 py-2">
                   {{ item.DealStage }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right" >
                   {{ item.TotalDeals }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ formatCurrency(item.TotalDealValue) }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ formatCurrency(item.WeightedDealValue) }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.AvgCloseProbability }}
                 </td>
               </tr>
@@ -117,12 +119,13 @@
   </div>
 </template>
 <script setup>
-import HorizondalBarGraph from '@/components/Dashboard/HorizondalBarGraph.vue'
+import BarChart from '@/components/Dashboard/BarChart.vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
 import { generateRandomColor } from '@/utils/colors'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue'
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui'
 import { ref, watch } from 'vue'
 const dealSummaryReportData = ref([])
@@ -180,24 +183,57 @@ watch(
   },
   { deep: true } // Ensure nested changes are detected
 );
-function convertToChartData(message) {
-  return message.map((item) => ({
-    type: 'bar',
-    showInLegend: true,
-    name: item.DealStage, // Use DealStage as the name
-    color: generateRandomColor(), // Optional: Generate a unique color for each DealStage
-    dataPoints: [
-      { y: item.TotalDeals, label: 'Total Deals' },
-      { y: item.TotalDealValue, label: 'Total Deal Value' },
-      { y: item.WeightedDealValue, label: 'Weighted Deal Value' },
-      { y: item.AvgCloseProbability, label: 'Avg Close Probability' },
-    ],
+// function convertToChartData(message) {
+//   return message.map((item) => ({
+//     type: 'bar',
+//     showInLegend: true,
+//     name: item.DealStage, // Use DealStage as the name
+//     color: generateRandomColor(), // Optional: Generate a unique color for each DealStage
+//     dataPoints: [
+//       { y: item.TotalDeals, label: 'Total Deals' },
+//       { y: item.TotalDealValue, label: 'Total Deal Value' },
+//       { y: item.WeightedDealValue, label: 'Weighted Deal Value' },
+//       { y: item.AvgCloseProbability, label: 'Avg Close Probability' },
+//     ],
+//   }))
+// }
+
+const formatCamelCase = (str) => {
+  return str.replace(/([a-z])([A-Z])/g, '$1 $2');
+};
+
+function convertToChartData(inputData) {
+  const categories = [
+    'TotalDeals',
+    'TotalDealValue',
+    'WeightedDealValue',
+    'AvgCloseProbability',
+  ]
+  const colors = {
+    backgroundColor: Array.from({ length: categories.length }, () =>
+      generateRandomColor(),
+    ),
+    borderColor: Array.from({ length: categories.length }, () =>
+      generateRandomColor(),
+    ),
+  }
+
+  const datasets = categories.map((category,index) => ({
+    label: formatCamelCase(category),
+    data: inputData.map((item) => item[category]),
+    backgroundColor: colors.backgroundColor[index],
+    borderColor: ['#ffffff'],
+    borderWidth: 2, // Border thickness
   }))
+  return {
+    labels: inputData?.map((item) => item.DealStage),
+    datasets: datasets,
+  }
 }
 
  function exportToPDF() {
       const doc = new jsPDF();
-      const columns = ['Deal Stage', 'Total Deals', 'Total Deal Value', 'Weighted Deal Value', 'Avg Close Probability'];
+      const columns = ['Deal Source', 'Total Deals', 'Total Deal Value', 'Weighted Deal Value', 'Avg Close Probability'];
       const rows = tableData.value.map((user) => [user.DealStage, user.TotalDeals, user.TotalDealValue, user.WeightedDealValue, user.AvgCloseProbability]);
 
       doc.text('Deal Pipeline Report', 14, 10);

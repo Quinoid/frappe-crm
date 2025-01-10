@@ -15,6 +15,8 @@
         placeholder="Placeholder"
         :disabled="false"
     />
+          <ToolTipInfo />
+
     </div>
       <div class="flex gap-2">
         <Tooltip :text="__('Graph View')">
@@ -79,13 +81,13 @@
             <thead>
               <tr class="bg-gray-100">
                 <th class="border border-gray-300 px-4 py-2">Lead Source</th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Converted Leads
                 </th>
-                <th class="border border-gray-300 px-4 py-2">
-                  Avg Conversion Time
+                <th class="border border-gray-300 px-4 py-2 text-right">
+                  Avg Conversion Time (in Days)
                 </th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Total Deal Value
                 </th>
               </tr>
@@ -95,13 +97,13 @@
                 <td class="border border-gray-300 px-4 py-2">
                   {{ item.LeadSource }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.ConvertedLeads }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.AvgConversionTime }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ formatCurrency(item.TotalDealValue) }}
                 </td>
               </tr>
@@ -120,6 +122,7 @@ import { generateRandomColor } from '@/utils/colors';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
+import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import { ref, watch } from 'vue';
 const leadConversionReportData = ref([])
 const leadConversionUpdateKey = ref({ key: 0, isLoading: false })
@@ -210,7 +213,7 @@ function formatCurrency(value) {
 }
  function exportToPDF() {
       const doc = new jsPDF();
-      const columns = ['Lead Source', 'Converted Leads', 'Avg Conversion Time', 'Total Deal Value'];
+      const columns = ['Lead Source', 'Converted Leads', 'Avg Conversion Time (in Days)', 'Total Deal Value'];
       const rows = tableData.value.map((user) => [user.LeadSource, user.ConvertedLeads, user.AvgConversionTime, user.TotalDealValue]);
 
       doc.text('Lead Conversion Report', 14, 10);

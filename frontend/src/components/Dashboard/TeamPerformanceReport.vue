@@ -15,6 +15,8 @@
         class="!w-[230px]"
         :disabled="false"
       /> 
+            <ToolTipInfo />
+
     </div>
       <div class="flex gap-2">
         <span @click="graphView = true" class="cursor-pointer">
@@ -81,19 +83,19 @@
             <thead>
               <tr class="bg-gray-100">
                 <th class="border border-gray-300 px-4 py-2">User Name</th>
-                <th class="border border-gray-300 px-4 py-2">Total Tasks</th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">Total Tasks</th>
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Completed Tasks
                 </th>
-                <th class="border border-gray-300 px-4 py-2">Total Deals</th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">Total Deals</th>
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Total Deal Value
                 </th>
-                <th class="border border-gray-300 px-4 py-2">
+                <th class="border border-gray-300 px-4 py-2 text-right">
                   Total Emails Sent
                 </th>
-                <th class="border border-gray-300 px-4 py-2">Total Calls</th>
-                <th class="border border-gray-300 px-4 py-2">Total Meetings</th>
+                <th class="border border-gray-300 px-4 py-2 text-right">Total Calls</th>
+                <th class="border border-gray-300 px-4 py-2 text-right">Total Meetings</th>
               </tr>
             </thead>
             <tbody>
@@ -101,25 +103,25 @@
                 <td class="border border-gray-300 px-4 py-2">
                   {{ item.UserName }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.TotalTasks }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.CompletedTasks }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.TotalDeals }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ formatCurrency(item.TotalDealValue) }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.TotalEmailsSent }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.TotalCalls }}
                 </td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-4 py-2 text-right">
                   {{ item.TotalMeetings }}
                 </td>
               </tr>
@@ -132,6 +134,7 @@
 </template>
 <script setup>
 import BarChart from '@/components/Dashboard/BarChart.vue';
+import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import GraphIcon from '@/components/GraphIcon.vue';
 import GridIcon from '@/components/GridIcon.vue';
 import { generateRandomColor } from '@/utils/colors';
@@ -139,7 +142,6 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
 import { ref, watch } from 'vue';
-
 const teamPerformanceReportData = ref([])
 const teamPerformanceUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
@@ -189,6 +191,7 @@ get_teamPerformanceReport()
 const formatCamelCase = (str) => {
   return str.replace(/([a-z])([A-Z])/g, '$1 $2');
 };
+
 
 function transformteamPerformanceReport(inputData) {
   const categories = [
