@@ -272,7 +272,7 @@ def get_user_summary(start_date, end_date):
         LEFT JOIN 
             `tabCRM Task` AS tasks ON users.name = tasks.assigned_to
         LEFT JOIN 
-            `tabCRM Deal` AS deals ON users.name = deals.owner
+            `tabCRM Deal` AS deals ON users.name = deals.deal_owner
         LEFT JOIN 
             `tabCommunication` AS communications ON users.email = communications.sender
         LEFT JOIN 
@@ -281,13 +281,12 @@ def get_user_summary(start_date, end_date):
             `tabEvent` AS events ON events.starts_on BETWEEN %s AND %s
         LEFT JOIN 
             `tabCustom User` AS participant_events ON participant_events.parent = events.name 
-            AND participant_events.link_field = users.email
         WHERE 
-            task_completion_date BETWEEN %s AND %s
+            (participant_events.link_field = users.email AND events.starts_on BETWEEN %s AND %s)
+            OR tasks.task_completion_date BETWEEN %s AND %s
             OR deals.close_date BETWEEN %s AND %s
             OR communications.creation BETWEEN %s AND %s
             OR calls.creation BETWEEN %s AND %s
-            OR events.starts_on BETWEEN %s AND %s
         GROUP BY 
             users.full_name
         ORDER BY 
