@@ -118,7 +118,7 @@ async function updateOrganization() {
   errorMessage.value = ''
   if (!validate()) return
   const old = { ...doc.value }
-  const newOrg = { ..._organization.value }
+  const newOrg = { ..._organization.value ,organization_status: 'Active'}
 
   const nameChanged = old.organization_name !== newOrg.organization_name
   delete old.organization_name

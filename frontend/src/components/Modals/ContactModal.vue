@@ -100,7 +100,7 @@ import { call, createResource } from 'qbs-vue-ui'
 import { ref, nextTick, watch, computed } from 'vue'
 import { createToast } from '@/utils'
 import { useRouter } from 'vue-router'
-
+import { statusesStore } from '@/stores/statuses'
 const props = defineProps({
   contact: {
     type: Object,
@@ -120,6 +120,7 @@ const { isManager } = usersStore()
 
 const router = useRouter()
 const show = defineModel()
+const { getContactStatus, statusOptions } = statusesStore()
 
 const detailMode = ref(false)
 const editMode = ref(false)
@@ -134,7 +135,7 @@ async function updateContact() {
     return
   }
 
-  const values = { ..._contact.value }
+  const values = { ..._contact.value,contact_status: 'Active' }
 
   let name = await callSetValue(values)
 
@@ -263,12 +264,32 @@ const detailFields = computed(() => {
 
   return details.filter((detail) => detail.value)
 })
-
+const contactStatuses = computed(() => {
+  let statuses = statusOptions('contact')
+  if (!_contact.value.contact_status) {
+    _contact.value.contact_status = statuses[0].value
+  }
+  return statuses
+})
 const sections = createResource({
   url: 'crm.fcrm.doctype.crm_fields_layout.crm_fields_layout.get_fields_layout',
   cache: ['quickEntryFields', 'Contact'],
   params: { doctype: 'Contact', type: 'Quick Entry' },
   auto: true,
+  transform: (data) => {
+    console.log(data)
+    return data.forEach((section) => {
+      section.fields.forEach((field) => {
+        if (field) {
+          if (field.name == 'contact_status') {
+            field.type = 'Select'
+            field.options = contactStatuses.value
+            field.prefix = getContactStatus(_contact.value.contact_status).iconColorClass
+          } 
+        }
+      })
+    })
+  },
 })
 
 const filteredSections = computed(() => {
