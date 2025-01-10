@@ -19,7 +19,7 @@
       </svg>
       <!-- Tooltip -->
       <div
-        class="absolute w-[222px] bottom-full mb-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity"
+        class="absolute w-[260px] bottom-full mb-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity"
       >
         
 Toggle visiblity by clicking on the legends
