@@ -53,8 +53,10 @@ def get_deal_summary_data(start_date, end_date, category_name="Open"):
             COALESCE(deals.source, 'N/A') AS DealStage,
             COUNT(deals.name) AS TotalDeals,
             ROUND(SUM(deals.custom_value), 2) AS TotalDealValue,
-            ROUND(SUM(deals.custom_value * (deals.deal_probability / 100)), 2) AS WeightedDealValue, #weighted deal value = deal value* (deal probability/100)
+            #ROUND(SUM(deals.custom_value * (deals.deal_probability / 100)), 2) AS WeightedDealValue, #weighted deal value = deal value* (deal probability/100)
+            ROUND(SUM(deals.custom_value * (CAST(REPLACE(deals.deal_probability, '%', '') AS DECIMAL) / 100)), 2) AS WeightedDealValue
             ROUND(AVG(deals.deal_probability), 2) AS AvgCloseProbability
+
         FROM 
             `tabCRM Deal` AS deals
         LEFT JOIN 
@@ -87,13 +89,12 @@ def get_task_summary_data(start_date, end_date):
             COUNT(tasks.name) AS TotalTasks,
             SUM(CASE WHEN tasks.status = 'Done' THEN 1 ELSE 0 END) AS CompletedTasks,
             SUM(CASE WHEN tasks.status = 'Backlog' THEN 1 ELSE 0 END) AS OverdueTasks,
-            #ROUND(AVG(DATEDIFF(tasks.task_completion_date, tasks.due_date)), 2) AS AvgCompletionTime
             ROUND(
                 AVG(
                     CASE
-                        WHEN DATEDIFF(tasks.task_completion_date, tasks.due_date) = 0 
+                        WHEN DATEDIFF(tasks.task_completion_date, tasks.task_assigned_date) = 0 
                             THEN 1
-                        ELSE DATEDIFF(tasks.task_completion_date, tasks.due_date)
+                        ELSE DATEDIFF(tasks.task_completion_date, tasks.task_assigned_date)
                     END
                 ),
                 2
@@ -103,7 +104,7 @@ def get_task_summary_data(start_date, end_date):
         LEFT JOIN 
             `tabUser` AS users ON tasks.assigned_to = users.name
         WHERE 
-            tasks.due_date BETWEEN %s AND %s
+            tasks.task_completion_date BETWEEN %s AND %s
         GROUP BY 
             users.full_name
         ORDER BY 
@@ -116,59 +117,6 @@ def get_task_summary_data(start_date, end_date):
     return data
 
 #Lag functionality needs to be changed?
-#currently showing leads converted to that stage from previous stage
-# @frappe.whitelist()
-# def get_funnel_data(start_date, end_date):
-#     # Validate input dates
-#     if not start_date or not end_date:
-#         frappe.throw(_("Start date and end date are required"))
-    
-#     query = """
-#         WITH FunnelData AS (
-#             SELECT 
-#                 status_table.lead_status AS FunnelStage,
-#                 COUNT(leads.name) AS TotalLeads,
-#                 SUM(CASE WHEN deals.status = 'Closed Won' THEN deals.custom_value ELSE 0 END) AS TotalDealValue,
-#                 status_table.position
-#             FROM 
-#                 `tabCRM Lead Status` AS status_table
-#             LEFT JOIN 
-#                 `tabCRM Lead` AS leads ON status_table.lead_status = leads.status
-#             LEFT JOIN 
-#                 `tabCRM Deal` AS deals ON leads.name = deals.lead
-#             WHERE 
-#                 leads.creation BETWEEN %s AND %s
-#                 OR leads.creation IS NULL
-#             GROUP BY 
-#                 status_table.position
-#         )
-#         SELECT 
-#             FunnelStage,
-#             TotalLeads,
-#             ROUND(TotalDealValue, 2) AS TotalDealValue,
-#             LAG(TotalLeads) OVER (ORDER BY FunnelData.position) AS PreviousStageLeads,
-#             ROUND(
-#                 CASE 
-#                     WHEN LAG(TotalLeads) OVER (ORDER BY FunnelData.position) IS NOT NULL 
-#                     THEN (TotalLeads * 100.0) / LAG(TotalLeads) OVER (ORDER BY FunnelData.position)
-#                     ELSE 100.0
-#                 END, 2
-#             ) AS ConversionRate
-#         FROM 
-#             FunnelData
-#         ORDER BY 
-#             FunnelData.position ASC
-
-#     """
-    
-#     # Execute the query
-#     try:
-#         data = frappe.db.sql(query, (start_date, end_date), as_dict=True)
-#     except Exception as e:
-#         frappe.throw(_("An error occurred while fetching funnel data: {0}").format(str(e)))
-    
-#     return data
-
 @frappe.whitelist()
 def get_funnel_data(start_date, end_date):
     # Validate input dates
