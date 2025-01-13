@@ -11,6 +11,7 @@
       :variant="attrs.variant"
       :placeholder="attrs.placeholder??__('Select any option')"
       :doctype="doctype"
+      :from="from"
       :filterable="false"
     >
       <template #target="{ open, togglePopover }">
@@ -78,6 +79,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  
   from: {
     type: String,
     default: undefined,

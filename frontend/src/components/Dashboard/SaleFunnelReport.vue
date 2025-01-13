@@ -131,14 +131,14 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
 import { ref, watch } from 'vue';
-import { addDaysToDate } from '../../utils/index';
+import { formatDate, revertDate } from '../../utils/index';
 
 const salesFunnelData = ref([])
 const salsFunnelUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
 const graphView = ref(true)
 const tableData = ref([])
-const dateRange = ref([new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],new Date().toISOString().split('T')[0]])
+const dateRange = ref([formatDate(new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0]), formatDate(new Date().toISOString().split('T')[0])])
 const filterData = ref(dateRange.value.join(' to '));
 const get_SalesFunnelReport = async () => {
   
@@ -154,8 +154,8 @@ const get_SalesFunnelReport = async () => {
           'X-Frappe-CSRF-Token': window.csrf_token,
         },
         body: JSON.stringify({
-          start_date: filters[0],
-          end_date: addDaysToDate(filters[1], 1) ,
+             start_date: revertDate(filters[0]),
+          end_date: revertDate(filters[1]),
         }),
       },
     )
@@ -200,7 +200,8 @@ watch(
   (newVal, oldVal) => {
     const filters = newVal.split(',');
     if (filters.length === 2) {
-      filterData.value = filters.join(' to '); // Ensure the delimiter is "to"
+ const newData = [formatDate(filters[0]), formatDate(filters[1])]
+      filterData.value = newData.join(' to ');
     }
 
     get_SalesFunnelReport(); // Call the API whenever the object changes

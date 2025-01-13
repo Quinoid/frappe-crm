@@ -207,7 +207,7 @@ const dialogOptions = computed(() => {
   let title = !editMode.value
     ? __('New Organization')
     : __(_organization.value.organization_name)
-  let size = detailMode.value ? '' : 'xl'
+  let size = detailMode.value ? '3xl' : '3xl'
   let actions = detailMode.value
     ? []
     : [
