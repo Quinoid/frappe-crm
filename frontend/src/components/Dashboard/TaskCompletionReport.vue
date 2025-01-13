@@ -125,6 +125,8 @@ import { generateRandomColor } from '@/utils/colors'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui'
+import { addDaysToDate } from '../../utils/index';
+
 import { ref, watch } from 'vue'
 const taskCompletionReportData = ref([])
 const taskCompletionUpdateKey = ref({ key: 0, isLoading: false })
@@ -148,7 +150,7 @@ const getTaskCompletionData = async () => {
         },
         body: JSON.stringify({
           start_date: filters[0],
-          end_date: filters[1],
+          end_date: addDaysToDate(filters[1], 1) ,
         }),
       },
     )

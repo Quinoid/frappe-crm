@@ -37,6 +37,7 @@
                 type="text"
                 :value="query"
                 @blur="handleBlur"
+                aria-placeholder="Select any option"
                 @change="
                   (e) => {
                     query = e.target.value

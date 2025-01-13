@@ -124,6 +124,8 @@ import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
 import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import { ref, watch } from 'vue';
+import { addDaysToDate } from '../../utils/index';
+
 const leadConversionReportData = ref([])
 const leadConversionUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
@@ -146,7 +148,7 @@ const get_LeadConversionData = async () => {
         },
         body: JSON.stringify({
          start_date: filters[0],
-          end_date: filters[1],
+          end_date: addDaysToDate(filters[1], 1) ,
         }),
       },
     )

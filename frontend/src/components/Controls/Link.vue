@@ -9,7 +9,7 @@
       v-model="value"
       :size="attrs.size || 'sm'"
       :variant="attrs.variant"
-      :placeholder="attrs.placeholder"
+      :placeholder="attrs.placeholder??__('Select any option')"
       :doctype="doctype"
       :filterable="false"
     >
@@ -63,7 +63,7 @@
 import Autocomplete from '@/components/qbs-vue-ui/Autocomplete.vue'
 import { watchDebounced } from '@vueuse/core'
 import { createResource } from 'qbs-vue-ui'
-import { useAttrs, computed, ref } from 'vue'
+import { computed, ref, useAttrs } from 'vue'
 
 const props = defineProps({
   doctype: {

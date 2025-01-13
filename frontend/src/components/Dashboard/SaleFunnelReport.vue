@@ -89,9 +89,9 @@
                 <th class="border border-gray-300 px-4 py-2 text-right">
                   Previous Stage Leads
                 </th>
-                <th class="border border-gray-300 px-4 py-2 text-right">Drop-off Rate (in %)</th>
+                <th class="border border-gray-300 px-4 py-2 text-right">Drop-off Rate (%)</th>
                 <th class="border border-gray-300 px-4 py-2 text-right">
-                  Conversion Rate (in %)
+                  Conversion Rate (%)
                 </th>
               </tr>
             </thead>
@@ -131,6 +131,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
 import { ref, watch } from 'vue';
+import { addDaysToDate } from '../../utils/index';
+
 const salesFunnelData = ref([])
 const salsFunnelUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
@@ -153,7 +155,7 @@ const get_SalesFunnelReport = async () => {
         },
         body: JSON.stringify({
           start_date: filters[0],
-          end_date: filters[1],
+          end_date: addDaysToDate(filters[1], 1) ,
         }),
       },
     )

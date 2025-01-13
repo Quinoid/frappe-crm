@@ -1,7 +1,7 @@
-import TaskStatusIcon from '@/components/Icons/TaskStatusIcon.vue'
 import TaskPriorityIcon from '@/components/Icons/TaskPriorityIcon.vue'
-import { useDateFormat, useTimeAgo } from '@vueuse/core'
+import TaskStatusIcon from '@/components/Icons/TaskStatusIcon.vue'
 import { usersStore } from '@/stores/users'
+import { useDateFormat, useTimeAgo } from '@vueuse/core'
 import { gemoji } from 'gemoji'
 import { toast } from 'qbs-vue-ui'
 import { h } from 'vue'
@@ -59,6 +59,11 @@ export function taskStatusOptions(action, data) {
       }
     },
   )
+}
+export function addDaysToDate(dateStr, daysToAdd) {
+  const [year, month, day] = dateStr.split('-').map(Number)
+  const date = new Date(year, month - 1, day + daysToAdd) // Month is 0-based in Date
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 }
 
 export function taskPriorityOptions(action, data) {
