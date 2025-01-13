@@ -120,12 +120,9 @@ watchDebounced(
   { debounce: 300, immediate: true },
 )
 const handleCheckDocType = (value) => {
-  return value === 'CRM Lead Quality' ||
-    value === 'CRM Priority' ||
-    value === 'Type Of Business' ||
-    value === 'CRM Organization Status' ||
+  return  value === 'CRM Organization Status' ||
     value === 'Contact Status' ||
-    value === 'CRM Deal Probability'||'CRM Lead Status'
+    value ==='CRM Lead Status'
     ? true
     : false
 }

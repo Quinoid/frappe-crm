@@ -74,20 +74,20 @@
 </template>
 
 <script setup>
-import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import CustomActions from '@/components/CustomActions.vue'
 import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
+import ContactsListView from '@/components/ListViews/ContactsListView.vue'
 import ContactModal from '@/components/Modals/ContactModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
-import ContactsListView from '@/components/ListViews/ContactsListView.vue'
+import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
 import { organizationsStore } from '@/stores/organizations.js'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
-import { ref, computed } from 'vue'
 import { call } from 'qbs-vue-ui'
+import { computed, ref } from 'vue'
+import { createToast } from '../utils/index'
 const { getOrganization } = organizationsStore()
-
 const showContactModal = ref(false)
 const showQuickEntryModal = ref(false)
 

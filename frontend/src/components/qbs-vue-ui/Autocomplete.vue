@@ -129,11 +129,11 @@
 import {
   Combobox,
   ComboboxInput,
-  ComboboxOptions,
   ComboboxOption,
+  ComboboxOptions,
 } from '@headlessui/vue'
-import { Popover, FeatherIcon } from 'qbs-vue-ui'
-import { ref, computed, useAttrs, useSlots, watch, nextTick } from 'vue'
+import { FeatherIcon, Popover } from 'qbs-vue-ui'
+import { computed, nextTick, ref, useAttrs, useSlots, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {

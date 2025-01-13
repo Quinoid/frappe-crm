@@ -118,7 +118,7 @@ async function updateOrganization() {
   errorMessage.value = ''
   if (!validate()) return
   const old = { ...doc.value }
-  const newOrg = { ..._organization.value ,organization_status: 'Active'}
+  const newOrg = { ..._organization.value }
 
   const nameChanged = old.organization_name !== newOrg.organization_name
   delete old.organization_name
@@ -180,6 +180,7 @@ async function callInsertDoc() {
     doc: {
       doctype: 'CRM Organization',
       ..._organization.value,
+      organization_status: 'Active',
     },
   })
   loading.value = false
@@ -305,7 +306,7 @@ watch(
       // TODO: Issue with FormControl
       // title.value.el.focus()
       doc.value = organization.value?.doc || organization.value || {}
-      _organization.value = { ...doc.value }
+      _organization.value = { ...doc.value, organization_status:'Active'}
       if (_organization.value.name) {
         editMode.value = true
       }
