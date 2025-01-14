@@ -11,6 +11,7 @@
       :variant="attrs.variant"
       :placeholder="attrs.placeholder??__('Select any option')"
       :doctype="doctype"
+      :from="from"
       :filterable="false"
     >
       <template #target="{ open, togglePopover }">
@@ -78,6 +79,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  
   from: {
     type: String,
     default: undefined,
@@ -120,12 +122,9 @@ watchDebounced(
   { debounce: 300, immediate: true },
 )
 const handleCheckDocType = (value) => {
-  return value === 'CRM Lead Quality' ||
-    value === 'CRM Priority' ||
-    value === 'Type Of Business' ||
-    value === 'CRM Organization Status' ||
+  return  value === 'CRM Organization Status' ||
     value === 'Contact Status' ||
-    value === 'CRM Deal Probability'||'CRM Lead Status'
+    value ==='CRM Lead Status'
     ? true
     : false
 }

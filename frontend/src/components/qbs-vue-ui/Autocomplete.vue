@@ -14,11 +14,13 @@
         >
           <div class="w-full">
             <button
-              class="flex w-full items-center bg-bg_white justify-between focus:outline-none"
-              :class="inputClasses"
+              class="flex w-full items-center bg-bg_white justify-between focus:outline-none "
+              :class="[inputClasses, {  'md:max-w-[230px] lg:max-w-max-w-[230px]': from === 'fields' }]"
               @click="() => togglePopover()"
             >
-              <div class="flex items-center">
+              <div class="flex items-center  "                   
+                :class="{ 'md:max-w-[calc(100%-1rem)] lg:max-w-[calc(100%-1rem)]': from === 'fields' }"
+>
                 <slot name="prefix" />
                 <span
                   class="overflow-hidden text-ellipsis whitespace-nowrap text-base leading-5"
@@ -129,11 +131,11 @@
 import {
   Combobox,
   ComboboxInput,
-  ComboboxOptions,
   ComboboxOption,
+  ComboboxOptions,
 } from '@headlessui/vue'
-import { Popover, FeatherIcon } from 'qbs-vue-ui'
-import { ref, computed, useAttrs, useSlots, watch, nextTick } from 'vue'
+import { FeatherIcon, Popover } from 'qbs-vue-ui'
+import { computed, nextTick, ref, useAttrs, useSlots, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -167,6 +169,10 @@ const props = defineProps({
   doctype: {
     type: String, 
     default: null
+  },
+  from: {
+    type: String,
+    default:""
   }
 })
 const emit = defineEmits(['update:modelValue', 'update:query', 'change'])

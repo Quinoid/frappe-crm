@@ -88,6 +88,7 @@
               <Link
                 class="form-control flex-1"
                 :value="data[field.name]"
+                :from="'fields'"
                 :isMultiple="field.type === 'Table MultiSelect' ? true : false"
                 :doctype="field.options"
                 @change="(v) => (data[field.name] = v)"
@@ -251,16 +252,16 @@
 </template>
 
 <script setup>
-import EditIcon from '@/components/Icons/EditIcon.vue'
-import NestedPopover from '@/components/NestedPopover.vue'
-import DropdownItem from '@/components/DropdownItem.vue'
-import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import UserAvatar from '@/components/UserAvatar.vue'
 import Link from '@/components/Controls/Link.vue'
-import { usersStore } from '@/stores/users'
 import MultiSelectBox from '@/components/Controls/MultiSelectBox.vue'
+import DropdownItem from '@/components/DropdownItem.vue'
+import EditIcon from '@/components/Icons/EditIcon.vue'
+import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
+import NestedPopover from '@/components/NestedPopover.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
+import { usersStore } from '@/stores/users'
 import { validateEmail } from '@/utils'
-import { Tooltip, DatePicker, DateTimePicker } from 'qbs-vue-ui'
+import { DatePicker, DateTimePicker, Tooltip } from 'qbs-vue-ui'
 
 const { getUser } = usersStore()
 

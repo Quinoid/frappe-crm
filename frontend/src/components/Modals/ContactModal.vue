@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="show" :options="dialogOptions">
+  <Dialog  v-model="show" :options="dialogOptions">
     <template #body>
       <div class="bg-white px-4 pb-6 pt-5 sm:px-6">
         <div class="mb-5 flex items-center justify-between">
@@ -135,7 +135,7 @@ async function updateContact() {
     return
   }
 
-  const values = { ..._contact.value,contact_status: 'Active' }
+  const values = { ..._contact.value }
 
   let name = await callSetValue(values)
 
@@ -183,6 +183,7 @@ async function callInsertDoc() {
     doc: {
       doctype: 'Contact',
       ..._contact.value,
+      contact_status: 'Active',
     },
   })
   if (doc.name) {
@@ -206,7 +207,7 @@ function handleContactUpdate(doc) {
 const dialogOptions = computed(() => {
   let title = !editMode.value ? 'New Contact' : _contact.value.full_name
 
-  let size = detailMode.value ? '' : 'xl'
+  let size = detailMode.value ? '3xl' : '3xl'
   let actions = detailMode.value
     ? []
     : [
@@ -277,7 +278,6 @@ const sections = createResource({
   params: { doctype: 'Contact', type: 'Quick Entry' },
   auto: true,
   transform: (data) => {
-    console.log(data)
     return data.forEach((section) => {
       section.fields.forEach((field) => {
         if (field) {
@@ -509,7 +509,7 @@ watch(
     detailMode.value = props.options.detailMode
     editMode.value = false
     nextTick(() => {
-      _contact.value = { ...props.contact.data }
+      _contact.value = { ...props.contact.data ,contact_status:'Active'}
       if (_contact.value.name) {
         editMode.value = true
       }
