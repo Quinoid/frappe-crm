@@ -44,7 +44,7 @@ def get_lead_conversion_data(start_date, end_date):
 
 
 @frappe.whitelist()
-def get_deal_summary_data(start_date, end_date, category_name="Open"):
+def get_deal_summary_data(start_date, end_date):
     if not start_date or not end_date:
         frappe.throw(_("Start date and end date are required"))
     
@@ -64,7 +64,7 @@ def get_deal_summary_data(start_date, end_date, category_name="Open"):
         LEFT JOIN 
             `tabDeal Status Category` AS status_category ON deal_status.category_name = status_category.category_name
         WHERE 
-            status_category.category_name = %s
+            status_category.category_name != 'Closed Won'
             AND deals.close_date BETWEEN %s AND %s
         GROUP BY 
             deals.source
@@ -72,7 +72,7 @@ def get_deal_summary_data(start_date, end_date, category_name="Open"):
             WeightedDealValue DESC
     """
     
-    data = frappe.db.sql(query, (category_name, start_date, end_date), as_dict=True)
+    data = frappe.db.sql(query, (start_date, end_date), as_dict=True)
     return data
 
 
@@ -127,12 +127,12 @@ def get_funnel_data(start_date, end_date):
         WITH FunnelData AS (
             SELECT 
                 CASE
-                    WHEN leads.status = 'New' THEN 'New'
-                    WHEN leads.status IN ('Contacted', 'Nurture') THEN 'Engaged'
-                    WHEN deals.status IN ('New', 'Qualification') THEN 'Qualified'
-                    WHEN deals.status IN ('Follow-up Required', 'Demo/Trial', 'Proposal/Quotation Sent') THEN 'Ongoing'
-                    WHEN deals.status IN ('Negotiation', 'Ready to Close') THEN 'Negotiation'
-                    WHEN deals.status = 'Closed Won' THEN 'Closed Won'
+                    WHEN lead_status.category_name = 'New' THEN 'New'
+                    WHEN lead_status.category_name = 'Engaged' THEN 'Engaged'
+                    WHEN deal_status.category_name = 'Qualified' THEN 'Qualified'
+                    WHEN deal_status.category_name = 'Ongoing' THEN 'Ongoing'
+                    WHEN deal_status.category_name = 'Negotiation' THEN 'Negotiation'
+                    WHEN deal_status.category_name = 'Closed Won' THEN 'Closed Won'
                 END AS FunnelStage,
                 COUNT(DISTINCT leads.name) AS TotalLeads,
                 SUM(
@@ -145,16 +145,13 @@ def get_funnel_data(start_date, end_date):
                 `tabCRM Lead` AS leads
             LEFT JOIN 
                 `tabCRM Deal` AS deals ON leads.name = deals.lead
+            LEFT JOIN 
+                `tabCRM Lead Status` AS lead_status ON leads.status = lead_status.name
+            LEFT JOIN 
+                `tabCRM Deal Status` AS deal_status ON deals.status = deal_status.name
             WHERE 
                 (leads.creation BETWEEN %s AND %s OR leads.creation IS NULL)
-                AND (
-                    leads.status IN ('New', 'Contacted', 'Nurture')
-                    OR deals.status IN (
-                        'New', 'Qualification', 'Follow-up Required', 
-                        'Demo/Trial', 'Proposal/Quotation Sent', 
-                        'Negotiation', 'Ready to Close', 'Closed Won'
-                    )
-                )
+                AND (lead_status.category_name IS NOT NULL OR deal_status.category_name IS NOT NULL)
 
             GROUP BY 
                 FunnelStage
