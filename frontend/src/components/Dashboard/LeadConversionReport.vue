@@ -57,7 +57,7 @@
       v-else-if="tableData?.length === 0"
       class="text-center text-gray-500 mt-4 p-3"
     >
-      <div class="flex h-full items-center justify-center">
+      <div class="flex h-full items-center justify-center min-h-[260px]">
         <div
           class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
         >
@@ -116,15 +116,13 @@
 </template>
 <script setup>
 import BarChart from '@/components/Dashboard/BarChart.vue';
+import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import GraphIcon from '@/components/GraphIcon.vue';
 import GridIcon from '@/components/GridIcon.vue';
-import { generateRandomColor } from '@/utils/colors';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
-import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import { ref, watch } from 'vue';
-import { addDaysToDate } from '../../utils/index';
 import { formatDate, revertDate } from '../../utils/index';
 
 const leadConversionReportData = ref([])
@@ -187,19 +185,18 @@ const formatCamelCase = (str) => {
 };
 
 function transformLeadData(inputData) {
-  const categories = ['ConvertedLeads', 'AvgConversionTime', 'TotalDealValue']
-  const colors = {
-    backgroundColor: Array.from({ length: categories.length }, () =>
-      generateRandomColor(),
-    ),
-    borderColor: Array.from({ length: categories.length }, () =>
-      generateRandomColor(),
-    ),
+
+   const colorsObj = {
+    ConvertedLeads: '#EB9772',
+    AvgConversionTime: '#A523B9',
+    TotalDealValue: '#573B92',
   }
+  const categories = ['ConvertedLeads', 'AvgConversionTime', 'TotalDealValue']
+ 
   const datasets = categories.map((category,index) => ({
     label: formatCamelCase(category),
     data: inputData?.map((item) => item[category]),
-    backgroundColor: colors.backgroundColor[index],
+    backgroundColor: colorsObj[category],
     borderColor: ['#ffffff'],
     borderWidth: 2, // Border thickness
   }))
