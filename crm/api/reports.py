@@ -46,18 +46,18 @@ def get_lead_conversion_data(start_date, end_date):
 
 
 @frappe.whitelist()
-def get_deal_summary_data(start_date, end_date):
+def get_deal_summary_data(start_date, end_date, excluded_category="Closed Won"):
     if not start_date or not end_date:
         frappe.throw(_("Start date and end date are required"))
-
-    adjusted_end_date = frappe.utils.add_days(end_date, 1)
     
+    adjusted_end_date = frappe.utils.add_days(end_date, 1)
+
     query = """
         SELECT 
             COALESCE(deals.source, 'N/A') AS DealStage,
             COUNT(deals.name) AS TotalDeals,
             ROUND(SUM(deals.custom_value), 2) AS TotalDealValue,
-            ROUND(SUM(deals.custom_value * (CAST(REPLACE(deals.deal_probability, '%', '') AS DECIMAL) / 100)), 2) AS WeightedDealValue,
+            ROUND(SUM(deals.custom_value * (deals.deal_probability / 100)), 2) AS WeightedDealValue, #weighted deal value = deal value* (deal probability/100)
             ROUND(AVG(deals.deal_probability), 2) AS AvgCloseProbability
         FROM 
             `tabCRM Deal` AS deals
@@ -66,18 +66,16 @@ def get_deal_summary_data(start_date, end_date):
         LEFT JOIN 
             `tabDeal Status Category` AS status_category ON deal_status.category_name = status_category.category_name
         WHERE 
-            status_category.category_name != 'Closed Won'
-            AND deals.close_date BETWEEN %(start_date)s AND %(adjusted_end_date)s
+            status_category.category_name != %s
+            AND deals.close_date BETWEEN %s AND %s
         GROUP BY 
             deals.source
         ORDER BY 
             WeightedDealValue DESC
     """
     
-    data = frappe.db.sql(query, {'start_date': start_date, 'end_date': adjusted_end_date}, as_dict=True)
+    data = frappe.db.sql(query, (excluded_category, start_date, adjusted_end_date), as_dict=True)
     return data
-
-
 
 
 @frappe.whitelist()
