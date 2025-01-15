@@ -58,7 +58,7 @@
       v-else-if="tableData?.length === 0"
       class="text-center text-gray-500 mt-4 p-3"
     >
-      <div class="flex h-full items-center justify-center">
+      <div class="flex h-full items-center justify-center min-h-[260px]">
         <div
           class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
         >
@@ -126,7 +126,6 @@ import HorizondalBarGraph from '@/components/Dashboard/HorizondalBarGraph.vue';
 import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import GraphIcon from '@/components/GraphIcon.vue';
 import GridIcon from '@/components/GridIcon.vue';
-import { generateRandomColor } from '@/utils/colors';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
@@ -180,7 +179,14 @@ get_SalesFunnelReport()
 
 function convertToFunnelData(inputData) {
     const sortedData = inputData.sort((a, b) => b.TotalLeads - a.TotalLeads);
-
+  const colorsObj = {
+    "New": "#DB5C4F",
+    "Engaged": "#8C52C1",
+    "Qualified": "#34C5B7",
+    "Ongoing": "#8C52C1",
+    "Negotiation": "#0077B5",
+    "Closed Won": "#E7BD88"
+  }
   return [
     {
       type: "funnel",
@@ -190,7 +196,7 @@ function convertToFunnelData(inputData) {
       dataPoints: sortedData.map(item => ({
         y: item.TotalLeads,
         label: item.FunnelStage,
-        color: generateRandomColor(),
+        color: colorsObj[item.FunnelStage],
       }))
     }
   ];

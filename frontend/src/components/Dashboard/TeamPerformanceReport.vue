@@ -59,7 +59,7 @@
       v-else-if="tableData?.length === 0"
       class="text-center text-gray-500 mt-4 p-3"
     >
-      <div class="flex h-full items-center justify-center">
+      <div class="flex h-full items-center justify-center min-h-[260px]">
         <div
           class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
         >
@@ -137,7 +137,6 @@ import BarChart from '@/components/Dashboard/BarChart.vue';
 import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import GraphIcon from '@/components/GraphIcon.vue';
 import GridIcon from '@/components/GridIcon.vue';
-import { generateRandomColor } from '@/utils/colors';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
@@ -196,28 +195,20 @@ const formatCamelCase = (str) => {
 
 
 function transformteamPerformanceReport(inputData) {
-  const categories = [
-    'TotalTasks',
-    'CompletedTasks',
-    'TotalDeals',
-    'TotalDealValue',
-    'TotalEmailsSent',
-    'TotalCalls',
-    'TotalMeetings',
-  ]
-  const colors = {
-    backgroundColor: Array.from({ length: categories.length }, () =>
-      generateRandomColor(),
-    ),
-    borderColor: Array.from({ length: categories.length }, () =>
-      generateRandomColor(),
-    ),
-  }
-
+  const categories = ['TotalTasks', 'CompletedTasks', 'TotalDeals', 'TotalDealValue', 'TotalEmailsSent', 'TotalCalls', 'TotalMeetings']
+  const colorsObj = {
+    TotalTasks: '#DE1189',
+    CompletedTasks: '#28AD4A',
+    TotalDeals: '#225EB9',
+    TotalDealValue: '#8C52C1',
+    TotalEmailsSent: '#DB5C4F',
+    TotalCalls: '#0088A0',
+    TotalMeetings: '#AE5955',
+  }   
   const datasets = categories.map((category, index) => ({
     label: formatCamelCase(category),
     data: inputData.map((item) => item[category]),
-    backgroundColor: colors.backgroundColor[index],
+    backgroundColor: colorsObj[category],
     borderColor: ['#ffffff'],
     borderWidth: 2, // Border thickness
   }))
