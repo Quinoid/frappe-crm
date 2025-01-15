@@ -8,6 +8,8 @@ def get_lead_conversion_data(start_date, end_date):
 
     if not start_date or not end_date:
         frappe.throw(_("Start date and end date are required"))
+
+    adjusted_end_date = frappe.utils.add_days(end_date, 1)
     
     query = """
         SELECT 
@@ -38,22 +40,24 @@ def get_lead_conversion_data(start_date, end_date):
             ConvertedLeads DESC
     """
     
-    data = frappe.db.sql(query, (start_date, end_date), as_dict=True)
+    data = frappe.db.sql(query, (start_date, adjusted_end_date), as_dict=True)
     
     return data
 
 
 @frappe.whitelist()
-def get_deal_summary_data(start_date, end_date, category_name="Open"):
+def get_deal_summary_data(start_date, end_date):
     if not start_date or not end_date:
         frappe.throw(_("Start date and end date are required"))
+
+    adjusted_end_date = frappe.utils.add_days(end_date, 1)
     
     query = """
         SELECT 
             COALESCE(deals.source, 'N/A') AS DealStage,
             COUNT(deals.name) AS TotalDeals,
             ROUND(SUM(deals.custom_value), 2) AS TotalDealValue,
-            ROUND(SUM(deals.custom_value * (deals.deal_probability / 100)), 2) AS WeightedDealValue, #weighted deal value = deal value* (deal probability/100)
+            ROUND(SUM(deals.custom_value * (CAST(REPLACE(deals.deal_probability, '%', '') AS DECIMAL) / 100)), 2) AS WeightedDealValue,
             ROUND(AVG(deals.deal_probability), 2) AS AvgCloseProbability
         FROM 
             `tabCRM Deal` AS deals
@@ -62,16 +66,17 @@ def get_deal_summary_data(start_date, end_date, category_name="Open"):
         LEFT JOIN 
             `tabDeal Status Category` AS status_category ON deal_status.category_name = status_category.category_name
         WHERE 
-            status_category.category_name = %s
-            AND deals.close_date BETWEEN %s AND %s
+            status_category.category_name != 'Closed Won'
+            AND deals.close_date BETWEEN %(start_date)s AND %(adjusted_end_date)s
         GROUP BY 
             deals.source
         ORDER BY 
             WeightedDealValue DESC
     """
     
-    data = frappe.db.sql(query, (category_name, start_date, end_date), as_dict=True)
+    data = frappe.db.sql(query, {'start_date': start_date, 'end_date': adjusted_end_date}, as_dict=True)
     return data
+
 
 
 
@@ -80,6 +85,8 @@ def get_task_summary_data(start_date, end_date):
 
     if not start_date or not end_date:
         frappe.throw(_("Start date and end date are required"))
+
+    adjusted_end_date = frappe.utils.add_days(end_date, 1)
     
     query = """
         SELECT 
@@ -87,13 +94,12 @@ def get_task_summary_data(start_date, end_date):
             COUNT(tasks.name) AS TotalTasks,
             SUM(CASE WHEN tasks.status = 'Done' THEN 1 ELSE 0 END) AS CompletedTasks,
             SUM(CASE WHEN tasks.status = 'Backlog' THEN 1 ELSE 0 END) AS OverdueTasks,
-            #ROUND(AVG(DATEDIFF(tasks.task_completion_date, tasks.due_date)), 2) AS AvgCompletionTime
             ROUND(
                 AVG(
                     CASE
-                        WHEN DATEDIFF(tasks.task_completion_date, tasks.due_date) = 0 
+                        WHEN DATEDIFF(tasks.task_completion_date, tasks.task_assigned_date) = 0 
                             THEN 1
-                        ELSE DATEDIFF(tasks.task_completion_date, tasks.due_date)
+                        ELSE DATEDIFF(tasks.task_completion_date, tasks.task_assigned_date)
                     END
                 ),
                 2
@@ -103,7 +109,7 @@ def get_task_summary_data(start_date, end_date):
         LEFT JOIN 
             `tabUser` AS users ON tasks.assigned_to = users.name
         WHERE 
-            tasks.due_date BETWEEN %s AND %s
+            tasks.task_completion_date BETWEEN %s AND %s
         GROUP BY 
             users.full_name
         ORDER BY 
@@ -111,80 +117,29 @@ def get_task_summary_data(start_date, end_date):
         LIMIT 10
     """
     
-    data = frappe.db.sql(query, (start_date, end_date), as_dict=True)
+    data = frappe.db.sql(query, (start_date, adjusted_end_date), as_dict=True)
     
     return data
 
 #Lag functionality needs to be changed?
-#currently showing leads converted to that stage from previous stage
-# @frappe.whitelist()
-# def get_funnel_data(start_date, end_date):
-#     # Validate input dates
-#     if not start_date or not end_date:
-#         frappe.throw(_("Start date and end date are required"))
-    
-#     query = """
-#         WITH FunnelData AS (
-#             SELECT 
-#                 status_table.lead_status AS FunnelStage,
-#                 COUNT(leads.name) AS TotalLeads,
-#                 SUM(CASE WHEN deals.status = 'Closed Won' THEN deals.custom_value ELSE 0 END) AS TotalDealValue,
-#                 status_table.position
-#             FROM 
-#                 `tabCRM Lead Status` AS status_table
-#             LEFT JOIN 
-#                 `tabCRM Lead` AS leads ON status_table.lead_status = leads.status
-#             LEFT JOIN 
-#                 `tabCRM Deal` AS deals ON leads.name = deals.lead
-#             WHERE 
-#                 leads.creation BETWEEN %s AND %s
-#                 OR leads.creation IS NULL
-#             GROUP BY 
-#                 status_table.position
-#         )
-#         SELECT 
-#             FunnelStage,
-#             TotalLeads,
-#             ROUND(TotalDealValue, 2) AS TotalDealValue,
-#             LAG(TotalLeads) OVER (ORDER BY FunnelData.position) AS PreviousStageLeads,
-#             ROUND(
-#                 CASE 
-#                     WHEN LAG(TotalLeads) OVER (ORDER BY FunnelData.position) IS NOT NULL 
-#                     THEN (TotalLeads * 100.0) / LAG(TotalLeads) OVER (ORDER BY FunnelData.position)
-#                     ELSE 100.0
-#                 END, 2
-#             ) AS ConversionRate
-#         FROM 
-#             FunnelData
-#         ORDER BY 
-#             FunnelData.position ASC
-
-#     """
-    
-#     # Execute the query
-#     try:
-#         data = frappe.db.sql(query, (start_date, end_date), as_dict=True)
-#     except Exception as e:
-#         frappe.throw(_("An error occurred while fetching funnel data: {0}").format(str(e)))
-    
-#     return data
-
 @frappe.whitelist()
 def get_funnel_data(start_date, end_date):
     # Validate input dates
     if not start_date or not end_date:
         frappe.throw(_("Start date and end date are required"))
+
+    adjusted_end_date = frappe.utils.add_days(end_date, 1)
     
     query = """
         WITH FunnelData AS (
             SELECT 
                 CASE
-                    WHEN leads.status = 'New' THEN 'New'
-                    WHEN leads.status IN ('Contacted', 'Nurture') THEN 'Engaged'
-                    WHEN deals.status IN ('New', 'Qualification') THEN 'Qualified'
-                    WHEN deals.status IN ('Follow-up Required', 'Demo/Trial', 'Proposal/Quotation Sent') THEN 'Ongoing'
-                    WHEN deals.status IN ('Negotiation', 'Ready to Close') THEN 'Negotiation'
-                    WHEN deals.status = 'Closed Won' THEN 'Closed Won'
+                    WHEN lead_status.category_name = 'New' THEN 'New'
+                    WHEN lead_status.category_name = 'Engaged' THEN 'Engaged'
+                    WHEN deal_status.category_name = 'Qualified' THEN 'Qualified'
+                    WHEN deal_status.category_name = 'Ongoing' THEN 'Ongoing'
+                    WHEN deal_status.category_name = 'Negotiation' THEN 'Negotiation'
+                    WHEN deal_status.category_name = 'Closed Won' THEN 'Closed Won'
                 END AS FunnelStage,
                 COUNT(DISTINCT leads.name) AS TotalLeads,
                 SUM(
@@ -197,15 +152,15 @@ def get_funnel_data(start_date, end_date):
                 `tabCRM Lead` AS leads
             LEFT JOIN 
                 `tabCRM Deal` AS deals ON leads.name = deals.lead
+            LEFT JOIN 
+                `tabCRM Lead Status` AS lead_status ON leads.status = lead_status.name
+            LEFT JOIN 
+                `tabCRM Deal Status` AS deal_status ON deals.status = deal_status.name
             WHERE 
                 (leads.creation BETWEEN %s AND %s OR leads.creation IS NULL)
                 AND (
-                    leads.status IN ('New', 'Contacted', 'Nurture')
-                    OR deals.status IN (
-                        'New', 'Qualification', 'Follow-up Required', 
-                        'Demo/Trial', 'Proposal/Quotation Sent', 
-                        'Negotiation', 'Ready to Close', 'Closed Won'
-                    )
+                    lead_status.category_name IN ('New', 'Engaged') 
+                    OR deal_status.category_name IN ('Qualified', 'Ongoing', 'Negotiation', 'Closed Won')
                 )
 
             GROUP BY 
@@ -239,7 +194,7 @@ def get_funnel_data(start_date, end_date):
     
     # Execute the query
     try:
-        data = frappe.db.sql(query, (start_date, end_date), as_dict=True)
+        data = frappe.db.sql(query, (start_date, adjusted_end_date), as_dict=True)
     except Exception as e:
         frappe.throw(_("An error occurred while fetching funnel data: {0}").format(str(e)))
     
@@ -251,8 +206,10 @@ def get_funnel_data(start_date, end_date):
 def get_user_summary(start_date, end_date):
     if not start_date or not end_date:
         frappe.throw(_("Start date and end date are required"))
+
+    adjusted_end_date = frappe.utils.add_days(end_date, 1)
     
-    if start_date > end_date:
+    if start_date >= adjusted_end_date:
         frappe.throw(_("Start date cannot be after the end date."))
 
     query = """
@@ -295,16 +252,16 @@ def get_user_summary(start_date, end_date):
     """
 
     data = frappe.db.sql(query, (
-        start_date, end_date,  # For events
-        start_date, end_date,  # For tasks
-        start_date, end_date,  # For deals
-        start_date, end_date,  # For communications
-        start_date, end_date,  # For call logs
-        start_date, end_date   # For participant events
+        start_date, adjusted_end_date,  # For events
+        start_date, adjusted_end_date,  # For tasks
+        start_date, adjusted_end_date,  # For deals
+        start_date, adjusted_end_date,  # For communications
+        start_date, adjusted_end_date,  # For call logs
+        start_date, adjusted_end_date   # For participant events
     ), as_dict=True)
     
     return {
         "summary": data,
         "start_date": start_date,
-        "end_date": end_date
+        "end_date": adjusted_end_date
     }
