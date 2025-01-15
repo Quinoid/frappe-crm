@@ -57,8 +57,7 @@ def get_deal_summary_data(start_date, end_date):
             COALESCE(deals.source, 'N/A') AS DealStage,
             COUNT(deals.name) AS TotalDeals,
             ROUND(SUM(deals.custom_value), 2) AS TotalDealValue,
-            #ROUND(SUM(deals.custom_value * (deals.deal_probability / 100)), 2) AS WeightedDealValue, #weighted deal value = deal value* (deal probability/100)
-            ROUND(SUM(deals.custom_value * (CAST(REPLACE(deals.deal_probability, '%', '') AS DECIMAL) / 100)), 2) AS WeightedDealValue
+            ROUND(SUM(deals.custom_value * (CAST(REPLACE(deals.deal_probability, '%', '') AS DECIMAL) / 100)), 2) AS WeightedDealValue,
             ROUND(AVG(deals.deal_probability), 2) AS AvgCloseProbability
         FROM 
             `tabCRM Deal` AS deals
@@ -68,15 +67,16 @@ def get_deal_summary_data(start_date, end_date):
             `tabDeal Status Category` AS status_category ON deal_status.category_name = status_category.category_name
         WHERE 
             status_category.category_name != 'Closed Won'
-            AND deals.close_date BETWEEN %s AND %s
+            AND deals.close_date BETWEEN %(start_date)s AND %(adjusted_end_date)s
         GROUP BY 
             deals.source
         ORDER BY 
             WeightedDealValue DESC
     """
     
-    data = frappe.db.sql(query, (start_date, adjusted_end_date), as_dict=True)
+    data = frappe.db.sql(query, {'start_date': start_date, 'end_date': adjusted_end_date}, as_dict=True)
     return data
+
 
 
 
@@ -158,7 +158,10 @@ def get_funnel_data(start_date, end_date):
                 `tabCRM Deal Status` AS deal_status ON deals.status = deal_status.name
             WHERE 
                 (leads.creation BETWEEN %s AND %s OR leads.creation IS NULL)
-                AND (lead_status.category_name IS NOT NULL OR deal_status.category_name IS NOT NULL)
+                AND (
+                    lead_status.category_name IN ('New', 'Engaged') 
+                    OR deal_status.category_name IN ('Qualified', 'Ongoing', 'Negotiation', 'Closed Won')
+                )
 
             GROUP BY 
                 FunnelStage
