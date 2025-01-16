@@ -198,7 +198,7 @@ function transformTaskData(inputData) {
   const datasets = categories.map((category,index) => ({
     label: formatCamelCase(category),
     data: inputData.map((item) => item[category]),
-    backgroundColor:colorsObj[index],
+    backgroundColor:colorsObj[category],
     borderColor: ['#ffffff'],
     borderWidth: 2, // Border thickness
   }))
