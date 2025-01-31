@@ -50,7 +50,7 @@
               </div>
               <div id="fieldname" class="w-full">
                 <Autocomplete
-                  :value="f.field.fieldname"
+                  :value="f.field?.fieldname"
                   :options="filterableFields.data"
                   @change="(e) => updateFilter(e, i)"
                   :placeholder="__('First Name')"
@@ -61,7 +61,7 @@
                   type="select"
                   v-model="f.operator"
                   @change="(e) => updateOperator(e, f)"
-                  :options="getOperators(f.field.fieldtype, f.field.fieldname)"
+                  :options="getOperators(f.field.fieldtype, f.field?.fieldname)"
                   :placeholder="__('Equals')"
                 />
               </div>
@@ -81,7 +81,7 @@
                 </div>
                 <div id="fieldname" class="!min-w-[140px]">
                   <Autocomplete
-                    :value="f.field.fieldname"
+                    :value="f.field?.fieldname"
                     :options="filterableFields.data"
                     @change="(e) => updateFilter(e, i)"
                     :placeholder="__('First Name')"
@@ -93,7 +93,7 @@
                     v-model="f.operator"
                     @change="(e) => updateOperator(e, f)"
                     :options="
-                      getOperators(f.field.fieldtype, f.field.fieldname)
+                      getOperators(f.field.fieldtype, f.field?.fieldname)
                     "
                     :placeholder="__('Equals')"
                   />
@@ -202,7 +202,7 @@ const filterableFields = createResource({
     fields = fields.map((field) => {
       return {
         label: field.label,
-        value: field.fieldname,
+        value: field?.fieldname,
         ...field,
       }
     })
@@ -241,7 +241,7 @@ function removeCommonFilters(commonFilters, allFilters) {
 function convertFilters(data, allFilters) {
   let f = []
   for (let [key, value] of Object.entries(allFilters)) {
-    let field = data.find((f) => f.fieldname === key)
+    let field = data.find((f) => f?.fieldname === key)
     if (typeof value !== 'object' || !value) {
       value = ['=', value]
       if (field?.fieldtype === 'Check') {
@@ -529,7 +529,7 @@ function apply() {
   let _filters = []
   filters.value.forEach((f) => {
     _filters.push({
-      fieldname: f.fieldname,
+      fieldname: f?.fieldname,
       operator: f.operator,
       value: f.value,
     })
@@ -541,10 +541,10 @@ function parseFilters(filters) {
   const filtersArray = Array.from(filters)
   const obj = filtersArray.map(transformIn).reduce((p, c) => {
     if (['equals', '='].includes(c.operator)) {
-      p[c.fieldname] =
+      p[c?.fieldname] =
         c.value == 'Yes' ? true : c.value == 'No' ? false : c.value
     } else {
-      p[c.fieldname] = [operatorMap[c.operator.toLowerCase()], c.value]
+      p[c?.fieldname] = [operatorMap[c.operator.toLowerCase()], c.value]
     }
     return p
   }, {})
