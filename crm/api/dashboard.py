@@ -308,3 +308,54 @@ def set_user_status(user_email, enabled):
     frappe.db.set_value("User", user_email, "enabled", enabled_flag)
     frappe.db.commit()
     return {"message": f"User {user_email} {'enabled' if enabled_flag else 'disabled'} successfully."}
+
+import json
+import frappe
+from frappe import _
+
+@frappe.whitelist()
+def update_domain_limit(**kwargs):
+    try:
+        file_path = frappe.get_site_path("domain_limit.json")
+        frappe.logger().info(f"File path: {file_path}")
+
+        # Load existing JSON data
+        try:
+            with open(file_path, "r") as file:
+                domain_limit = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            frappe.throw(_("Error reading domain_limit.json. Please check its existence and structure."))
+
+        if not domain_limit.get("limits") or not isinstance(domain_limit["limits"], list) or len(domain_limit["limits"]) == 0:
+            frappe.throw(_("Invalid domain_limit.json structure."))
+
+        frappe.logger().info(f"Current domain limits: {domain_limit}")
+
+        # Ensure we update the first dictionary inside "limits"
+        limits_data = domain_limit["limits"][0]  # Extract first entry
+        if isinstance(kwargs, dict) and kwargs:
+            for key, value in kwargs.items():
+                if key in limits_data:
+                    updated_value = int(value) if str(value).isdigit() else value
+                    if limits_data[key] != updated_value:  # Check if the value is actually changing
+                        limits_data[key] = updated_value
+                        frappe.logger().info(f"Updated {key}: {limits_data[key]}")
+                else:
+                    frappe.logger().warn(f"Key {key} not found in domain_limit.json")
+        else:
+            frappe.throw(_("Invalid input: No valid data provided."))
+
+        # Save updated data back to the file
+        with open(file_path, "w") as file:
+            json.dump(domain_limit, file, indent=4)
+
+        # Verify changes
+        with open(file_path, "r") as file:
+            updated_data = json.load(file)
+            frappe.logger().info(f"Updated domain_limit.json: {updated_data}")
+
+        return {"message": "Domain limits updated successfully", "updated_limits": updated_data}
+
+    except Exception as e:
+        frappe.log_error(message=str(e), title="Update Domain Limit Error")
+        frappe.throw(_("An error occurred while updating the domain limits."))
