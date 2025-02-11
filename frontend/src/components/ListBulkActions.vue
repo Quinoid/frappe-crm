@@ -1,19 +1,8 @@
 <template>
-  <EditValueModal
-    v-if="showEditModal"
-    v-model="showEditModal"
-    :doctype="doctype"
-    :selectedValues="selectedValues"
-    @reload="reload"
-  />
-  <AssignmentModal
-    v-if="showAssignmentModal"
-    v-model="showAssignmentModal"
-    v-model:assignees="bulkAssignees"
-    :docs="selectedValues"
-    :doctype="doctype"
-    @reload="reload"
-  />
+  <EditValueModal v-if="showEditModal" v-model="showEditModal" :doctype="doctype" :selectedValues="selectedValues"
+    @reload="reload" />
+  <AssignmentModal v-if="showAssignmentModal" v-model="showAssignmentModal" v-model:assignees="bulkAssignees"
+    :docs="selectedValues" :doctype="doctype" @reload="reload" />
 </template>
 
 <script setup>
@@ -49,7 +38,7 @@ const { $dialog, $socket } = globalStore()
 
 const showEditModal = ref(false)
 const selectedValues = ref([])
-const unselectAllAction = ref(() => {})
+const unselectAllAction = ref(() => { })
 
 function editValues(selections, unselectAll) {
   selectedValues.value = selections
@@ -57,7 +46,6 @@ function editValues(selections, unselectAll) {
   unselectAllAction.value = unselectAll
 }
 
-console.log(list.value)
 function convertToDeal(selections, unselectAll) {
   $dialog({
     title: __('Convert to Deal'),
@@ -93,7 +81,47 @@ function convertToDeal(selections, unselectAll) {
   })
 }
 
+// function deleteValues(selections, unselectAll) {
+//   $dialog({
+//     title: __('Delete'),
+//     message: __('Are you sure you want to delete {0} item(s)?', [
+//       selections.size,
+//     ]),
+//     variant: 'solid',
+//     theme: 'red',
+//     actions: [
+//       {
+//         label: __('Delete'),
+//         variant: 'solid',
+//         class: 'bg-btn_primary hover:bg-btn_primary',
+//         theme: 'red',
+//         onClick: (close) => {
+//           capture('bulk_delete')
+//           call('frappe.desk.reportview.delete_items', {
+//             items: JSON.stringify(Array.from(selections)),
+//             doctype: props.doctype,
+//           }).then(() => {
+//             createToast({
+//               title: __('Deleted successfully'),
+//               icon: 'check',
+//               iconClasses: 'text-green-600',
+//             })
+//             unselectAll()
+//             list.value.reload()
+//             close()
+//           })
+//         },
+
+//       },
+//     ],
+//   })
+// }
+function removeATags(htmlString) {
+  return htmlString.replace(/<a [^>]*>(.*?)<\/a>/g, '$1')
+}
 function deleteValues(selections, unselectAll) {
+  const API_BASE_PATH = `${window.location.origin}/api/method/`
+
   $dialog({
     title: __('Delete'),
     message: __('Are you sure you want to delete {0} item(s)?', [
@@ -107,21 +135,67 @@ function deleteValues(selections, unselectAll) {
         variant: 'solid',
         class: 'bg-btn_primary hover:bg-btn_primary',
         theme: 'red',
-        onClick: (close) => {
-          capture('bulk_delete')
-          call('frappe.desk.reportview.delete_items', {
-            items: JSON.stringify(Array.from(selections)),
-            doctype: props.doctype,
-          }).then(() => {
+        async onClick(close) {
+          try {
+            capture('bulk_delete')
+            console.log(JSON.stringify(Array.from(selections)),'saad')
+            const response = await fetch(
+              `${API_BASE_PATH}frappe.desk.reportview.delete_items`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-Frappe-CSRF-Token': window.csrf_token,
+                },
+                body: JSON.stringify({
+                  items: JSON.stringify(Array.from(selections)),
+                  doctype: props.doctype,
+                }),
+              },
+            )
+            if (!response) {
+              throw new Error('Server did not return a valid response.')
+            }
+
             createToast({
               title: __('Deleted successfully'),
               icon: 'check',
               iconClasses: 'text-green-600',
             })
+
             unselectAll()
             list.value.reload()
             close()
-          })
+
+          } catch (error) {
+            console.error('Failed to delete items:', error)
+
+            let errorMessage = __('Failed to delete the selected items. Please try again.')
+
+            // Attempt to parse server error messages
+            if (error.message) {
+              try {
+                const serverMessages = JSON.parse(error.message)
+                if (Array.isArray(serverMessages) && serverMessages[0]) {
+                  const parsedMessage = JSON.parse(serverMessages[0])
+                  if (parsedMessage.message) {
+                    errorMessage = removeATags(parsedMessage.message)
+                  }
+                }
+              } catch (parseError) {
+                console.error('Error parsing server response:', parseError)
+              }
+            }
+
+            // Show error toast
+            createToast({
+              title: 'Error',
+              text: errorMessage,
+              icon: 'x',
+              iconClasses: 'text-red-600',
+            })
+            close()
+          }
         },
       },
     ],
