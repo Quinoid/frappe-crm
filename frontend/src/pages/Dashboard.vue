@@ -7,45 +7,58 @@
 
   <div v-if="!isLoading" class="p-6 space-y-6">
     <!-- Dashboard Counts -->
-    <div class="lg:w-3/5 grid grid-cols-1 sm:grid-cols-4 gap-6">
+  
+
+    <div class="grid grid-cols-2 gap-4  w-full lg:w-4/5">
+      <!-- <FunnelChart />
+      <BarChart /> -->
+      <!-- Task List -->
+    <div class=" shadow-sm rounded-lg p-3  grid grid-cols-2 sm:grid-cols-2 bg-white gap-6">
       <!-- Leads Card -->
-      <div class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold">Leads</h3>
-        <p class="text-3xl font-bold text-indigo-600">
+      <div class="sm:col-span-1 bg-white shadow-sm  rounded-lg p-6 ">
+        <div class=" flex gap-2 items-center "> 
+              <LeadsIcon class="h-5 w-5" />
+             <h3 class="text-lg ">Leads</h3>
+          </div>
+        <p class="text-[36px]  text-primary">
           {{ dashboardData?.leadCount }}
         </p>
       </div>
 
       <!-- Deals Card -->
-      <div class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold">Deals</h3>
-        <p class="text-3xl font-bold text-green-600">
+      <div class="sm:col-span-1 bg-white shadow-sm rounded-lg p-6 ">
+    <div class=" flex gap-2 items-center "> 
+        <DealsIcon class="h-5 w-5" />
+        <h3 class="text-lg ">Deals</h3>
+      </div>        
+      <p class="text-[36px]  text-primary">
           {{ dashboardData?.dealCount }}
         </p>
       </div>
 
       <!-- Tasks Card -->
-      <div class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold">Tasks</h3>
-        <p class="text-3xl font-bold text-red-600">
+      <div class="sm:col-span-1 bg-white shadow-sm rounded-lg p-6 ">
+     <div class=" flex gap-2 items-center "> 
+        <TaskIcon class="h-5 w-5" />
+        <h3 class="text-lg ">Tasks</h3>
+      </div>        
+      <p class="text-[36px] text-primary">
           {{ dashboardData?.taskCount }}
         </p>
       </div>
 
-      <div class="sm:col-span-1 bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold">Contacts</h3>
-        <p class="text-3xl font-bold text-purple-600">
+      <div class="sm:col-span-1 bg-white shadow-sm rounded-lg p-6 ">
+    <div class=" flex gap-2 items-center "> 
+      <ContactsIcon class="h-5 w-5" />
+        <h3 class="text-lg ">Contacts</h3>
+        </div>        
+        <p class="text-[36px]   text-primary">
           {{ dashboardData?.contact_total_count }}
         </p>
       </div>
     </div>
-
-    <div class="flex-col gap-4 flex w-full lg:w-3/5">
-      <!-- <FunnelChart />
-      <BarChart /> -->
-      <!-- Task List -->
       <div
-        class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
+        class="bg-white shadow-sm rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
       >
         <h3 class="text-lg font-medium mb-4 text-gray-900">Recent Tasks</h3>
         <ul>
@@ -101,7 +114,7 @@
       <TeamPerformanceReport />
 
       <div
-        class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
+        class="bg-white shadow-sm rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
       >
         <h3 class="text-lg font-medium mb-4 text-gray-900">Upcoming Events</h3>
         <ul>
@@ -151,7 +164,7 @@
       </div>
       <div
         v-if="callEnabled"
-        class="bg-white shadow-md rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
+        class="bg-white shadow-sm rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto"
       >
         <h3 class="text-lg font-medium mb-4 text-gray-900">Call Logs</h3>
         <ul>
@@ -215,7 +228,6 @@ import { computed } from 'vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import { Breadcrumbs, createResource } from 'qbs-vue-ui'
 import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
-import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import { callEnabled } from '@/composables/settings'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import DealConversionReportData from '../components/Dashboard/DealConversionReportData.vue'
@@ -223,6 +235,10 @@ import LeadConversionReport from '../components/Dashboard/LeadConversionReport.v
 import SaleFunnelReport from '../components/Dashboard/SaleFunnelReport.vue'
 import TaskCompletionReport from '../components/Dashboard/TaskCompletionReport.vue'
 import TeamPerformanceReport from '../components/Dashboard/TeamPerformanceReport.vue'
+import LeadsIcon from '@/components/Icons/LeadsIcon.vue'
+import DealsIcon from '@/components/Icons/DealsIcon.vue'
+import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
+import TaskIcon from '@/components/Icons/TaskIcon.vue'
 let title = 'Dashboard'
 const breadcrumbs = [{ label: title, route: { name: 'Dashboard' } }]
 
