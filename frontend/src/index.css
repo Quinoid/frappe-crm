@@ -39,7 +39,7 @@
   right: 0;
   height: 100%;
   width: 1px;
-  background-color: #f0f1f5; /* Light gray (tailwind gray-300) */
+  background-color: rgba(219, 229, 250, 1); /* Light gray (tailwind gray-300) */
 }
 .event-submit-button {
   @apply !bg-btn_primary !text-white hover:!text-white;
@@ -101,4 +101,12 @@
   top: 0; /* Stick it to the top */
   z-index: 2; /* Ensure it stays above tbody rows */
   background-color: #f3f4f6; /* Optional: Add background color to header */
+}
+
+.bg-maingradient {
+  background: linear-gradient(
+    180deg,
+    rgba(245, 247, 255, 0.33),
+    rgba(237, 242, 255, 0.8)
+  );
 }

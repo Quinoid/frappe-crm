@@ -7,8 +7,8 @@
           isCollapsed
             ? 'w-auto px-0'
             : open
-              ? 'w-52 bg-white px-2 shadow-sm'
-              : 'w-52 px-2 hover:bg-gray-200'
+              ? 'w-52 bg-sidebar_active px-2 shadow-sm'
+              : 'w-52 px-2 hover:bg-sidebar_hover'
         "
       >
         <BizpoleLogo class="size-8 flex-shrink-0 rounded" />
@@ -20,10 +20,10 @@
               : 'ml-2 w-auto opacity-100'
           "
         >
-          <div class="text-base font-medium leading-none text-gray-900">
+          <div class="text-base font-medium leading-none text-white">
             {{ __('CRM') }}
           </div>
-          <div class="mt-1 text-sm leading-none text-gray-700">
+          <div class="mt-1 text-sm leading-none text-white">
             {{ user.full_name }}
           </div>
         </div>
@@ -37,7 +37,7 @@
         >
           <FeatherIcon
             name="chevron-down"
-            class="size-4 text-gray-600"
+            class="size-4 text-white"
             aria-hidden="true"
           />
         </div>

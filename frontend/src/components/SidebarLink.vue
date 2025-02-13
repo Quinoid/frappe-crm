@@ -2,7 +2,7 @@
   <a
     v-if="shouldShowComponent"
     class="flex h-7 cursor-pointer items-center rounded text-gray-700 duration-300 ease-in-out focus:outline-none focus:transition-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-gray-400"
-    :class="isActive ? 'bg-white shadow-sm' : 'hover:bg-gray-100'"
+    :class="isActive ? ' bg-sidebar_active shadow-sm' : 'hover:bg-sidebar_hover'"
     @click.prevent="handleClick"
     :href="linkHref"
   >
@@ -17,9 +17,16 @@
               <FeatherIcon
                 v-if="typeof icon == 'string'"
                 :name="icon"
-                class="size-4 text-gray-700"
+                class="size-4"
+                  :class="isActive ? 'text-white' : 'text-gray-700'"
+
               />
-              <component v-else :is="icon" class="size-4 text-gray-700" />
+                <component 
+                  v-else 
+                  :is="icon" 
+                  class="size-4" 
+                  :class="isActive ? 'text-white' : 'text-gray-700'"
+                />
             </span>
           </slot>
         </Tooltip>
@@ -30,8 +37,9 @@
           :hoverDelay="1.5"
         >
           <span
-            class="flex-1 flex-shrink-0 truncate text-sm duration-300 ease-in-out"
+            class="flex-1 flex-shrink-0 text-white truncate text-sm duration-300 ease-in-out"
             :class="
+
               isCollapsed
                 ? 'ml-0 w-0 overflow-hidden opacity-0'
                 : 'ml-2 w-auto opacity-100'

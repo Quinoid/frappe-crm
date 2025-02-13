@@ -3,7 +3,7 @@
     <div class="h-full border-r bg-gray-50">
       <AppSidebar />
     </div>
-    <div class="flex-1 flex flex-col h-full overflow-auto">
+    <div class="flex-1 flex flex-col h-full overflow-auto bg-maingradient">
       <AppHeader />
       <slot />
     </div>
