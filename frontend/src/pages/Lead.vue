@@ -376,7 +376,7 @@ const lead = createResource({
 })
 
 onMounted(() => {
-  if (lead.data) return
+  // if (lead.data) return
   lead.fetch()
 })
 

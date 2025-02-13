@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { userResource } from '@/stores/user'
-import { sessionStore } from '@/stores/session'
+import {  sessionStore } from '@/stores/session'
 
 const routes = [
   {
