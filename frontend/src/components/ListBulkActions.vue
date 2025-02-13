@@ -156,17 +156,42 @@ function deleteValues(selections, unselectAll) {
             if (!response) {
               throw new Error('Server did not return a valid response.')
             }
+            const data = await response.json()
+            if (data._server_messages) {
+              let errorMessage = __('Failed to delete the selected items. Please try again.')
+                try {
+                  const serverMessages = JSON.parse(data._server_messages)
+                  if (Array.isArray(serverMessages) && [0]) {
+                    const parsedMessage = JSON.parse(serverMessages[0])
+                    if (parsedMessage.message) {
+                      errorMessage = removeATags(parsedMessage.message)
+                    }
+                  }
+                } catch (parseError) {
+                  console.error('Error parsing server response:', parseError)
+                }
+              
 
-            createToast({
-              title: __('Deleted successfully'),
-              icon: 'check',
-              iconClasses: 'text-green-600',
-            })
+              // Show error toast
+              createToast({
+                title: 'Error',
+                text: errorMessage,
+                icon: 'x',
+                iconClasses: 'text-red-600',
+              })
+              close()
+            } else {
 
-            unselectAll()
-            list.value.reload()
-            close()
+              createToast({
+                title: __('Deleted successfully'),
+                icon: 'check',
+                iconClasses: 'text-green-600',
+              })
 
+              unselectAll()
+              list.value.reload()
+              close()
+            }
           } catch (error) {
             console.error('Failed to delete items:', error)
 
@@ -176,7 +201,7 @@ function deleteValues(selections, unselectAll) {
             if (error.message) {
               try {
                 const serverMessages = JSON.parse(error.message)
-                if (Array.isArray(serverMessages) && serverMessages[0]) {
+                if (Array.isArray(serverMessages) &&  [0]) {
                   const parsedMessage = JSON.parse(serverMessages[0])
                   if (parsedMessage.message) {
                     errorMessage = removeATags(parsedMessage.message)
