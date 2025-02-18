@@ -105,8 +105,39 @@
 
 .bg-maingradient {
   background: linear-gradient(
-    180deg,
-    rgba(245, 247, 255, 0.33),
-    rgba(237, 242, 255, 0.8)
+      180deg,
+      rgba(220, 227, 254, 0.25) 0%,
+      rgba(228, 197, 245, 0.25) 100%
+    ),
+    #f8f8f8;
+}
+.sideBar_shadow {
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0px 9px 42px 0px rgba(0, 0, 0, 0.09);
+}
+
+.sidemenu-header-menu {
+  border-radius: 10px;
+  background: rgba(34, 34, 34, 0.05);
+  display: flex;
+  padding: var(--padding-spacing_xsmall, 8px);
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.sidemenu-item :hover {
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0px 9px 42px 0px rgba(0, 0, 0, 0.09);
+}
+.dash_tile {
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: linear-gradient(
+    103deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.6) 100%
   );
 }

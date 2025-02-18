@@ -4,6 +4,7 @@
       <div class="flex items-center">
         <Button
           :label="__('Filter')"
+          class="!bg-transparent"
           :class="filters?.size ? 'rounded-r-none' : ''"
         >
           <template #prefix><FilterIcon class="h-4" /></template>

@@ -127,10 +127,10 @@ export default defineComponent({
       plugins: {
         legend: {
           display: true,
-          position: 'top',
+          position: 'bottom',
         },
         title: {
-          display: true,
+          display: false,
           text: 'Monthly Data Overview',
         },
       },

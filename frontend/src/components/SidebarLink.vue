@@ -1,14 +1,15 @@
 <template>
+  <div>
   <a
     v-if="shouldShowComponent"
-    class="flex h-7 cursor-pointer items-center rounded text-gray-700 duration-300 ease-in-out focus:outline-none focus:transition-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-gray-400"
-    :class="isActive ? ' bg-sidebar_active shadow-sm' : 'hover:bg-sidebar_hover'"
+    class="flex flex-col  cursor-pointer items-center text-[14px] duration-300 ease-in-out  sidemenu-item focus:outline-none focus:transition-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-gray-400"
+    :class="isActive ? ' bg-sidebar_active  sideBar_shadow' : 'hover:bg-sidebar_hover '"
     @click.prevent="handleClick"
     :href="linkHref"
   >
     <div
       class="flex w-full items-center justify-between duration-300 ease-in-out"
-      :class="isCollapsed ? 'ml-[3px] p-1' : 'px-2 py-1'"
+      :class="isCollapsed ? `${!isStatic ? 'ml-[3px] p-1' : ''}` : 'px-2 py-2'"
     >
       <div class="flex items-center truncate">
         <Tooltip :text="label" placement="right" :disabled="!isCollapsed">
@@ -17,15 +18,15 @@
               <FeatherIcon
                 v-if="typeof icon == 'string'"
                 :name="icon"
-                class="size-4"
-                  :class="isActive ? 'text-white' : 'text-gray-700'"
+                class="size-5"
+                  :class="isActive ?   'text-primary_text':'text-sidebar_icon_color'"
 
               />
                 <component 
                   v-else 
                   :is="icon" 
-                  class="size-4" 
-                  :class="isActive ? 'text-white' : 'text-gray-700'"
+                  class="size-5" 
+                  :class="isActive ? 'text-primary_text':'text-sidebar_icon_color'"
                 />
             </span>
           </slot>
@@ -37,9 +38,9 @@
           :hoverDelay="1.5"
         >
           <span
-            class="flex-1 flex-shrink-0 text-white truncate text-sm duration-300 ease-in-out"
+            class="flex-1 flex-shrink-0 text-[#222222] truncate text-[14px] duration-300 ease-in-out"
             :class="
-
+              isActive ? 'text-primary_text':'text-[#222222]',
               isCollapsed
                 ? 'ml-0 w-0 overflow-hidden opacity-0'
                 : 'ml-2 w-auto opacity-100'
@@ -52,14 +53,16 @@
       <slot name="right" />
     </div>
   </a>
+    <div v-if="divider" class="border-b border-gray-300 my-2"></div>
+    </div>
+
 </template>
 
 <script setup>
-import { Tooltip } from 'qbs-vue-ui'
-import { computed, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
 import { isMobileView, mobileSidebarOpened } from '@/composables/settings'
-import { call } from 'qbs-vue-ui'
+import { call, Tooltip } from 'qbs-vue-ui'
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 
@@ -74,6 +77,14 @@ const props = defineProps({
   to: {
     type: [Object, String],
     default: '',
+  },
+  divider: {
+    type: Boolean,
+    default: false,
+  },
+  isStatic: {
+    type: Boolean,
+    default: false, 
   },
   isCollapsed: {
     type: Boolean,

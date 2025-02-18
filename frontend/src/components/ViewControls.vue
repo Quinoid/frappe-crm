@@ -88,9 +88,9 @@
         <Button :label="__('Save Changes')" @click="saveView" />
       </div>
       <div class="flex items-center gap-2">
-        <Button :label="__('Refresh')" @click="reload()" :loading="isLoading">
+        <Button :label="__('Refresh')" @click="reload()"  class="!bg-transparent" :loading="isLoading">
           <template #icon>
-            <RefreshIcon class="h-4 w-4" />
+            <RefreshIcon class="h-4 w-4 bg-transparent" />
           </template>
         </Button>
         <GroupBy
@@ -144,7 +144,7 @@
           ]"
         >
           <template #default>
-            <Button icon="more-horizontal" />
+            <Button icon="more-horizontal" class="!bg-transparent" />
           </template>
         </Dropdown>
       </div>

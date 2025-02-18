@@ -2,13 +2,13 @@
   <Dropdown :options="dropdownOptions" v-bind="$attrs">
     <template v-slot="{ open }">
       <button
-        class="flex h-12 items-center rounded-md py-2 duration-300 ease-in-out"
+        class="flex h-12 items-center rounded-md py-2 duration-300 ease-in-out "
         :class="
           isCollapsed
             ? 'w-auto px-0'
             : open
-              ? 'w-52 bg-sidebar_active px-2 shadow-sm'
-              : 'w-52 px-2 hover:bg-sidebar_hover'
+              ? 'w-[237px] bg-sidebar_active px-2 shadow-sm sidemenu-header-menu'
+              : 'w-[237px] px-2 hover:bg-sidebar_hover sidemenu-header-menu'
         "
       >
         <BizpoleLogo class="size-8 flex-shrink-0 rounded" />
@@ -20,10 +20,10 @@
               : 'ml-2 w-auto opacity-100'
           "
         >
-          <div class="text-base font-medium leading-none text-white">
+          <div class="text-base font-medium leading-none text-[#222]">
             {{ __('CRM') }}
           </div>
-          <div class="mt-1 text-sm leading-none text-white">
+          <div class="mt-1 text-sm leading-none text-sidebar_icon_color">
             {{ user.full_name }}
           </div>
         </div>
@@ -48,13 +48,13 @@
 </template>
 
 <script setup>
-import SettingsModal from '@/components/Settings/SettingsModal.vue'
-import BizpoleLogo from '@/components/Icons/BizpoleLogo.vue'
 import Apps from '@/components/Apps.vue'
+import BizpoleLogo from '@/components/Icons/BizpoleLogo.vue'
+import SettingsModal from '@/components/Settings/SettingsModal.vue'
 import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'
 import { Dropdown } from 'qbs-vue-ui'
-import { computed, ref, markRaw } from 'vue'
+import { computed, markRaw, ref } from 'vue'
 const props = defineProps({
   isCollapsed: {
     type: Boolean,

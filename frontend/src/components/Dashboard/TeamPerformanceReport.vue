@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white shadow-sm rounded-lg p-6 sm:w-full w-full overflow-y-auto"
+    class="bg-white shadow-sm rounded-lg grid col-span-3 p-6 sm:w-full w-full overflow-y-auto"
   >
     
        <div class="flex justify-between items-center mb-4 ">
