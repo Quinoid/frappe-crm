@@ -14,7 +14,14 @@ from crm.api.views import get_views
 from crm.fcrm.doctype.crm_form_script.crm_form_script import get_form_script
 from frappe.utils.password import get_decrypted_password
 from frappe.query_builder import Table
+from bs4 import BeautifulSoup
 
+
+def strip_html(html_content):
+    if html_content:
+        soup = BeautifulSoup(html_content, "html.parser")
+        return " ".join(soup.get_text().split())
+    return ""
 
 @frappe.whitelist()
 def change_password(new_password: str, confirm_password: str, old_password: str = None):
@@ -91,12 +98,21 @@ def is_password_set():
 @staticmethod
 def custom_communication_default_list_data():
     columns = [
+
         {
-            'label': 'Name',
+            'label': 'Date Sender',
             'type': 'Data',
-            'key': 'name',
-            'width': '12rem',
+            'key': 'communication_date',
+            'width': '8rem',
         },
+
+        {
+            'label': 'Recipients',
+            'type': 'Data',
+            'key': 'recipients',
+            'width': '8rem',
+        },
+
         {
             'label': 'Subject',
             'type': 'Data',
@@ -109,57 +125,47 @@ def custom_communication_default_list_data():
             'key': 'content',
             'width': '8rem',
         },
-        {
-            'label': 'Sender',
-            'type': 'Data',
-            'key': 'sender',
-            'width': '8rem',
-        },
+        # {
+        #     'label': 'Sender',
+        #     'type': 'Data',
+        #     'key': 'sender',
+        #     'width': '8rem',
+        # },
 
-        {
-            'label': 'Recipients',
-            'type': 'Data',
-            'key': 'recipients',
-            'width': '8rem',
-        },
+        
 
-        {
-            'label': 'Cc',
-            'type': 'Data',
-            'key': 'cc',
-            'width': '8rem',
-        },
+        # {
+        #     'label': 'Cc',
+        #     'type': 'Data',
+        #     'key': 'cc',
+        #     'width': '8rem',
+        # },
 
-        {
-            'label': 'Bcc',
-            'type': 'Data',
-            'key': 'bcc',
-            'width': '8rem',
-        },
+        # {
+        #     'label': 'Bcc',
+        #     'type': 'Data',
+        #     'key': 'bcc',
+        #     'width': '8rem',
+        # },
 
-        {
-            'label': 'Communication Date',
-            'type': 'Data',
-            'key': 'communication_date',
-            'width': '8rem',
-        },
+        
 
 
-        {
-            'label': 'Last Modified',
-            'type': 'Datetime',
-            'key': 'modified',
-            'width': '8rem',
-        },
+        # {
+        #     'label': 'Last Modified',
+        #     'type': 'Datetime',
+        #     'key': 'modified',
+        #     'width': '8rem',
+        # },
     ]
     rows = [
-        "name",
+        # "name",
         "subject",
         "content",
         "sender",
-        "recipients",
-        "cc",
-        "bcc",
+        # "recipients",
+        # "cc",
+        # "bcc",
         "communication_date",
         "modified",
     ]
@@ -284,6 +290,11 @@ def get_communication_data(
             as_dict=True
         )
         #return communications
+
+        
+
+        for comm in communications:
+            comm["content"] = strip_html(comm["content"])
 
         data = communications
 
