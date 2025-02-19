@@ -67,7 +67,7 @@
       </div>
       <div
         v-else-if="title == 'Details'"
-        class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)] overflow-auto"
+        class="pb-5  h-[calc(100vh-100px)] overflow-auto"
       >
         <div class="" v-if="doctype == 'CRM Lead'">
           <DetailsView

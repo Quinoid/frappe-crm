@@ -13,8 +13,8 @@
       <!-- <FunnelChart />
       <BarChart /> -->
       <!-- Task List -->
-      <div class="col-span-4 space-y-4">
-        <div class="rounded-lg   grid   sm:grid-cols-4  gap-6">
+      <div class="lg:col-span-4 col-span-6  space-y-4">
+        <div class="rounded-lg   grid lg:grid-cols-4  grid-cols-1  gap-6">
           <!-- Leads Card -->
           <div class="sm:col-span-1 dash_tile shadow-sm  rounded-lg p-6 ">
             <div class=" flex gap-2 items-center ">
@@ -23,7 +23,7 @@
               </span>
               <h3 class="text-2xl ">Leads</h3>
             </div>
-            <p class="text-[48px]  text-primary">
+            <p class="text-[48px] font-semibold  text-primary">
               {{ dashboardData?.leadCount }}
             </p>
           </div>
@@ -36,7 +36,7 @@
               </span>
               <h3 class="text-2xl ">Deals</h3>
             </div>
-            <p class="text-[48px]  text-primary">
+            <p class="text-[48px] font-semibold text-primary">
               {{ dashboardData?.dealCount }}
             </p>
           </div>
@@ -49,7 +49,7 @@
               </span>
               <h3 class="text-2xl ">Tasks</h3>
             </div>
-            <p class="text-[48px] text-primary">
+            <p class="text-[48px] font-semibold text-primary">
               {{ dashboardData?.taskCount }}
             </p>
           </div>
@@ -61,7 +61,7 @@
               </span>
               <h3 class="text-2xl ">Contacts</h3>
             </div>
-            <p class="text-[48px]   text-primary">
+            <p class="text-[48px] font-semibold  text-primary">
               {{ dashboardData?.contact_total_count }}
             </p>
           </div>
@@ -71,7 +71,7 @@
 
         <DealConversionReportData />
       </div>
-      <div class="col-span-2 space-y-4">
+      <div class="lg:col-span-2 col-span-6 space-y-4">
         <div class="bg-white shadow-sm grid col-span-2 rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto">
           <h3 class="text-lg font-medium mb-4 text-gray-900">Recent Tasks</h3>
           <ul>
@@ -151,7 +151,7 @@
 
 
       <div v-if="callEnabled"
-        class="bg-white shadow-sm  grid col-span-3 rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto">
+        class="bg-white shadow-sm  grid lg:col-span-3 col-span-6 rounded-lg p-6 sm:w-full w-full max-h-[380px] overflow-y-auto">
         <h3 class="text-lg font-medium mb-4 text-gray-900">Call Logs</h3>
         <ul>
           <li v-for="calllog in dashboardData?.call_logs" :key="calllog.name" class="border-b last:border-none py-2">

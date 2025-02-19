@@ -78,26 +78,21 @@ export default {
 }
 </script> -->
 <template v-if="chartData.labels.length > 0">
-  <Bar
-    class="h-full w-full"
-    id="my-chart-id"
-    :options="chartOptions"
-    :data="chartData"
-  />
+  <Bar class="h-full w-full" id="my-chart-id" :options="chartOptions" :data="chartData" />
 </template>
 
 <script>
-import { defineComponent, toRefs } from 'vue'
-import { Bar } from 'vue-chartjs'
 import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
   BarElement,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-} from 'chart.js'
+  Title,
+  Tooltip,
+} from 'chart.js';
+import { defineComponent, toRefs } from 'vue';
+import { Bar } from 'vue-chartjs';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
@@ -132,6 +127,16 @@ export default defineComponent({
         title: {
           display: false,
           text: 'Monthly Data Overview',
+        },
+
+      },
+      scales: {
+        x: {
+          barPercentage: 0.5, // Adjust space between bars (0 to 1)
+          categoryPercentage: 0.8, // Controls the width of bars relative to the category
+        },
+        y: {
+          beginAtZero: true,
         },
       },
     }

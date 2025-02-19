@@ -120,7 +120,7 @@
       <div
         v-for="(section, i) in filteredSections"
         :key="section.label"
-        class="flex flex-col p-3 shadow-sm rounded-md bg-white"
+        class="flex flex-col  shadow-sm rounded-md bg-white"
       >
         <Section
           :is-opened="section.opened"

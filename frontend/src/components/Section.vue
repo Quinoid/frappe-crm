@@ -1,6 +1,6 @@
 <template>
   <slot name="header" v-bind="{ opened, hide, open, close, toggle }">
-    <div v-if="!hide" class="flex items-center justify-between">
+    <div v-if="!hide" class="flex items-center justify-between details-container-header">
       <div
         class="flex h-7 max-w-fit cursor-pointer items-center gap-2 pl-2 pr-3 text-base font-semibold leading-5"
         @click="!hideDrillDown && toggle()"
@@ -24,7 +24,7 @@
     enter-from-class="max-h-0 overflow-hidden"
     leave-to-class="max-h-0 overflow-hidden"
   >
-    <div v-if="opened">
+    <div v-if="opened" class="p-3 !pt-0">
       <slot v-bind="{ opened, open, close, toggle }" />
     </div>
   </transition>

@@ -100,9 +100,29 @@
   position: sticky; /* Make header sticky */
   top: 0; /* Stick it to the top */
   z-index: 2; /* Ensure it stays above tbody rows */
-  background-color: #f3f4f6; /* Optional: Add background color to header */
+  background-color: #eae9fd; /* Optional: Add background color to header */
+  color: #374151;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+}
+.table-container tbody tr {
+  color: #000;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}
+.table-container tbody tr:nth-child(odd) {
+  background-color: #eeeeee4d; /* Light gray background for odd rows */
 }
 
+.table-container tbody tr:nth-child(even) {
+  background-color: #ffffff; /* White background for even rows */
+}
 .bg-maingradient {
   background: linear-gradient(
       180deg,
@@ -140,4 +160,40 @@
     rgba(255, 255, 255, 0.4) 0%,
     rgba(255, 255, 255, 0.6) 100%
   );
+}
+.graph-actions {
+  display: flex;
+  padding: 4px;
+  align-items: center;
+  gap: 7px;
+  border-radius: 8px;
+  background: rgba(235, 235, 235, 0.6);
+}
+.nodata-text {
+  display: flex;
+  width: 382px;
+  height: 75px;
+  padding: 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  position: absolute;
+  color: #434343;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+}
+.details-container-header {
+  display: flex;
+  padding: 8px 16px;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border-card-color_default, #e6e8ea);
+  background: var(--surface-main-bg_fill_color, #fafafa);
+  align-self: stretch;
 }

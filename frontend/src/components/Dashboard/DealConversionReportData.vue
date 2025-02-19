@@ -17,22 +17,23 @@
       />
       <ToolTipInfo />
     </div>
-      <div class="flex gap-2">
-        <Tooltip :text="__('Graph View')">
-        <span @click="graphView = true" class="cursor-pointer">
+      <div class="flex gap-2 graph-actions">
+       <span @click="graphView = true" class="cursor-pointer" :class="graphView ? 'bg-white' : ''">
+          <Tooltip :text="__('Graph View')">
           <GraphIcon
-            class="h-4 w-4"
-            :class="graphView ? 'text-green-600' : 'text-gray-600'"
+            class="h-6 w-6"
+            :class="'text-icon_color'"
           />
+          </Tooltip>
         </span>
-        </Tooltip>
-        <Tooltip :text="__('Grid View')">
-        <span @click="graphView = false" class="cursor-pointer">
+        <span @click="graphView = false" class="cursor-pointer p-[2px]" :class="!graphView ? 'bg-white' : ''">
+          <Tooltip :text="__('Grid View')">
           <GridIcon
-            class="h-4 w-4"
-            :class="!graphView ? 'text-green-600' : 'text-gray-600'"
-        /></span>
-        </Tooltip>
+            class="h-6 w-6"
+            :class="'text-icon_color'"
+        />
+              </Tooltip>
+        </span>
         <Tooltip :text="__('Download PDF')">
           <a
             class="cursor-pointer hover:text-green-600"
@@ -58,10 +59,10 @@
     >
       <div class="flex h-full items-center justify-center min-h-[260px]">
         <div
-          class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
+          class="flex flex-col relative items-center justify-center gap-3 text-xl font-medium text-gray-500"
         >
-          <GraphIcon class="h-10 w-10" />
-          <span class="text-sm text-gray-500"> No Data Available</span>
+          <EmptyGraph  />
+          <span class="nodata-text"> Not enough data to display visualization.</span>
         </div>
       </div>
     </div>
@@ -120,6 +121,7 @@
 </template>
 <script setup>
 import BarChart from '@/components/Dashboard/BarChart.vue'
+import EmptyGraph from '@/components/Dashboard/EmptyGraph.vue'
 import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
