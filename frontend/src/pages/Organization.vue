@@ -120,7 +120,7 @@
               size="3xl"
               :image="organization.data.organization_logo"
               :label="organization.data.name"
-              class="!h-24 !w-24"
+              class="!h-24 !w-24 avat_container"
             />
             <component
               :is="organization.data.organization_logo ? Dropdown : 'div'"

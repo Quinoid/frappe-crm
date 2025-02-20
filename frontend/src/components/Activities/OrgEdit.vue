@@ -18,12 +18,12 @@
         >
           <template #default="{ openFileSelector, error }">
             <div
-              class="flex items-center justify-start gap-5 border-b px-5 py-2.5"
+              class="flex items-center justify-start gap-5  px-5 py-2.5"
             >
               <div class="group relative size-12">
                 <Avatar
                   size="3xl"
-                  class="size-12"
+                  class="size-12 avat_container"
                   :label="doc.data.name || __('Untitled')"
                   :image="doc.data.organization_logo"
                 />
@@ -86,13 +86,13 @@
             <div class="flex gap-1.5">
               <Tooltip v-if="callEnabled" :text="__('Make a call')">
                 <Button class="h-7 w-7" @click="triggerCall">
-                  <PhoneIcon class="h-4 w-4" />
+                  <PhoneIcon class="h-4 w-4 text-primary_text" />
                 </Button>
               </Tooltip>
               <Tooltip :text="__('Send an email')">
                 <Button class="h-7 w-7">
                   <Email2Icon
-                    class="h-4 w-4"
+                    class="h-4 w-4 text-primary_text"
                     @click="
                       doc.data.email
                         ? openEmailBox()
@@ -104,7 +104,7 @@
               <Tooltip :text="__('Go to website')">
                 <Button class="h-7 w-7">
                   <LinkIcon
-                    class="h-4 w-4"
+                    class="h-4 w-4 text-primary_text"
                     @click="
                       doc.data.website
                         ? openWebsite(doc.data.website)
@@ -166,22 +166,20 @@
   </div>
 </template>
 <script setup>
+import EditIcon from '@/components/Icons/EditIcon.vue'
+import Email2Icon from '@/components/Icons/Email2Icon.vue'
+import LinkIcon from '@/components/Icons/LinkIcon.vue'
+import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
-import { ref, computed } from 'vue'
-import { usersStore } from '@/stores/users'
 import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
-import EditIcon from '@/components/Icons/EditIcon.vue'
-import { Tooltip, Avatar } from 'qbs-vue-ui'
-import LinkIcon from '@/components/Icons/LinkIcon.vue'
-import Email2Icon from '@/components/Icons/Email2Icon.vue'
-import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import { errorMessage, openWebsite, copyToClipboard } from '@/utils'
-import { globalStore } from '@/stores/global'
 import { callEnabled } from '@/composables/settings'
+import { globalStore } from '@/stores/global'
+import { usersStore } from '@/stores/users'
+import { copyToClipboard, createToast, errorMessage, openWebsite } from '@/utils'
+import { Avatar, Dropdown, FileUploader, Tooltip, call } from 'qbs-vue-ui'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { FileUploader, Dropdown, call } from 'qbs-vue-ui'
-import { createToast } from '@/utils'
 const router = useRouter()
 const props = defineProps({
   doctype: {

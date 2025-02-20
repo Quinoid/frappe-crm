@@ -59,7 +59,7 @@
     </Tabs>
     <Resizer
       v-if="tabIndex !== 0"
-      class="flex flex-col justify-between border-l"
+      class="flex flex-col justify-between border-l border-[#e3e2e8]"
       side="right"
     >
       <div
@@ -73,11 +73,11 @@
         :validateFile="validateFile"
       >
         <template #default="{ openFileSelector, error }">
-          <div class="flex items-center justify-start gap-5 border-b p-5">
+          <div class="flex items-center justify-start gap-5 border-b p-5 section-container-bg">
             <div class="group relative size-12">
               <Avatar
                 size="3xl"
-                class="size-12"
+                class="size-12 avat_container"
                 :label="lead.data.first_name || __('Untitled')"
                 :image="lead.data.image"
               />
@@ -133,13 +133,13 @@
                           : errorMessage(__('No phone number set'))
                     "
                   >
-                    <PhoneIcon class="h-4 w-4" />
+                    <PhoneIcon class="h-4 w-4 text-primary_text" />
                   </Button>
                 </Tooltip>
                 <Tooltip :text="__('Send an email')">
                   <Button class="h-7 w-7">
                     <Email2Icon
-                      class="h-4 w-4"
+                      class="h-4 w-4 text-primary_text"
                       @click="
                         lead.data.email
                           ? openEmailBox()
@@ -151,7 +151,7 @@
                 <Tooltip :text="__('Go to website')">
                   <Button class="h-7 w-7">
                     <LinkIcon
-                      class="h-4 w-4"
+                      class="h-4 w-4 text-primary_text"
                       @click="
                         lead.data.website
                           ? openWebsite(lead.data.website)
@@ -179,7 +179,7 @@
           <div
             v-for="(section, i) in fieldsLayout.data"
             :key="section.label"
-            class="flex flex-col p-3"
+            class="flex flex-col"
             :class="{ 'border-b': i !== fieldsLayout.data.length - 1 }"
           >
             <Section :is-opened="section.opened" :label="section.label">
@@ -285,53 +285,54 @@
   />
 </template>
 <script setup>
-import Icon from '@/components/Icon.vue'
-import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
-import EmailIcon from '@/components/Icons/EmailIcon.vue'
-import CommentIcon from '@/components/Icons/CommentIcon.vue'
-import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import TaskIcon from '@/components/Icons/TaskIcon.vue'
-import NoteIcon from '@/components/Icons/NoteIcon.vue'
-import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
-import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'
-import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
-import LayoutHeader from '@/components/LayoutHeader.vue'
 import Activities from '@/components/Activities/Activities.vue'
-import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
-import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
-import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import Link from '@/components/Controls/Link.vue'
 import CustomActions from '@/components/CustomActions.vue'
-import { createToast, setupAssignees, setupCustomizations } from '@/utils'
-import { getView } from '@/utils/view'
-import { globalStore } from '@/stores/global'
-import { contactsStore } from '@/stores/contacts'
-import { statusesStore } from '@/stores/statuses'
-import { usersStore } from '@/stores/users'
-import { whatsappEnabled, callEnabled } from '@/composables/settings'
-import { capture } from '@/telemetry'
+import Icon from '@/components/Icon.vue'
+import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
+import CameraIcon from '@/components/Icons/CameraIcon.vue'
+import CommentIcon from '@/components/Icons/CommentIcon.vue'
+import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
-import {
-  createResource,
-  Dropdown,
-  Tabs,
-  Switch,
-  Breadcrumbs,
-  call,
-  usePageMeta,
-} from 'qbs-vue-ui'
-import { ref, computed, onMounted, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import EditIcon from '@/components/Icons/EditIcon.vue'
+import Email2Icon from '@/components/Icons/Email2Icon.vue'
+import EmailIcon from '@/components/Icons/EmailIcon.vue'
+import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
+import LinkIcon from '@/components/Icons/LinkIcon.vue'
+import NoteIcon from '@/components/Icons/NoteIcon.vue'
+import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'
+import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import TaskIcon from '@/components/Icons/TaskIcon.vue'
+import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
+import LayoutHeader from '@/components/LayoutHeader.vue'
+import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
+import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import Resizer from '@/components/Resizer.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
-import EditIcon from '@/components/Icons/EditIcon.vue'
-import { FileUploader, Tooltip, Avatar } from 'qbs-vue-ui'
-import CameraIcon from '@/components/Icons/CameraIcon.vue'
-import LinkIcon from '@/components/Icons/LinkIcon.vue'
-import Email2Icon from '@/components/Icons/Email2Icon.vue'
-import { errorMessage, openWebsite, copyToClipboard } from '@/utils'
+import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
+import { callEnabled, whatsappEnabled } from '@/composables/settings'
+import { contactsStore } from '@/stores/contacts'
+import { globalStore } from '@/stores/global'
+import { statusesStore } from '@/stores/statuses'
+import { usersStore } from '@/stores/users'
+import { capture } from '@/telemetry'
+import { copyToClipboard, createToast, errorMessage, openWebsite, setupAssignees, setupCustomizations } from '@/utils'
+import { getView } from '@/utils/view'
+import {
+  Avatar,
+  Breadcrumbs,
+  call,
+  createResource,
+  Dropdown,
+  FileUploader,
+  Switch,
+  Tabs,
+  Tooltip,
+  usePageMeta,
+} from 'qbs-vue-ui'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 const { $dialog, $socket, makeCall } = globalStore()
 const { getContactByName, contacts } = contactsStore()
 const { statusOptions, getLeadStatus } = statusesStore()

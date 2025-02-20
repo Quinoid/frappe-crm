@@ -1,31 +1,25 @@
 <template>
   <slot name="header" v-bind="{ opened, hide, open, close, toggle }">
-    <div v-if="!hide" class="flex items-center justify-between details-container-header">
-      <div
-        class="flex h-7 max-w-fit cursor-pointer items-center gap-2 pl-2 pr-3 text-base font-semibold leading-5"
-        @click="!hideDrillDown && toggle()"
-      >
-        <FeatherIcon
-          v-if="!hideDrillDown"
-          name="chevron-right"
-          class="h-4 text-gray-900 transition-all duration-300 ease-in-out"
-          :class="{ 'rotate-90': opened }"
-        />
+    <div v-if="!hide" class="flex items-center justify-between details-container-header"
+      :class="{ 'details-container-header-bg': !hideDrillDown }">
+      <div class="flex h-7 max-w-fit cursor-pointer items-center gap-2 pl-2 pr-3 text-base font-semibold leading-5"
+        @click="!hideDrillDown && toggle()">
+        <FeatherIcon v-if="!hideDrillDown" name="chevron-right"
+          class="h-4 text-gray-900 transition-all duration-300 ease-in-out" :class="{ 'rotate-90': opened }" />
         {{ __(label) || __('Untitled') }}
       </div>
       <slot name="actions"></slot>
     </div>
   </slot>
-  <transition
-    enter-active-class="duration-300 ease-in"
-    leave-active-class="duration-300 ease-[cubic-bezier(0, 1, 0.5, 1)]"
-    enter-to-class="max-h-[200px] overflow-hidden"
-    leave-from-class="max-h-[200px] overflow-hidden"
-    enter-from-class="max-h-0 overflow-hidden"
-    leave-to-class="max-h-0 overflow-hidden"
-  >
-    <div v-if="opened" class="p-3 !pt-0">
-      <slot v-bind="{ opened, open, close, toggle }" />
+  <transition enter-active-class="duration-300 ease-in"
+    leave-active-class="duration-300 ease-[cubic-bezier(0, 1, 0.5, 1)]" enter-to-class="max-h-[200px] overflow-hidden"
+    leave-from-class="max-h-[200px] overflow-hidden" enter-from-class="max-h-0 overflow-hidden"
+    leave-to-class="max-h-0 overflow-hidden">
+    <div v-if="opened" :class="{
+      'p-3 !pt-0': !fromSidemenu,
+      'section-container-bg': !hideDrillDown && !fromSidemenu
+    }">
+      <slot v-bind="{ opened, open, close, toggle }"></slot>
     </div>
   </transition>
 </template>
@@ -48,6 +42,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  fromSidemenu: {
+    type: Boolean,
+    default: false
+  }
 })
 function toggle() {
   opened.value = !opened.value

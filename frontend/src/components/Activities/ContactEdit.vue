@@ -18,12 +18,12 @@
         >
           <template #default="{ openFileSelector, error }">
             <div
-              class="flex items-center justify-start gap-5 border-b px-5 py-2.5"
+              class="flex items-center justify-start gap-5 px-5 py-2.5"
             >
               <div class="group relative size-12">
                 <Avatar
                   size="3xl"
-                  class="size-12"
+                  class="size-12 avat_container"
                   :label="doc.data.first_name || __('Untitled')"
                   :image="doc.data.image"
                 />
@@ -80,19 +80,19 @@
               @click="deleteContact"
             >
               <template #prefix>
-                <FeatherIcon name="trash-2" class="h-4 w-4" />
+                <FeatherIcon name="trash-2" class="h-4 w-4 " />
               </template>
             </Button>
             <div class="flex gap-1.5">
               <Tooltip v-if="callEnabled" :text="__('Make a call')">
                 <Button class="h-7 w-7" @click="triggerCall">
-                  <PhoneIcon class="h-4 w-4" />
+                  <PhoneIcon class="h-4 w-4 text-primary_text" />
                 </Button>
               </Tooltip>
               <Tooltip :text="__('Send an email')">
                 <Button class="h-7 w-7">
                   <Email2Icon
-                    class="h-4 w-4"
+                    class="h-4 w-4 text-primary_text"
                     @click="
                       doc.data.email
                         ? openEmailBox()
@@ -109,7 +109,7 @@
                 class="w-7 mr-2"
                 @click="showSidePanelModal = true"
               >
-                <EditIcon class="h-4 w-4" />
+                <EditIcon class="h-4 w-4 text-primary_text" />
               </Button>
             </template>
           </div>

@@ -2,7 +2,7 @@
   <div>
     <div
       :class="[
-        'flex flex-wrap gap-1 rounded-[8px]',
+        'flex flex-wrap gap-1 rounded-[8px] bg-white p-1 ',
         {
           'border border-gray-300': !editableOnClick, // Apply border when not in editable mode
           'hover:border-gray-300 hover:border': editableOnClick, // Apply hover effect when not in editable mode
@@ -16,7 +16,7 @@
         :label="value"
         theme="gray"
         variant="subtle"
-        class="rounded !items-start !justify-start"
+        class="rounded !bg-gray-50 hover:!bg-gray-300 "
         @keydown.delete.capture.stop="removeLastValue"
       >
         <template #suffix>
@@ -96,17 +96,17 @@
 </template>
 
 <script setup>
+import UserAvatar from '@/components/UserAvatar.vue'
+import Popover from '@/components/qbs-vue-ui/Popover.vue'
 import {
   Combobox,
   ComboboxInput,
-  ComboboxOptions,
   ComboboxOption,
+  ComboboxOptions,
 } from '@headlessui/vue'
-import UserAvatar from '@/components/UserAvatar.vue'
-import Popover from '@/components/qbs-vue-ui/Popover.vue'
-import { createResource } from 'qbs-vue-ui'
-import { ref, computed, nextTick } from 'vue'
 import { watchDebounced } from '@vueuse/core'
+import { createResource } from 'qbs-vue-ui'
+import { computed, nextTick, ref } from 'vue'
 
 const props = defineProps({
   validate: {

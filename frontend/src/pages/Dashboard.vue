@@ -13,8 +13,8 @@
       <!-- <FunnelChart />
       <BarChart /> -->
       <!-- Task List -->
-      <div class="lg:col-span-4 col-span-6  space-y-4">
-        <div class="rounded-lg   grid lg:grid-cols-4  grid-cols-1  gap-6">
+       <div class=" g:col-span-6 col-span-6  space-y-4"> 
+         <div class="rounded-lg   grid lg:grid-cols-6  grid-cols-1  gap-6">
           <!-- Leads Card -->
           <div class="sm:col-span-1 dash_tile shadow-sm  rounded-lg p-6 ">
             <div class=" flex gap-2 items-center ">
@@ -40,6 +40,28 @@
               {{ dashboardData?.dealCount }}
             </p>
           </div>
+            <div class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 ">
+            <div class=" flex gap-2 items-center ">
+              <span class="flex items-center bg-[#F5CFE9] p-2 rounded-[9px]">
+                <ContactsIcon class="h-5 w-5   text-[#E94DA0]" />
+              </span>
+              <h3 class="text-2xl ">Contacts</h3>
+            </div>
+            <p class="text-[48px] font-semibold  text-primary">
+              {{ dashboardData?.contact_total_count }}
+            </p>
+          </div>
+           <div class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 ">
+            <div class=" flex gap-2 items-center ">
+              <span class="flex items-center bg-[#DEEEF5] p-2 rounded-[9px]">
+                <OrganizationsIcon class="h-5 w-5   text-[#39B9CA]" />
+              </span>
+              <h3 class="text-2xl ">Organizations</h3>
+            </div>
+            <p class="text-[48px] font-semibold text-primary">
+              {{ dashboardData?.organisation_total_count }}
+            </p>
+          </div>
 
           <!-- Tasks Card -->
           <div class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 ">
@@ -54,19 +76,23 @@
             </p>
           </div>
 
+
           <div class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 ">
             <div class=" flex gap-2 items-center ">
               <span class="flex items-center bg-[#F5CFE9] p-2 rounded-[9px]">
-                <ContactsIcon class="h-5 w-5   text-[#E94DA0]" />
+                <CalendarIcon class="h-5 w-5   text-[#E94DA0]" />
               </span>
-              <h3 class="text-2xl ">Contacts</h3>
+              <h3 class="text-2xl ">Events</h3>
             </div>
             <p class="text-[48px] font-semibold  text-primary">
-              {{ dashboardData?.contact_total_count }}
+              {{ dashboardData?.eventCount }}
             </p>
           </div>
         </div>
+        </div>
 
+      <div class="lg:col-span-4 col-span-6  space-y-4">
+      
         <LeadConversionReport />
 
         <DealConversionReportData />
@@ -202,6 +228,7 @@ import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
 import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import DealsIcon from '@/components/Icons/DealsIcon.vue'
 import LeadsIcon from '@/components/Icons/LeadsIcon.vue'
+import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
@@ -229,6 +256,7 @@ const dashboardResource = createResource({
       eventCount: message?.event_total_count || 0,
       tasks: message?.tasks || [],
       events: message?.events,
+      organisation_total_count: message?.organisation_total_count || 0,
       deal_total_count: message?.deal_total_count || 0,
       contact_total_count: message?.contact_total_count || 0,
       call_logs: message?.call_logs || [],
