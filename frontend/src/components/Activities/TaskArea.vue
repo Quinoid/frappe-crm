@@ -1,101 +1,93 @@
 <template>
   <div v-if="tasks.length">
     <div v-for="(task, i) in tasks" class="flex flex-col gap-2">
-      <div
-        class="activity flex cursor-pointer gap-6 rounded p-2.5 duration-300 bg-white ease-in-out hover:bg-gray-50"
-        @click="modalRef.showTask(task)"
-      >
+      <div class="activity flex cursor-pointer gap-6 rounded p-2.5 duration-300 bg-white ease-in-out hover:bg-gray-50"
+        @click="modalRef.showTask(task)">
         <div class="flex flex-1 flex-col gap-1.5 text-base">
-          <div class="font-medium text-gray-900 flex items-center gap-1 justify-between">
-            <span>
-            {{ task.title }}
+          <div class=" flex items-center gap-1 justify-between">
+            <span class="text-black font-inter text-[14px] font-semibold leading-[20px]
+">
+              {{ task.title }}
             </span>
-             <div class="flex items-center gap-1">
-          <Dropdown
-            :options="taskStatusOptions(modalRef.updateTaskStatus, task)"
-            @click.stop
-          >
-            <Tooltip :text="__('Change Status')">
-              <Button variant="ghosted" class="hover:bg-gray-300">
-                <TaskStatusIcon :status="task.status" />
-              </Button>
-            </Tooltip>
-          </Dropdown>
-          <Dropdown
-            :options="[
-              {
-                label: __('Delete'),
-                icon: 'trash-2',
-                onClick: () => {
-                  $dialog({
-                    title: __('Delete Task'),
-                    message: __('Are you sure you want to delete this task?'),
-                    actions: [
-                      {
-                        label: __('Delete'),
-                        theme: 'red',
-                        variant: 'solid',
-                        onClick(close) {
-                          modalRef.deleteTask(task.name)
-                          close()
+            <div class="flex items-center gap-1">
+              <Dropdown :options="taskStatusOptions(modalRef.updateTaskStatus, task)" @click.stop>
+                <Tooltip :text="__('Change Status')">
+                  <Button variant="ghosted" class="hover:bg-gray-300">
+                    <TaskStatusIcon :status="task.status" />
+                  </Button>
+                </Tooltip>
+              </Dropdown>
+              <Dropdown :options="[
+                {
+                  label: __('Delete'),
+                  icon: 'trash-2',
+                  onClick: () => {
+                    $dialog({
+                      title: __('Delete Task'),
+                      message: __('Are you sure you want to delete this task?'),
+                      actions: [
+                        {
+                          label: __('Delete'),
+                          theme: 'red',
+                          variant: 'solid',
+                          onClick(close) {
+                            modalRef.deleteTask(task.name)
+                            close()
+                          },
                         },
-                      },
-                    ],
-                  })
+                      ],
+                    })
+                  },
                 },
-              },
-            ]"
-            @click.stop
-          >
-            <Button
-              icon="more-horizontal"
-              variant="ghosted"
-              class="hover:bg-gray-300"
-            />
-          </Dropdown>
-               </div>
-          </div>
-          <div class="flex gap-1.5 text-gray-800">
-         
-            <div class="flex gap-2">
-              <TaskPriorityIcon class="!h-2 !w-2" :priority="task.priority" />
-              {{ task.priority }}
+              ]" @click.stop>
+                <Button icon="more-horizontal" variant="ghosted" class="hover:bg-gray-300" />
+              </Dropdown>
             </div>
-                       <div class="flex" v-html="task.descriptiontent"></div>
+          </div>
+          <div class="flex flex-col gap-1.5 text-gray-800">
+            <div class="flex gap-2">
+              <span :class="{
+                'text-red-500': task.priority === 'High',
+                'text-yellow-500': task.priority === 'Medium',
+                'text-gray-500': task.priority === 'Low',
+                'bg-red-100': task.priority === 'High',
+                'bg-yellow-100': task.priority === 'Medium',
+                'bg-gray-50': task.priority === 'Low' }" 
+                class="px-2 py-1  rounded">
+                {{ task.priority }}
+              </span>
+            </div>
 
-            <div class="flex items-center justify-center">
-             <div class="flex items-center gap-1.5">
+            <div class=" flex text-gray-700 font-inter text-sm font-normal leading-[20px]" v-html="task.description">
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 text-gray-500 font-inter text-xs font-normal leading-[20px]">
               <UserAvatar :user="task.assigned_to" size="xs" />
               {{ getUser(task.assigned_to).full_name }}
             </div>
             <div v-if="task.due_date">
-              <Tooltip
-                :text="dateFormat(task.due_date, 'ddd, MMM D, YYYY | hh:mm a')"
-              >
+              <Tooltip :text="dateFormat(task.due_date, 'ddd, MMM D, YYYY | hh:mm a')">
                 <div class="flex gap-2">
                   <CalendarIcon />
                   <div>{{ dateFormat(task.due_date, 'D MMM, hh:mm a') }}</div>
                 </div>
               </Tooltip>
             </div>
-            </div>
-            
-
-         
           </div>
+
+
+
         </div>
-       
       </div>
-      <div
-        v-if="i < tasks.length - 1"
-        class="mx-2 h-px border-t border-gray-200"
-      />
+
     </div>
+    <div v-if="i < tasks.length - 1" class="mx-2 h-px border-t border-gray-200" />
+  </div>
   </div>
 </template>
 <script setup>
 import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
-import TaskPriorityIcon from '@/components/Icons/TaskPriorityIcon.vue'
 import TaskStatusIcon from '@/components/Icons/TaskStatusIcon.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import { globalStore } from '@/stores/global'
