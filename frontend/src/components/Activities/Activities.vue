@@ -157,18 +157,18 @@
         v-for="(activity, i) in activities"
         class="activity px-3 sm:px-10"
         :class="
-          ['Activity', 'Emails'].includes(title)
+      ['Activity', 'Emails'].includes(title)&&activity.activity_type!='comment'
             ? 'grid grid-cols-[30px_minmax(auto,_1fr)] gap-2 sm:gap-4'
             : ''
         "
       >
         <div
-          v-if="['Activity', 'Emails'].includes(title)"
+          v-if="['Activity', 'Emails'].includes(title) &&activity.activity_type!='comment'"
           class="relative flex justify-center before:absolute before:left-[50%] before:top-0 before:-z-10 before:border-l before:border-gray-200"
           :class="[i != activities.length - 1 ? 'before:h-full' : 'before:h-4']"
         >
           <div
-            class="z-10 flex h-7 w-7 items-center justify-center bg-white"
+            class="z-10 flex h-7 w-7 items-center justify-center"
             :class="{
               'mt-2.5': ['communication'].includes(activity.activity_type),
               'bg-white': ['added', 'removed', 'changed'].includes(
@@ -185,6 +185,7 @@
             <UserAvatar
               v-if="activity.activity_type == 'communication'"
               :user="activity.data.sender"
+              :class="' border-gray-50 border-1'"
               size="md"
             />
             <MissedCallIcon
