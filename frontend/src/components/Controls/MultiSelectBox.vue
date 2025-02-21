@@ -16,7 +16,7 @@
         :label="value"
         theme="gray"
         variant="subtle"
-        class="rounded !bg-gray-50 hover:!bg-gray-300 "
+        class="rounded-[6px] text-primary_text chip-style"
         @keydown.delete.capture.stop="removeLastValue"
       >
         <template #suffix>
