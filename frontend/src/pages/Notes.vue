@@ -32,7 +32,7 @@
     >
       <div
         v-for="note in notes.data.data"
-        class="group flex h-56 cursor-pointer flex-col justify-between gap-2 rounded-lg border px-5 py-4 shadow-sm hover:bg-gray-50"
+        class="group flex h-56 cursor-pointer flex-col justify-between gap-2 rounded-lg border px-5 py-4 shadow-sm bg-white hover:bg-gray-50"
         @click="editNote(note)"
       >
         <div class="flex items-center justify-between">
