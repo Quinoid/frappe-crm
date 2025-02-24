@@ -193,7 +193,7 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <Email2Icon class="h-10 w-10" />
+      <TaskIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full"  />
       <span>{{ __('No {0} Found', [__('Tasks')]) }}</span>
       <Button :label="__('Create')" @click="showTaskModal = true">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
@@ -225,6 +225,7 @@ import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { Tooltip, Avatar, TextEditor, Dropdown, call } from 'qbs-vue-ui'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import TaskCalendarComponent from '../components/TaskCalendarComponent.vue'
 
 const { getUser } = usersStore()

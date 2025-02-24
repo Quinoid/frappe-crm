@@ -60,7 +60,7 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <ContactsIcon class="h-10 w-10" />
+      <EmailIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Emails')]) }}</span>
       <span class="text-sm text-gray-500">{{
         __('Setup Email account to enable accessing your emails')
@@ -84,6 +84,7 @@ import { ref, computed } from 'vue'
 import CommunicationListView from '../components/ListViews/CommunicationListView.vue'
 import QuickEntryModal from '../components/Modals/QuickEntryModal.vue'
 import { useRoute } from 'vue-router'
+import EmailIcon from '@/components/Icons/EmailIcon.vue'
 const showQuickEntryModal = ref(false)
 const route = useRoute()
 

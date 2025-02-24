@@ -1,22 +1,29 @@
 <template>
   <div
-    class="bg-white shadow-sm grid col-span-4  rounded-lg p-6 sm:w-full w-full overflow-y-auto"
+    class="bg-white shadow-sm grid lg:col-span-4 col-span-6  rounded-lg p-6 sm:w-full w-full overflow-y-auto"
   >
    
     <div class="flex justify-between items-center mb-4 ">
       <div class="flex gap-2 items-center">
-      <h3 class="text-lg font-medium  text-gray-900">
-        Deal Pipeline Report
-      </h3>
-      <DateRangePicker
+      
+      <div class="" >
+          <h3 class="flex gap-1 text-black font-inter text-base not-italic font-semibold leading-normal"
+>         Deal Pipeline Report
+      <ToolTipInfo />
+
+          </h3>
+          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Your deals in motion! Track every opportunity from pitch to close and optimise your sales cycle.</p>
+        </div>
+     
+    </div>
+      <div class="flex gap-2 items-center">
+     <DateRangePicker
         v-model="filterData"
         variant="subtle"
         class="!w-[230px]"
         placeholder="Placeholder"
         :disabled="false"
       />
-      <ToolTipInfo />
-    </div>
       <div class="flex gap-2 graph-actions">
        <span @click="graphView = true" class="cursor-pointer" :class="graphView ? 'bg-white' : ''">
           <Tooltip :text="__('Graph View')">
@@ -43,6 +50,7 @@
             <FeatherIcon name="download" class="h-4 w-4" />
           </a>
         </Tooltip>
+      </div>
       </div>
     </div>
     <div v-if="dealSummaryUpdateKey.isLoading" class="flex justify-center">

@@ -229,9 +229,10 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <DealsIcon class="h-10 w-10" />
+      <DealsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Deals')]) }}</span>
-      <Button :label="__('Create')" @click="createDeal">
+      <Button :label="__('Create')"  :variant="solid"        class="bg-btn_primary text-white"
+        @click="createDeal">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </div>

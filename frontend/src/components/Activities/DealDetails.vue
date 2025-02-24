@@ -82,7 +82,7 @@
       <div
         v-for="(section, i) in fieldsLayout.data"
         :key="section.label"
-        class="flex flex-col shadow-sm rounded-md bg-white"
+        class="flex flex-col shadow-sm rounded-md "
       >
         <Section
           :is-opened="section.opened"

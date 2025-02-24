@@ -46,11 +46,12 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <PhoneIcon class="h-10 w-10" />
+      <PhoneIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full"  />
       <span>{{ __('No {0} Found', [__('Logs')]) }}</span>
       <span class="text-sm text-gray-500">{{
         __('Setup Twilio account to enable phone calls ')
       }}</span>
+      
     </div>
   </div>
   <CallLogModal v-model="showCallLogModal" :name="selectedCallLog" />

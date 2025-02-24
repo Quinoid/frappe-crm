@@ -1,12 +1,22 @@
 <template>
   <div
-    class="bg-white shadow-sm grid lg:col-span-3 col-span-6  rounded-lg p-6 sm:w-full w-full overflow-y-auto"
+    class="bg-white shadow-sm grid lg:col-span-4 col-span-6  rounded-lg p-6 sm:w-full w-full overflow-y-auto"
   >
     <div class="flex justify-between items-center mb-4 ">
       <div class="flex gap-2 items-center">
-      <h3 class="text-lg font-medium  text-gray-900">
+    
+       <div >
+          <h3 class=" flex gap-1 text-black font-inter text-base not-italic font-semibold leading-normal">
         Sales Funnel Report
-      </h3>
+            <ToolTipInfo />
+
+          </h3>
+          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">From interest to action! Visualise your sales funnel and unlock growth potential at every stage.</p>
+        </div>
+      
+
+     </div>
+      <div class="flex gap-2 items-center">
       <DateRangePicker
         v-model="filterData"
         variant="subtle"
@@ -14,10 +24,7 @@
         class="!w-[230px]"
         :disabled="false"
       />
-            <ToolTipInfo />
-
-     </div>
-      <div class="flex gap-2 graph-actions ">
+    <div class="flex gap-2 graph-actions ">
           
         <span @click="graphView = true" class="cursor-pointer" :class="graphView ? 'bg-white' : ''">
           <Tooltip :text="__('Graph View')">
@@ -45,7 +52,8 @@
             <FeatherIcon name="download" class="h-4 w-4" />
           </a>
         </Tooltip>
-      </div>
+      </div></div>
+      
     </div>
     <div v-if="salsFunnelUpdateKey.isLoading" class="flex justify-center">
       <div

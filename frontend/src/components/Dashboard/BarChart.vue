@@ -78,7 +78,7 @@ export default {
 }
 </script> -->
 <template v-if="chartData.labels.length > 0">
-  <Bar class="h-full w-full" id="my-chart-id" :options="chartOptions" :data="chartData" />
+  <Bar class="h-full w-full" id="my-chart-id" :height="300" :options="chartOptions" :data="chartData" />
 </template>
 
 <script>
