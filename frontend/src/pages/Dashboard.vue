@@ -6,9 +6,7 @@
   </LayoutHeader>
 
   <div v-if="!isLoading" class="p-6 space-y-6">
-    <div class="">
-      <p></p>
-    </div>
+  
     <!-- Dashboard Counts -->
 
 
