@@ -204,7 +204,8 @@
         </div>
       </div>
       <SaleFunnelReport />
-      <div
+         <div v-if="callEnabled"
+
         class="bg-white shadow-sm  lg:col-span-2 col-span-6 rounded-lg p-5 sm:w-full w-full max-h-[400px] overflow-y-auto">
         <div class="flex flex-col mb-5">
 
