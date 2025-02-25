@@ -146,8 +146,8 @@
           <div v-if="dashboardData?.tasks?.length === 0" class="text-center text-gray-500 mt-4 p-3">
             <div class="flex h-full items-center justify-center">
               <div class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500">
-                <TaskIcon class="h-10 w-10" />
-                <span class="text-sm text-gray-500"> No tasks to display. </span>
+                <DashTileEmty />
+                <span class="text-sm text-gray-500"> Start adding tasks to keep on top of your work </span>
               </div>
             </div>
           </div>
@@ -197,8 +197,8 @@
         <div v-if="dashboardData?.events?.length === 0" class="text-center text-gray-500 mt-4 p-3">
           <div class="flex h-full items-center justify-center">
             <div class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500">
-              <CalendarIcon class="h-10 w-10" />
-              <span class="text-sm text-gray-500"> No Events to display. </span>
+              <DashTileEmty />
+              <span class="text-sm text-gray-500"> Setup Calendar account to enable accessing your events </span>
             </div>
           </div>
         </div>
@@ -241,10 +241,9 @@
         <div v-if="dashboardData?.call_logs?.length === 0" class="text-center text-gray-500 mt-4 p-3">
           <div class="flex h-full items-center justify-center">
             <div class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500">
-              <PhoneIcon class="h-10 w-10" />
+              <DashTileEmty  />
               <span class="text-sm text-gray-500">
-                No Call Logs to display.
-              </span>
+Setup Twilio account to enable phone calls              </span>
             </div>
           </div>
         </div>
@@ -267,7 +266,6 @@ import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import DealsIcon from '@/components/Icons/DealsIcon.vue'
 import LeadsIcon from '@/components/Icons/LeadsIcon.vue'
 import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'
-import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
@@ -275,6 +273,7 @@ import { usersStore } from '@/stores/users'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { Breadcrumbs, createResource, Tooltip } from 'qbs-vue-ui'
 import { computed } from 'vue'
+import DashTileEmty from '../components/Dashboard/DashTileEmpty.vue'
 import DealConversionReportData from '../components/Dashboard/DealConversionReportData.vue'
 import LeadConversionReport from '../components/Dashboard/LeadConversionReport.vue'
 import SaleFunnelReport from '../components/Dashboard/SaleFunnelReport.vue'
@@ -300,29 +299,7 @@ const dashboardResource = createResource({
       organisation_total_count: message?.organisation_total_count || 0,
       deal_total_count: message?.deal_total_count || 0,
       contact_total_count: message?.contact_total_count || 0,
-      call_logs: [
-        {
-          name: "log1",
-          caller: "John Doe",
-          medium: "Phone",
-          creation: "2025-02-20T09:00:00Z",
-          status: "Open"
-        },
-        {
-          name: "log2",
-          caller: "Jane Smith",
-          medium: "Email",
-          creation: "2025-02-21T10:30:00Z",
-          status: "Closed"
-        },
-        {
-          name: "log3",
-          caller: "Sam Wilson",
-          medium: "Skype",
-          creation: null, // This will show "No Start Date"
-          status: "Open"
-        }
-      ]
+      call_logs: message?.call_logs || [],
 
     }
   },
