@@ -161,8 +161,7 @@
     <div class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500">
       <LeadsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Leads')]) }}</span>
-      <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">Every big win starts with a
-        single lead! Don’t wait - ignite your sales pipeline now!</span>
+      <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Every big win starts with asingle lead! Don’t wait - ignite your sales pipeline now!'}}</span>
       <Button :label="__('Add Your First Lead!')" class="bg-btn_primary text-white" @click="createLead">
       <template #prefix>
         <FeatherIcon name="plus" class="h-4" />

@@ -791,6 +791,7 @@ const emptyText = computed(() => {
     text = 'No WhatsApp Messages'
   } else if (props.title == 'Deals') {
     text = 'No Deals'
+    textSub='Your next big deal is out there - start tracking, negotiating, and closing like a pro!'
   }
   return {text,textSub}
 })

@@ -94,6 +94,7 @@
           <div class="flex flex-col items-center justify-center space-y-3">
             <component :is="tab.icon" class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
             <div>{{ __('No {0} Found', [__(tab.label)]) }}</div>
+            <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]" >Your network is your net worth! Build strong relationships that fuel success.</span>
           </div>
         </div>
         <div
@@ -103,6 +104,8 @@
           <div class="flex flex-col items-center justify-center space-y-3">
             <component :is="tab.icon" class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
             <div>{{ __('No {0} Found', [__(tab.label)]) }}</div>
+            <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]" >Your next big deal is out there - start tracking, negotiating, and closing like a pro!</span>
+
           </div>
         </div>
       </template>

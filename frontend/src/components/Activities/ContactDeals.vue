@@ -14,6 +14,9 @@
       <div class="flex flex-col items-center justify-center space-y-3">
       <DealsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
         <span>{{ __('No {0} Found', [__('Deals')]) }}</span>
+              <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your next big deal is out there - start tracking, negotiating, and closing like a pro!' }}</span>  
+
+        ContactDeals
       </div>
     </div>
   </div>
