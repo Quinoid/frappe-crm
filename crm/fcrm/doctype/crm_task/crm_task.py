@@ -49,6 +49,12 @@ class CRMTask(Document):
 				'width': '8rem',
 			},
 			{
+				'label': 'Reference Doc Type',
+				'type': 'Dynamic Link"',
+				'key': 'reference_doctype',
+				'width': '8rem',
+			},
+			{
 				'label': 'Priority',
 				'type': 'Select',
 				'key': 'priority',
@@ -71,19 +77,19 @@ class CRMTask(Document):
 				'type': 'Datetime',
 				'key': 'modified',
 				'width': '8rem',
-			},
+			}
 		]
 
 		rows = [
 			"name",
 			"title",
+			"reference_docname",
 			"description",
 			"assigned_to",
 			"due_date",
 			"status",
 			"priority",
 			"reference_doctype",
-			"reference_docname",
 			"modified",
 		]
 		return {'columns': columns, 'rows': rows}
