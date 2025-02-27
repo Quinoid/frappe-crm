@@ -73,7 +73,6 @@
       >
         <QuickFilterField
           :filter="filter"
-          class="bg-white"
           @applyQuickFilter="(f, v) => applyQuickFilter(f, v)"
         />
       </div>

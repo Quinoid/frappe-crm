@@ -1,25 +1,17 @@
 <template>
   <Dropdown :options="dropdownOptions" v-bind="$attrs">
     <template v-slot="{ open }">
-      <button
-        class="flex h-12 items-center rounded-md py-2 duration-300 ease-in-out "
-        :class="
-          isCollapsed
-            ? 'w-auto px-0'
-            : open
-              ? 'w-[237px] bg-sidebar_active px-2 shadow-sm sidemenu-header-menu'
-              : 'w-[237px] px-2 hover:bg-sidebar_hover sidemenu-header-menu'
-        "
-      >
+      <button class="flex h-12 items-center rounded-md py-2 duration-300 ease-in-out " :class="isCollapsed
+          ? 'w-auto px-0'
+          : open
+            ? 'w-[237px] bg-sidebar_active px-2 shadow-sm sidemenu-header-menu'
+            : 'w-[237px] px-2 hover:bg-sidebar_hover sidemenu-header-menu'
+        ">
         <BizpoleLogo class="size-8 flex-shrink-0 rounded" />
-        <div
-          class="flex flex-1 flex-col text-left duration-300 ease-in-out"
-          :class="
-            isCollapsed
-              ? 'ml-0 w-0 overflow-hidden opacity-0'
-              : 'ml-2 w-auto opacity-100'
-          "
-        >
+        <div class="flex flex-1 flex-col text-left duration-300 ease-in-out" :class="isCollapsed
+            ? 'ml-0 w-0 overflow-hidden opacity-0'
+            : 'ml-2 w-auto opacity-100'
+          ">
           <div class="text-base font-medium leading-none text-[#222]">
             {{ __('CRM') }}
           </div>
@@ -27,23 +19,19 @@
             {{ user.full_name }}
           </div>
         </div>
-        <div
-          class="duration-300 ease-in-out"
-          :class="
-            isCollapsed
-              ? 'ml-0 w-0 overflow-hidden opacity-0'
-              : 'ml-2 w-auto opacity-100'
-          "
-        >
-          <FeatherIcon
-            name="chevron-down"
-            class="size-4 text-white"
-            aria-hidden="true"
-          />
+        <div class="duration-300 ease-in-out" :class="isCollapsed
+            ? 'ml-0 w-0 overflow-hidden opacity-0'
+            : 'ml-2 w-auto opacity-100'
+          ">
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+            <path d="M15.8893 7.5L10.056 13.3333L4.22266 7.5" stroke="#313131" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
         </div>
       </button>
     </template>
   </Dropdown>
+  
   <SettingsModal v-if="showSettingsModal" v-model="showSettingsModal" />
 </template>
 

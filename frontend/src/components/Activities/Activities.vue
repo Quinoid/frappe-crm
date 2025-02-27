@@ -67,7 +67,7 @@
       </div>
       <div
         v-else-if="title == 'Details'"
-        class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)] overflow-auto"
+        class="pb-5  h-[calc(100vh-100px)] overflow-auto"
       >
         <div class="" v-if="doctype == 'CRM Lead'">
           <DetailsView
@@ -157,18 +157,18 @@
         v-for="(activity, i) in activities"
         class="activity px-3 sm:px-10"
         :class="
-          ['Activity', 'Emails'].includes(title)
+      ['Activity', 'Emails'].includes(title)&&activity.activity_type!='comment'
             ? 'grid grid-cols-[30px_minmax(auto,_1fr)] gap-2 sm:gap-4'
             : ''
         "
       >
         <div
-          v-if="['Activity', 'Emails'].includes(title)"
+          v-if="['Activity', 'Emails'].includes(title) &&activity.activity_type!='comment'"
           class="relative flex justify-center before:absolute before:left-[50%] before:top-0 before:-z-10 before:border-l before:border-gray-200"
           :class="[i != activities.length - 1 ? 'before:h-full' : 'before:h-4']"
         >
           <div
-            class="z-10 flex h-7 w-7 items-center justify-center bg-white"
+            class="z-10 flex h-7 w-7 items-center justify-center"
             :class="{
               'mt-2.5': ['communication'].includes(activity.activity_type),
               'bg-white': ['added', 'removed', 'changed'].includes(
@@ -185,6 +185,7 @@
             <UserAvatar
               v-if="activity.activity_type == 'communication'"
               :user="activity.data.sender"
+              :class="' border-gray-50 border-1'"
               size="md"
             />
             <MissedCallIcon
@@ -382,34 +383,46 @@
     </div>
     <div
       v-else
-      class="flex flex-1 flex-col items-center justify-center gap-3 text-xl font-medium text-gray-500"
+      class="flex flex-1 flex-col items-center justify-center gap-3 text-xl font-medium "
     >
-      <component :is="emptyTextIcon" class="h-10 w-10" />
-      <span>{{ __(emptyText) }}</span>
+      <component :is="emptyTextIcon" class="h-[196px] w-[196px]" />
+      <span class="text-black text-center font-inter text-sm font-semibold leading-[20px]"> {{ __(emptyText.text) }}</span>
+      <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{ __(emptyText.textSub) }}</span>
+
       <Button
         v-if="title == 'Calls'"
         :label="__('Make a Call')"
+        variant="solid"
+        class="bg-btn_primary"        
         @click="makeCall(doc.data.mobile_no)"
       />
       <Button
         v-else-if="title == 'Notes'"
         :label="__('Create Note')"
         @click="modalRef.showNote()"
+         variant="solid"
+        class="bg-btn_primary"  
       />
       <Button
         v-else-if="title == 'Emails'"
         :label="__('New Email')"
         @click="emailBox.show = true"
+         variant="solid"
+        class="bg-btn_primary"  
       />
       <Button
         v-else-if="title == 'Comments'"
         :label="__('New Comment')"
         @click="emailBox.showComment = true"
+         variant="solid"
+        class="bg-btn_primary"  
       />
       <Button
         v-else-if="title == 'Tasks'"
         :label="__('Create Task')"
         @click="modalRef.showTask()"
+         variant="solid"
+        class="bg-btn_primary"  
       />
     </div>
   </FadedScrollableDiv>
@@ -504,6 +517,11 @@ import { useRoute } from 'vue-router'
 import ContactDeals from '@/components/Activities/ContactDeals.vue'
 import DealDetails from '@/components/Activities/DealDetails.vue'
 import DealsIcon from '@/components/Icons/DealsIcon.vue'
+import ActivityEmpty from '@/components/Activities/newEmptycon/ActivityEmpty.vue'
+import EmailEmpty from '@/components/Activities/newEmptycon/EmailEmpty.vue'
+import NotesEmpty from '@/components/Activities/newEmptycon/NotesEmpty.vue'
+import TaskEmpty from '@/components/Activities/newEmptycon/TaskEmpty.vue'
+import CommentsEmpty from '@/components/Activities/newEmptycon/CommentsEmpty.vue'
 const { makeCall, $socket } = globalStore()
 const { getUser } = usersStore()
 const { getContact, getLeadContact } = contactsStore()
@@ -753,37 +771,42 @@ function update_activities_details(activity) {
 }
 
 const emptyText = computed(() => {
-  let text = 'No Activities'
+  let text = 'No Activities Yet'
+  let textSub='Start adding your thoughts and ideas by clicking New Note'
   if (props.title == 'Emails') {
-    text = 'No Email Communications'
+    text = 'No Email Communications Yet'
+    textSub='Stay connected by composing your first email.'
   } else if (props.title == 'Comments') {
-    text = 'No Comments'
+    text = 'No Comments Yet'
+    textSub='Share your comments by clicking on ‘New Comment’'
   } else if (props.title == 'Calls') {
     text = 'No Call Logs'
   } else if (props.title == 'Notes') {
-    text = 'No Notes'
+    text = 'No Notes Yet'
+    textSub='Start adding your thoughts and ideas by clicking New Note'
   } else if (props.title == 'Tasks') {
-    text = 'No Tasks'
+    text = 'No Tasks Yet'
+    textSub='Stay organized by adding your first task now'
   } else if (props.title == 'WhatsApp') {
     text = 'No WhatsApp Messages'
   } else if (props.title == 'Deals') {
     text = 'No Deals'
   }
-  return text
+  return {text,textSub}
 })
 
 const emptyTextIcon = computed(() => {
-  let icon = ActivityIcon
+  let icon = ActivityEmpty
   if (props.title == 'Emails') {
-    icon = Email2Icon
+    icon = EmailEmpty
   } else if (props.title == 'Comments') {
-    icon = CommentIcon
+    icon = CommentsEmpty
   } else if (props.title == 'Calls') {
     icon = PhoneIcon
   } else if (props.title == 'Notes') {
-    icon = NoteIcon
+    icon = NotesEmpty
   } else if (props.title == 'Tasks') {
-    icon = TaskIcon
+    icon = TaskEmpty
   } else if (props.title == 'WhatsApp') {
     icon = WhatsAppIcon
   } else if (props.title == ' Deals') {

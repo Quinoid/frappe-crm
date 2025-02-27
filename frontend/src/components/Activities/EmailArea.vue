@@ -1,6 +1,6 @@
 <template>
   <div
-    class="cursor-pointer flex flex-col rounded-md shadow bg-white px-3 py-1.5 text-base transition-all duration-300 ease-in-out"
+    class="cursor-pointer flex flex-col rounded-md shadow bg-white gap-2 px-3 py-1.5 text-base transition-all duration-300 ease-in-out"
   >
     <div class="-mb-0.5 flex items-center justify-between gap-2 truncate">
       <div class="flex items-center gap-2 truncate">
@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-1 text-base leading-5 text-gray-800">
+    <div class="flex flex-col gap-2 text-base leading-5 text-gray-800">
       <div>{{ activity.data.subject }}</div>
       <div>
         <span class="mr-1 text-gray-600"> {{ __('To') }}: </span>
@@ -68,7 +68,7 @@
         <span v-if="activity.data.bcc">{{ activity.data.bcc }}</span>
       </div>
     </div>
-    <div class="border-0 border-t mt-3 mb-1 border-gray-200" />
+    <div class="border-0 border-t  border-gray-200" />
     <EmailContent :content="activity.data.content" />
     <div v-if="activity.data?.attachments?.length" class="flex flex-wrap gap-2">
       <AttachmentItem

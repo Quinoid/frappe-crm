@@ -53,11 +53,12 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <OrganizationsIcon class="h-10 w-10" />
+      <OrganizationsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Organizations')]) }}</span>
-      <Button :label="__('Create')" @click="showOrganizationModal = true">
+      <Button :label="__('Create')" class="bg-btn_primary text-white" @click="showOrganizationModal = true">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
+      
     </div>
   </div>
   <OrganizationModal

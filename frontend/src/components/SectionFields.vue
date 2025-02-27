@@ -8,7 +8,7 @@
       :key="field.label"
       :class="[
         field.hidden && 'hidden',
-        field.type === 'Table MultiSelect' || field.type === 'table multiselect'
+        field.type === 'Table MultiSelect' || field.type === 'table multiselect'||field.type === 'textarea' 
           ? 'items-start'
           : 'items-center',
       ]"

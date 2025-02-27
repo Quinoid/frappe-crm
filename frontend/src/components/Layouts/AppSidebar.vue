@@ -20,7 +20,7 @@
       </div>
       <div v-for="view in allViews" :key="view.label">
         <div v-if="!view.hideLabel && isSidebarCollapsed && view.views?.length" class="mx-2 my-2 h-1 border-b" />
-        <Section :label="view.name" :hideLabel="view.hideLabel" :isOpened="view.opened">
+        <Section :label="view.name" :hideLabel="view.hideLabel" :fromSidemenu="true" :isOpened="view.opened">
           <template #header="{ opened, hide, toggle }">
             <div v-if="!hide"
               class="flex cursor-pointer gap-1.5 px-1 text-base font-medium text-gray-600 transition-all duration-300 ease-in-out"

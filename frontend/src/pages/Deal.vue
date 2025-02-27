@@ -59,7 +59,7 @@
     <Resizer
       v-if="tabIndex !== 0"
       side="right"
-      class="flex flex-col justify-between border-l"
+      class="flex flex-col justify-between border-l border-[#e3e2e8]"
     >
       <div
         class="flex h-10.5 cursor-copy items-center border-b px-5 py-2.5 text-lg font-medium"
@@ -67,12 +67,12 @@
       >
         {{ __(deal.data.name) }}
       </div>
-      <div class="flex items-center justify-start gap-5 border-b p-5">
+      <div class="flex items-center justify-start gap-5 border-b p-5 section-container-bg">
         <Tooltip :text="__('Organization logo')">
           <div class="group relative size-12">
             <Avatar
               size="3xl"
-              class="size-12"
+              class="size-12 avat_container"
               :label="organization.data?.name || __('Untitled')"
               :image="organization.data?.organization_logo"
             />
@@ -87,13 +87,13 @@
           <div class="flex gap-1.5">
             <Tooltip v-if="callEnabled" :text="__('Make a call')">
               <Button class="h-7 w-7" @click="triggerCall">
-                <PhoneIcon class="h-4 w-4" />
+                <PhoneIcon class="h-4 w-4 text-primary_text" />
               </Button>
             </Tooltip>
             <Tooltip :text="__('Send an email')">
               <Button class="h-7 w-7">
                 <Email2Icon
-                  class="h-4 w-4"
+                  class="h-4 w-4 text-primary_text"
                   @click="
                     deal.data.email
                       ? openEmailBox()
@@ -105,7 +105,7 @@
             <Tooltip :text="__('Go to website')">
               <Button class="h-7 w-7">
                 <LinkIcon
-                  class="h-4 w-4"
+                  class="h-4 w-4 text-primary_text"
                   @click="
                     deal.data.website
                       ? openWebsite(deal.data.website)
@@ -130,7 +130,7 @@
           <div
             v-for="(section, i) in fieldsLayout.data"
             :key="section.label"
-            class="section flex flex-col p-3"
+            class="section flex flex-col"
             :class="{ 'border-b': i !== fieldsLayout.data.length - 1 }"
           >
             <Section :is-opened="section.opened" :label="section.label">

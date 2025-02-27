@@ -2,7 +2,7 @@
   <component
     :is="list.options.getRowRoute ? 'router-link' : 'div'"
     :class="{ 'cursor-pointer': isHoverable }"
-    class="flex flex-col transition-all duration-300 ease-in-out odd:bg-white even:bg-table_row_hover hover:bg-table_row_hover active:bg-table_row_hover"
+    class="flex flex-col transition-all duration-300 ease-in-out odd:bg-white even:bg-gray-50 hover:bg-gray-50 active:bg-table_row_hover"
     v-bind="{
       to: list.options.getRowRoute ? list.options.getRowRoute(row) : undefined,
       onClick: list.options.onRowClick

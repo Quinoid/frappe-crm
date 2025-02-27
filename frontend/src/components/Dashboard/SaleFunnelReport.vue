@@ -1,12 +1,22 @@
 <template>
   <div
-    class="bg-white shadow-sm grid col-span-3   rounded-lg p-6 sm:w-full w-full overflow-y-auto"
+    class="bg-white shadow-sm grid lg:col-span-4 col-span-6  rounded-lg p-6 sm:w-full w-full overflow-y-auto"
   >
     <div class="flex justify-between items-center mb-4 ">
       <div class="flex gap-2 items-center">
-      <h3 class="text-lg font-medium  text-gray-900">
+    
+       <div >
+          <h3 class=" flex gap-1 text-black font-inter text-base not-italic font-semibold leading-normal">
         Sales Funnel Report
-      </h3>
+            <ToolTipInfo />
+
+          </h3>
+          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">From interest to action! Visualise your sales funnel and unlock growth potential at every stage.</p>
+        </div>
+      
+
+     </div>
+      <div class="flex gap-2 items-center">
       <DateRangePicker
         v-model="filterData"
         variant="subtle"
@@ -14,26 +24,24 @@
         class="!w-[230px]"
         :disabled="false"
       />
-            <ToolTipInfo />
-
-     </div>
-      <div class="flex gap-2 ">
+    <div class="flex gap-2 graph-actions ">
           
-        <Tooltip :text="__('Graph View')">
-       <span @click="graphView = true" class="cursor-pointer">
+        <span @click="graphView = true" class="cursor-pointer" :class="graphView ? 'bg-white' : ''">
+          <Tooltip :text="__('Graph View')">
           <GraphIcon
-            class="h-4 w-4"
-            :class="graphView ? 'text-green-600' : 'text-gray-600'"
+            class="h-6 w-6"
+            :class="'text-icon_color'"
           />
+          </Tooltip>
         </span>
-        </Tooltip>
-        <Tooltip :text="__('Grid View')">
-        <span @click="graphView = false" class="cursor-pointer">
+        <span @click="graphView = false" class="cursor-pointer p-[2px]" :class="!graphView ? 'bg-white' : ''">
+          <Tooltip :text="__('Grid View')">
           <GridIcon
-            class="h-4 w-4"
-            :class="!graphView ? 'text-green-600' : 'text-gray-600'"
-        /></span>
-        </Tooltip>
+            class="h-6 w-6"
+            :class="'text-icon_color'"
+        />
+              </Tooltip>
+        </span>
 
         <Tooltip :text="__('Download PDF')">
           <a
@@ -44,7 +52,8 @@
             <FeatherIcon name="download" class="h-4 w-4" />
           </a>
         </Tooltip>
-      </div>
+      </div></div>
+      
     </div>
     <div v-if="salsFunnelUpdateKey.isLoading" class="flex justify-center">
       <div
@@ -60,10 +69,10 @@
     >
       <div class="flex h-full items-center justify-center min-h-[260px]">
         <div
-          class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
+          class="flex flex-col relative justify-center items-center gap-3 text-xl font-medium text-gray-500"
         >
-          <GraphIcon class="h-10 w-10" />
-          <span class="text-sm text-gray-500"> No  Data Available</span>
+          <EmptyFunnel />
+          <span class="nodata-text"> Not enough data to display visualization.</span>
         </div>
       </div>
     </div>
@@ -131,7 +140,7 @@ import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
 import { ref, watch } from 'vue';
 import { formatDate, revertDate } from '../../utils/index';
-
+import EmptyFunnel from '@/components/Dashboard/EmptyFunnel.vue'
 const salesFunnelData = ref([])
 const salsFunnelUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`

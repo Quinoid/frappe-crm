@@ -62,7 +62,7 @@
       <template #default="{ tab }">
         <div
           v-if="tab.label === 'Details'"
-          class="pb-5 bg-[#f7f7f7] h-[calc(100vh-100px)] overflow-auto"
+          class="pb-5  h-[calc(100vh-100px)] overflow-auto"
         >
           <OrgEdit
             class="mb-4"
@@ -120,7 +120,7 @@
               size="3xl"
               :image="organization.data.organization_logo"
               :label="organization.data.name"
-              class="!h-24 !w-24"
+              class="!h-24 !w-24 avat_container"
             />
             <component
               :is="organization.data.organization_logo ? Dropdown : 'div'"

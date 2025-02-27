@@ -32,7 +32,7 @@
     >
       <div
         v-for="note in notes.data.data"
-        class="group flex h-56 cursor-pointer flex-col justify-between gap-2 rounded-lg border px-5 py-4 shadow-sm hover:bg-gray-50"
+        class="group flex h-56 cursor-pointer flex-col justify-between gap-2 rounded-lg border px-5 py-4 shadow-sm bg-white hover:bg-gray-50"
         @click="editNote(note)"
       >
         <div class="flex items-center justify-between">
@@ -93,11 +93,13 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <NoteIcon class="h-10 w-10" />
+      <NoteIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Notes')]) }}</span>
-      <Button :label="__('Create')" @click="createNote">
+      <Button :label="__('Create')" class="bg-btn_primary text-white" @click="createNote">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
+      
+     
     </div>
   </div>
   <NoteModal

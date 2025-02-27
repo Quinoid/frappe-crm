@@ -71,14 +71,16 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <ContactsIcon class="h-10 w-10" />
+      <ContactsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Event')]) }}</span>
       <span class="text-sm text-gray-500">{{
         __('Setup Calendar account to enable accessing your events')
       }}</span>
-      <Button :label="__('Create')" @click="handleCreateEvent">
+      <Button :label="__('Create')" class="bg-btn_primary text-white"  @click="handleCreateEvent">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
+
+     
     </div>
   </div>
   <EventModal

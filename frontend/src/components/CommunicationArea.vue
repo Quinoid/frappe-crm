@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between gap-3 border-t px-4 py-2.5 sm:px-10">
+  <div class="flex justify-between gap-3 border-t px-4 py-2.5 sm:px-10 email-header">
     <div class="flex gap-1.5">
       <Button
         ref="sendEmailRef"
@@ -26,6 +26,7 @@
   </div>
   <div
     v-show="showEmailBox"
+    class="section-container-bg"
     @keydown.ctrl.enter.capture.stop="submitEmail"
     @keydown.meta.enter.capture.stop="submitEmail"
   >
@@ -59,7 +60,8 @@
       "
     />
   </div>
-  <div v-show="showCommentBox">
+  <div v-show="showCommentBox"     class="section-container-bg"
+>
     <CommentBox
       ref="newCommentEditor"
       v-model:content="newComment"

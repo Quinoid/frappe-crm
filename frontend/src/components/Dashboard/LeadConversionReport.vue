@@ -1,84 +1,65 @@
 <template>
-  <div
-    class="bg-white shadow-sm grid col-span-4  rounded-lg p-6 sm:w-full w-full overflow-y-auto"
-  >
-   
+  <div class="bg-white shadow-sm grid col-span-4  rounded-lg p-6 sm:w-full w-full overflow-y-auto">
+
     <div class="flex justify-between items-center mb-4 ">
       <div class="flex gap-2 items-center">
-      <h3 class="text-lg font-medium  text-gray-900">
-        Lead Conversion Report
-      </h3>
-      <DateRangePicker
-        v-model="filterData"
-        variant="subtle"
-        class="!w-[230px]"
-        placeholder="Placeholder"
-        :disabled="false"
-    />
-          <ToolTipInfo />
+        <div class="text-lg font-medium  text-gray-900">
+          <h3 class=" flex gap-1 text-black font-inter text-base not-italic font-semibold leading-normal"
+> Lead Conversion Report
+        <ToolTipInfo />
 
-    </div>
-      <div class="flex gap-2">
-        <Tooltip :text="__('Graph View')">
-        <span @click="graphView = true" class="cursor-pointer">
-          <GraphIcon
-            class="h-4 w-4"
-            :class="graphView ? 'text-green-600' : 'text-gray-600'"
-          />
+          </h3>
+          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Turn prospects into profits! See how well your leads are converting and fine-tune your strategy.</p>
+        </div>
+    
+
+      </div>
+      <div class="flex gap-2 items-center">
+         <DateRangePicker v-model="filterData" variant="subtle" class="!w-[230px]" placeholder="Placeholder"
+          :disabled="false" />
+          <div class="flex gap-2 graph-actions ">
+           
+        <span @click="graphView = true" class="cursor-pointer" :class="graphView ? 'bg-white' : ''">
+          <Tooltip :text="__('Graph View')">
+            <GraphIcon class="h-6 w-6" :class="'text-icon_color'" />
+          </Tooltip>
         </span>
-        </Tooltip>
-        <Tooltip :text="__('Grid View')">
-        <span @click="graphView = false" class="cursor-pointer">
-          <GridIcon
-            class="h-4 w-4"
-            :class="!graphView ? 'text-green-600' : 'text-gray-600'"
-        /></span>
-        </Tooltip>
+        <span @click="graphView = false" class="cursor-pointer p-[2px]" :class="!graphView ? 'bg-white' : ''">
+          <Tooltip :text="__('Grid View')">
+            <GridIcon class="h-6 w-6" :class="'text-icon_color'" />
+          </Tooltip>
+        </span>
         <Tooltip :text="__('Download PDF')">
-          <a
-            class="cursor-pointer hover:text-green-600"
-            @click="exportToPDF()"
-            target="_blank"
-          >
+          <a class="cursor-pointer hover:text-green-600" @click="exportToPDF()" target="_blank">
             <FeatherIcon name="download" class="h-4 w-4" />
           </a>
         </Tooltip>
       </div>
+      </div>
+      
     </div>
     <div v-if="leadConversionUpdateKey.isLoading" class="flex justify-center">
-      <div
-        class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
-      >
+      <div class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500">
         <component :is="leadConversionUpdateKey.icon" class="!h-10 !w-10" />
         <div>{{ __('Loading data...') }}</div>
       </div>
     </div>
-    <div
-      v-else-if="tableData?.length === 0"
-      class="text-center text-gray-500 mt-4 p-3"
-    >
+    <div v-else-if="tableData?.length === 0" class="text-center text-gray-500 mt-4 p-3">
       <div class="flex h-full items-center justify-center min-h-[260px]">
-        <div
-          class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
-        >
-          <GraphIcon class="h-10 w-10" />
-          <span class="text-sm text-gray-500"> No Data Available</span>
+        <div class="flex flex-col items-center relative justify-center gap-3 text-xl font-medium text-gray-500">
+          <EmptyIcon />
+          <span class="nodata-text"> Not enough data to display visualization.</span>
         </div>
       </div>
     </div>
     <div v-else>
       <template v-if="graphView">
-        <BarChart
-          :key="leadConversionUpdateKey.value"
-          :chartData="leadConversionReportData || []"
-        />
+        <BarChart :key="leadConversionUpdateKey.value" :chartData="leadConversionReportData || []" />
       </template>
       <template v-else>
         <div class="data-table overflow-auto table-container">
-          <table
-            class="table-auto border-collapse border border-gray-400 w-full text-left"
-          >
-            <thead>
+          <table class="table-auto border-collapse border border-gray-400 w-full text-left">
+            <thead class="bg-table_header">
               <tr class="bg-gray-100">
                 <th class="border border-gray-300 px-4 py-2">Lead Source</th>
                 <th class="border border-gray-300 px-4 py-2 text-right">
@@ -116,6 +97,7 @@
 </template>
 <script setup>
 import BarChart from '@/components/Dashboard/BarChart.vue';
+import EmptyIcon from '@/components/Dashboard/EmptyIcon.vue';
 import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import GraphIcon from '@/components/GraphIcon.vue';
 import GridIcon from '@/components/GridIcon.vue';
@@ -124,7 +106,6 @@ import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
 import { ref, watch } from 'vue';
 import { formatDate, revertDate } from '../../utils/index';
-
 const leadConversionReportData = ref([])
 const leadConversionUpdateKey = ref({ key: 0, isLoading: false })
 const API_BASE_PATH = `${window.location.origin}/api/method/`
@@ -133,7 +114,7 @@ const tableData = ref([])
 const dateRange = ref([formatDate(new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0]), formatDate(new Date().toISOString().split('T')[0])])
 const filterData = ref(dateRange.value.join(' to '));
 const get_LeadConversionData = async () => {
-  const filters=filterData.value.split(' to ')
+  const filters = filterData.value.split(' to ')
 
   leadConversionUpdateKey.value.isLoading = true
   try {
@@ -171,9 +152,9 @@ get_LeadConversionData()
 watch(
   () => filterData.value, // Watching the entire array
   (newVal, oldVal) => {
-  const filters = newVal.split(',');
+    const filters = newVal.split(',');
     if (filters.length === 2) {
- const newData = [formatDate(filters[0]), formatDate(filters[1])]
+      const newData = [formatDate(filters[0]), formatDate(filters[1])]
       filterData.value = newData.join(' to ');
     }
     get_LeadConversionData(); // Call the API whenever the object changes
@@ -186,14 +167,14 @@ const formatCamelCase = (str) => {
 
 function transformLeadData(inputData) {
 
-   const colorsObj = {
+  const colorsObj = {
     ConvertedLeads: '#EB9772',
     AvgConversionTime: '#A523B9',
     TotalDealValue: '#573B92',
   }
   const categories = ['ConvertedLeads', 'AvgConversionTime', 'TotalDealValue']
- 
-  const datasets = categories.map((category,index) => ({
+
+  const datasets = categories.map((category, index) => ({
     label: formatCamelCase(category),
     data: inputData?.map((item) => item[category]),
     backgroundColor: colorsObj[category],
@@ -212,19 +193,19 @@ function formatCurrency(value) {
     maximumFractionDigits: 2,
   })
 }
- function exportToPDF() {
-      const doc = new jsPDF();
-      const columns = ['Lead Source', 'Converted Leads', 'Avg Conversion Time (in Days)', 'Total Deal Value'];
-      const rows = tableData.value.map((user) => [user.LeadSource, user.ConvertedLeads, user.AvgConversionTime, user.TotalDealValue]);
+function exportToPDF() {
+  const doc = new jsPDF();
+  const columns = ['Lead Source', 'Converted Leads', 'Avg Conversion Time (in Days)', 'Total Deal Value'];
+  const rows = tableData.value.map((user) => [user.LeadSource, user.ConvertedLeads, user.AvgConversionTime, user.TotalDealValue]);
 
-      doc.text('Lead Conversion Report', 14, 10);
-      autoTable(doc, {
-        head: [columns],
-        body: rows,
-      });
-      const date=new Date();
-      const filename = "lead-conversion-report-" + date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + ".pdf";
-      doc.save(filename);
-    }
+  doc.text('Lead Conversion Report', 14, 10);
+  autoTable(doc, {
+    head: [columns],
+    body: rows,
+  });
+  const date = new Date();
+  const filename = "lead-conversion-report-" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + ".pdf";
+  doc.save(filename);
+}
 
 </script>

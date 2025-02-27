@@ -15,7 +15,7 @@
         <Avatar
           :image="contact.image"
           :label="contact.full_name"
-          class="relative flex !h-24 !w-24 items-center justify-center [&>div]:text-[30px]"
+          class="relative flex !h-24 !w-24 items-center avat_container justify-center [&>div]:text-[30px]"
           :class="onCall || calling ? '' : 'pulse'"
         />
         <div class="flex flex-col items-center justify-center gap-1">
