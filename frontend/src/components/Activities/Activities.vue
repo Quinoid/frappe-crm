@@ -398,28 +398,28 @@
       />
       <Button
         v-else-if="title == 'Notes'"
-        :label="__('Create Note')"
+        :label="__('Write a Note Now!')"
         @click="modalRef.showNote()"
          variant="solid"
         class="bg-btn_primary"  
       />
       <Button
         v-else-if="title == 'Emails'"
-        :label="__('New Email')"
+        :label="__('Send an Email Now!')"
         @click="emailBox.show = true"
          variant="solid"
         class="bg-btn_primary"  
       />
       <Button
         v-else-if="title == 'Comments'"
-        :label="__('New Comment')"
+        :label="__('Add a Comment Now!')"
         @click="emailBox.showComment = true"
          variant="solid"
         class="bg-btn_primary"  
       />
       <Button
         v-else-if="title == 'Tasks'"
-        :label="__('Create Task')"
+        :label="__('Create a Task Now!')"
         @click="modalRef.showTask()"
          variant="solid"
         class="bg-btn_primary"  
@@ -775,18 +775,18 @@ const emptyText = computed(() => {
   let textSub='Start adding your thoughts and ideas by clicking New Note'
   if (props.title == 'Emails') {
     text = 'No Email Communications Yet'
-    textSub='Stay connected by composing your first email.'
+    textSub='Your voice matters! Keep conversations flowing and make every message count.'
   } else if (props.title == 'Comments') {
     text = 'No Comments Yet'
-    textSub='Share your comments by clicking on ‘New Comment’'
+    textSub='Great teams run on great communication! Share insights and keep everyone aligned.'
   } else if (props.title == 'Calls') {
     text = 'No Call Logs'
   } else if (props.title == 'Notes') {
     text = 'No Notes Yet'
-    textSub='Start adding your thoughts and ideas by clicking New Note'
+    textSub='Brilliant ideas deserve to be captured! Write down key takeaways and never miss a beat.'
   } else if (props.title == 'Tasks') {
     text = 'No Tasks Yet'
-    textSub='Stay organized by adding your first task now'
+    textSub='Action beats intention! Set tasks, track progress, and make things happen.'
   } else if (props.title == 'WhatsApp') {
     text = 'No WhatsApp Messages'
   } else if (props.title == 'Deals') {

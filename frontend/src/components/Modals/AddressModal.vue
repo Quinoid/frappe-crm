@@ -15,7 +15,7 @@
               class="w-7"
               @click="openQuickEntryModal"
             >
-              <EditIcon class="h-4 w-4" />
+              <SettingsIcon class="h-4 w-4" />
             </Button>
             <Button variant="ghost" class="w-7" @click="show = false">
               <FeatherIcon name="x" class="h-4 w-4" />
@@ -52,6 +52,7 @@
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
 import Fields from '@/components/Fields.vue'
 import EditIcon from '@/components/Icons/EditIcon.vue'
+import SettingsIcon from '@/components/Icons/Settings.vue'
 import { usersStore } from '@/stores/users'
 import { capture } from '@/telemetry'
 import { call, FeatherIcon, createResource, ErrorMessage } from 'qbs-vue-ui'

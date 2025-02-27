@@ -14,10 +14,10 @@
           class="flex flex-col gap-2.5 min-w-72 w-72 hover:bg-gray-100 rounded-lg p-2.5"
         >
           <div class="flex gap-2 items-center group justify-between">
-            <div class="flex items-center text-base">
+            <div class="flex items-center text-base gap-2">
               <NestedPopover>
                 <template #target>
-                  <Button variant="ghost" size="sm" class="hover:!bg-gray-100">
+                  <Button variant="ghost" size="sm" class="hover:!bg-gray-300">
                     <IndicatorIcon
                       :class="colorClasses(column.column.color, true)"
                     />

@@ -60,8 +60,10 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <EmailIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
+      <EmailEmpty class="h-[196px]  w-[196px]" />
       <span>{{ __('No {0} Found', [__('Emails')]) }}</span>
+                                     <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your inbox is the command centre of your business. Engage, respond, and lead the conversation!' }}</span>  
+
       <span class="text-sm text-gray-500">{{
         __('Setup Email account to enable accessing your emails')
       }}</span>
@@ -76,15 +78,15 @@
 </template>
 
 <script setup>
-import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
+import EmailEmpty from '@/components/Activities/newEmptycon/EmailEmpty.vue'
 import CustomActions from '@/components/CustomActions.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
+import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import CommunicationListView from '../components/ListViews/CommunicationListView.vue'
 import QuickEntryModal from '../components/Modals/QuickEntryModal.vue'
-import { useRoute } from 'vue-router'
-import EmailIcon from '@/components/Icons/EmailIcon.vue'
 const showQuickEntryModal = ref(false)
 const route = useRoute()
 

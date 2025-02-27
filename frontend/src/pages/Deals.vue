@@ -231,7 +231,8 @@
     >
       <DealsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Deals')]) }}</span>
-      <Button :label="__('Create')"  :variant="solid"        class="bg-btn_primary text-white"
+      <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your next big deal is out there - start tracking, negotiating, and closing like a pro!' }}</span>  
+        <Button :label="__('Create a Deal Now!')"  :variant="solid"        class="bg-btn_primary text-white"
         @click="createDeal">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>

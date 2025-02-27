@@ -55,7 +55,9 @@
     >
       <OrganizationsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Organizations')]) }}</span>
-      <Button :label="__('Create')" class="bg-btn_primary text-white" @click="showOrganizationModal = true">
+                  <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Strong businesses are built on strong partnerships. Organise, connect, and grow!' }}</span>  
+
+      <Button :label="__('Add an Organisation!')" class="bg-btn_primary text-white" @click="showOrganizationModal = true">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
       

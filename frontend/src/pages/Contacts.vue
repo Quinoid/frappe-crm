@@ -56,7 +56,9 @@
     >
       <ContactsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Contacts')]) }}</span>
-      <Button :label="__('Create')" class="bg-btn_primary text-white" @click="createContact">
+            <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your network is your net worth! Build strong relationships that fuel success.' }}</span>  
+
+      <Button :label="__('Add a Contact Now!')" class="bg-btn_primary text-white" @click="createContact">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
      

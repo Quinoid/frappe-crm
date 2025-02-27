@@ -12,22 +12,21 @@
       class="grid flex-1 place-items-center text-xl font-medium text-gray-500 justify-center h-[100vh]"
     >
       <div class="flex flex-col items-center justify-center space-y-3">
-        <DealsIcon class="h-10 w-10" />
+      <DealsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
         <span>{{ __('No {0} Found', [__('Deals')]) }}</span>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { usersStore } from '@/stores/users'
+import DealsIcon from '@/components/Icons/DealsIcon.vue'
+import DealsListView from '@/components/ListViews/DealsListView.vue'
 import { organizationsStore } from '@/stores/organizations'
 import { statusesStore } from '@/stores/statuses'
-import { formatNumberIntoCurrency } from '@/utils'
-import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
-import DealsListView from '@/components/ListViews/DealsListView.vue'
+import { usersStore } from '@/stores/users'
+import { dateFormat, dateTooltipFormat, formatNumberIntoCurrency, timeAgo } from '@/utils'
 import { createResource } from 'qbs-vue-ui'
 import { computed } from 'vue'
-import DealsIcon from '@/components/Icons/DealsIcon.vue'
 
 const { getUser } = usersStore()
 const { getOrganization } = organizationsStore()

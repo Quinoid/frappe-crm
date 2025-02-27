@@ -73,6 +73,8 @@
     >
       <ContactsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
       <span>{{ __('No {0} Found', [__('Event')]) }}</span>
+                         <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your calendar should work for you, not against you! Plan, organise, and own your schedule.' }}</span>  
+
       <span class="text-sm text-gray-500">{{
         __('Setup Calendar account to enable accessing your events')
       }}</span>

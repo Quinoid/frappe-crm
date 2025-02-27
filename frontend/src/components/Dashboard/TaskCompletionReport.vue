@@ -10,8 +10,7 @@
         <ToolTipInfo />
 
           </h3>
-          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Productivity in numbers!
-            See what’s done, what’s pending, and what’s next—stay on top of deadlines.</p>
+          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Productivity in numbers! See what’s done, what’s pending, and what’s next—stay on top of deadlines.</p>
         </div>
      
 

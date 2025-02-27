@@ -192,10 +192,10 @@
               <template v-if="i == 0 && isManager()" #actions>
                 <Button
                   variant="ghost"
-                  class="w-7 mr-2"
+                  class="w-7 mr-2 !text-black"
                   @click="showSidePanelModal = true"
                 >
-                  <EditIcon class="h-4 w-4" />
+                  <SettingsIcon class="h-4 w-4" />
                 </Button>
               </template>
             </Section>
@@ -294,7 +294,6 @@ import CameraIcon from '@/components/Icons/CameraIcon.vue'
 import CommentIcon from '@/components/Icons/CommentIcon.vue'
 import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
-import EditIcon from '@/components/Icons/EditIcon.vue'
 import Email2Icon from '@/components/Icons/Email2Icon.vue'
 import EmailIcon from '@/components/Icons/EmailIcon.vue'
 import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
@@ -302,6 +301,7 @@ import LinkIcon from '@/components/Icons/LinkIcon.vue'
 import NoteIcon from '@/components/Icons/NoteIcon.vue'
 import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import SettingsIcon from '@/components/Icons/SettingsIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'

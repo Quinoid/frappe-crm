@@ -15,7 +15,7 @@
               class="w-7"
               @click="detailMode ? (detailMode = false) : openQuickEntryModal()"
             >
-              <EditIcon class="h-4 w-4" />
+              <SettingsIcon class="h-4 w-4" />
             </Button>
             <Button variant="ghost" class="w-7" @click="show = false">
               <FeatherIcon name="x" class="h-4 w-4" />
@@ -93,6 +93,7 @@ import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'
 import AddressIcon from '@/components/Icons/AddressIcon.vue'
 import CertificateIcon from '@/components/Icons/CertificateIcon.vue'
 import EditIcon from '@/components/Icons/EditIcon.vue'
+import SettingsIcon from '@/components/Icons/Settings.vue'
 import Dropdown from '@/components/qbs-vue-ui/Dropdown.vue'
 import { usersStore } from '@/stores/users'
 import { capture } from '@/telemetry'

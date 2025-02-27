@@ -63,10 +63,10 @@
             <template v-if="i == 0 && isManager()">
               <Button
                 variant="ghost"
-                class="w-7 mr-2"
+                class="w-7 mr-2 !text-black"
                 @click="showSidePanelModal = true"
               >
-                <EditIcon class="h-4 w-4" />
+                <SettingsIcon class="h-4 w-4" />
               </Button>
             </template>
           </div>
@@ -122,10 +122,10 @@
                 ((!section.contacts && i == 1) || i == 0) && isManager()
               "
               variant="ghost"
-              class="w-7 mr-2"
+              class="w-7 mr-2 !text-black"
               @click="showSidePanelModal = true"
             >
-              <EditIcon class="h-4 w-4" />
+              <SettingsIcon class="h-4 w-4" />
             </Button>
           </template>
           <SectionFields
@@ -239,23 +239,22 @@
   </div>
 </template>
 <script setup>
+import Link from '@/components/Controls/Link.vue'
+import ArrowUpRightIcon from '@/components/Icons/ArrowUpRightIcon.vue'
+import Email2Icon from '@/components/Icons/Email2Icon.vue'
+import LinkIcon from '@/components/Icons/LinkIcon.vue'
+import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import SettingsIcon from '@/components/Icons/Settings.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
-import { ref } from 'vue'
-import { usersStore } from '@/stores/users'
 import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
-import EditIcon from '@/components/Icons/EditIcon.vue'
-import { Tooltip, Avatar } from 'qbs-vue-ui'
-import LinkIcon from '@/components/Icons/LinkIcon.vue'
-import Email2Icon from '@/components/Icons/Email2Icon.vue'
-import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import { errorMessage, openWebsite, copyToClipboard } from '@/utils'
-import { globalStore } from '@/stores/global'
-import { callEnabled } from '@/composables/settings'
-import Link from '@/components/Controls/Link.vue'
 import SLASection from '@/components/SLASection.vue'
-import { Dropdown } from 'qbs-vue-ui'
-import ArrowUpRightIcon from '@/components/Icons/ArrowUpRightIcon.vue'
+import { callEnabled } from '@/composables/settings'
+import { globalStore } from '@/stores/global'
+import { usersStore } from '@/stores/users'
+import { copyToClipboard, errorMessage, openWebsite } from '@/utils'
+import { Avatar, Dropdown, Tooltip } from 'qbs-vue-ui'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const props = defineProps({

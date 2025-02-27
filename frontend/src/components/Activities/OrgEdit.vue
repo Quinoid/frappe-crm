@@ -117,7 +117,7 @@
             <template v-if="i == 0 && isManager()">
               <Button
                 variant="ghost"
-                class="w-7 mr-2"
+                class="w-7 mr-2 !text-black"
                 @click="showSidePanelModal = true"
               >
                 <EditIcon class="h-4 w-4" />
@@ -142,10 +142,10 @@
             <Button
               v--if="i == 0 && isManager()"
               variant="ghost"
-              class="w-7 mr-2"
+              class="w-7 mr-2 !text-black"
               @click="showSidePanelModal = true"
             >
-              <EditIcon class="h-4 w-4" />
+              <SettingsIcon class="h-4 w-4" />
             </Button>
           </template>
           <SectionFields
@@ -170,6 +170,7 @@ import EditIcon from '@/components/Icons/EditIcon.vue'
 import Email2Icon from '@/components/Icons/Email2Icon.vue'
 import LinkIcon from '@/components/Icons/LinkIcon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import SettingsIcon from '@/components/Icons/Settings.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
 import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
