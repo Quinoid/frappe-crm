@@ -182,27 +182,65 @@ class CRMDeal(Document):
                 'width': '10rem',
             },
             {
-                'label': 'Email',
+                'label': 'Deal Owner',
+                'type': 'Link',
+                'key': 'deal_owner',
+                'width': '8rem',
+            },
+            # {
+            #     'label': 'Interested Services',
+            #     'type': 'Table MultiSelect',
+            #     'key': 'interested_services_for_lead',
+            #     'width': '8rem',
+            # },
+
+            {
+                'label': 'Deal Followup Date',
+                'type': 'Date',
+                'key': 'deal_followup_date',
+                'width': '8rem',
+            },
+            {
+                'label': 'Deal Priority',
+                'type': 'Link',
+                'key': 'lead_priority',
+                'width': '8rem',
+            },
+            {
+                'label': 'Deal Probability',
+                'type': 'Percent',
+                'key': 'probability',
+                'width': '8rem',
+            },
+
+            {
+                'label': 'Deal Close Date',
                 'type': 'Data',
-                'key': 'email',
+                'key': 'close_date',
                 'width': '12rem',
             },
-            {
-                'label': 'Mobile No',
-                'type': 'Data',
-                'key': 'mobile_no',
-                'width': '11rem',
-            },
-            {
-                'label': 'Assigned To',
-                'type': 'Text',
-                'key': '_assign',
-                'width': '10rem',
-            },
+            # {
+            #     'label': 'Mobile No',
+            #     'type': 'Data',
+            #     'key': 'mobile_no',
+            #     'width': '11rem',
+            # },
+            # {
+            #     'label': 'Assigned To',
+            #     'type': 'Text',
+            #     'key': '_assign',
+            #     'width': '10rem',
+            # },
             {
                 'label': 'Last Modified',
                 'type': 'Datetime',
                 'key': 'modified',
+                'width': '8rem',
+            },
+            {
+                'label': 'Created On',
+                'type': 'Datetime',
+                'key': 'creation',
                 'width': '8rem',
             },
         ]

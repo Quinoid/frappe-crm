@@ -10,10 +10,28 @@ class CRMCallLog(Document):
 		def default_list_data():
 			columns = [
 				{
+					'label': 'Date',
+					'type': 'Datetime',
+					'key': 'creation',
+					'width': '8rem',
+				},
+				{
+					'label': 'Type',
+					'type': 'Select',
+					'key': 'type',
+					'width': '9rem',
+				},
+				{
 					'label': 'From',
 					'type': 'Link',
 					'key': 'caller',
 					'options': 'User',
+					'width': '9rem',
+				},
+				{
+					'label': 'From Number',
+					'type': 'Data',
+					'key': 'from',
 					'width': '9rem',
 				},
 				{
@@ -24,11 +42,12 @@ class CRMCallLog(Document):
 					'width': '9rem',
 				},
 				{
-					'label': 'Type',
-					'type': 'Select',
-					'key': 'type',
+					'label': 'To Number',
+					'type': 'Data',
+					'key': 'to',
 					'width': '9rem',
 				},
+				
 				{
 					'label': 'Status',
 					'type': 'Select',
@@ -41,24 +60,14 @@ class CRMCallLog(Document):
 					'key': 'duration',
 					'width': '6rem',
 				},
-				{
-					'label': 'From (number)',
-					'type': 'Data',
-					'key': 'from',
-					'width': '9rem',
-				},
-				{
-					'label': 'To (number)',
-					'type': 'Data',
-					'key': 'to',
-					'width': '9rem',
-				},
-				{
-					'label': 'Created On',
-					'type': 'Datetime',
-					'key': 'creation',
-					'width': '8rem',
-				},
+				
+				
+				# {
+				# 	'label': 'Created On',
+				# 	'type': 'Datetime',
+				# 	'key': 'creation',
+				# 	'width': '8rem',
+				# },
 				]
 			rows = [
 				"name",

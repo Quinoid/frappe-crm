@@ -16,11 +16,23 @@ class CRMOrganization(Document):
 					'width': '16rem',
 				},
 				{
-					'label': 'Website',
+					'label': 'Type Of Business',
+					'type': 'Link',
+					'key': 'type_of_business',
+					'width': '16rem',
+				},
+				{
+					'label': 'Organization',
 					'type': 'Data',
-					'key': 'website',
+					'key': 'organization_status',
 					'width': '14rem',
 				},
+				{
+	                'label': 'Owner/Assigned To',
+	                'type': 'Text',
+	                'key': '_assign',
+	                'width': '10rem',
+	            },
 				{
 					'label': 'Industry',
 					'type': 'Link',
@@ -29,17 +41,35 @@ class CRMOrganization(Document):
 					'width': '14rem',
 				},
 				{
-					'label': 'Annual Revenue',
-					'type': 'Currency',
-					'key': 'annual_revenue',
+					'label': 'Sector',
+					'type': 'Link',
+					'key': 'sector',
 					'width': '14rem',
 				},
+				{
+					'label': 'City',
+					'type': 'Link',
+					'key': 'city',
+					'width': '14rem',
+				},
+				# {
+				# 	'label': 'Annual Revenue',
+				# 	'type': 'Currency',
+				# 	'key': 'annual_revenue',
+				# 	'width': '14rem',
+				# },
 				{
 					'label': 'Last Modified',
 					'type': 'Datetime',
 					'key': 'modified',
 					'width': '8rem',
 				},
+				{
+	                'label': 'Created On',
+	                'type': 'Datetime',
+	                'key': 'creation',
+	                'width': '8rem',
+	            },
 			]
 			rows = [
 				"name",
