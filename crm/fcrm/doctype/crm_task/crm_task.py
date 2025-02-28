@@ -43,16 +43,22 @@ class CRMTask(Document):
 				'width': '16rem',
 			},
 			{
+				'label': 'Reference Doc Type',
+				'type': 'Dynamic Link"',
+				'key': 'reference_doctype',
+				'width': '8rem',
+			},
+			{
 				'label': 'Status',
 				'type': 'Select',
 				'key': 'status',
 				'width': '8rem',
 			},
 			{
-				'label': 'Reference Doc Type',
-				'type': 'Dynamic Link"',
-				'key': 'reference_doctype',
-				'width': '8rem',
+				'label': 'Assigned To',
+				'type': 'Link',
+				'key': 'assigned_to',
+				'width': '10rem',
 			},
 			{
 				'label': 'Priority',
@@ -66,18 +72,25 @@ class CRMTask(Document):
 				'key': 'due_date',
 				'width': '8rem',
 			},
-			{
-				'label': 'Assigned To',
-				'type': 'Link',
-				'key': 'assigned_to',
-				'width': '10rem',
-			},
+			
 			{
 				'label': 'Last Modified',
 				'type': 'Datetime',
 				'key': 'modified',
 				'width': '8rem',
-			}
+			},
+			{
+                'label': 'Created On',
+                'type': 'Datetime',
+                'key': 'creation',
+                'width': '8rem',
+            },
+			# {
+			# 	'label': 'Reference Doc Name',
+			# 	'type': 'Dynamic Link"',
+			# 	'key': 'reference_docname',
+			# 	'width': '8rem',
+			# },
 		]
 
 		rows = [
