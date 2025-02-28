@@ -348,6 +348,7 @@ def create_contact(doc):
             "first_name": doc.get("first_name"),
             "last_name": doc.get("last_name"),
             "salutation": doc.get("salutation"),
+            "contact_status":'Active',
             "company_name": doc.get("organization") or doc.get("organization_name"),
         }
     )
