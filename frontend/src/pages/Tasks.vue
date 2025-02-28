@@ -193,9 +193,11 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <TaskIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full"  />
+      <TaskEmpty class="h-[196px]  w-[196px]"  />
       <span>{{ __('No {0} Found', [__('Tasks')]) }}</span>
-      <Button :label="__('Create')" @click="showTaskModal = true">
+             <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Stay ahead, stay focused! Set clear tasks and smash your goals.' }}</span>  
+
+      <Button :label="__('Create a Task Now!')" class="bg-btn_primary text-white" @click="showTaskModal = true">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </div>
@@ -217,6 +219,7 @@ import TaskPriorityIcon from '@/components/Icons/TaskPriorityIcon.vue'
 import Email2Icon from '@/components/Icons/Email2Icon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import ViewControls from '@/components/ViewControls.vue'
+import TaskEmpty from '@/components/Activities/newEmptycon/TaskEmpty.vue'
 import TasksListView from '@/components/ListViews/TasksListView.vue'
 import KanbanView from '@/components/Kanban/KanbanView.vue'
 import TaskModal from '@/components/Modals/TaskModal.vue'

@@ -54,9 +54,11 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <ContactsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
+      <ContactEmpty class="h-[196px]  w-[196px] " />
       <span>{{ __('No {0} Found', [__('Contacts')]) }}</span>
-      <Button :label="__('Create')" class="bg-btn_primary text-white" @click="createContact">
+            <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your network is your net worth! Build strong relationships that fuel success.' }}</span>  
+
+      <Button :label="__('Add a Contact Now!')" class="bg-btn_primary text-white" @click="createContact">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
      
@@ -83,16 +85,19 @@ import ContactModal from '@/components/Modals/ContactModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
 import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
+import ContactEmpty from '@/components/Icons/ContactEmpty.vue'
 import { organizationsStore } from '@/stores/organizations.js'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { call } from 'qbs-vue-ui'
 import { computed, ref } from 'vue'
 import { createToast } from '../utils/index'
+import { usersStore } from '@/stores/users'
 const { getOrganization } = organizationsStore()
 const showContactModal = ref(false)
 const showQuickEntryModal = ref(false)
 
 const contactsListView = ref(null)
+const { getUser } = usersStore()
 
 // contacts data is loaded in the ViewControls component
 const contacts = ref({})
@@ -144,6 +149,13 @@ const rows = computed(() => {
           image_label: contact.full_name,
           image: contact.image,
         }
+      } else if (row == '_assign') {
+        let assignees = JSON.parse(contact._assign || '[]')
+        _rows[row] = assignees.map((user) => ({
+          name: user,
+          image: getUser(user).user_image,
+          label: getUser(user).full_name,
+        }))
       } else if (row == 'company_name') {
         _rows[row] = {
           label: contact.company_name,

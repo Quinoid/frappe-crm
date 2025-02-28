@@ -53,9 +53,11 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <OrganizationsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
+      <OrganizationEmpty class="h-[196px] w-[196px] " />
       <span>{{ __('No {0} Found', [__('Organizations')]) }}</span>
-      <Button :label="__('Create')" class="bg-btn_primary text-white" @click="showOrganizationModal = true">
+                  <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Strong businesses are built on strong partnerships. Organise, connect, and grow!' }}</span>  
+
+      <Button :label="__('Add an Organisation!')" class="bg-btn_primary text-white" @click="showOrganizationModal = true">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
       
@@ -80,6 +82,7 @@ import OrganizationModal from '@/components/Modals/OrganizationModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
 import OrganizationsListView from '@/components/ListViews/OrganizationsListView.vue'
 import ViewControls from '@/components/ViewControls.vue'
+import OrganizationEmpty from '@/components/Icons/OrganizationEmpty.vue'
 import {
   dateFormat,
   dateTooltipFormat,
@@ -87,7 +90,9 @@ import {
   website,
   formatNumberIntoCurrency,
 } from '@/utils'
+import { usersStore } from '@/stores/users'
 import { ref, computed } from 'vue'
+const { getUser } = usersStore()
 
 const organizationsListView = ref(null)
 const showOrganizationModal = ref(false)
@@ -116,6 +121,13 @@ const rows = computed(() => {
           label: organization.organization_name,
           logo: organization.organization_logo,
         }
+      }else if (row == '_assign') {
+        let assignees = JSON.parse(organization._assign || '[]')
+        _rows[row] = assignees.map((user) => ({
+          name: user,
+          image: getUser(user).user_image,
+          label: getUser(user).full_name,
+        }))
       } else if (row === 'website') {
         _rows[row] = website(organization.website)
       } else if (row === 'annual_revenue') {

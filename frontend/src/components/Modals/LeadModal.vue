@@ -15,7 +15,7 @@
               class="w-7"
               @click="openQuickEntryModal"
             >
-              <EditIcon class="h-4 w-4" />
+              <SettingsIcon class="h-4 w-4" />
             </Button>
             <Button variant="ghost" class="w-7" @click="show = false">
               <FeatherIcon name="x" class="h-4 w-4" />
@@ -44,6 +44,7 @@
 
 <script setup>
 import EditIcon from '@/components/Icons/EditIcon.vue'
+import SettingsIcon from '@/components/Icons/SettingsIcon.vue'
 import Fields from '@/components/Fields.vue'
 import { usersStore } from '@/stores/users'
 import { statusesStore } from '@/stores/statuses'

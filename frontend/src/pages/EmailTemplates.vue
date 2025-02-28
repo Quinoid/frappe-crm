@@ -54,9 +54,11 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <Email2Icon lass="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
+      <EmailTemplateEmpty lass="h-[196px]  w-[196px]" />
       <span>{{ __('No {0} Found', [__('Email Templates')]) }}</span>
-      <Button :label="__('Create')" class="bg-btn_primary text-white" @click="() => showEmailTemplate()">
+                               <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Save time, stay sharp! Create templates for fast, impactful communication.' }}</span>  
+
+      <Button :label="__('Create a Template Now!')" class="bg-btn_primary text-white" @click="() => showEmailTemplate()">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
     </div>
@@ -69,14 +71,15 @@
 </template>
 
 <script setup>
-import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
+import EmailEmpty from '@/components/Activities/newEmptycon/EmailEmpty.vue'
 import CustomActions from '@/components/CustomActions.vue'
-import Email2Icon from '@/components/Icons/Email2Icon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
-import ViewControls from '@/components/ViewControls.vue'
 import EmailTemplatesListView from '@/components/ListViews/EmailTemplatesListView.vue'
 import EmailTemplateModal from '@/components/Modals/EmailTemplateModal.vue'
+import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
+import ViewControls from '@/components/ViewControls.vue'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
+import EmailTemplateEmpty from '@/components/Icons/EmailTemplateEmpty.vue'
 import { computed, ref } from 'vue'
 
 const emailTemplatesListView = ref(null)

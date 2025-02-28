@@ -32,7 +32,7 @@
     >
       <div
         v-for="note in notes.data.data"
-        class="group flex h-56 cursor-pointer flex-col justify-between gap-2 rounded-lg border px-5 py-4 shadow-sm bg-white hover:bg-gray-50"
+        class="group flex h-56 cursor-pointer flex-col justify-between gap-2 rounded-lg border px-5 py-4 shadow-sm bg-white  border hover:border-primary_text"
         @click="editNote(note)"
       >
         <div class="flex items-center justify-between">
@@ -93,9 +93,11 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <NoteIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
+      <NotesEmpty class="h-[196px] w-[196px] " />
       <span>{{ __('No {0} Found', [__('Notes')]) }}</span>
-      <Button :label="__('Create')" class="bg-btn_primary text-white" @click="createNote">
+       <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Great ideas should never slip away! Capture insights and turn thoughts into action.' }}</span>  
+      <Button :label="__('Add a Note Now!')" class="bg-btn_primary text-white" @click="createNote">
+
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
       
@@ -110,15 +112,15 @@
 </template>
 
 <script setup>
-import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
-import UserAvatar from '@/components/UserAvatar.vue'
-import NoteIcon from '@/components/Icons/NoteIcon.vue'
 import NoteModal from '@/components/Modals/NoteModal.vue'
+import NotesEmpty from '@/components/Activities/newEmptycon/NotesEmpty.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
+import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
 import { usersStore } from '@/stores/users'
-import { timeAgo, dateFormat, dateTooltipFormat } from '@/utils'
-import { TextEditor, call, Dropdown, Tooltip, ListFooter } from 'qbs-vue-ui'
+import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
+import { call, Dropdown, ListFooter, TextEditor, Tooltip } from 'qbs-vue-ui'
 import { ref, watch } from 'vue'
 
 const { getUser } = usersStore()

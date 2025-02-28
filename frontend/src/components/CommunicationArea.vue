@@ -106,7 +106,7 @@ const props = defineProps({
 const doc = defineModel()
 const reload = defineModel('reload')
 
-const emit = defineEmits(['scroll'])
+const emit = defineEmits(['scroll', 'refresh'])
 
 const { getUser } = usersStore()
 
@@ -222,6 +222,7 @@ async function submitEmail() {
   newEmail.value = ''
   reload.value = true
   emit('scroll')
+  emit('refresh')
   capture('email_sent', { doctype: props.doctype })
 }
 
@@ -232,6 +233,7 @@ async function submitComment() {
   newComment.value = ''
   reload.value = true
   emit('scroll')
+  emit('refresh')
   capture('comment_sent', { doctype: props.doctype })
 }
 

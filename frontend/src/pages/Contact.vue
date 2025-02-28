@@ -18,7 +18,7 @@
         :options="statusOptions('contact', updateField, customStatuses)"
       >
         <template #default="{ open }">
-          <Button :label="contact.data.contact_status" :class="'grey'">
+          <Button :label="contact.data.contact_status"  :class="getContactStatus(contact.data.contact_status).colorClass">
             <template #prefix>
               <IndicatorIcon />
             </template>
@@ -31,6 +31,8 @@
           </Button>
         </template>
       </Dropdown>
+
+
     </template>
   </LayoutHeader>
   <div v-if="contact.data" class="flex h-full flex-col overflow-hidden">
@@ -84,7 +86,6 @@ import { usersStore } from '@/stores/users'
 import MultipleAvatar from '@/components/MultipleAvatar.vue'
 const { $dialog } = globalStore()
 const { statusOptions, getContactStatus } = statusesStore()
-
 const props = defineProps({
   contactId: {
     type: String,

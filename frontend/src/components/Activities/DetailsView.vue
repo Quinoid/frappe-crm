@@ -136,10 +136,10 @@
           <template v-if="i == 0 && isManager()" #actions>
             <Button
               variant="ghost"
-              class="w-7 mr-2"
+              class="w-7 mr-2 !text-black"
               @click="showSidePanelModal = true"
             >
-              <EditIcon class="h-4 w-4" />
+              <SettingsIcon class="h-4 w-4" />
             </Button>
           </template>
         </Section>
@@ -159,6 +159,7 @@ import { ref } from 'vue'
 import { usersStore } from '@/stores/users'
 import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
 import EditIcon from '@/components/Icons/EditIcon.vue'
+import SettingsIcon from '@/components/Icons/Settings.vue'
 import { FileUploader, Dropdown, Tooltip, Avatar } from 'qbs-vue-ui'
 import CameraIcon from '@/components/Icons/CameraIcon.vue'
 import LinkIcon from '@/components/Icons/LinkIcon.vue'

@@ -1,6 +1,18 @@
 @import './assets/Inter/inter.css';
 @import 'qbs-vue-ui/src/style.css';
 
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hidden {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+}
+
 @layer components {
   .prose-f {
     @apply break-all
@@ -172,13 +184,11 @@
 }
 .nodata-text {
   display: flex;
-  width: 382px;
-  height: 75px;
-  padding: 16px;
+
+  padding: 8px;
   justify-content: center;
   align-items: center;
   gap: 4px;
-  position: absolute;
   color: #434343;
   font-family: Inter;
   font-size: 12px;
@@ -186,8 +196,6 @@
   font-weight: 400;
   line-height: normal;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
 }
 .details-container-header {
   display: flex;
@@ -222,27 +230,34 @@
   background-color: white;
   border-radius: 12px;
 }
+.ProseMirror p {
+  margin: 2px !important;
+  margin-bottom: 2px !important;
+}
 /* global.css or in a non-scoped style block */
 /* For WebKit browsers */
+/* Add this in main.css or App.vue (without scoped) */
+
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 3px !important;
+  height: 3px !important;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: transparent I !important;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.5) I !important;
+  border-radius: 3px !important;
 }
 
-/* For Firefox */
+/* Firefox */
 html {
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
 }
+
 .chip-style {
   background-color: rgba(150, 88, 231, 0.1) !important;
 }
@@ -279,4 +294,21 @@ html {
   border-radius: 8px;
   background: #fff;
   box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.07);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px !important; /* Thin scrollbar width */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Track background */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3); /* Thumb color */
+  border-radius: 10px; /* Rounded scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5); /* Darker color on hover */
 }

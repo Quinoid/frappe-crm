@@ -9,8 +9,12 @@
   
     <!-- Dashboard Counts -->
 
-
+<div>
+  <p class=" text-[16px] font-semibold">Dashboard</p>
+  <p class=" text-[16px] font-light">Your business at a glance! Keep track of leads, deals, contacts, and organisations—all in one place.</p>
+</div>
     <div class="grid grid-cols-6 gap-4  w-full ">
+
       <!-- <FunnelChart />
       <BarChart /> -->
       <!-- Task List -->
@@ -102,11 +106,10 @@
           <div class="flex flex-col mb-5">
 
             <h3 class="text-black font-inter text-base not-italic font-semibold leading-normal">Recent Tasks</h3>
-            <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Your action list,
-              simplified!
+            <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Your action list, simplified! Knock out your top priorities and keep momentum high.
             </p>
           </div>
-          <ul class="task-card-container max-h-[300px] overflow-y-auto">
+          <ul v-if="dashboardData?.tasks?.length>0" class="task-card-container max-h-[300px] overflow-y-auto">
             <li v-for="task in dashboardData?.tasks" :key="task.name" class="border-b last:border-none py-2">
               <div class="flex items-center w-full">
                 <div class="flex flex-col gap-2 w-full">
@@ -159,8 +162,7 @@
         class="bg-white shadow-sm lg:col-span-2 col-span-6 rounded-lg p-5 sm:w-full w-full max-h-[400px] overflow-y-auto">
         <div class="flex flex-col mb-5">
           <h3 class="text-black font-inter text-base not-italic font-semibold leading-normal">Upcoming Events</h3>
-          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Stay prepared for meetings,
-            follow-ups, and key engagements.</p>
+          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Big moments ahead! Stay prepared for meetings, follow-ups, and key engagements.</p>
         </div>
         <ul class="flex flex-col gap-2 max-h-[300px] overflow-auto">
           <li v-for="event in dashboardData?.events" :key="event.name" class="events-container">
@@ -210,8 +212,7 @@
         <div class="flex flex-col mb-5">
 
           <h3 class="text-black font-inter text-base not-italic font-semibold leading-normal">Call Logs</h3>
-          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Track calls, follow up, and
-            keep the communication flowing.</p>
+          <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Every conversation matters! Track calls, follow up, and keep the communication flowing..</p>
         </div>
         <ul class=" max-h-[300px] overflow-auto">
           <li v-for="calllog in dashboardData?.call_logs" :key="calllog.name" class="border-b last:border-none py-2">

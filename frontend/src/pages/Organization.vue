@@ -22,8 +22,7 @@
         <template #default="{ open }">
           <Button
             :label="organization.data.organization_status"
-            :class="'grey'"
-          >
+ :class="getOrganizationStatus(organization.data.organization_status).colorClass"          >
             <template #prefix>
               <IndicatorIcon />
             </template>
@@ -92,8 +91,9 @@
           class="grid flex-1 place-items-center text-xl font-medium text-gray-500"
         >
           <div class="flex flex-col items-center justify-center space-y-3">
-            <component :is="tab.icon" class="!h-10 !w-10" />
+            <ContactEmpty class="h-[196px] w-[196px] " />
             <div>{{ __('No {0} Found', [__(tab.label)]) }}</div>
+            <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]" >Your network is your net worth! Build strong relationships that fuel success.</span>
           </div>
         </div>
         <div
@@ -101,8 +101,10 @@
           class="grid flex-1 place-items-center text-xl font-medium text-gray-500"
         >
           <div class="flex flex-col items-center justify-center space-y-3">
-            <component :is="tab.icon" class="!h-10 !w-10" />
+            <DealEmpty class="h-[196px] w-[196px] " />
             <div>{{ __('No {0} Found', [__(tab.label)]) }}</div>
+            <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]" >Your next big deal is out there - start tracking, negotiating, and closing like a pro!</span>
+
           </div>
         </div>
       </template>
@@ -293,55 +295,57 @@
 
 <script setup>
 import Icon from '@/components/Icon.vue'
+import CameraIcon from '@/components/Icons/CameraIcon.vue'
+import ContactEmpty from '@/components/Icons/ContactEmpty.vue'
+import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
+import DealEmpty from '@/components/Icons/DealEmpty.vue'
+import DealsIcon from '@/components/Icons/DealsIcon.vue'
+import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
+import EditIcon from '@/components/Icons/EditIcon.vue'
+import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
+import MoneyIcon from '@/components/Icons/MoneyIcon.vue'
+import TerritoryIcon from '@/components/Icons/TerritoryIcon.vue'
+import WebsiteIcon from '@/components/Icons/WebsiteIcon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
+import ContactsListView from '@/components/ListViews/ContactsListView.vue'
+import DealsListView from '@/components/ListViews/DealsListView.vue'
+import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
 import OrganizationModal from '@/components/Modals/OrganizationModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
-import DealsListView from '@/components/ListViews/DealsListView.vue'
-import ContactsListView from '@/components/ListViews/ContactsListView.vue'
-import WebsiteIcon from '@/components/Icons/WebsiteIcon.vue'
-import TerritoryIcon from '@/components/Icons/TerritoryIcon.vue'
-import MoneyIcon from '@/components/Icons/MoneyIcon.vue'
-import EditIcon from '@/components/Icons/EditIcon.vue'
-import CameraIcon from '@/components/Icons/CameraIcon.vue'
-import DealsIcon from '@/components/Icons/DealsIcon.vue'
-import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import { globalStore } from '@/stores/global'
-import { usersStore } from '@/stores/users'
 import { statusesStore } from '@/stores/statuses'
-import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import MultipleAvatar from '../components/MultipleAvatar.vue'
-import { Dropdown, Button } from 'qbs-vue-ui'
-import { getView } from '@/utils/view'
+import { usersStore } from '@/stores/users'
 import { createToast } from '@/utils'
-import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
-import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
+import { getView } from '@/utils/view'
+import { Button, Dropdown } from 'qbs-vue-ui'
+import MultipleAvatar from '../components/MultipleAvatar.vue'
 
+import OrgEdit from '@/components/Activities/OrgEdit.vue'
 import {
   dateFormat,
   dateTooltipFormat,
-  timeAgo,
   formatNumberIntoCurrency,
+  timeAgo,
 } from '@/utils'
 import {
-  Breadcrumbs,
   Avatar,
+  Breadcrumbs,
   FileUploader,
   Tabs,
   call,
   createListResource,
-  usePageMeta,
   createResource,
+  usePageMeta,
 } from 'qbs-vue-ui'
-import { h, computed, ref } from 'vue'
+import { computed, h, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import OrgEdit from '@/components/Activities/OrgEdit.vue'
 const props = defineProps({
   organizationId: {
     type: String,
     required: true,
   },
 })
-const { statusOptions, getContactStatus } = statusesStore()
+const { statusOptions, getOrganizationStatus } = statusesStore()
 const showAssignmentModal = ref(false)
 const { $dialog } = globalStore()
 const { getDealStatus } = statusesStore()

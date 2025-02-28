@@ -46,8 +46,9 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <PhoneIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full"  />
+      <CallLogsEmpty class="h-[196px] w-[196px] "  />
       <span>{{ __('No {0} Found', [__('Logs')]) }}</span>
+    <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Every conversation is a step closer to success! Track calls and stay in control.' }}</span>  
       <span class="text-sm text-gray-500">{{
         __('Setup Twilio account to enable phone calls ')
       }}</span>
@@ -65,6 +66,7 @@ import LayoutHeader from '@/components/LayoutHeader.vue'
 import ViewControls from '@/components/ViewControls.vue'
 import CallLogsListView from '@/components/ListViews/CallLogsListView.vue'
 import CallLogModal from '@/components/Modals/CallLogModal.vue'
+import CallLogsEmpty from '@/components/Icons/CallLogEmpty.vue'
 import { getCallLogDetail } from '@/utils/callLog'
 import { computed, ref } from 'vue'
 

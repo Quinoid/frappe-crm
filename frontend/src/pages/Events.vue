@@ -71,12 +71,14 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <ContactsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
+      <EventesEmpty class="h-[196px] w-[196px] " />
       <span>{{ __('No {0} Found', [__('Event')]) }}</span>
+                         <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your calendar should work for you, not against you! Plan, organise, and own your schedule.' }}</span>  
+
       <span class="text-sm text-gray-500">{{
         __('Setup Calendar account to enable accessing your events')
       }}</span>
-      <Button :label="__('Create')" class="bg-btn_primary text-white"  @click="handleCreateEvent">
+      <Button :label="__('Schedule an Event Now!')" class="bg-btn_primary text-white"  @click="handleCreateEvent">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
 
@@ -99,18 +101,18 @@
 </template>
 
 <script setup>
-import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
+import CalendarComponent from '@/components/CalendarComponent.vue'
 import CustomActions from '@/components/CustomActions.vue'
-import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
+import EventesEmpty from '@/components/Icons/EventesEmpty.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import EventsListView from '@/components/ListViews/EventsListView.vue'
+import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
-import { ref, computed } from 'vue'
+import { createResource } from 'qbs-vue-ui'
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import EventModal from '../components/Modals/EventModal.vue'
 import QuickEntryModal from '../components/Modals/QuickEntryModal.vue'
-import { useRoute } from 'vue-router'
-import CalendarComponent from '@/components/CalendarComponent.vue'
-import { createResource } from 'qbs-vue-ui'
 const showContactModal = ref(false)
 const showQuickEntryModal = ref(false)
 const route = useRoute()

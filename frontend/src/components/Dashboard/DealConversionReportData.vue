@@ -69,7 +69,7 @@
         <div
           class="flex flex-col relative items-center justify-center gap-3 text-xl font-medium text-gray-500"
         >
-          <EmptyGraph  />
+          <DealEmpty  />
           <span class="nodata-text"> Not enough data to display visualization.</span>
         </div>
       </div>
@@ -129,7 +129,6 @@
 </template>
 <script setup>
 import BarChart from '@/components/Dashboard/BarChart.vue'
-import EmptyGraph from '@/components/Dashboard/EmptyGraph.vue'
 import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue'
 import GraphIcon from '@/components/GraphIcon.vue'
 import GridIcon from '@/components/GridIcon.vue'
@@ -138,6 +137,7 @@ import autoTable from 'jspdf-autotable'
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui'
 import { ref, watch } from 'vue'
 import { formatDate, revertDate } from '../../utils/index'
+import DealEmpty from '@/components/Dashboard/DealEmpty.vue'
 
 const dealSummaryReportData = ref([])
 const dealSummaryUpdateKey = ref({ key: 0, isLoading: false })

@@ -255,11 +255,14 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <LeadsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full"/>
+      <LeadEmpty class="h-[196px] w-[196px] "  />
       <span>{{ __('No {0} Found', [__('Leads')]) }}</span>
-      <Button :label="__('Create')"  class="bg-btn_primary text-white" @click="createLead">
+            <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Every big win starts with a single lead! Don’t wait - ignite your sales pipeline now!' }}</span>  
+
+      <Button :label="__('Add Your First Lead!')" class="bg-btn_primary text-white" @click="createLead">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
+      
     </div>
   </div>
   <LeadModal
@@ -286,39 +289,39 @@
 </template>
 
 <script setup>
-import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
-import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import CustomActions from '@/components/CustomActions.vue'
-import EmailAtIcon from '@/components/Icons/EmailAtIcon.vue'
-import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import NoteIcon from '@/components/Icons/NoteIcon.vue'
-import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import CommentIcon from '@/components/Icons/CommentIcon.vue'
+import EmailAtIcon from '@/components/Icons/EmailAtIcon.vue'
 import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import LeadsIcon from '@/components/Icons/LeadsIcon.vue'
+import NoteIcon from '@/components/Icons/NoteIcon.vue'
+import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import TaskIcon from '@/components/Icons/TaskIcon.vue'
+import KanbanView from '@/components/Kanban/KanbanView.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import LeadsListView from '@/components/ListViews/LeadsListView.vue'
-import KanbanView from '@/components/Kanban/KanbanView.vue'
 import LeadModal from '@/components/Modals/LeadModal.vue'
 import NoteModal from '@/components/Modals/NoteModal.vue'
-import TaskModal from '@/components/Modals/TaskModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
+import TaskModal from '@/components/Modals/TaskModal.vue'
+import MultipleAvatar from '@/components/MultipleAvatar.vue'
+import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
-import { globalStore } from '@/stores/global'
-import { usersStore } from '@/stores/users'
-import { statusesStore } from '@/stores/statuses'
 import { callEnabled } from '@/composables/settings'
+import { globalStore } from '@/stores/global'
+import { statusesStore } from '@/stores/statuses'
+import { usersStore } from '@/stores/users'
+import LeadEmpty from '../components/Icons/LeadEmpty.vue'
 import {
+  createToast,
   dateFormat,
   dateTooltipFormat,
+  formatTime,
   timeAgo,
   website,
-  formatTime,
-  createToast,
 } from '@/utils'
-import { Avatar, Tooltip, Dropdown, call } from 'qbs-vue-ui'
+import { Avatar, Dropdown, Tooltip, call } from 'qbs-vue-ui'
+import { computed, h, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { ref, computed, reactive, h } from 'vue'
 const { makeCall } = globalStore()
 const { getUser } = usersStore()
 const { getLeadStatus } = statusesStore()

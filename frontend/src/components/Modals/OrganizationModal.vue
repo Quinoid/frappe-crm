@@ -15,7 +15,7 @@
               class="w-7"
               @click="detailMode ? (detailMode = false) : openQuickEntryModal()"
             >
-              <EditIcon class="h-4 w-4" />
+              <SettingsIcon class="h-4 w-4" />
             </Button>
             <Button variant="ghost" class="w-7" @click="show = false">
               <FeatherIcon name="x" class="h-4 w-4" />
@@ -68,6 +68,7 @@
 import Fields from '@/components/Fields.vue'
 import AddressModal from '@/components/Modals/AddressModal.vue'
 import EditIcon from '@/components/Icons/EditIcon.vue'
+import SettingsIcon from '@/components/Icons/SettingsIcon.vue'
 import MoneyIcon from '@/components/Icons/MoneyIcon.vue'
 import WebsiteIcon from '@/components/Icons/WebsiteIcon.vue'
 import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'

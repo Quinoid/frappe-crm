@@ -167,10 +167,10 @@
                     ((!section.contacts && i == 1) || i == 0) && isManager()
                   "
                   variant="ghost"
-                  class="w-7 mr-2"
+                  class="w-7 mr-2 !text-black"
                   @click="showSidePanelModal = true"
                 >
-                  <EditIcon class="h-4 w-4" />
+                  <SettingsIcon class="h-4 w-4" />
                 </Button>
               </template>
               <SectionFields
@@ -316,59 +316,59 @@
   />
 </template>
 <script setup>
+import Activities from '@/components/Activities/Activities.vue'
+import Link from '@/components/Controls/Link.vue'
+import CustomActions from '@/components/CustomActions.vue'
 import Icon from '@/components/Icon.vue'
-import Resizer from '@/components/Resizer.vue'
-import LoadingIndicator from '@/components/Icons/LoadingIndicator.vue'
-import EditIcon from '@/components/Icons/EditIcon.vue'
 import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
-import EmailIcon from '@/components/Icons/EmailIcon.vue'
-import Email2Icon from '@/components/Icons/Email2Icon.vue'
+import ArrowUpRightIcon from '@/components/Icons/ArrowUpRightIcon.vue'
 import CommentIcon from '@/components/Icons/CommentIcon.vue'
-import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import TaskIcon from '@/components/Icons/TaskIcon.vue'
-import NoteIcon from '@/components/Icons/NoteIcon.vue'
-import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
+import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
+import Email2Icon from '@/components/Icons/Email2Icon.vue'
+import EmailIcon from '@/components/Icons/EmailIcon.vue'
 import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
 import LinkIcon from '@/components/Icons/LinkIcon.vue'
-import ArrowUpRightIcon from '@/components/Icons/ArrowUpRightIcon.vue'
+import LoadingIndicator from '@/components/Icons/LoadingIndicator.vue'
+import NoteIcon from '@/components/Icons/NoteIcon.vue'
+import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import SettingsIcon from '@/components/Icons/SettingsIcon.vue'
 import SuccessIcon from '@/components/Icons/SuccessIcon.vue'
+import TaskIcon from '@/components/Icons/TaskIcon.vue'
+import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
-import Activities from '@/components/Activities/Activities.vue'
-import OrganizationModal from '@/components/Modals/OrganizationModal.vue'
 import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
-import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import ContactModal from '@/components/Modals/ContactModal.vue'
-import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
-import Link from '@/components/Controls/Link.vue'
+import OrganizationModal from '@/components/Modals/OrganizationModal.vue'
+import MultipleAvatar from '@/components/MultipleAvatar.vue'
+import Resizer from '@/components/Resizer.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
+import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
 import SLASection from '@/components/SLASection.vue'
-import CustomActions from '@/components/CustomActions.vue'
-import {
-  openWebsite,
-  createToast,
-  setupAssignees,
-  setupCustomizations,
-  errorMessage,
-  copyToClipboard,
-} from '@/utils'
-import { getView } from '@/utils/view'
+import { callEnabled, whatsappEnabled } from '@/composables/settings'
 import { globalStore } from '@/stores/global'
 import { statusesStore } from '@/stores/statuses'
 import { usersStore } from '@/stores/users'
-import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
-import { whatsappEnabled, callEnabled } from '@/composables/settings'
 import {
-  createResource,
-  Dropdown,
-  Tooltip,
+  copyToClipboard,
+  createToast,
+  errorMessage,
+  openWebsite,
+  setupAssignees,
+  setupCustomizations,
+} from '@/utils'
+import { getView } from '@/utils/view'
+import {
   Avatar,
-  Tabs,
   Breadcrumbs,
   call,
+  createResource,
+  Dropdown,
+  Tabs,
+  Tooltip,
   usePageMeta,
 } from 'qbs-vue-ui'
-import { ref, computed, h, onMounted, onBeforeUnmount } from 'vue'
+import { computed, h, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const { $dialog, $socket, makeCall } = globalStore()
