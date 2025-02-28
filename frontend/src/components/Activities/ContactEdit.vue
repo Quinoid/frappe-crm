@@ -157,8 +157,7 @@
 <script setup>
 import Email2Icon from '@/components/Icons/Email2Icon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import SettingsIcon from '@/components/Icons/SettignsIcon'
-import SettginsIcon from '@/components/Icons/Settings.vue'
+import SettingsIcon from '@/components/Icons/SettingsIcon.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
 import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
