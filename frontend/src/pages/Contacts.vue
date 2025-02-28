@@ -54,7 +54,7 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <ContactsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
+      <ContactEmpty class="h-[196px]  w-[196px] " />
       <span>{{ __('No {0} Found', [__('Contacts')]) }}</span>
             <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your network is your net worth! Build strong relationships that fuel success.' }}</span>  
 
@@ -85,6 +85,7 @@ import ContactModal from '@/components/Modals/ContactModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
 import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
+import ContactEmpty from '@/components/Icons/ContactEmpty.vue'
 import { organizationsStore } from '@/stores/organizations.js'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { call } from 'qbs-vue-ui'

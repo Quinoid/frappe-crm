@@ -255,7 +255,7 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <LeadsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full"  />
+      <LeadEmpty class="h-[196px] w-[196px] "  />
       <span>{{ __('No {0} Found', [__('Leads')]) }}</span>
             <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Every big win starts with a single lead! Don’t wait - ignite your sales pipeline now!' }}</span>  
 
@@ -293,7 +293,6 @@ import CustomActions from '@/components/CustomActions.vue'
 import CommentIcon from '@/components/Icons/CommentIcon.vue'
 import EmailAtIcon from '@/components/Icons/EmailAtIcon.vue'
 import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import LeadsIcon from '@/components/Icons/LeadsIcon.vue'
 import NoteIcon from '@/components/Icons/NoteIcon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
@@ -311,6 +310,7 @@ import { callEnabled } from '@/composables/settings'
 import { globalStore } from '@/stores/global'
 import { statusesStore } from '@/stores/statuses'
 import { usersStore } from '@/stores/users'
+import LeadEmpty from '../components/Icons/LeadEmpty.vue'
 import {
   createToast,
   dateFormat,

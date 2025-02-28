@@ -53,7 +53,7 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <OrganizationsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
+      <OrganizationEmpty class="h-[196px] w-[196px] " />
       <span>{{ __('No {0} Found', [__('Organizations')]) }}</span>
                   <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Strong businesses are built on strong partnerships. Organise, connect, and grow!' }}</span>  
 
@@ -82,6 +82,7 @@ import OrganizationModal from '@/components/Modals/OrganizationModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
 import OrganizationsListView from '@/components/ListViews/OrganizationsListView.vue'
 import ViewControls from '@/components/ViewControls.vue'
+import OrganizationEmpty from '@/components/Icons/OrganizationEmpty.vue'
 import {
   dateFormat,
   dateTooltipFormat,

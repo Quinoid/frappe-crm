@@ -12,7 +12,7 @@
       class="grid flex-1 place-items-center text-xl font-medium text-gray-500 justify-center h-[100vh]"
     >
       <div class="flex flex-col items-center justify-center space-y-3">
-      <DealsIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full" />
+      <DealEmpty class="h-[196px]  w-[196px] " />
         <span>{{ __('No {0} Found', [__('Deals')]) }}</span>
               <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your next big deal is out there - start tracking, negotiating, and closing like a pro!' }}</span>  
 
@@ -30,6 +30,7 @@ import { usersStore } from '@/stores/users'
 import { dateFormat, dateTooltipFormat, formatNumberIntoCurrency, timeAgo } from '@/utils'
 import { createResource } from 'qbs-vue-ui'
 import { computed } from 'vue'
+import DealEmpty from '@/components/Icons/DealEmpty.vue'
 
 const { getUser } = usersStore()
 const { getOrganization } = organizationsStore()

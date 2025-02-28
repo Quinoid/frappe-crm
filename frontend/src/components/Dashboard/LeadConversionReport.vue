@@ -47,7 +47,7 @@
     <div v-else-if="tableData?.length === 0" class="text-center text-gray-500 mt-4 p-3">
       <div class="flex h-full items-center justify-center min-h-[260px]">
         <div class="flex flex-col items-center relative justify-center gap-3 text-xl font-medium text-gray-500">
-          <EmptyIcon />
+          <LeadEmpty />
           <span class="nodata-text"> Not enough data to display visualization.</span>
         </div>
       </div>
@@ -98,6 +98,7 @@
 <script setup>
 import BarChart from '@/components/Dashboard/BarChart.vue';
 import EmptyIcon from '@/components/Dashboard/EmptyIcon.vue';
+import LeadEmpty from '@/components/Dashboard/LeadEmpty.vue';
 import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import GraphIcon from '@/components/GraphIcon.vue';
 import GridIcon from '@/components/GridIcon.vue';

@@ -54,7 +54,7 @@
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
-      <EmailEmpty lass="h-[196px]  w-[196px]" />
+      <EmailTemplateEmpty lass="h-[196px]  w-[196px]" />
       <span>{{ __('No {0} Found', [__('Email Templates')]) }}</span>
                                <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Save time, stay sharp! Create templates for fast, impactful communication.' }}</span>  
 
@@ -79,6 +79,7 @@ import EmailTemplateModal from '@/components/Modals/EmailTemplateModal.vue'
 import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
+import EmailTemplateEmpty from '@/components/Icons/EmailTemplateEmpty.vue'
 import { computed, ref } from 'vue'
 
 const emailTemplatesListView = ref(null)

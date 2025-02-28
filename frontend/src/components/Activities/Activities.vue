@@ -434,6 +434,7 @@
       v-model:reload="reload_email"
       :doctype="doctype"
       @scroll="scroll"
+      @refresh="refreshActivities"
     />
     <WhatsAppBox
       ref="whatsappBox"
@@ -514,6 +515,8 @@ import {
   onBeforeUnmount,
 } from 'vue'
 import { useRoute } from 'vue-router'
+import CallLogEmpty from '@/components/Icons/CallLogEmpty.vue'
+import DealEmpty from '@/components/Icons/DealEmpty.vue'
 import ContactDeals from '@/components/Activities/ContactDeals.vue'
 import DealDetails from '@/components/Activities/DealDetails.vue'
 import DealsIcon from '@/components/Icons/DealsIcon.vue'
@@ -592,7 +595,7 @@ const props = defineProps({
 const doc = defineModel()
 const reload = defineModel('reload')
 const tabIndex = defineModel('tabIndex')
-
+const refetchKey = ref(0)
 const reload_email = ref(false)
 const modalRef = ref(null)
 const all_activities =
@@ -602,6 +605,7 @@ const all_activities =
         url: 'crm.api.activities.get_activities',
         params: { name: doc.value.data.name },
         cache: ['activity', doc.value.data.name],
+        key: refetchKey.value,
         auto: true,
         transform: ([versions, calls, notes, tasks]) => {
           if (calls?.length) {
@@ -661,6 +665,10 @@ const whatsappMessages = createResource({
 onBeforeUnmount(() => {
   $socket.off('whatsapp_message')
 })
+function refreshActivities() {
+console.log('refresh',refetchKey.value)
+  refetchKey.value++
+}
 
 onMounted(() => {
   $socket.on('whatsapp_message', (data) => {
@@ -803,7 +811,7 @@ const emptyTextIcon = computed(() => {
   } else if (props.title == 'Comments') {
     icon = CommentsEmpty
   } else if (props.title == 'Calls') {
-    icon = PhoneIcon
+    icon = CallLogEmpty
   } else if (props.title == 'Notes') {
     icon = NotesEmpty
   } else if (props.title == 'Tasks') {
@@ -811,7 +819,7 @@ const emptyTextIcon = computed(() => {
   } else if (props.title == 'WhatsApp') {
     icon = WhatsAppIcon
   } else if (props.title == ' Deals') {
-    icon = DealsIcon
+    icon = DealEmpty
   }
   return h(icon, { class: 'text-gray-500' })
 })

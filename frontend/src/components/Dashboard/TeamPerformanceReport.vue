@@ -50,7 +50,7 @@
     <div v-else-if="tableData?.length === 0" class="text-center text-gray-500 mt-4 p-3">
       <div class="flex h-full items-center justify-center min-h-[260px]">
         <div class="flex flex-col items-center justify-center relative gap-3 text-xl font-medium text-gray-500">
-          <EmptyGraph />
+          <TeamEmpty />
           <span class="nodata-text"> Not enough data to display visualization.</span>
         </div>
       </div>
@@ -121,6 +121,7 @@ import ToolTipInfo from '@/components/Dashboard/TootlTipInfo.vue';
 import GraphIcon from '@/components/GraphIcon.vue';
 import GridIcon from '@/components/GridIcon.vue';
 import jsPDF from 'jspdf';
+import TeamEmpty from '@/components/Dashboard/TeamEmpty.vue';
 import autoTable from 'jspdf-autotable';
 import { DateRangePicker, Tooltip } from 'qbs-vue-ui';
 import { ref, watch } from 'vue';
