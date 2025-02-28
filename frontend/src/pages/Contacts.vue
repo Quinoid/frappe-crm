@@ -90,11 +90,13 @@ import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { call } from 'qbs-vue-ui'
 import { computed, ref } from 'vue'
 import { createToast } from '../utils/index'
+import { usersStore } from '@/stores/users'
 const { getOrganization } = organizationsStore()
 const showContactModal = ref(false)
 const showQuickEntryModal = ref(false)
 
 const contactsListView = ref(null)
+const { getUser } = usersStore()
 
 // contacts data is loaded in the ViewControls component
 const contacts = ref({})
@@ -146,6 +148,13 @@ const rows = computed(() => {
           image_label: contact.full_name,
           image: contact.image,
         }
+      } else if (row == '_assign') {
+        let assignees = JSON.parse(contact._assign || '[]')
+        _rows[row] = assignees.map((user) => ({
+          name: user,
+          image: getUser(user).user_image,
+          label: getUser(user).full_name,
+        }))
       } else if (row == 'company_name') {
         _rows[row] = {
           label: contact.company_name,

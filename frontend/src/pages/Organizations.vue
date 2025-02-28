@@ -89,7 +89,9 @@ import {
   website,
   formatNumberIntoCurrency,
 } from '@/utils'
+import { usersStore } from '@/stores/users'
 import { ref, computed } from 'vue'
+const { getUser } = usersStore()
 
 const organizationsListView = ref(null)
 const showOrganizationModal = ref(false)
@@ -118,6 +120,13 @@ const rows = computed(() => {
           label: organization.organization_name,
           logo: organization.organization_logo,
         }
+      }else if (row == '_assign') {
+        let assignees = JSON.parse(organization._assign || '[]')
+        _rows[row] = assignees.map((user) => ({
+          name: user,
+          image: getUser(user).user_image,
+          label: getUser(user).full_name,
+        }))
       } else if (row === 'website') {
         _rows[row] = website(organization.website)
       } else if (row === 'annual_revenue') {

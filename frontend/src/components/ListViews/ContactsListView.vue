@@ -45,6 +45,22 @@
       >
         <ListRowItem :item="item">
           <template #prefix>
+             <div v-if="column.key === '_assign'" class="flex items-center">
+        <MultipleAvatar
+          :avatars="item"
+          size="sm"
+          @click="
+            (event) =>
+              emit('applyFilter', {
+                event,
+                idx,
+                column,
+                item,
+                firstColumn: columns[0],
+              })
+          "
+        />
+      </div>
             <div v-if="column.key === 'full_name'">
               <Avatar
                 v-if="item.label"
@@ -170,6 +186,8 @@ import {
   Dropdown,
 } from 'qbs-vue-ui'
 import ListRowItem from './ListRowItem.vue'
+import MultipleAvatar from '@/components/MultipleAvatar.vue'
+
 import { sessionStore } from '@/stores/session'
 import ListHeader from './ListHeader.vue'
 import CustomListRows from './CustomListRows.vue'
