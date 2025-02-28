@@ -134,7 +134,7 @@
               class="w-7 mr-2 !text-black"
               @click="showSidePanelModal = true"
             >
-              <EditIcon class="h-4 w-4" />
+              <SettingsIcon class="h-4 w-4" />
             </Button>
           </template>
           <SectionFields
@@ -155,9 +155,9 @@
   </div>
 </template>
 <script setup>
-import EditIcon from '@/components/Icons/EditIcon.vue'
 import Email2Icon from '@/components/Icons/Email2Icon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import SettingsIcon from '@/components/Icons/SettignsIcon'
 import SettginsIcon from '@/components/Icons/Settings.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
