@@ -48,8 +48,7 @@
     >
       <PhoneIcon class="h-[196px] p-6 text-primary_text bg-[#eee8f6] w-[196px] rounded-full"  />
       <span>{{ __('No {0} Found', [__('Logs')]) }}</span>
-                   <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Every conversation is a step closer to success! Track calls and stay in control.' }}</span>  
-
+    <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Every conversation is a step closer to success! Track calls and stay in control.' }}</span>  
       <span class="text-sm text-gray-500">{{
         __('Setup Twilio account to enable phone calls ')
       }}</span>

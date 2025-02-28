@@ -78,7 +78,7 @@
       <span class="text-sm text-gray-500">{{
         __('Setup Calendar account to enable accessing your events')
       }}</span>
-      <Button :label="__('Create')" class="bg-btn_primary text-white"  @click="handleCreateEvent">
+      <Button :label="__('Schedule an Event Now!')" class="bg-btn_primary text-white"  @click="handleCreateEvent">
         <template #prefix><FeatherIcon name="plus" class="h-4" /></template>
       </Button>
 

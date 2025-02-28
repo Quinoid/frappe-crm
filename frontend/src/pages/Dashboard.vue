@@ -109,7 +109,7 @@
             <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Your action list, simplified! Knock out your top priorities and keep momentum high.
             </p>
           </div>
-          <ul class="task-card-container max-h-[300px] overflow-y-auto">
+          <ul v-if="dashboardData?.tasks?.length>0" class="task-card-container max-h-[300px] overflow-y-auto">
             <li v-for="task in dashboardData?.tasks" :key="task.name" class="border-b last:border-none py-2">
               <div class="flex items-center w-full">
                 <div class="flex flex-col gap-2 w-full">

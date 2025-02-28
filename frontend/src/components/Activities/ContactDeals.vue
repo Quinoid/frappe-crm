@@ -16,7 +16,7 @@
         <span>{{ __('No {0} Found', [__('Deals')]) }}</span>
               <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{'Your next big deal is out there - start tracking, negotiating, and closing like a pro!' }}</span>  
 
-        ContactDeals
+        
       </div>
     </div>
   </div>

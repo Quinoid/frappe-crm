@@ -288,3 +288,20 @@ html {
   background: #fff;
   box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.07);
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px; /* Thin scrollbar width */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Track background */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3); /* Thumb color */
+  border-radius: 10px; /* Rounded scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5); /* Darker color on hover */
+}
