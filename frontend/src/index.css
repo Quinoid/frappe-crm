@@ -231,7 +231,7 @@
 /* Add this in main.css or App.vue (without scoped) */
 
 ::-webkit-scrollbar {
-  width: 3px I !important;
+  width: 3px !important;
   height: 3px !important;
 }
 
@@ -249,7 +249,6 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
 }
-
 
 .chip-style {
   background-color: rgba(150, 88, 231, 0.1) !important;
@@ -290,7 +289,7 @@ html {
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px; /* Thin scrollbar width */
+  width: 4px !important; /* Thin scrollbar width */
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
