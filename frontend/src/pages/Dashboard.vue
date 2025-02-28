@@ -11,7 +11,7 @@
 
 <div>
   <p class=" text-[16px] font-semibold">Dashboard</p>
-  <p class=" text-[16px] font-light">Your business at a glance! Keep track of leads, deals, contacts, and organisations—all in one place.</p>
+  <p class=" text-[16px] font-light">Stay on top of your sales journey with real-time insights and actionable reports, from lead conversion to team performance—all in one place.</p>
 </div>
     <div class="grid grid-cols-6 gap-4  w-full ">
 
