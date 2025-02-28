@@ -4,7 +4,7 @@
     <div>
       <UserDropdown :class="isSidebarCollapsed ? 'p-0' : 'p-4'" :isCollapsed="isSidebarCollapsed" />
     </div>
-        <div class="flex-1 overflow-y-auto custom-scrollbar" :class=" isSidebarCollapsed ? '' : '  p-4'">
+        <div class="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hidden" :class=" isSidebarCollapsed ? '' : '  p-4'">
 
       <div class="mb-3 flex flex-col">
         <SidebarLink id="notifications-btn" :label="__('Notifications')" :icon="NotificationsIcon"
