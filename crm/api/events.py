@@ -126,10 +126,10 @@ def custom_edit_event(name, **kwargs):
 def custom_event_default_list_data():
     columns = [
         {
-            'label': 'Name',
+            'label': 'Event Category',
             'type': 'Data',
-            'key': 'name',
-            'width': '12rem',
+            'key': 'event_category',
+            'width': '8rem',
         },
         {
             'label': 'Subject',
@@ -138,31 +138,31 @@ def custom_event_default_list_data():
             'width': '10rem',
         },
         {
-            'label': 'Event Category',
-            'type': 'Data',
-            'key': 'event_category',
-            'width': '8rem',
-        },
-        {
-            'label': 'Start Date',
+            'label': 'Starts On',
             'type': 'Data',
             'key': 'starts_on',
             'width': '8rem',
         },
-
         {
-            'label': 'End Date',
+            'label': 'Ends On',
             'type': 'Data',
             'key': 'ends_on',
             'width': '8rem',
         },
-
         {
-            'label': 'Last Modified',
-            'type': 'Datetime',
-            'key': 'modified',
-            'width': '8rem',
-        },
+            'label': 'Owner',
+            'type': 'Data',
+            'key': 'owner',
+            'width': '12rem',
+        },   
+
+
+        # {
+        #     'label': 'Last Modified',
+        #     'type': 'Datetime',
+        #     'key': 'modified',
+        #     'width': '8rem',
+        # },
     ]
     rows = [
         "name",
