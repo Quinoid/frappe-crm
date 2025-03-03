@@ -36,27 +36,28 @@
                 </Button>
               </Tooltip>
               <Tooltip :text="__('Send an email')">
-                <Button class="h-7 w-7">
-                  <Email2Icon
-                    class="h-4 w-4 text-primary_text"
-                    @click="
+                <Button class="h-7 button-link-class"    @click="
                       doc.data.email
                         ? openEmailBox()
                         : errorMessage(__('No email set'))
-                    "
+                    " >
+                  <Email2Icon
+                    class="h-4 w-4 text-primary_text"
+                 
                   />
+                    <span>{{doc.data.email&&doc.data.email!==""?doc.data.email:'- -'}}</span>
                 </Button>
               </Tooltip>
               <Tooltip :text="__('Go to website')">
-                <Button class="h-7 w-7">
-                  <LinkIcon
-                    class="h-4 w-4 text-primary_text"
-                    @click="
+                <Button class="h-7  button-link-class"  @click="
                       doc.data.website
                         ? openWebsite(doc.data.website)
                         : errorMessage(__('No website set'))
-                    "
+                    ">
+                  <LinkIcon
+                    class="h-4 w-4 text-primary_text"
                   />
+                  <span class="">{{ doc.data.website&&doc.data.website!==""?doc.data.website:'- -' }}</span>
                 </Button>
               </Tooltip>
             </div>

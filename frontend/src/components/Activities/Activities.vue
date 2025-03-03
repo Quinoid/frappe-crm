@@ -666,8 +666,7 @@ onBeforeUnmount(() => {
   $socket.off('whatsapp_message')
 })
 function refreshActivities() {
-console.log('refresh',refetchKey.value)
-  refetchKey.value++
+  all_activities.reload()
 }
 
 onMounted(() => {

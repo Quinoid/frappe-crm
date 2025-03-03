@@ -11,7 +11,8 @@
         {{ __(doc.data.name) }}
       </div>
 
-      <div class="flex items-center justify-start gap-5 border-b p-5">
+      <div class="flex items-center justify-between gap-5 border-b p-5">
+        <div class="flex  items-center justify-start gap-5">
         <FileUploader
           @success="(file) => updateField('organization_logo', file.file_url)"
           :validateFile="validateFile"
@@ -73,44 +74,38 @@
             </div>
           </Tooltip>
           <div class="flex justify-between items-center">
-            <Button
-              :label="__('Delete')"
-              theme="red"
-              size="sm"
-              @click="deleteContact"
-            >
-              <template #prefix>
-                <FeatherIcon name="trash-2" class="h-4 w-4" />
-              </template>
-            </Button>
+          
             <div class="flex gap-1.5">
               <Tooltip v-if="callEnabled" :text="__('Make a call')">
-                <Button class="h-7 w-7" @click="triggerCall">
+                <Button class="h-7 w-7 !pl-0" @click="triggerCall">
                   <PhoneIcon class="h-4 w-4 text-primary_text" />
                 </Button>
               </Tooltip>
               <Tooltip :text="__('Send an email')">
-                <Button class="h-7 w-7">
-                  <Email2Icon
-                    class="h-4 w-4 text-primary_text"
-                    @click="
-                      doc.data.email
-                        ? openEmailBox()
-                        : errorMessage(__('No email set'))
-                    "
-                  />
-                </Button>
+               <Button 
+                class="h-7 button-link-class " 
+                :class="{ '!pl-0': !callEnabled }" 
+                @click="
+                  doc.data.email
+                    ? openEmailBox()
+                    : errorMessage(__('No email set'))
+                "
+              >
+                <Email2Icon class="h-4 w-4 text-primary_text" />
+                <span>{{ doc.data.email && doc.data.email !== '' ? doc.data.email : '--' }}</span>
+              </Button>
               </Tooltip>
               <Tooltip :text="__('Go to website')">
-                <Button class="h-7 w-7">
-                  <LinkIcon
-                    class="h-4 w-4 text-primary_text"
-                    @click="
+                <Button class="h-7 button-link-class"  @click="
                       doc.data.website
                         ? openWebsite(doc.data.website)
                         : errorMessage(__('No website set'))
-                    "
+                    ">
+                  <LinkIcon
+                    class="h-4 w-4 text-primary_text"
+                   
                   />
+                  <span class="">{{ doc.data.website&&doc.data.website!==""?doc.data.website:'- -' }}</span>
                 </Button>
               </Tooltip>
             </div>
@@ -125,6 +120,19 @@
             </template>
           </div>
         </div>
+      </div>
+       <div>  
+        <Button
+              :label="__('Delete')"
+              theme="red"
+              size="sm"
+              @click="deleteContact"
+            >
+              <template #prefix>
+                <FeatherIcon name="trash-2" class="h-4 w-4" />
+              </template>
+            </Button>
+            </div>
       </div>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-4 w-full">

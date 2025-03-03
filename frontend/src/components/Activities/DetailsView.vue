@@ -81,27 +81,28 @@
                   </Button>
                 </Tooltip>
                 <Tooltip :text="__('Send an email')">
-                  <Button class="h-7 w-7">
-                    <Email2Icon
-                      class="h-4 w-4 text-primary_text"
-                      @click="
-                        doc.data.email
+                  <Button class="h-7 button-link-class" @click="doc.data.email
                           ? openEmailBox()
                           : errorMessage(__('No email set'))
-                      "
+                      ">
+                    <Email2Icon
+                      class="h-4 w-4 text-primary_text"
+                    
                     />
+                    <span>{{doc.data.email&&doc.data.email!==""?doc.data.email:'- -'}}</span>
                   </Button>
                 </Tooltip>
                 <Tooltip :text="__('Go to website')">
-                  <Button class="h-7 w-7">
-                    <LinkIcon
-                      class="h-4 w-4 text-primary_text"
-                      @click="
+                  <Button class="h-7  button-link-class" @click="
                         doc.data.website
                           ? openWebsite(doc.data.website)
                           : errorMessage(__('No website set'))
-                      "
+                      ">
+                    <LinkIcon
+                      class="h-4 w-4 text-primary_text"
+                      
                     />
+                  <span class="">{{ doc.data.website&&doc.data.website!==""?doc.data.website:'- -' }}</span>
                   </Button>
                 </Tooltip>
               </div>
@@ -153,22 +154,21 @@
   </div>
 </template>
 <script setup>
+import CameraIcon from '@/components/Icons/CameraIcon.vue'
+import Email2Icon from '@/components/Icons/Email2Icon.vue'
+import LinkIcon from '@/components/Icons/LinkIcon.vue'
+import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import SettingsIcon from '@/components/Icons/Settings.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
-import { ref } from 'vue'
-import { usersStore } from '@/stores/users'
 import SidePanelModal from '@/components/Settings/SidePanelModal.vue'
-import EditIcon from '@/components/Icons/EditIcon.vue'
-import SettingsIcon from '@/components/Icons/Settings.vue'
-import { FileUploader, Dropdown, Tooltip, Avatar } from 'qbs-vue-ui'
-import CameraIcon from '@/components/Icons/CameraIcon.vue'
-import LinkIcon from '@/components/Icons/LinkIcon.vue'
-import Email2Icon from '@/components/Icons/Email2Icon.vue'
-import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import { errorMessage, openWebsite, copyToClipboard } from '@/utils'
-import { globalStore } from '@/stores/global'
-import { callEnabled } from '@/composables/settings'
 import SLASection from '@/components/SLASection.vue'
+import { callEnabled } from '@/composables/settings'
+import { globalStore } from '@/stores/global'
+import { usersStore } from '@/stores/users'
+import { copyToClipboard, errorMessage, openWebsite } from '@/utils'
+import { Avatar, Dropdown, FileUploader, Tooltip } from 'qbs-vue-ui'
+import { ref } from 'vue'
 const props = defineProps({
   doctype: {
     type: String,

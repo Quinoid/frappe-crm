@@ -312,3 +312,9 @@ html {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.5); /* Darker color on hover */
 }
+.button-link-class span {
+  @apply text-primary_text hover:text-primary_text;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
