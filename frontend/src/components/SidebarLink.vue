@@ -31,24 +31,18 @@
             </span>
           </slot>
         </Tooltip>
-        <Tooltip
-          :text="label"
-          placement="right"
-          :disabled="isCollapsed"
-          :hoverDelay="1.5"
-        >
-          <span
-            class="flex-1 flex-shrink-0 text-[#222222] truncate text-[14px] duration-300 ease-in-out"
-            :class="
-              isActive ? 'text-primary_text':'text-[#222222]',
+      
+         <span
+            class="flex-1 flex-shrink-0 truncate text-[14px] duration-300 ease-in-out"
+            :class="[
+              isActive ? 'text-primary_text' : 'text-[#222222]',
               isCollapsed
                 ? 'ml-0 w-0 overflow-hidden opacity-0'
                 : 'ml-2 w-auto opacity-100'
-            "
+            ]"
           >
             {{ label }}
           </span>
-        </Tooltip>
       </div>
       <slot name="right" />
     </div>

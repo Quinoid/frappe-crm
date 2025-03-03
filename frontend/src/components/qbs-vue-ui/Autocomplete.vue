@@ -34,7 +34,7 @@
               </div>
               <FeatherIcon
                 name="chevron-down"
-                class="h-4 w-4 text-gray-600"
+                class="!h-4 !w-4 !text-gray-600"
                 aria-hidden="true"
               />
             </button>
