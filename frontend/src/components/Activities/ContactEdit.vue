@@ -12,7 +12,7 @@
       </div>
 
       <div class="flex items-center justify-between gap-5 border-b p-5">
-        <div class="flex items-center justify-start gap-5">
+        <div class="flex items-center justify-start ">
         <FileUploader
           @success="(file) => updateField('image', file.file_url)"
           :validateFile="validateFile"
