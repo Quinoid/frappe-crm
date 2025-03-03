@@ -131,6 +131,7 @@ class CRMLead(Document):
 				"state": self.state or "",
 				"city": self.city or "",
 				"pin_code": self.pin_code or "",
+				"contact_status":'Active',
 			}
 		)
 
@@ -178,6 +179,7 @@ class CRMLead(Document):
 				"state": self.state or "",
 				"city": self.city or "",
 				"pin_code": self.pin_code or "",
+				"organization_status":"Active",
 			}
 		)
 		organization.insert(ignore_permissions=True)
