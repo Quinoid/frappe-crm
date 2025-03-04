@@ -528,3 +528,43 @@ def export_data(doctype):
             writer.writerow([record.get(field) for field in valid_fields])
 
     return f"/public/files/{doctype}_export.csv"  # Public file URL
+
+
+
+import frappe
+import csv
+from frappe.utils import get_site_path
+
+@frappe.whitelist()
+def export_data_all(doctype):
+    """Exports data from the specified Doctype and returns the file path."""
+    
+    # Check if Doctype exists
+    if not frappe.db.exists("DocType", doctype):
+        frappe.throw(f"Doctype '{doctype}' does not exist", frappe.DoesNotExistError)
+
+    # Replace spaces with underscores in filename
+    safe_doctype = doctype.replace(" ", "_")  
+
+    # Get all fields dynamically
+    meta = frappe.get_meta(doctype)
+    all_fields = [df.fieldname for df in meta.fields]
+
+    # Validate fields
+    valid_fields = [field for field in all_fields if frappe.db.has_column(doctype, field)]
+
+    # Fetch data
+    records = frappe.get_all(doctype, fields=valid_fields)
+
+    # Define file path
+    file_path = get_site_path("public", "files", f"{safe_doctype}_export.csv")
+
+    # Write data to CSV
+    with open(file_path, mode="w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(valid_fields)  # Write headers
+        for record in records:
+            writer.writerow([record.get(field) for field in valid_fields])
+
+    return f"/public/files/{safe_doctype}_export.csv"
+
