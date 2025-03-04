@@ -492,29 +492,6 @@ def custom_get_data(
 
 
 
-import frappe
-import csv
-from frappe.utils import get_site_path
-
-@frappe.whitelist()
-def export_leads():
-    meta = frappe.get_meta("CRM Lead")
-    all_fields = [df.fieldname for df in meta.fields]
-
-    # Ensure the fields exist in the database
-    valid_fields = [field for field in all_fields if frappe.db.has_column("CRM Lead", field)]
-
-    leads = frappe.get_all("CRM Lead", fields=valid_fields)
-
-    file_path = get_site_path("private", "files", "leads_export.csv")
-
-    with open(file_path, mode="w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(all_fields)  # Write headers
-        for lead in leads:
-            writer.writerow([lead.get(field) for field in all_fields])
-
-    return f"/private/files/leads_export.csv"  # Returns file path for download
 
 
 
