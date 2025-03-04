@@ -40,13 +40,13 @@ class CRMTask(Document):
 				'label': 'Title',
 				'type': 'Data',
 				'key': 'title',
-				'width': '16rem',
+				'width': '8rem',
 			},
 			{
 				'label': 'Reference Doc Type',
 				'type': 'Dynamic Link"',
 				'key': 'reference_doctype',
-				'width': '8rem',
+				'width': '12rem',
 			},
 			{
 				'label': 'Status',
@@ -70,7 +70,7 @@ class CRMTask(Document):
 				'label': 'Due Date',
 				'type': 'Date',
 				'key': 'due_date',
-				'width': '8rem',
+				'width': '12rem',
 			},
 			
 			{

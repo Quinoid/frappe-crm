@@ -100,12 +100,17 @@ def custom_communication_default_list_data():
     columns = [
 
         {
-            'label': 'Date Sender',
+            'label': 'Email Date',
             'type': 'Data',
             'key': 'communication_date',
             'width': '8rem',
         },
-
+        {
+            'label': 'Sender',
+            'type': 'Data',
+            'key': 'sender',
+            'width': '8rem',
+        },
         {
             'label': 'Recipients',
             'type': 'Data',
@@ -125,12 +130,7 @@ def custom_communication_default_list_data():
             'key': 'content',
             'width': '8rem',
         },
-        # {
-        #     'label': 'Sender',
-        #     'type': 'Data',
-        #     'key': 'sender',
-        #     'width': '8rem',
-        # },
+        
 
         
 
