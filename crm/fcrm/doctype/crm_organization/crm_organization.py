@@ -22,7 +22,7 @@ class CRMOrganization(Document):
 					'width': '16rem',
 				},
 				{
-					'label': 'Organization',
+					'label': 'Organization Status',
 					'type': 'Data',
 					'key': 'organization_status',
 					'width': '14rem',
