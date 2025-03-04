@@ -37,13 +37,14 @@
                 type="text"
                 :value="query"
                 @blur="handleBlur"
-                aria-placeholder="Select any option"
+                :placeholder="'Select one or more ' + label"
                 @change="
                   (e) => {
                     query = e.target.value
                     showOptions = true
                   }
                 "
+                @click="showOptions = true"
                 autocomplete="off"
                 @focus="() => togglePopover()"
                 @keydown.delete.capture.stop="removeLastValue"
@@ -129,6 +130,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  label: {
+    type: String,
+    default: ''
+  },
+  
   datatype: {
     type: String,
     default: null, // Add datatype for conditional behavior

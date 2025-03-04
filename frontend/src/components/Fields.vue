@@ -119,6 +119,7 @@
                 :validate="validateEmail"
                 @change="(v) => (data[field.name] = v)"
                 :datatype="field.data_type"
+                :label="field.label"
                 :custom_option="field.custom_option"
                 :error-message="
                   (value) => __('{0} is an invalid email address', [value])

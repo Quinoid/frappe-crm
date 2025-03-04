@@ -148,6 +148,7 @@
             class="flex-1"
             v-model="data[field.name]"
             :data="data"
+            :label="field.label"
             :validate="validateEmail"
             @change="(data) => emit('update', field.name, data)"
             :custom_option="field.custom_option"

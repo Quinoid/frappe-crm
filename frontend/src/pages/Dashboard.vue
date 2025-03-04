@@ -21,7 +21,7 @@
       <div class=" g:col-span-6 col-span-6  space-y-4">
         <div class="rounded-lg   grid lg:grid-cols-6  grid-cols-1  gap-6">
           <!-- Leads Card -->
-          <div class="sm:col-span-1 dash_tile shadow-sm  rounded-lg p-6 ">
+          <div @click="goToLeads" class="sm:col-span-1 dash_tile shadow-sm  rounded-lg p-6 cursor-pointer ">
             <div class=" flex gap-2 items-center ">
               <span class="flex items-center bg-[#D2DFF7] p-2 rounded-[9px]">
                 <LeadsIcon class="h-5 w-5   text-[#1650E2]" />
@@ -34,7 +34,7 @@
           </div>
 
           <!-- Deals Card -->
-          <div class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 ">
+          <div @click="goToDeals" class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 cursor-pointer ">
             <div class=" flex gap-2 items-center ">
               <span class="flex items-center bg-[#DCD9FF] p-2 rounded-[9px]">
                 <DealsIcon class="h-5 w-5   text-[#7A69F7]" />
@@ -45,7 +45,7 @@
               {{ dashboardData?.dealCount }}
             </p>
           </div>
-          <div class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 ">
+          <div @click="goToContacts" class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 cursor-pointer ">
             <div class=" flex gap-2 items-center ">
               <span class="flex items-center bg-[#F5CFE9] p-2 rounded-[9px]">
                 <ContactsIcon class="h-5 w-5   text-[#E94DA0]" />
@@ -56,7 +56,7 @@
               {{ dashboardData?.contact_total_count }}
             </p>
           </div>
-          <div class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 ">
+          <div @click="goToOrganizations" class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 cursor-pointer ">
             <div class=" flex gap-2 items-center ">
               <span class="flex items-center bg-[#DEEEF5] p-2 rounded-[9px]">
                 <OrganizationsIcon class="h-5 w-5   text-[#39B9CA]" />
@@ -69,7 +69,7 @@
           </div>
 
           <!-- Tasks Card -->
-          <div class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 ">
+          <div @click="goToTasks" class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 cursor-pointer ">
             <div class=" flex gap-2 items-center ">
               <span class="flex items-center bg-[#DEEEF5] p-2 rounded-[9px]">
                 <TaskIcon class="h-5 w-5   text-[#39B9CA]" />
@@ -82,7 +82,7 @@
           </div>
 
 
-          <div class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 ">
+          <div @click="goToEvents" class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 cursor-pointer ">
             <div class=" flex gap-2 items-center ">
               <span class="flex items-center bg-[#F5CFE9] p-2 rounded-[9px]">
                 <CalendarIcon class="h-5 w-5   text-[#E94DA0]" />
@@ -206,7 +206,7 @@
         </div>
       </div>
       <SaleFunnelReport />
-         <div v-if="callEnabled"
+         <div 
 
         class="bg-white shadow-sm  lg:col-span-2 col-span-6 rounded-lg p-5 sm:w-full w-full max-h-[400px] overflow-y-auto">
         <div class="flex flex-col mb-5">
@@ -275,6 +275,7 @@ import { usersStore } from '@/stores/users'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { Breadcrumbs, createResource, Tooltip } from 'qbs-vue-ui'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import DashTileEmty from '../components/Dashboard/DashTileEmpty.vue'
 import DealConversionReportData from '../components/Dashboard/DealConversionReportData.vue'
 import LeadConversionReport from '../components/Dashboard/LeadConversionReport.vue'
@@ -284,7 +285,7 @@ import TeamPerformanceReport from '../components/Dashboard/TeamPerformanceReport
 let title = 'Dashboard'
 const breadcrumbs = [{ label: title, route: { name: 'Dashboard' } }]
 const { getUser } = usersStore()
-
+const router=useRouter()
 const dashboardResource = createResource({
   url: 'crm.api.dashboard.custom_dashboard',
   cache: ['dashboardCounts'],
@@ -306,6 +307,24 @@ const dashboardResource = createResource({
     }
   },
 })
+function goToDeals() {
+  router.push({ name: 'Deals' })
+}
+function goToLeads() {
+  router.push({ name: 'Leads' })
+}
+function goToContacts() {
+  router.push({ name: 'Contacts' })
+}
+function goToOrganizations() {
+  router.push({ name: 'Organizations' })
+}
+function goToTasks() {
+  router.push({ name: 'Tasks' })
+}
+function goToEvents() {
+  router.push({ name: 'Events' })
+}
 
 const dashboardData = computed(() => dashboardResource.data)
 const isLoading = computed(() => dashboardResource.isLoading)
