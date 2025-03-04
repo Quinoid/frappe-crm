@@ -141,13 +141,13 @@ def custom_event_default_list_data():
             'label': 'Starts On',
             'type': 'Data',
             'key': 'starts_on',
-            'width': '8rem',
+            'width': '12rem',
         },
         {
             'label': 'Ends On',
             'type': 'Data',
             'key': 'ends_on',
-            'width': '8rem',
+            'width': '12rem',
         },
         {
             'label': 'Owner',
@@ -490,3 +490,25 @@ def custom_get_data(
         "view_type": view_type,
     }
 
+
+
+import frappe
+import csv
+from frappe.utils import get_site_path
+
+@frappe.whitelist()
+def export_leads():
+    meta = frappe.get_meta("CRM Lead")
+    all_fields = [df.fieldname for df in meta.fields]
+
+    leads = frappe.get_all("CRM Lead", fields=all_fields)
+
+    file_path = get_site_path("private", "files", "leads_export.csv")
+
+    with open(file_path, mode="w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(all_fields)  # Write headers
+        for lead in leads:
+            writer.writerow([lead.get(field) for field in all_fields])
+
+    return f"/private/files/leads_export.csv"  # Returns file path for download
