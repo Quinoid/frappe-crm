@@ -501,7 +501,10 @@ def export_leads():
     meta = frappe.get_meta("CRM Lead")
     all_fields = [df.fieldname for df in meta.fields]
 
-    leads = frappe.get_all("CRM Lead", fields=all_fields)
+    # Ensure the fields exist in the database
+    valid_fields = [field for field in all_fields if frappe.db.has_column("CRM Lead", field)]
+
+    leads = frappe.get_all("CRM Lead", fields=valid_fields)
 
     file_path = get_site_path("private", "files", "leads_export.csv")
 
