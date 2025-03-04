@@ -515,3 +515,39 @@ def export_leads():
             writer.writerow([lead.get(field) for field in all_fields])
 
     return f"/private/files/leads_export.csv"  # Returns file path for download
+
+
+
+import frappe
+import csv
+from frappe.utils import get_site_path
+
+@frappe.whitelist()
+def export_data(doctype):
+    """Exports data from the specified Doctype and returns the file path."""
+    
+    # Check if the Doctype exists
+    if not frappe.db.exists("DocType", doctype):
+        frappe.throw(f"Doctype '{doctype}' does not exist", frappe.DoesNotExistError)
+    
+    # Get all fields dynamically
+    meta = frappe.get_meta(doctype)
+    all_fields = [df.fieldname for df in meta.fields]
+
+    # Ensure only valid fields are used
+    valid_fields = [field for field in all_fields if frappe.db.has_column(doctype, field)]
+
+    # Fetch all data
+    records = frappe.get_all(doctype, fields=valid_fields)
+
+    # Define file path (Public for easy access)
+    file_path = get_site_path("public", "files", f"{doctype}_export.csv")
+
+    # Write data to CSV
+    with open(file_path, mode="w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(valid_fields)  # Write headers
+        for record in records:
+            writer.writerow([record.get(field) for field in valid_fields])
+
+    return f"/public/files/{doctype}_export.csv"  # Public file URL
