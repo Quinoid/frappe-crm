@@ -530,7 +530,6 @@ def export_data(doctype):
     return f"/public/files/{doctype}_export.csv"  # Public file URL
 
 
-
 import frappe
 import csv
 import time
@@ -547,6 +546,12 @@ def strip_html(text):
 @frappe.whitelist()
 def export_data_all(doctype, filters=None):
     """Exports data from the specified Doctype with optional filters and returns a unique file path."""
+
+    # Column name replacements
+    column_name_map = {
+        "custom_value": "Value",
+        # Add more replacements as needed
+    }
 
     # Check if Doctype exists
     if not frappe.db.exists("DocType", doctype):
@@ -571,13 +576,16 @@ def export_data_all(doctype, filters=None):
     # Fetch data with optional filters
     records = frappe.get_all(doctype, fields=ordered_fields, filters=filters or {})
 
+    # Replace column names with friendly names
+    display_fields = [column_name_map.get(field, field) for field in ordered_fields]
+
     # Define file path
     file_path = get_site_path("public", "files", filename)
 
     # Write data to CSV
     with open(file_path, mode="w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(ordered_fields)  # Write headers in correct order
+        writer.writerow(display_fields)  # Write headers with replaced names
 
         for record in records:
             cleaned_record = [strip_html(str(record.get(field, ""))) for field in ordered_fields]
