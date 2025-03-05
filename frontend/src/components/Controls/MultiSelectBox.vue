@@ -37,7 +37,7 @@
                 type="text"
                 :value="query"
                 @blur="handleBlur"
-                :placeholder="'Select one or more ' + label"
+                :placeholder="values?.length > 0 ? '' : 'Search for a value '+label"
                 @change="
                   (e) => {
                     query = e.target.value

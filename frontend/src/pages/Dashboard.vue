@@ -164,8 +164,8 @@
           <h3 class="text-black font-inter text-base not-italic font-semibold leading-normal">Upcoming Events</h3>
           <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Big moments ahead! Stay prepared for meetings, follow-ups, and key engagements.</p>
         </div>
-        <ul class="flex flex-col gap-2 max-h-[300px] overflow-auto">
-          <li v-for="event in dashboardData?.events" :key="event.name" class="events-container">
+        <ul class="flex flex-col gap-2 max-h-[300px] overflow-auto p-0.5">
+          <li v-for="event in dashboardData?.events" :key="event.name" class="events-container shadow-sm">
             <div class=" w-full">
               <div class="flex flex-col gap-2  w-full">
                 <div class="flex gap-2 items-center justify-between">
