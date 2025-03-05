@@ -102,7 +102,7 @@
 
       </div>
       <div class="lg:col-span-2 col-span-6 space-y-4">
-        <div class="bg-white shadow-sm  col-span-2 rounded-lg p-5 sm:w-full w-full max-h-[400px] overflow-y-auto">
+        <div class="bg-white shadow-sm  col-span-2 rounded-lg p-5 sm:w-full w-full min-h-[400px] max-h-[400px] overflow-y-auto">
           <div class="flex flex-col mb-5">
 
             <h3 class="text-black font-inter text-base not-italic font-semibold leading-normal">Recent Tasks</h3>
@@ -146,7 +146,7 @@
               </div>
             </li>
           </ul>
-          <div v-if="dashboardData?.tasks?.length === 0" class="text-center text-gray-500 mt-4 p-3">
+          <div v-if="dashboardData?.tasks?.length === 0" class="text-center  text-gray-500 mt-4 p-3">
             <div class="flex h-full items-center justify-center">
               <div class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500">
                 <DashTileEmty />
@@ -159,7 +159,7 @@
       </div>
       <DealConversionReportData />
       <div
-        class="bg-white shadow-sm lg:col-span-2 col-span-6 rounded-lg p-5 sm:w-full w-full max-h-[400px] overflow-y-auto">
+        class="bg-white shadow-sm lg:col-span-2 col-span-6 rounded-lg p-5 sm:w-full w-full min-h-[400px] max-h-[400px] overflow-y-auto">
         <div class="flex flex-col mb-5">
           <h3 class="text-black font-inter text-base not-italic font-semibold leading-normal">Upcoming Events</h3>
           <p class="text-[#434343] font-inter text-xs not-italic font-normal leading-normal">Big moments ahead! Stay prepared for meetings, follow-ups, and key engagements.</p>
@@ -208,7 +208,7 @@
       <SaleFunnelReport />
          <div 
 
-        class="bg-white shadow-sm  lg:col-span-2 col-span-6 rounded-lg p-5 sm:w-full w-full max-h-[400px] overflow-y-auto">
+        class="bg-white shadow-sm  lg:col-span-2 col-span-6 rounded-lg p-5 sm:w-full w-full min-h-[400px] max-h-[400px] overflow-y-auto">
         <div class="flex flex-col mb-5">
 
           <h3 class="text-black font-inter text-base not-italic font-semibold leading-normal">Call Logs</h3>

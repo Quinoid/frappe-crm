@@ -138,6 +138,14 @@
                     h(FeatherIcon, { name: 'download', class: 'h-4 w-4' }),
                   onClick: () => (showExportDialog = true),
                 },
+                ...list?.data?.data?.length > 0?[
+                 {
+                  label: __('Export All'),
+                  class: 'bg-btn_primary hover:bg-btn_primary',
+                  icon: () =>
+                    h(FeatherIcon, { name: 'download', class: 'h-4 w-4' }),
+                  onClick: () => (exportAll()),
+                }]:[],
               ],
             },
           ]"
@@ -635,6 +643,38 @@ const visibilityCheck = async () => {
   }
 }
 visibilityCheck()
+async function exportAll() {
+  const API_BASE_PATH = `${window.location.origin}/api/method/`
+
+  try {
+    const response = await fetch(
+      `${API_BASE_PATH}crm.api.events.export_data_all`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Frappe-CSRF-Token': window.csrf_token,
+        },
+        body: JSON.stringify({
+          doctype: props.doctype,
+          filters: view.value.filters,
+        }),
+      },
+    )
+
+    const data = await response.json();
+    const filePath = data.message
+    const fileUrl = `${window.location.origin}${filePath}`;
+
+    window.open(fileUrl, "_blank");
+
+  } catch (error) {
+    let errorMessage = __(
+      'Please try again.',
+    )
+      console.log(errorMessage)
+  }
+}
 const quickFilterList = computed(() => {
   let nameField
   let labelField

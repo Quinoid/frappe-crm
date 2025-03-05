@@ -591,4 +591,4 @@ def export_data_all(doctype, filters=None):
             cleaned_record = [strip_html(str(record.get(field, ""))) for field in ordered_fields]
             writer.writerow(cleaned_record)
 
-    return f"/public/files/{filename}"
+    return f"/files/{filename}"
