@@ -534,15 +534,15 @@ def export_data(doctype):
 import frappe
 import csv
 import time
-import re
 from frappe.utils import get_site_path
+from bs4 import BeautifulSoup
 
 # Function to remove HTML tags
 def strip_html(text):
-    """Removes HTML tags from a string."""
+    """Removes HTML tags using BeautifulSoup."""
     if not text:
         return ""
-    return re.sub(r"<.*?>", "", text)
+    return BeautifulSoup(text, "html.parser").get_text()
 
 @frappe.whitelist()
 def export_data_all(doctype, filters=None):
@@ -559,12 +559,9 @@ def export_data_all(doctype, filters=None):
     timestamp = int(time.time())  # Current timestamp in seconds
     filename = f"{safe_doctype}_export_{timestamp}.csv"
 
-    # Get all fields dynamically
+    # Get fieldnames **in the exact order** defined in Doctype
     meta = frappe.get_meta(doctype)
-    all_fields = [df.fieldname for df in meta.fields]
-
-    # Validate fields
-    valid_fields = [field for field in all_fields if frappe.db.has_column(doctype, field)]
+    ordered_fields = [df.fieldname for df in meta.fields if frappe.db.has_column(doctype, df.fieldname)]
 
     # Convert filters from JSON string (if coming from API call)
     if isinstance(filters, str):
@@ -572,7 +569,7 @@ def export_data_all(doctype, filters=None):
         filters = json.loads(filters)
 
     # Fetch data with optional filters
-    records = frappe.get_all(doctype, fields=valid_fields, filters=filters or {})
+    records = frappe.get_all(doctype, fields=ordered_fields, filters=filters or {})
 
     # Define file path
     file_path = get_site_path("public", "files", filename)
@@ -580,10 +577,10 @@ def export_data_all(doctype, filters=None):
     # Write data to CSV
     with open(file_path, mode="w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(valid_fields)  # Write headers
+        writer.writerow(ordered_fields)  # Write headers in correct order
 
         for record in records:
-            cleaned_record = [strip_html(str(record.get(field))) for field in valid_fields]
+            cleaned_record = [strip_html(str(record.get(field, ""))) for field in ordered_fields]
             writer.writerow(cleaned_record)
 
     return f"/public/files/{filename}"
