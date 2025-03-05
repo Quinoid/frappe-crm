@@ -107,7 +107,7 @@
         />
         <FormControl
           v-else-if="field.type === 'select'"
-          class="form-control cursor-pointer [&_select]:cursor-pointer"
+          class=" m-0.5 bg-white "
           type="select"
           :value="data[field.name]"
           :options="field.options"
