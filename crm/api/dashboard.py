@@ -307,7 +307,7 @@ def get_users_with_roles():
             }
 
         # Rename roles
-        role_name = "Sales Manager" if user["role"] == "Manager Access" else "Regular Access"
+        role_name = "Manager Access" if user["role"] == "Sales Manager" else "Regular Access"
         user_dict[user_id]["roles"].append(role_name)
 
     return list(user_dict.values())
