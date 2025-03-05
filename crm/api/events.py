@@ -533,18 +533,23 @@ def export_data(doctype):
 
 import frappe
 import csv
+import time
 from frappe.utils import get_site_path
 
 @frappe.whitelist()
-def export_data_all(doctype):
-    """Exports data from the specified Doctype and returns the file path."""
-    
+def export_data_all(doctype, filters=None):
+    """Exports data from the specified Doctype with optional filters and returns a unique file path."""
+
     # Check if Doctype exists
     if not frappe.db.exists("DocType", doctype):
         frappe.throw(f"Doctype '{doctype}' does not exist", frappe.DoesNotExistError)
 
     # Replace spaces with underscores in filename
-    safe_doctype = doctype.replace(" ", "_")  
+    safe_doctype = doctype.replace(" ", "_")
+
+    # Generate unique timestamp-based filename
+    timestamp = int(time.time())  # Current timestamp in seconds
+    filename = f"{safe_doctype}_export_{timestamp}.csv"
 
     # Get all fields dynamically
     meta = frappe.get_meta(doctype)
@@ -553,11 +558,16 @@ def export_data_all(doctype):
     # Validate fields
     valid_fields = [field for field in all_fields if frappe.db.has_column(doctype, field)]
 
-    # Fetch data
-    records = frappe.get_all(doctype, fields=valid_fields)
+    # Convert filters from JSON string (if coming from API call)
+    if isinstance(filters, str):
+        import json
+        filters = json.loads(filters)
+
+    # Fetch data with optional filters
+    records = frappe.get_all(doctype, fields=valid_fields, filters=filters or {})
 
     # Define file path
-    file_path = get_site_path("public", "files", f"{safe_doctype}_export.csv")
+    file_path = get_site_path("public", "files", filename)
 
     # Write data to CSV
     with open(file_path, mode="w", newline="") as file:
@@ -566,5 +576,4 @@ def export_data_all(doctype):
         for record in records:
             writer.writerow([record.get(field) for field in valid_fields])
 
-    return f"/public/files/{safe_doctype}_export.csv"
-
+    return f"/public/files/{filename}"
