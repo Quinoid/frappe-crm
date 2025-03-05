@@ -272,25 +272,46 @@ def custom_delete(doctype, name):
         }
 
 
+import frappe
+
 @frappe.whitelist()
 def get_users_with_roles():
     """
     Fetch all users along with their assigned roles who have either 'Sales Manager' or 'Sales User' roles.
+    Excludes users with specific emails and renames roles.
     """
-    users = frappe.get_all("User", fields=["name", "full_name", "email", "enabled"])
+    roles_to_filter = ["Sales Manager", "Sales User"]
+    email_exclusions = ["test@yopmail.com", "admin@example.com"]
 
-    filtered_users = []
-    
+    # Fetch users with specified roles, excluding certain emails
+    users = frappe.db.sql("""
+        SELECT DISTINCT u.name, u.full_name, u.email, u.enabled, hr.role
+        FROM `tabUser` u
+        JOIN `tabHas Role` hr ON u.name = hr.parent
+        WHERE hr.role IN %(roles)s 
+        AND u.enabled = 1
+        AND u.email NOT IN %(excluded_emails)s
+    """, {"roles": roles_to_filter, "excluded_emails": email_exclusions}, as_dict=True)
+
+    # Organize users into a dictionary with their roles
+    user_dict = {}
     for user in users:
-        # Fetch roles directly from the User's child table
-        roles = [role.role for role in frappe.get_all("Has Role", filters={"parent": user["name"]}, fields=["role"])]
-        
-        # Check if the user has 'Sales Manager' or 'Sales User' role
-        if "Sales Manager" in roles or "Sales User" in roles:
-            user["roles"] = roles
-            filtered_users.append(user)
-    
-    return filtered_users
+        user_id = user["name"]
+        if user_id not in user_dict:
+            user_dict[user_id] = {
+                "name": user["name"],
+                "full_name": user["full_name"],
+                "email": user["email"],
+                "enabled": user["enabled"],
+                "roles": []
+            }
+
+        # Rename roles
+        role_name = "Manager Access" if user["role"] == "Sales Manager" else "Regular Access"
+        user_dict[user_id]["roles"].append(role_name)
+
+    return list(user_dict.values())
+
 
 
 
