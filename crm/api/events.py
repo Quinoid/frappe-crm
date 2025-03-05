@@ -534,7 +534,15 @@ def export_data(doctype):
 import frappe
 import csv
 import time
+import re
 from frappe.utils import get_site_path
+
+# Function to remove HTML tags
+def strip_html(text):
+    """Removes HTML tags from a string."""
+    if not text:
+        return ""
+    return re.sub(r"<.*?>", "", text)
 
 @frappe.whitelist()
 def export_data_all(doctype, filters=None):
@@ -573,7 +581,9 @@ def export_data_all(doctype, filters=None):
     with open(file_path, mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(valid_fields)  # Write headers
+
         for record in records:
-            writer.writerow([record.get(field) for field in valid_fields])
+            cleaned_record = [strip_html(str(record.get(field))) for field in valid_fields]
+            writer.writerow(cleaned_record)
 
     return f"/public/files/{filename}"
