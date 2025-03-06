@@ -118,7 +118,8 @@
   font-family: Inter;
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
+  height: 34px;
+  font-weight: 400;
   line-height: 20px; /* 142.857% */
 }
 .table-container tbody tr {

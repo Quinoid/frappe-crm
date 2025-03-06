@@ -8,6 +8,7 @@
         <div class="flex gap-2">
           <Filter
             v-model="list"
+            ref="childRef"
             :doctype="doctype"
             :default_filters="filters"
             @update="updateFilter"
@@ -100,6 +101,7 @@
         />
         <Filter
           v-model="list"
+          ref="childRef"
           :doctype="doctype"
           :default_filters="filters"
           @update="updateFilter"
@@ -132,7 +134,7 @@
               hideLabel: true,
               items: [
                 {
-                  label: __('Export'),
+                  label: __('Export This View'),
                   class: 'bg-btn_primary hover:bg-btn_primary',
                   icon: () =>
                     h(FeatherIcon, { name: 'download', class: 'h-4 w-4' }),
@@ -140,7 +142,7 @@
                 },
                 ...list?.data?.data?.length > 0?[
                  {
-                  label: __('Export All'),
+                  label: __('Export All Columns'),
                   class: 'bg-btn_primary hover:bg-btn_primary',
                   icon: () =>
                     h(FeatherIcon, { name: 'download', class: 'h-4 w-4' }),
@@ -273,6 +275,17 @@ const props = defineProps({
     },
   },
 })
+const childRef = ref(null);
+const clearfilter = ref(null);
+
+onMounted(() => {
+  if (childRef.value) {
+    clearfilter.value = childRef.value.clearfilter; // Capture the child's function
+  }
+});
+
+// Expose the function to the grandparent
+const emit = defineEmits(['updateFilters']);
 
 const { $dialog } = globalStore()
 const { reload: reloadView, getView } = viewsStore()
@@ -359,6 +372,13 @@ const view = ref({
   pinned: false,
   public: false,
 })
+watch(
+  () => view.value.filters,
+  (newFilters) => {
+    emit('updateFilters', newFilters);
+  },
+  { deep: true } // Ensures Vue watches for deep changes in objects
+);
 
 const pageLength = computed(() => list.value?.data?.page_length)
 const pageLengthCount = computed(() => list.value?.data?.page_length_count)
@@ -1246,6 +1266,7 @@ defineExpose({
   viewActions,
   viewsDropdownOptions,
   currentView,
+  clearfilter
 })
 
 // Watchers

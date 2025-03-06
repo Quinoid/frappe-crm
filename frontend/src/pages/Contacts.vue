@@ -21,6 +21,7 @@
   <ViewControls
     ref="viewControls"
     v-model="contacts"
+    @updateFilters="handleFilterUpdate"
     v-model:loadMore="loadMore"
     v-model:resizeColumn="triggerResize"
     v-model:updatedPageCount="updatedPageCount"
@@ -48,7 +49,7 @@
     @likeDoc="(data) => viewControls.likeDoc(data)"
   />
   <div
-    v-else-if="contacts.data"
+    v-else-if="contacts.data&&Object.keys(parentFilters).length === 0"
     class="flex h-full items-center justify-center"
   >
     <div
@@ -64,6 +65,8 @@
      
     </div>
   </div>
+    <SearchEmptyComponent moduleName="Contacts" v-else-if="contacts.data && Object.keys(parentFilters).length > 0" :clearFunction="callChildFunction" />
+
   <ContactModal
     v-model="showContactModal"
     v-model:quickEntry="showQuickEntryModal"
@@ -89,9 +92,10 @@ import ContactEmpty from '@/components/Icons/ContactEmpty.vue'
 import { organizationsStore } from '@/stores/organizations.js'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { call } from 'qbs-vue-ui'
-import { computed, ref } from 'vue'
+import { computed, ref,onMounted } from 'vue'
 import { createToast } from '../utils/index'
 import { usersStore } from '@/stores/users'
+import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
 const { getOrganization } = organizationsStore()
 const showContactModal = ref(false)
 const showQuickEntryModal = ref(false)
@@ -105,7 +109,24 @@ const loadMore = ref(1)
 const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
+const parentFilters = ref({});
+const clearfilter = ref(null);
 
+onMounted(() => {
+  if (viewControls.value) {
+    clearfilter.value = viewControls.value.clearfilter; // Capture the parent's function
+  }
+});
+
+const callChildFunction = () => {
+  if (clearfilter.value) {
+    clearfilter.value();
+  }
+};
+
+const handleFilterUpdate = (newFilters) => {
+  parentFilters.value = { ...newFilters }; // Update the parent state
+};
 async function createContact() {
   const url = new URL(window.location.href)
   const domain = url.hostname

@@ -21,6 +21,7 @@
   <ViewControls
     ref="viewControls"
     v-model="tasks"
+    @updateFilters="handleFilterUpdate"
     v-model:loadMore="loadMore"
     v-model:resizeColumn="triggerResize"
     v-model:updatedPageCount="updatedPageCount"
@@ -189,7 +190,7 @@
     @applyLikeFilter="(data) => viewControls.applyLikeFilter(data)"
     @likeDoc="(data) => viewControls.likeDoc(data)"
   />
-  <div v-else-if="tasks.data" class="flex h-full items-center justify-center">
+  <div v-else-if="tasks.data&& Object.keys(parentFilters).length === 0" class="flex h-full items-center justify-center">
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
@@ -202,6 +203,8 @@
       </Button>
     </div>
   </div>
+    <SearchEmptyComponent moduleName="Tasks" v-else-if="tasks.data && Object.keys(parentFilters).length > 0" :clearFunction="callChildFunction" />
+
   <TaskModal
     v-if="showTaskModal"
     v-model="showTaskModal"
@@ -211,26 +214,24 @@
 </template>
 
 <script setup>
-import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
+import TaskEmpty from '@/components/Activities/newEmptycon/TaskEmpty.vue'
 import CustomActions from '@/components/CustomActions.vue'
 import ArrowUpRightIcon from '@/components/Icons/ArrowUpRightIcon.vue'
-import TaskStatusIcon from '@/components/Icons/TaskStatusIcon.vue'
 import TaskPriorityIcon from '@/components/Icons/TaskPriorityIcon.vue'
-import Email2Icon from '@/components/Icons/Email2Icon.vue'
-import LayoutHeader from '@/components/LayoutHeader.vue'
-import ViewControls from '@/components/ViewControls.vue'
-import TaskEmpty from '@/components/Activities/newEmptycon/TaskEmpty.vue'
-import TasksListView from '@/components/ListViews/TasksListView.vue'
+import TaskStatusIcon from '@/components/Icons/TaskStatusIcon.vue'
 import KanbanView from '@/components/Kanban/KanbanView.vue'
+import LayoutHeader from '@/components/LayoutHeader.vue'
+import TasksListView from '@/components/ListViews/TasksListView.vue'
 import TaskModal from '@/components/Modals/TaskModal.vue'
+import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
+import ViewControls from '@/components/ViewControls.vue'
 import { usersStore } from '@/stores/users'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
-import { Tooltip, Avatar, TextEditor, Dropdown, call } from 'qbs-vue-ui'
-import { computed, ref } from 'vue'
+import { Avatar, Dropdown, TextEditor, Tooltip, call } from 'qbs-vue-ui'
+import { computed, ref,onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import TaskCalendarComponent from '../components/TaskCalendarComponent.vue'
-
+import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
 const { getUser } = usersStore()
 
 const router = useRouter()
@@ -243,7 +244,24 @@ const loadMore = ref(1)
 const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
+const parentFilters = ref({});
+const clearfilter = ref(null);
 
+onMounted(() => {
+  if (viewControls.value) {
+    clearfilter.value = viewControls.value.clearfilter; // Capture the parent's function
+  }
+});
+
+const callChildFunction = () => {
+  if (clearfilter.value) {
+    clearfilter.value();
+  }
+};
+
+const handleFilterUpdate = (newFilters) => {
+  parentFilters.value = { ...newFilters }; // Update the parent state
+};
 function getRow(name, field) {
   function getValue(value) {
     if (value && typeof value === 'object') {

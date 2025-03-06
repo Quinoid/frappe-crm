@@ -21,6 +21,7 @@
   <ViewControls
     ref="viewControls"
     v-model="leads"
+     @updateFilters="handleFilterUpdate"
     v-model:loadMore="loadMore"
     v-model:resizeColumn="triggerResize"
     v-model:updatedPageCount="updatedPageCount"
@@ -251,7 +252,7 @@
     @applyLikeFilter="(data) => viewControls.applyLikeFilter(data)"
     @likeDoc="(data) => viewControls.likeDoc(data)"
   />
-  <div v-else-if="leads.data" class="flex h-full items-center justify-center">
+  <div v-else-if="leads.data&& Object.keys(parentFilters).length === 0" class="flex h-full items-center justify-center">
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
@@ -265,6 +266,7 @@
       
     </div>
   </div>
+  <SearchEmptyComponent moduleName="Leads" v-else-if="leads.data && Object.keys(parentFilters).length > 0" :clearFunction="callChildFunction" />
   <LeadModal
     v-if="showLeadModal"
     v-model="showLeadModal"
@@ -309,8 +311,8 @@ import ViewControls from '@/components/ViewControls.vue'
 import { callEnabled } from '@/composables/settings'
 import { globalStore } from '@/stores/global'
 import { statusesStore } from '@/stores/statuses'
+import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
 import { usersStore } from '@/stores/users'
-import LeadEmpty from '../components/Icons/LeadEmpty.vue'
 import {
   createToast,
   dateFormat,
@@ -320,8 +322,9 @@ import {
   website,
 } from '@/utils'
 import { Avatar, Dropdown, Tooltip, call } from 'qbs-vue-ui'
-import { computed, h, reactive, ref } from 'vue'
+import { computed, h, reactive, ref ,onMounted} from 'vue'
 import { useRoute } from 'vue-router'
+import LeadEmpty from '../components/Icons/LeadEmpty.vue'
 const { makeCall } = globalStore()
 const { getUser } = usersStore()
 const { getLeadStatus } = statusesStore()
@@ -340,7 +343,24 @@ const loadMore = ref(1)
 const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
+const parentFilters = ref({});
+const clearfilter = ref(null);
 
+onMounted(() => {
+  if (viewControls.value) {
+    clearfilter.value = viewControls.value.clearfilter; // Capture the parent's function
+  }
+});
+
+const callChildFunction = () => {
+  if (clearfilter.value) {
+    clearfilter.value();
+  }
+};
+
+const handleFilterUpdate = (newFilters) => {
+  parentFilters.value = { ...newFilters }; // Update the parent state
+};
 function getRow(name, field) {
   function getValue(value) {
     if (value && typeof value === 'object' && !Array.isArray(value)) {
@@ -350,6 +370,10 @@ function getRow(name, field) {
   }
   return getValue(rows.value?.find((row) => row.name == name)[field])
 }
+const leadDetails= computed(() => {
+  if (!leads.value?.data?.data) return []
+  return leads.value?.data
+})
 
 // Rows
 const rows = computed(() => {

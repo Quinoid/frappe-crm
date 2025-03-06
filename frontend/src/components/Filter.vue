@@ -168,7 +168,7 @@ import {
   DateTimePicker,
   DateRangePicker,
 } from 'qbs-vue-ui'
-import { h, computed, onMounted } from 'vue'
+import { h, computed, onMounted ,defineExpose} from 'vue'
 import { isMobileView } from '@/composables/settings'
 
 const typeCheck = ['Check']
@@ -483,7 +483,9 @@ function clearfilter(close) {
   apply()
   close && close()
 }
-
+defineExpose({
+  clearfilter
+});
 function updateValue(value, filter) {
   value = value.target ? value.target.value : value
   if (filter.operator === 'between') {

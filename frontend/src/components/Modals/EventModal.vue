@@ -190,9 +190,7 @@ async function callInsertDoc() {
     error.value = __('Subject is mandatory')
     return error.value
   }
-  if (!_event.value.event_category) {
-    error.value = __('Event Category is mandatory')
-  }
+ 
 
   if (
     _event.value.custom_participant &&
@@ -204,7 +202,6 @@ async function callInsertDoc() {
       }
     })
   }
-  console.log(data)
   const doc = await call('frappe.client.insert', {
     doc: {
       doctype: 'Event',
@@ -233,7 +230,6 @@ const dialogOptions = computed(() => {
         {
           label: editMode.value ? 'Save' : 'Create',
           variant: 'solid',
-          disabled: !dirty.value,
           onClick: () => (editMode.value ? updateContact() : callInsertDoc()),
         },
       ]

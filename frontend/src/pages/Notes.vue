@@ -16,6 +16,7 @@
   </LayoutHeader>
   <ViewControls
     ref="viewControls"
+    @updateFilters="handleFilterUpdate"
     v-model="notes"
     v-model:loadMore="loadMore"
     v-model:updatedPageCount="updatedPageCount"
@@ -89,6 +90,7 @@
     }"
     @loadMore="() => loadMore++"
   />
+   <SearchEmptyComponent moduleName="Notes" v-else-if="notes.data && Object.keys(parentFilters).length > 0" :clearFunction="callChildFunction" />
   <div v-else class="flex h-full items-center justify-center">
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
@@ -104,6 +106,7 @@
      
     </div>
   </div>
+
   <NoteModal
     v-model="showNoteModal"
     v-model:reloadNotes="notes"
@@ -121,8 +124,8 @@ import ViewControls from '@/components/ViewControls.vue'
 import { usersStore } from '@/stores/users'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { call, Dropdown, ListFooter, TextEditor, Tooltip } from 'qbs-vue-ui'
-import { ref, watch } from 'vue'
-
+import { ref, watch ,onMounted} from 'vue'
+import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
 const { getUser } = usersStore()
 
 const showNoteModal = ref(false)
@@ -132,7 +135,24 @@ const notes = ref({})
 const loadMore = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
+const parentFilters = ref({});
+const clearfilter = ref(null);
 
+onMounted(() => {
+  if (viewControls.value) {
+    clearfilter.value = viewControls.value.clearfilter; // Capture the parent's function
+  }
+});
+
+const callChildFunction = () => {
+  if (clearfilter.value) {
+    clearfilter.value();
+  }
+};
+
+const handleFilterUpdate = (newFilters) => {
+  parentFilters.value = { ...newFilters }; // Update the parent state
+};
 watch(
   () => notes.value?.data?.page_length_count,
   (val, old_value) => {

@@ -20,6 +20,7 @@
   </LayoutHeader>
   <ViewControls
     ref="viewControls"
+     @updateFilters="handleFilterUpdate"
     v-model="communications"
     v-model:loadMore="loadMore"
     v-model:resizeColumn="triggerResize"
@@ -54,7 +55,7 @@
   />
 
   <div
-    v-else-if="communications.data"
+    v-else-if="communications.data&&Object.keys(parentFilters).length === 0"
     class="flex h-full items-center justify-center"
   >
     <div
@@ -69,6 +70,7 @@
       }}</span>
     </div>
   </div>
+  <SearchEmptyComponent moduleName="Emails" v-else-if="communications.data && Object.keys(parentFilters).length > 0" :clearFunction="callChildFunction" />
 
   <QuickEntryModal
     v-if="showQuickEntryModal"
@@ -83,10 +85,11 @@ import CustomActions from '@/components/CustomActions.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
-import { computed, ref } from 'vue'
+import { computed, ref ,onMounted} from 'vue'
 import { useRoute } from 'vue-router'
 import CommunicationListView from '../components/ListViews/CommunicationListView.vue'
 import QuickEntryModal from '../components/Modals/QuickEntryModal.vue'
+import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
 const showQuickEntryModal = ref(false)
 const route = useRoute()
 
@@ -97,7 +100,24 @@ const loadMore = ref(1)
 const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
+const parentFilters = ref({});
+const clearfilter = ref(null);
 
+onMounted(() => {
+  if (viewControls.value) {
+    clearfilter.value = viewControls.value.clearfilter; // Capture the parent's function
+  }
+});
+
+const callChildFunction = () => {
+  if (clearfilter.value) {
+    clearfilter.value();
+  }
+};
+
+const handleFilterUpdate = (newFilters) => {
+  parentFilters.value = { ...newFilters }; // Update the parent state
+};
 const rows = computed(() => {
   if (
     !communications.value?.data?.data ||

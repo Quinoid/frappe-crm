@@ -19,6 +19,7 @@
     </template>
   </LayoutHeader>
   <ViewControls
+    @updateFilters="handleFilterUpdate"
     ref="viewControls"
     v-model="organizations"
     v-model:loadMore="loadMore"
@@ -47,7 +48,7 @@
     @likeDoc="(data) => viewControls.likeDoc(data)"
   />
   <div
-    v-else-if="organizations.data"
+    v-else-if="organizations.data&& Object.keys(parentFilters).length === 0"
     class="flex h-full items-center justify-center"
   >
     <div
@@ -63,6 +64,8 @@
       
     </div>
   </div>
+    <SearchEmptyComponent moduleName="Oraganizations" v-else-if="organizations.data && Object.keys(parentFilters).length > 0" :clearFunction="callChildFunction" />
+
   <OrganizationModal
     v-model="showOrganizationModal"
     v-model:quickEntry="showQuickEntryModal"
@@ -91,7 +94,8 @@ import {
   formatNumberIntoCurrency,
 } from '@/utils'
 import { usersStore } from '@/stores/users'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
 const { getUser } = usersStore()
 
 const organizationsListView = ref(null)
@@ -104,7 +108,24 @@ const loadMore = ref(1)
 const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
+const parentFilters = ref({});
+const clearfilter = ref(null);
 
+onMounted(() => {
+  if (viewControls.value) {
+    clearfilter.value = viewControls.value.clearfilter; // Capture the parent's function
+  }
+});
+
+const callChildFunction = () => {
+  if (clearfilter.value) {
+    clearfilter.value();
+  }
+};
+
+const handleFilterUpdate = (newFilters) => {
+  parentFilters.value = { ...newFilters }; // Update the parent state
+};
 const rows = computed(() => {
   if (
     !organizations.value?.data?.data ||

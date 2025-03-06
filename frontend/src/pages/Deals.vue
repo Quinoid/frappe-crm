@@ -21,6 +21,7 @@
   <ViewControls
     ref="viewControls"
     v-model="deals"
+     @updateFilters="handleFilterUpdate"
     v-model:loadMore="loadMore"
     v-model:resizeColumn="triggerResize"
     v-model:updatedPageCount="updatedPageCount"
@@ -225,7 +226,7 @@
     @applyLikeFilter="(data) => viewControls.applyLikeFilter(data)"
     @likeDoc="(data) => viewControls.likeDoc(data)"
   />
-  <div v-else-if="deals.data" class="flex h-full items-center justify-center">
+  <div v-else-if="deals.data&&Object.keys(parentFilters).length === 0" class="flex h-full items-center justify-center">
     <div
       class="flex flex-col items-center gap-3 text-xl font-medium text-gray-500"
     >
@@ -238,6 +239,8 @@
       </Button>
     </div>
   </div>
+    <SearchEmptyComponent moduleName="Deals" v-else-if="deals.data && Object.keys(parentFilters).length > 0" :clearFunction="callChildFunction" />
+
   <DealModal
     v-if="showDealModal"
     v-model="showDealModal"
@@ -266,42 +269,42 @@
 </template>
 
 <script setup>
-import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
-import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import CustomActions from '@/components/CustomActions.vue'
-import EmailAtIcon from '@/components/Icons/EmailAtIcon.vue'
-import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import NoteIcon from '@/components/Icons/NoteIcon.vue'
-import TaskIcon from '@/components/Icons/TaskIcon.vue'
 import CommentIcon from '@/components/Icons/CommentIcon.vue'
+import EmailAtIcon from '@/components/Icons/EmailAtIcon.vue'
 import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import DealsIcon from '@/components/Icons/DealsIcon.vue'
+import NoteIcon from '@/components/Icons/NoteIcon.vue'
+import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import TaskIcon from '@/components/Icons/TaskIcon.vue'
+import KanbanView from '@/components/Kanban/KanbanView.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import DealsListView from '@/components/ListViews/DealsListView.vue'
-import KanbanView from '@/components/Kanban/KanbanView.vue'
 import DealModal from '@/components/Modals/DealModal.vue'
 import NoteModal from '@/components/Modals/NoteModal.vue'
-import TaskModal from '@/components/Modals/TaskModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
+import TaskModal from '@/components/Modals/TaskModal.vue'
+import MultipleAvatar from '@/components/MultipleAvatar.vue'
+import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
+import { callEnabled } from '@/composables/settings'
 import { globalStore } from '@/stores/global'
-import DealEmpty from '../components/Icons/DealEmpty.vue'
-import { usersStore } from '@/stores/users'
 import { organizationsStore } from '@/stores/organizations'
 import { statusesStore } from '@/stores/statuses'
-import { callEnabled } from '@/composables/settings'
+import { usersStore } from '@/stores/users'
 import {
+  createToast,
   dateFormat,
   dateTooltipFormat,
-  timeAgo,
-  website,
   formatNumberIntoCurrency,
   formatTime,
-  createToast,
+  timeAgo,
+  website,
 } from '@/utils'
-import { Tooltip, Avatar, Dropdown, call } from 'qbs-vue-ui'
+import { Avatar, Dropdown, Tooltip, call } from 'qbs-vue-ui'
+import { computed, h, reactive, ref ,onMounted} from 'vue'
 import { useRoute } from 'vue-router'
-import { ref, reactive, computed, h } from 'vue'
+import DealEmpty from '../components/Icons/DealEmpty.vue'
+import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
 const { makeCall } = globalStore()
 const { getUser } = usersStore()
 const { getOrganization } = organizationsStore()
@@ -321,7 +324,24 @@ const loadMore = ref(1)
 const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
+const parentFilters = ref({});
+const clearfilter = ref(null);
 
+onMounted(() => {
+  if (viewControls.value) {
+    clearfilter.value = viewControls.value.clearfilter; // Capture the parent's function
+  }
+});
+
+const callChildFunction = () => {
+  if (clearfilter.value) {
+    clearfilter.value();
+  }
+};
+
+const handleFilterUpdate = (newFilters) => {
+  parentFilters.value = { ...newFilters }; // Update the parent state
+};
 function getRow(name, field) {
   function getValue(value) {
     if (value && typeof value === 'object' && !Array.isArray(value)) {

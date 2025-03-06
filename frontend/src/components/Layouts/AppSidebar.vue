@@ -175,14 +175,14 @@ const allViews = computed(() => {
   if (getPublicViews().length) {
     _views.push({
       name: 'Public views',
-      opened: true,
+      opened: false,
       views: parseView(getPublicViews()),
     })
   }
   if (getReportViews().length) {
     _views.push({
       name: 'Reports',
-      opened: true,
+      opened: false,
       views: parseView(getReportViews()),
     })
   }
@@ -190,7 +190,7 @@ const allViews = computed(() => {
   if (getPinnedViews().length) {
     _views.push({
       name: 'Pinned views',
-      opened: true,
+      opened: false,
       views: parseView(getPinnedViews()),
     })
   }

@@ -1,15 +1,15 @@
 <template>
-  <div class="container mx-auto p-4 relative">
+  <div class="container mx-auto p-4 relative flex flex-col gap-3 ">
     <h2 class="text-xl font-semibold">Users</h2>
 
     <div class="overflow-auto max-h-[calc(100vh_-_10rem)]">
       <table class="min-w-full border-collapse border border-gray-300">
         <thead class="sticky top-0 bg-white z-10">
           <tr class="bg-table_header text-sm font-light text-gray-700">
-            <th class="border border-gray-300 px-4 py-1 text-left">Name</th>
-            <th class="border border-gray-300 px-4 py-1 text-left">Email</th>
-            <th class="border border-gray-300 px-4 py-1 text-left">Roles</th>
-            <th class="border border-gray-300 px-4 py-1 text-center">
+            <th class="border border-gray-300 px-4 py-1 text-left font-normal">Name</th>
+            <th class="border border-gray-300 px-4 py-1 text-left font-normal">Email</th>
+            <th class="border border-gray-300 px-4 py-1 text-left font-normal">Roles</th>
+            <th class="border border-gray-300 px-4 py-1 text-center font-normal">
               Enabled
             </th>
           </tr>
@@ -45,9 +45,9 @@
   </div>
 </template>
 <script setup>
+import { createToast } from '@/utils'
 import { call } from 'qbs-vue-ui'
 import { ref } from 'vue'
-import { createToast } from '@/utils'
 async function getUserRoles() {
   const domain = window.location.hostname
   try {

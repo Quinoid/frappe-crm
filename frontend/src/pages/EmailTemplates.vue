@@ -21,6 +21,7 @@
   <ViewControls
     ref="viewControls"
     v-model="emailTemplates"
+    @updateFilters="handleFilterUpdate"
     v-model:loadMore="loadMore"
     v-model:resizeColumn="triggerResize"
     v-model:updatedPageCount="updatedPageCount"
@@ -48,7 +49,7 @@
     @likeDoc="(data) => viewControls.likeDoc(data)"
   />
   <div
-    v-else-if="emailTemplates.data"
+    v-else-if="emailTemplates.data&&Object.keys(parentFilters).length === 0"
     class="flex h-full items-center justify-center"
   >
     <div
@@ -63,6 +64,8 @@
       </Button>
     </div>
   </div>
+    <SearchEmptyComponent moduleName="Email Templates" v-else-if="emailTemplates.data && Object.keys(parentFilters).length > 0" :clearFunction="callChildFunction" />
+
   <EmailTemplateModal
     v-model="showEmailTemplateModal"
     v-model:reloadEmailTemplates="emailTemplates"
@@ -71,17 +74,16 @@
 </template>
 
 <script setup>
-import EmailEmpty from '@/components/Activities/newEmptycon/EmailEmpty.vue'
 import CustomActions from '@/components/CustomActions.vue'
+import EmailTemplateEmpty from '@/components/Icons/EmailTemplateEmpty.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import EmailTemplatesListView from '@/components/ListViews/EmailTemplatesListView.vue'
 import EmailTemplateModal from '@/components/Modals/EmailTemplateModal.vue'
 import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
-import EmailTemplateEmpty from '@/components/Icons/EmailTemplateEmpty.vue'
-import { computed, ref } from 'vue'
-
+import { computed, ref ,onMounted} from 'vue'
+import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
 const emailTemplatesListView = ref(null)
 
 // emailTemplates data is loaded in the ViewControls component
@@ -90,7 +92,24 @@ const loadMore = ref(1)
 const triggerResize = ref(1)
 const updatedPageCount = ref(20)
 const viewControls = ref(null)
+const parentFilters = ref({});
+const clearfilter = ref(null);
 
+onMounted(() => {
+  if (viewControls.value) {
+    clearfilter.value = viewControls.value.clearfilter; // Capture the parent's function
+  }
+});
+
+const callChildFunction = () => {
+  if (clearfilter.value) {
+    clearfilter.value();
+  }
+};
+
+const handleFilterUpdate = (newFilters) => {
+  parentFilters.value = { ...newFilters }; // Update the parent state
+};
 const rows = computed(() => {
   if (
     !emailTemplates.value?.data?.data ||

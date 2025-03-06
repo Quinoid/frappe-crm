@@ -21,6 +21,7 @@
   <ViewControls
     ref="viewControls"
     v-model="events"
+    @updateFilters="handleFilterUpdate"
     v-model:loadMore="loadMore"
     v-model:resizeColumn="triggerResize"
     v-model:updatedPageCount="updatedPageCount"
@@ -65,7 +66,7 @@
   />
 
   <div
-    v-else-if="rows.length == 0 && route.params.viewType !== 'calendar'"
+    v-else-if="rows.length == 0 && route.params.viewType !== 'calendar'&& Object.keys(parentFilters).length === 0"
     class="flex h-full items-center justify-center"
   >
     <div
@@ -85,6 +86,8 @@
      
     </div>
   </div>
+    <SearchEmptyComponent moduleName="Events" v-else-if="rows.length == 0 && Object.keys(parentFilters).length > 0" :clearFunction="callChildFunction" />
+
   <EventModal
     v-model="showContactModal"
     v-model:quickEntry="showQuickEntryModal"
@@ -109,10 +112,11 @@ import EventsListView from '@/components/ListViews/EventsListView.vue'
 import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
 import { createResource } from 'qbs-vue-ui'
-import { computed, ref } from 'vue'
+import { computed, ref,onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import EventModal from '../components/Modals/EventModal.vue'
 import QuickEntryModal from '../components/Modals/QuickEntryModal.vue'
+import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
 const showContactModal = ref(false)
 const showQuickEntryModal = ref(false)
 const route = useRoute()
@@ -128,7 +132,24 @@ const viewControls = ref(null)
 const event = ref({})
 const editMode = ref(false)
 const detailMode = ref(false)
+const parentFilters = ref({});
+const clearfilter = ref(null);
 
+onMounted(() => {
+  if (viewControls.value) {
+    clearfilter.value = viewControls.value.clearfilter; // Capture the parent's function
+  }
+});
+
+const callChildFunction = () => {
+  if (clearfilter.value) {
+    clearfilter.value();
+  }
+};
+
+const handleFilterUpdate = (newFilters) => {
+  parentFilters.value = { ...newFilters }; // Update the parent state
+};
 const rows = computed(() => {
   if (
     !events.value?.data?.data ||
