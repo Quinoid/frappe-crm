@@ -290,3 +290,18 @@ export function revertDate(formattedDate) {
   const [day, month, year] = formattedDate.split('-')
   return `${year}-${month}-${day}`
 }
+export const handleValidateForm = (sections, values) => {
+  const errors = {}
+
+  if (!sections) return errors
+
+  sections?.forEach((section) => {
+    section.fields.forEach((field) => {
+      if (field.mandatory=== 0 && !values[field.name]?.trim()) {
+        errors[field.name] = __('This field is required')
+      }
+    })
+  })
+
+  return Object.keys(errors).length ? errors : null
+}

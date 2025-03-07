@@ -81,7 +81,6 @@
                   <PhoneIcon class="h-4 w-4 text-primary_text" />
                 </Button>
               </Tooltip>
-              // <Tooltip :text="__('Send an email')">
                <Button 
                 class="h-7 button-link-class " 
                 :class="{ '!pl-0': !callEnabled }" 
@@ -94,7 +93,6 @@
                 <Email2Icon class="h-4 w-4 text-primary_text" />
                 <span>{{ doc.data.email && doc.data.email !== '' ? doc.data.email : '--' }}</span>
               </Button>
-              // </Tooltip>
               <Tooltip :text="__('Go to website')">
                 <Button class="h-7 button-link-class"  @click="
                       doc.data.website
