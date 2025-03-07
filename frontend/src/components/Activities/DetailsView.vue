@@ -80,7 +80,6 @@
                     <PhoneIcon class="h-4 w-4 text-primary_text" />
                   </Button>
                 </Tooltip>
-                // <Tooltip :text="__('Send an email')">
                   <Button class="h-7 button-link-class" @click="doc.data.email
                           ? openEmailBox()
                           : errorMessage(__('No email set'))
@@ -90,8 +89,7 @@
                     
                     />
                     <span>{{doc.data.email&&doc.data.email!==""?doc.data.email:'- -'}}</span>
-                  // </Button>
-                </Tooltip>
+                  </Button>
                 <Tooltip :text="__('Go to website')">
                   <Button class="h-7  button-link-class" @click="
                         doc.data.website
