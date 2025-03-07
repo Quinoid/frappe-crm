@@ -36,14 +36,12 @@
 </template>
 
 <script setup>
-import Apps from '@/components/Apps.vue'
-import BizpoleLogo from '@/components/Icons/BizpoleLogo.vue'
+import CRMHeaderLogo from '@/components/Icons/CRMHeaderLogo.vue'
 import SettingsModal from '@/components/Settings/SettingsModal.vue'
 import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'
-import CRMHeaderLogo from '@/components/Icons/CRMHeaderLogo.vue'
 import { Dropdown } from 'qbs-vue-ui'
-import { computed, markRaw, ref } from 'vue'
+import { computed, ref } from 'vue'
 const props = defineProps({
   isCollapsed: {
     type: Boolean,
@@ -73,9 +71,9 @@ let dropdownOptions = ref([
     group: 'Manage',
     hideLabel: true,
     items: [
-      {
-        component: markRaw(Apps),
-      },
+      // {
+      //   component: markRaw(Apps),
+      // },
 
       {
         icon: 'life-buoy',
