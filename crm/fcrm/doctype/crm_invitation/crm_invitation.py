@@ -3,6 +3,8 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe import _
+from erpnext import get_default_company
 
 
 class CRMInvitation(Document):
@@ -21,14 +23,15 @@ class CRMInvitation(Document):
 		if frappe.local.dev_server:
 			print(f"Invite link for {self.email}: {invite_link}")
 
-		title = f"Bizpole CRM"
+		#title = f"Bizpole CRM"
+		title  = get_default_company()
 		template = "crm_invitation"
 
 		frappe.sendmail(
 			recipients=self.email,
-			subject=f"You have been invited to join {title}",
+			subject=f"Welcome to {title}",
 			template=template,
-			args={"title": title, "invite_link": invite_link},
+			args={"title": title, "invite_link": invite_link, 'email': self.email},
 			now=True,
 		)
 		self.db_set("email_sent_at", frappe.utils.now())
