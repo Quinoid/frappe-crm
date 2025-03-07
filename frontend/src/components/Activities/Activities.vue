@@ -1,63 +1,36 @@
 <template>
-  <ActivityHeader
-    v-if="title != 'Details' && title != 'Deals'"
-    v-model="tabIndex"
-    v-model:showWhatsappTemplates="showWhatsappTemplates"
-    :tabs="tabs"
-    :title="title"
-    :doc="doc"
-    :emailBox="emailBox"
-    :whatsappBox="whatsappBox"
-    :modalRef="modalRef"
-  />
-  <FadedScrollableDiv
-    :maskHeight="30"
-    class="flex flex-col flex-1 overflow-y-auto"
-  >
-    <div
-      v-if="all_activities?.loading"
-      class="flex flex-1 flex-col items-center justify-center gap-3 text-xl font-medium text-gray-500"
-    >
+  <ActivityHeader v-if="title != 'Details' && title != 'Deals'" v-model="tabIndex"
+    v-model:showWhatsappTemplates="showWhatsappTemplates" :tabs="tabs" :title="title" :doc="doc" :emailBox="emailBox"
+    :whatsappBox="whatsappBox" :modalRef="modalRef" />
+  <FadedScrollableDiv :maskHeight="30" class="flex flex-col flex-1 overflow-y-auto">
+    <div v-if="all_activities?.loading"
+      class="flex flex-1 flex-col items-center justify-center gap-3 text-xl font-medium text-gray-500">
       <LoadingIndicator class="h-6 w-6" />
       <span>{{ __('Loading...') }}</span>
     </div>
-    <div
-      v-else-if="
-        activities?.length ||
-        (fieldsLayout && title == 'Details') ||
-        title == 'Deals' ||
-        (whatsappMessages.data?.length && title == 'WhatsApp')
-      "
-      class="activities"
-    >
+    <div v-else-if="
+      activities?.length ||
+      (fieldsLayout && title == 'Details') ||
+      title == 'Deals' ||
+      (whatsappMessages.data?.length && title == 'WhatsApp')
+    " class="activities">
       <div v-if="title == 'WhatsApp' && whatsappMessages.data?.length">
-        <WhatsAppArea
-          class="px-3 sm:px-10"
-          v-model="whatsappMessages"
-          v-model:reply="replyMessage"
-          :messages="whatsappMessages.data"
-        />
+        <WhatsAppArea class="px-3 sm:px-10" v-model="whatsappMessages" v-model:reply="replyMessage"
+          :messages="whatsappMessages.data" />
       </div>
-      <div
-        v-else-if="title == 'Notes'"
-        class="grid grid-cols-1 gap-4 px-3 pb-3 sm:px-10 sm:pb-5 lg:grid-cols-2 xl:grid-cols-3"
-      >
+      <div v-else-if="title == 'Notes'"
+        class="grid grid-cols-1 gap-4 px-3 pb-3 sm:px-10 sm:pb-5 lg:grid-cols-2 xl:grid-cols-3">
         <div v-for="note in activities" @click="modalRef.showNote(note)">
           <NoteArea :note="note" v-model="all_activities" />
         </div>
       </div>
       <div v-else-if="title == 'Comments'" class="pb-5">
         <div v-for="(comment, i) in activities">
-          <div
-            class="activity grid grid-cols-[30px_minmax(auto,_1fr)] gap-2 px-3 sm:gap-4 sm:px-10"
-          >
+          <div class="activity grid grid-cols-[30px_minmax(auto,_1fr)] gap-2 px-3 sm:gap-4 sm:px-10">
             <div
               class="relative flex justify-center after:absolute after:left-[50%] after:top-0 after:-z-10 after:border-l after:border-gray-200"
-              :class="i != activities.length - 1 ? 'after:h-full' : 'after:h-4'"
-            >
-              <div
-                class="z-10 flex h-8 w-7 items-center justify-center bg-white"
-              >
+              :class="i != activities.length - 1 ? 'after:h-full' : 'after:h-4'">
+              <div class="z-10 flex h-8 w-7 items-center justify-center bg-white">
                 <CommentIcon class="text-gray-800" />
               </div>
             </div>
@@ -65,220 +38,119 @@
           </div>
         </div>
       </div>
-      <div
-        v-else-if="title == 'Details'"
-        class="pb-5  h-[calc(100vh-100px)] overflow-auto"
-      >
+      <div v-else-if="title == 'Details'" class="pb-5  h-[calc(100vh-100px)] overflow-auto">
         <div class="" v-if="doctype == 'CRM Lead'">
-          <DetailsView
-            class="mb-4"
-            :doc="doc"
-            :fieldsLayout="fieldsLayout"
-            :updateField="updateField"
-            :openEmailBox="openEmailBox"
-          />
+          <DetailsView class="mb-4" :doc="doc" :fieldsLayout="fieldsLayout" :updateField="updateField"
+            :openEmailBox="handleEmailBox" />
         </div>
         <div class="" v-else-if="doctype == 'Contact'">
-          <ContactEdit
-            class="mb-4"
-            :doc="doc"
-            :fieldsLayout="fieldsLayout"
-            :updateField="updateField"
-            :deleteContact="deleteContact"
-          />
+          <ContactEdit class="mb-4" :doc="doc" :fieldsLayout="fieldsLayout" :updateField="updateField"
+            :openEmailBox="handleEmailBox" :deleteContact="deleteContact" />
         </div>
         <div class="" v-else>
-          <DealDetails
-            class="mb-4"
-            :doc="doc"
-            :fieldsLayout="fieldsLayout"
-            :updateField="updateField"
-            :openEmailBox="openEmailBox"
-            :dealContacts="dealContacts"
-            :doctype="doctype"
-            :organization="organization"
-            :addContact="addContact"
-            :contactOptions="contactOptions"
-            :togglePopover="togglePopover"
-            :showContactModal="showContactModal"
-            :_contact="_contact"
-          />
+          <DealDetails class="mb-4" :doc="doc" :fieldsLayout="fieldsLayout" :updateField="updateField"
+            :dealContacts="dealContacts" :openEmailBox="handleEmailBox" :doctype="doctype" :organization="organization"
+            :addContact="addContact" :contactOptions="contactOptions" :togglePopover="togglePopover"
+            :showContactModal="showContactModal" :_contact="_contact" />
         </div>
       </div>
-      <div
-        v-else-if="title == 'Deals'"
-        class="pb-3 overflow-x-auto sm:w-full w-max"
-      >
+      <div v-else-if="title == 'Deals'" class="pb-3 overflow-x-auto sm:w-full w-max">
         <ContactDeals :tab="tab" :contactId="contactId" />
       </div>
-      <div
-        v-else-if="title == 'Tasks'"
-        class="px-3 pb-3 sm:px-10 sm:pb-5 overflow-x-auto sm:w-full w-max"
-      >
-        <TaskArea
-          v-model="all_activities"
-          v-model:doc="doc"
-          :modalRef="modalRef"
-          :tasks="activities"
-          :doctype="doctype"
-        />
+      <div v-else-if="title == 'Tasks'" class="px-3 pb-3 sm:px-10 sm:pb-5 overflow-x-auto sm:w-full w-max">
+        <TaskArea v-model="all_activities" v-model:doc="doc" :modalRef="modalRef" :tasks="activities"
+          :doctype="doctype" />
       </div>
       <div v-else-if="title == 'Calls'" class="activity">
         <div v-for="(call, i) in activities">
-          <div
-            class="activity grid grid-cols-[30px_minmax(auto,_1fr)] gap-4 px-3 sm:px-10"
-          >
+          <div class="activity grid grid-cols-[30px_minmax(auto,_1fr)] gap-4 px-3 sm:px-10">
             <div
               class="relative flex justify-center after:absolute after:left-[50%] after:top-0 after:-z-10 after:border-l after:border-gray-200"
-              :class="i != activities.length - 1 ? 'after:h-full' : 'after:h-4'"
-            >
-              <div
-                class="z-10 flex h-8 w-7 items-center justify-center bg-white text-gray-800"
-              >
-                <MissedCallIcon
-                  v-if="call.status == 'No Answer'"
-                  class="text-red-600"
-                />
+              :class="i != activities.length - 1 ? 'after:h-full' : 'after:h-4'">
+              <div class="z-10 flex h-8 w-7 items-center justify-center bg-white text-gray-800">
+                <MissedCallIcon v-if="call.status == 'No Answer'" class="text-red-600" />
                 <DeclinedCallIcon v-else-if="call.status == 'Busy'" />
-                <component
-                  v-else
-                  :is="
-                    call.type == 'Incoming' ? InboundCallIcon : OutboundCallIcon
-                  "
-                />
+                <component v-else :is="call.type == 'Incoming' ? InboundCallIcon : OutboundCallIcon
+                  " />
               </div>
             </div>
             <CallArea class="mb-4" :activity="call" />
           </div>
         </div>
       </div>
-      <div
-        v-else
-        v-for="(activity, i) in activities"
-        class="activity px-3 sm:px-10"
-        :class="
-      ['Activity', 'Emails'].includes(title)&&activity.activity_type!='comment'
-            ? 'grid grid-cols-[30px_minmax(auto,_1fr)] gap-2 sm:gap-4'
-            : ''
-        "
-      >
-        <div
-          v-if="['Activity', 'Emails'].includes(title) &&activity.activity_type!='comment'"
+      <div v-else v-for="(activity, i) in activities" class="activity px-3 sm:px-10" :class="['Activity', 'Emails'].includes(title) && activity.activity_type != 'comment'
+          ? 'grid grid-cols-[30px_minmax(auto,_1fr)] gap-2 sm:gap-4'
+          : ''
+        ">
+        <div v-if="['Activity', 'Emails'].includes(title) && activity.activity_type != 'comment'"
           class="relative flex justify-center before:absolute before:left-[50%] before:top-0 before:-z-10 before:border-l before:border-gray-200"
-          :class="[i != activities.length - 1 ? 'before:h-full' : 'before:h-4']"
-        >
-          <div
-            class="z-10 flex h-7 w-7 items-center justify-center"
-            :class="{
-              'mt-2.5': ['communication'].includes(activity.activity_type),
-              'bg-white': ['added', 'removed', 'changed'].includes(
+          :class="[i != activities.length - 1 ? 'before:h-full' : 'before:h-4']">
+          <div class="z-10 flex h-7 w-7 items-center justify-center" :class="{
+            'mt-2.5': ['communication'].includes(activity.activity_type),
+            'bg-white': ['added', 'removed', 'changed'].includes(
+              activity.activity_type,
+            ),
+            'h-8': [
+              'comment',
+              'communication',
+              'incoming_call',
+              'outgoing_call',
+            ].includes(activity.activity_type),
+          }">
+            <UserAvatar v-if="activity.activity_type == 'communication'" :user="activity.data.sender"
+              :class="' border-gray-50 border-1'" size="md" />
+            <MissedCallIcon v-else-if="
+              ['incoming_call', 'outgoing_call'].includes(
                 activity.activity_type,
-              ),
-              'h-8': [
-                'comment',
-                'communication',
-                'incoming_call',
-                'outgoing_call',
-              ].includes(activity.activity_type),
-            }"
-          >
-            <UserAvatar
-              v-if="activity.activity_type == 'communication'"
-              :user="activity.data.sender"
-              :class="' border-gray-50 border-1'"
-              size="md"
-            />
-            <MissedCallIcon
-              v-else-if="
-                ['incoming_call', 'outgoing_call'].includes(
-                  activity.activity_type,
-                ) && activity.status == 'No Answer'
-              "
-              class="text-red-600"
-            />
-            <DeclinedCallIcon
-              v-else-if="
-                ['incoming_call', 'outgoing_call'].includes(
-                  activity.activity_type,
-                ) && activity.status == 'Busy'
-              "
-            />
-            <component
-              v-else
-              :is="activity.icon"
-              :class="
-                ['added', 'removed', 'changed'].includes(activity.activity_type)
-                  ? 'text-gray-500'
-                  : 'text-gray-800'
-              "
-            />
+              ) && activity.status == 'No Answer'
+            " class="text-red-600" />
+            <DeclinedCallIcon v-else-if="
+              ['incoming_call', 'outgoing_call'].includes(
+                activity.activity_type,
+              ) && activity.status == 'Busy'
+            " />
+            <component v-else :is="activity.icon" :class="['added', 'removed', 'changed'].includes(activity.activity_type)
+                ? 'text-gray-500'
+                : 'text-gray-800'
+              " />
           </div>
         </div>
-        <div
-          v-if="activity.activity_type == 'communication'"
-          class="pb-5 mt-px"
-        >
+        <div v-if="activity.activity_type == 'communication'" class="pb-5 mt-px">
           <EmailArea :activity="activity" :emailBox="emailBox" />
         </div>
-        <div
-          class="mb-4"
-          :id="activity.name"
-          v-else-if="activity.activity_type == 'comment'"
-        >
+        <div class="mb-4" :id="activity.name" v-else-if="activity.activity_type == 'comment'">
           <CommentArea :activity="activity" />
         </div>
-        <div
-          v-else-if="
-            activity.activity_type == 'incoming_call' ||
-            activity.activity_type == 'outgoing_call'
-          "
-          class="mb-4"
-        >
+        <div v-else-if="
+          activity.activity_type == 'incoming_call' ||
+          activity.activity_type == 'outgoing_call'
+        " class="mb-4">
           <CallArea :activity="activity" />
         </div>
         <div v-else class="mb-4 flex flex-col gap-2 py-1.5">
           <div class="flex items-center justify-stretch gap-2 text-base">
-            <div
-              v-if="activity.other_versions"
-              class="inline-flex flex-wrap gap-1.5 text-gray-800 font-medium"
-            >
+            <div v-if="activity.other_versions" class="inline-flex flex-wrap gap-1.5 text-gray-800 font-medium">
               <span>{{ activity.show_others ? __('Hide') : __('Show') }}</span>
               <span> +{{ activity.other_versions.length + 1 }} </span>
               <span>{{ __('changes from') }}</span>
               <span>{{ activity.owner_name }}</span>
-              <Button
-                class="!size-4"
-                variant="ghost"
-                @click="activity.show_others = !activity.show_others"
-              >
+              <Button class="!size-4" variant="ghost" @click="activity.show_others = !activity.show_others">
                 <template #icon>
                   <SelectIcon />
                 </template>
               </Button>
             </div>
-            <div
-              v-else
-              class="inline-flex items-center flex-wrap gap-1 text-gray-600"
-            >
+            <div v-else class="inline-flex items-center flex-wrap gap-1 text-gray-600">
               <span class="font-medium text-gray-800">
                 {{ activity.owner_name }}
               </span>
               <span v-if="activity.type">{{ __(activity.type) }}</span>
-              <span
-                v-if="activity.data.field_label"
-                class="max-w-xs truncate font-medium text-gray-800"
-              >
+              <span v-if="activity.data.field_label" class="max-w-xs truncate font-medium text-gray-800">
                 {{ __(activity.data.field_label) }}
               </span>
               <span v-if="activity.value">{{ __(activity.value) }}</span>
-              <span
-                v-if="activity.data.old_value"
-                class="max-w-xs font-medium text-gray-800"
-              >
-                <div
-                  class="flex items-center gap-1"
-                  v-if="activity.options == 'User'"
-                >
+              <span v-if="activity.data.old_value" class="max-w-xs font-medium text-gray-800">
+                <div class="flex items-center gap-1" v-if="activity.options == 'User'">
                   <UserAvatar :user="activity.data.old_value" size="xs" />
                   {{ getUser(activity.data.old_value).full_name }}
                 </div>
@@ -287,14 +159,8 @@
                 </div>
               </span>
               <span v-if="activity.to">{{ __('to') }}</span>
-              <span
-                v-if="activity.data.value"
-                class="max-w-xs font-medium text-gray-800"
-              >
-                <div
-                  class="flex items-center gap-1"
-                  v-if="activity.options == 'User'"
-                >
+              <span v-if="activity.data.value" class="max-w-xs font-medium text-gray-800">
+                <div class="flex items-center gap-1" v-if="activity.options == 'User'">
                   <UserAvatar :user="activity.data.value" size="xs" />
                   {{ getUser(activity.data.value).full_name }}
                 </div>
@@ -312,36 +178,19 @@
               </Tooltip>
             </div>
           </div>
-          <div
-            v-if="activity.other_versions && activity.show_others"
-            class="flex flex-col gap-0.5"
-          >
-            <div
-              v-for="activity in [activity, ...activity.other_versions]"
-              class="flex items-start justify-stretch gap-2 py-1.5 text-base"
-            >
+          <div v-if="activity.other_versions && activity.show_others" class="flex flex-col gap-0.5">
+            <div v-for="activity in [activity, ...activity.other_versions]"
+              class="flex items-start justify-stretch gap-2 py-1.5 text-base">
               <div class="inline-flex flex-wrap gap-1 text-gray-600">
-                <span
-                  v-if="activity.data.field_label"
-                  class="max-w-xs truncate text-gray-600"
-                >
+                <span v-if="activity.data.field_label" class="max-w-xs truncate text-gray-600">
                   {{ __(activity.data.field_label) }}
                 </span>
-                <FeatherIcon
-                  name="arrow-right"
-                  class="mx-1 h-4 w-4 text-gray-600"
-                />
+                <FeatherIcon name="arrow-right" class="mx-1 h-4 w-4 text-gray-600" />
                 <span v-if="activity.type">
                   {{ startCase(__(activity.type)) }}
                 </span>
-                <span
-                  v-if="activity.data.old_value"
-                  class="max-w-xs font-medium text-gray-800"
-                >
-                  <div
-                    class="flex items-center gap-1"
-                    v-if="activity.options == 'User'"
-                  >
+                <span v-if="activity.data.old_value" class="max-w-xs font-medium text-gray-800">
+                  <div class="flex items-center gap-1" v-if="activity.options == 'User'">
                     <UserAvatar :user="activity.data.old_value" size="xs" />
                     {{ getUser(activity.data.old_value).full_name }}
                   </div>
@@ -350,14 +199,8 @@
                   </div>
                 </span>
                 <span v-if="activity.to">{{ __('to') }}</span>
-                <span
-                  v-if="activity.data.value"
-                  class="max-w-xs font-medium text-gray-800"
-                >
-                  <div
-                    class="flex items-center gap-1"
-                    v-if="activity.options == 'User'"
-                  >
+                <span v-if="activity.data.value" class="max-w-xs font-medium text-gray-800">
+                  <div class="flex items-center gap-1" v-if="activity.options == 'User'">
                     <UserAvatar :user="activity.data.value" size="xs" />
                     {{ getUser(activity.data.value).full_name }}
                   </div>
@@ -368,9 +211,7 @@
               </div>
 
               <div class="ml-auto whitespace-nowrap">
-                <Tooltip
-                  :text="dateFormat(activity.creation, dateTooltipFormat)"
-                >
+                <Tooltip :text="dateFormat(activity.creation, dateTooltipFormat)">
                   <div class="text-sm text-gray-600">
                     {{ __(timeAgo(activity.creation)) }}
                   </div>
@@ -381,83 +222,34 @@
         </div>
       </div>
     </div>
-    <div
-      v-else
-      class="flex flex-1 flex-col items-center justify-center gap-3 text-xl font-medium "
-    >
+    <div v-else class="flex flex-1 flex-col items-center justify-center gap-3 text-xl font-medium ">
       <component :is="emptyTextIcon" class="h-[196px] w-[196px]" />
-      <span class="text-black text-center font-inter text-sm font-semibold leading-[20px]"> {{ __(emptyText.text) }}</span>
-      <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{ __(emptyText.textSub) }}</span>
+      <span class="text-black text-center font-inter text-sm font-semibold leading-[20px]"> {{ __(emptyText.text)
+        }}</span>
+      <span class="text-gray-700 text-center font-inter text-sm font-normal leading-[20px]">{{ __(emptyText.textSub)
+        }}</span>
 
-      <Button
-        v-if="title == 'Calls'"
-        :label="__('Make a Call')"
-        variant="solid"
-        class="bg-btn_primary"        
-        @click="makeCall(doc.data.mobile_no)"
-      />
-      <Button
-        v-else-if="title == 'Notes'"
-        :label="__('Write a Note Now!')"
-        @click="modalRef.showNote()"
-         variant="solid"
-        class="bg-btn_primary"  
-      />
-      <Button
-        v-else-if="title == 'Emails'"
-        :label="__('Send an Email Now!')"
-        @click="emailBox.show = true"
-         variant="solid"
-        class="bg-btn_primary"  
-      />
-      <Button
-        v-else-if="title == 'Comments'"
-        :label="__('Add a Comment Now!')"
-        @click="emailBox.showComment = true"
-         variant="solid"
-        class="bg-btn_primary"  
-      />
-      <Button
-        v-else-if="title == 'Tasks'"
-        :label="__('Create a Task Now!')"
-        @click="modalRef.showTask()"
-         variant="solid"
-        class="bg-btn_primary"  
-      />
+      <Button v-if="title == 'Calls'" :label="__('Make a Call')" variant="solid" class="bg-btn_primary"
+        @click="makeCall(doc.data.mobile_no)" />
+      <Button v-else-if="title == 'Notes'" :label="__('Write a Note Now!')" @click="modalRef.showNote()" variant="solid"
+        class="bg-btn_primary" />
+      <Button v-else-if="title == 'Emails'" :label="__('Send an Email Now!')" @click="emailBox.show = true"
+        variant="solid" class="bg-btn_primary" />
+      <Button v-else-if="title == 'Comments'" :label="__('Add a Comment Now!')" @click="emailBox.showComment = true"
+        variant="solid" class="bg-btn_primary" />
+      <Button v-else-if="title == 'Tasks'" :label="__('Create a Task Now!')" @click="modalRef.showTask()"
+        variant="solid" class="bg-btn_primary" />
     </div>
   </FadedScrollableDiv>
   <div>
-    <CommunicationArea
-      ref="emailBox"
-      v-if="['Emails', 'Comments', 'Activity'].includes(title)"
-      v-model="doc"
-      v-model:reload="reload_email"
-      :doctype="doctype"
-      @scroll="scroll"
-      @refresh="refreshActivities"
-    />
-    <WhatsAppBox
-      ref="whatsappBox"
-      v-if="title == 'WhatsApp'"
-      v-model="doc"
-      v-model:reply="replyMessage"
-      v-model:whatsapp="whatsappMessages"
-      :doctype="doctype"
-      @scroll="scroll"
-    />
+    <CommunicationArea ref="emailBox" v-if="['Emails', 'Comments', 'Activity'].includes(title)" v-model="doc"
+      v-model:reload="reload_email" :doctype="doctype" @scroll="scroll" @refresh="refreshActivities" />
+    <WhatsAppBox ref="whatsappBox" v-if="title == 'WhatsApp'" v-model="doc" v-model:reply="replyMessage"
+      v-model:whatsapp="whatsappMessages" :doctype="doctype" @scroll="scroll" />
   </div>
-  <WhatsappTemplateSelectorModal
-    v-if="whatsappEnabled"
-    v-model="showWhatsappTemplates"
-    :doctype="doctype"
-    @send="(t) => sendTemplate(t)"
-  />
-  <AllModals
-    ref="modalRef"
-    v-model="all_activities"
-    :doctype="doctype"
-    :doc="doc"
-  />
+  <WhatsappTemplateSelectorModal v-if="whatsappEnabled" v-model="showWhatsappTemplates" :doctype="doctype"
+    @send="(t) => sendTemplate(t)" />
+  <AllModals ref="modalRef" v-model="all_activities" :doctype="doctype" :doc="doc" />
 </template>
 <script setup>
 import ActivityHeader from '@/components/Activities/ActivityHeader.vue'
@@ -548,11 +340,11 @@ const props = defineProps({
   },
   updateField: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
   openEmailBox: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
   organization: {
     type: Object,
@@ -564,19 +356,19 @@ const props = defineProps({
   },
   addContact: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
   contactOptions: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
   togglePopover: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
   showContactModal: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
   _contact: {
     type: Object,
@@ -588,7 +380,7 @@ const props = defineProps({
   },
   deleteContact: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
 })
 
@@ -602,51 +394,51 @@ const all_activities =
   props.doctype === 'Contact'
     ? null
     : createResource({
-        url: 'crm.api.activities.get_activities',
-        params: { name: doc.value.data.name },
-        cache: ['activity', doc.value.data.name],
-        key: refetchKey.value,
-        auto: true,
-        transform: ([versions, calls, notes, tasks]) => {
-          if (calls?.length) {
-            calls.forEach((doc) => {
-              doc.show_recording = false
-              doc.activity_type =
-                doc.type === 'Incoming' ? 'incoming_call' : 'outgoing_call'
-              doc.duration = secondsToDuration(doc.duration)
-              if (doc.type === 'Incoming') {
-                doc.caller = {
-                  label:
-                    getContact(doc.from)?.full_name ||
-                    getLeadContact(doc.from)?.full_name ||
-                    'Unknown',
-                  image:
-                    getContact(doc.from)?.image ||
-                    getLeadContact(doc.from)?.image,
-                }
-                doc.receiver = {
-                  label: getUser(doc.receiver).full_name,
-                  image: getUser(doc.receiver).user_image,
-                }
-              } else {
-                doc.caller = {
-                  label: getUser(doc.caller).full_name,
-                  image: getUser(doc.caller).user_image,
-                }
-                doc.receiver = {
-                  label:
-                    getContact(doc.to)?.full_name ||
-                    getLeadContact(doc.to)?.full_name ||
-                    'Unknown',
-                  image:
-                    getContact(doc.to)?.image || getLeadContact(doc.to)?.image,
-                }
+      url: 'crm.api.activities.get_activities',
+      params: { name: doc.value.data.name },
+      cache: ['activity', doc.value.data.name],
+      key: refetchKey.value,
+      auto: true,
+      transform: ([versions, calls, notes, tasks]) => {
+        if (calls?.length) {
+          calls.forEach((doc) => {
+            doc.show_recording = false
+            doc.activity_type =
+              doc.type === 'Incoming' ? 'incoming_call' : 'outgoing_call'
+            doc.duration = secondsToDuration(doc.duration)
+            if (doc.type === 'Incoming') {
+              doc.caller = {
+                label:
+                  getContact(doc.from)?.full_name ||
+                  getLeadContact(doc.from)?.full_name ||
+                  'Unknown',
+                image:
+                  getContact(doc.from)?.image ||
+                  getLeadContact(doc.from)?.image,
               }
-            })
-          }
-          return { versions, calls, notes, tasks }
-        },
-      })
+              doc.receiver = {
+                label: getUser(doc.receiver).full_name,
+                image: getUser(doc.receiver).user_image,
+              }
+            } else {
+              doc.caller = {
+                label: getUser(doc.caller).full_name,
+                image: getUser(doc.caller).user_image,
+              }
+              doc.receiver = {
+                label:
+                  getContact(doc.to)?.full_name ||
+                  getLeadContact(doc.to)?.full_name ||
+                  'Unknown',
+                image:
+                  getContact(doc.to)?.image || getLeadContact(doc.to)?.image,
+              }
+            }
+          })
+        }
+        return { versions, calls, notes, tasks }
+      },
+    })
 
 const showWhatsappTemplates = ref(false)
 
@@ -694,7 +486,9 @@ function sendTemplate(template) {
     auto: true,
   })
 }
-
+const handleEmailBox = () => {
+  emailBox.show = true
+}
 const replyMessage = ref({})
 
 function get_activities() {
@@ -779,28 +573,28 @@ function update_activities_details(activity) {
 
 const emptyText = computed(() => {
   let text = 'No Activities Yet'
-  let textSub='Start adding your thoughts and ideas by clicking New Note'
+  let textSub = 'Start adding your thoughts and ideas by clicking New Note'
   if (props.title == 'Emails') {
     text = 'No Email Communications Yet'
-    textSub='Your voice matters! Keep conversations flowing and make every message count.'
+    textSub = 'Your voice matters! Keep conversations flowing and make every message count.'
   } else if (props.title == 'Comments') {
     text = 'No Comments Yet'
-    textSub='Great teams run on great communication! Share insights and keep everyone aligned.'
+    textSub = 'Great teams run on great communication! Share insights and keep everyone aligned.'
   } else if (props.title == 'Calls') {
     text = 'No Call Logs'
   } else if (props.title == 'Notes') {
     text = 'No Notes Yet'
-    textSub='Brilliant ideas deserve to be captured! Write down key takeaways and never miss a beat.'
+    textSub = 'Brilliant ideas deserve to be captured! Write down key takeaways and never miss a beat.'
   } else if (props.title == 'Tasks') {
     text = 'No Tasks Yet'
-    textSub='Action beats intention! Set tasks, track progress, and make things happen.'
+    textSub = 'Action beats intention! Set tasks, track progress, and make things happen.'
   } else if (props.title == 'WhatsApp') {
     text = 'No WhatsApp Messages'
   } else if (props.title == 'Deals') {
     text = 'No Deals'
-    textSub='Your next big deal is out there - start tracking, negotiating, and closing like a pro!'
+    textSub = 'Your next big deal is out there - start tracking, negotiating, and closing like a pro!'
   }
-  return {text,textSub}
+  return { text, textSub }
 })
 
 const emptyTextIcon = computed(() => {
@@ -852,7 +646,7 @@ const emailBox = ref(null)
 const whatsappBox = ref(null)
 
 watch([reload, reload_email], ([reload_value, reload_email_value]) => {
-  if ((reload_value || reload_email_value )&&title!=='Details') {
+  if ((reload_value || reload_email_value) && title !== 'Details') {
     all_activities.reload()
     reload.value = false
     reload_email.value = false
