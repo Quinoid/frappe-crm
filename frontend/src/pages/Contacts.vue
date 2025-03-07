@@ -27,6 +27,9 @@
     v-model:updatedPageCount="updatedPageCount"
     doctype="Contact"
     :filters="{ user: ['=', ''] }"
+     :options="{
+      allowedViews: ['list'],
+    }"
   />
   <ContactsListView
     ref="contactsListView"
@@ -81,21 +84,20 @@
 
 <script setup>
 import CustomActions from '@/components/CustomActions.vue'
-import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
+import ContactEmpty from '@/components/Icons/ContactEmpty.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
 import ContactsListView from '@/components/ListViews/ContactsListView.vue'
 import ContactModal from '@/components/Modals/ContactModal.vue'
 import QuickEntryModal from '@/components/Modals/QuickEntryModal.vue'
 import ViewBreadcrumbs from '@/components/ViewBreadcrumbs.vue'
 import ViewControls from '@/components/ViewControls.vue'
-import ContactEmpty from '@/components/Icons/ContactEmpty.vue'
 import { organizationsStore } from '@/stores/organizations.js'
+import { usersStore } from '@/stores/users'
 import { dateFormat, dateTooltipFormat, timeAgo } from '@/utils'
 import { call } from 'qbs-vue-ui'
-import { computed, ref,onMounted } from 'vue'
-import { createToast } from '../utils/index'
-import { usersStore } from '@/stores/users'
+import { computed, onMounted, ref } from 'vue'
 import SearchEmptyComponent from '../components/SearchEmptyComponent.vue'
+import { createToast } from '../utils/index'
 const { getOrganization } = organizationsStore()
 const showContactModal = ref(false)
 const showQuickEntryModal = ref(false)
