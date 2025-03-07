@@ -90,7 +90,7 @@
                 <PhoneIcon class="h-4 w-4 text-primary_text" />
               </Button>
             </Tooltip>
-            <Tooltip :text="__('Send an email')">
+                <Tooltip :text="__('Send an email')" :disabled="tab.name === 'Notes'||tab.name === 'Tasks'">
               <Button class="h-7 w-7">
                 <Email2Icon
                   class="h-4 w-4 text-primary_text"

@@ -28,7 +28,6 @@
               'CRM Deal',
               'Contact',
               'CRM Organization',
-              'Address',
             ]"
             @change="reload"
           />

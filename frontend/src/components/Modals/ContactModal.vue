@@ -63,6 +63,8 @@
             class="border-t pt-4"
             :data="_contact"
           />
+           <ErrorMessage class="mt-4" v-if="error" :message="__(error)" />
+
         </div>
       </div>
       <div v-if="!detailMode" class="px-4 pb-7 pt-4 sm:px-6">
@@ -118,6 +120,7 @@ const props = defineProps({
 })
 
 const { isManager } = usersStore()
+const error = ref(null)
 
 const router = useRouter()
 const show = defineModel()
@@ -136,6 +139,7 @@ async function updateContact() {
     return
   }
 
+
   const values = { ..._contact.value }
 
   let name = await callSetValue(values)
@@ -144,6 +148,7 @@ async function updateContact() {
 }
 
 async function callSetValue(values) {
+
   const d = await call('frappe.client.set_value', {
     doctype: 'Contact',
     name: props.contact.data.name,
@@ -179,7 +184,10 @@ async function callInsertDoc() {
     _contact.value.phone_nos = [{ phone: _contact.value.actual_mobile_no }]
     delete _contact.value.actual_mobile_no
   }
-
+if (!_contact.value.first_name || _contact.value.first_name === "") {
+    error.value = __('First Name is mandatory')
+    return
+  }
   const doc = await call('frappe.client.insert', {
     doc: {
       doctype: 'Contact',

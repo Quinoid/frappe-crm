@@ -62,28 +62,28 @@
 </template>
 
 <script setup>
+import Activities from '@/components/Activities/Activities.vue'
 import Icon from '@/components/Icon.vue'
-import LayoutHeader from '@/components/LayoutHeader.vue'
 import DealsIcon from '@/components/Icons/DealsIcon.vue'
-import { getView } from '@/utils/view'
+import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
+import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
+import LayoutHeader from '@/components/LayoutHeader.vue'
 import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
+import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import { globalStore } from '@/stores/global.js'
+import { statusesStore } from '@/stores/statuses'
+import { usersStore } from '@/stores/users'
+import { createToast } from '@/utils'
+import { getView } from '@/utils/view'
 import {
   Breadcrumbs,
+  Dropdown,
   Tabs,
   createResource,
   usePageMeta,
-  Dropdown,
 } from 'qbs-vue-ui'
-import { ref, computed, h, onMounted } from 'vue'
+import { computed, h, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { createToast } from '@/utils'
-import Activities from '@/components/Activities/Activities.vue'
-import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
-import { statusesStore } from '@/stores/statuses'
-import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import { usersStore } from '@/stores/users'
-import MultipleAvatar from '@/components/MultipleAvatar.vue'
 const { $dialog } = globalStore()
 const { statusOptions, getContactStatus } = statusesStore()
 const props = defineProps({
@@ -125,9 +125,9 @@ onMounted(() => {
   if (contact.data) return
   contact.fetch()
 })
-console.log(contact)
 function updateContact(fieldname, value, callback) {
   value = Array.isArray(fieldname) ? '' : value
+
 
   createResource({
     url: 'frappe.client.set_value',

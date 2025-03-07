@@ -176,6 +176,10 @@ const dealStatuses = computed(() => {
 })
 
 function createDeal() {
+ if ((deal?.interested_services_for_deal?.length ?? 0) > 0 || (deal?.interested_services_for_lead?.length ?? 0) > 0) {
+  // Proceed with logic
+
+
   if (deal.website && !deal.website.startsWith('http')) {
     deal.website = 'https://' + deal.website
   }
@@ -243,7 +247,12 @@ function createDeal() {
       error.value = err.messages.join('\n')
     },
   })
+
+  } else {
+  error.value = __('Please select at least one interested service');
+  return;
 }
+ }
 
 const showQuickEntryModal = defineModel('quickEntry')
 

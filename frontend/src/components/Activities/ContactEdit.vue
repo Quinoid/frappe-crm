@@ -83,7 +83,6 @@
                   <PhoneIcon class="h-4 w-4 text-primary_text" />
                 </Button>
               </Tooltip>
-              <Tooltip :text="__('Send an email')">
                 <Button class="h-7 
                  button-link-class !pl-0"                 
                  :class="{ '!pl-0': !callEnabled }" 
@@ -98,7 +97,6 @@
                   />
                     <span>{{doc.data.email&&doc.data.email!==""?doc.data.email:'- -'}}</span>
                 </Button>
-              </Tooltip>
             
             </div>
             <template v-if="i == 0 && isManager()">
