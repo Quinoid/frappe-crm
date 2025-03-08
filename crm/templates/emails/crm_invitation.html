@@ -1,55 +1,83 @@
+<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Welcome to {{ title }} CRM</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;600;700;900&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;600;700;900&display=swap" rel="stylesheet">
     <style>
-      * {
-        font-family: 'Inter', sans-serif !important;
-        box-sizing: border-box;
-      }
-      p {
-        font-size: 16px;
-        color: #1f272e;
-      }
-      html, body {
-        width: 100%;
-        display: block;
-        overflow-x: hidden;
-        background: #f8f8f8;
-      }
-      @media(max-width: 634px) {
-        .resp_padding {
-            padding: 20px !important;
+        * {
+            font-family: 'Inter', sans-serif !important;
+            box-sizing: border-box;
         }
-        .resp_borderbox {
-            padding: 16px !important;
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f8f8f8;
+            text-align: center;
         }
-        p {
-            font-size: 12px !important;
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-      }
+        .header {
+            background: linear-gradient(45deg, #2e1b46, #271b2d, #261929, #462245, #83327d);
+            padding: 20px;
+            color: #fff;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            text-align: left;
+        }
+        .content p {
+            font-size: 14px;
+            color: #222;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            background: #2490ef !important;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            .content {
+                padding: 15px;
+            }
+            .content p {
+                font-size: 12px;
+            }
+            .btn {
+                font-size: 12px;
+                padding: 8px 15px;
+            }
+        }
     </style>
-  </head>
-  <body style="margin: 0; padding: 0; background: #0c113305;">
-    <div style="width: 604px; max-width: calc(100% - 30px); border-radius: 8px 8px 0 0; margin: 10px auto 0; background-color: #480043;">
-      <div style="text-align: center; background: linear-gradient(45deg, rgb(46,27,70) 0%, rgb(39,27,45) 25%, rgb(38,25,41) 53%, rgb(70,34,69) 81%, rgb(131,50,125) 100%); border-radius: 8px 8px 0 0; background-color: #480043;">
-      </div>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Welcome to {{ title }} CRM</h2>
+        </div>
+        <div class="content">
+            <p>Hello {{ email }},</p>
+            <p>We’re excited to have you join {{ title }} CRM!</p>
+            <p>Click the link below to access your portal and start exploring:</p>
+            <p><a href="{{ invite_link }}" class="btn">👉 Join CRM</a></p>
+            <p>Set your password in the Settings Menu from the User Menu at the top left.</p>
+            <p>If you need any help, our support team is here for you.</p>
+            <p>For a step-by-step guide, check out our <a href="{{ invite_link }}">User Guide</a>.</p>
+            <p>Looking forward to seeing you inside!</p>
+        </div>
     </div>
-    <div class="resp_padding" style="position: relative; width: 604px; max-width: calc(100% - 30px); margin: 0 auto 10px; border-radius: 0 0 8px 8px; padding: 1rem; box-sizing: border-box;">
-      <div class="resp_borderbox" style="width: 100%; display: inline-block; padding: 24px; text-align: left; border: 1px solid #E6E8EA; border-radius: 8px; margin-bottom: 20px; background: #FFFFFF;">
-        <h2 style="text-align: center; color: #480043; font-size: 20px; margin-bottom: 20px;">Welcome to {{ title }} CRM</h2>
-        <p style="font-size: 12px; line-height: 20px; color: #222222; margin: 0 0 12px;">Hello {{ email }},</p>
-        <p style="font-size: 12px; line-height: 20px; color: #222222; margin: 0 0 12px;">We’re excited to have you join {{ title }} CRM!</p>
-        <p style="font-size: 12px; line-height: 20px; color: #222222; margin: 0 0 12px;">To get started, click the link below to access your portal and begin exploring:</p>
-        <p style="margin: 0 0 12px;">
-          <a href="{{ invite_link }}" style="color: #fff; text-decoration: none; padding: 8px 20px; font-size: 13px; border: 1px solid transparent; border-radius: 6px; background-color: #2490ef; display: inline-block; line-height: 20px;">👉 Join CRM</a>
-        </p>
-        <p style="font-size: 12px; line-height: 20px; color: #222222; margin: 0 0 12px;">You'll need to set your password from the Settings Menu, which you can find in the User Menu at the top left of the platform.</p>
-        <p style="font-size: 12px; line-height: 20px; color: #222222; margin: 0 0 12px;">If you have any questions or need any help, our support team is here for you.</p>
-        <p style="font-size: 12px; line-height: 20px; color: #222222; margin: 0;">Looking forward to seeing you inside!</p>
-      </div>
-    </div>
-  </body>
+</body>
 </html>
