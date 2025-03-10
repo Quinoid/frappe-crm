@@ -8,6 +8,7 @@ from crm.fcrm.doctype.crm_form_script.crm_form_script import get_form_script
 def get_lead(name):
     Lead = frappe.qb.DocType("CRM Lead")
     CustomLeadService = frappe.qb.DocType("Custom Lead Service")
+    CustomLeadTags = frappe.qb.DocType("Custom Lead Tags")
 
     # Query the CRM Lead details
     query = frappe.qb.from_(Lead).select("*").where(Lead.name == name).limit(1)
@@ -29,6 +30,16 @@ def get_lead(name):
     
     # Add the interested services to the lead data
     lead["interested_services_for_lead"] = [service["link_field"] for service in services]
+
+    # Fetch the custom_tags from the Custom Lead Tags table
+    tags_query = (
+        frappe.qb.from_(CustomLeadTags)
+        .select(CustomLeadTags.link_field) 
+        .where(CustomLeadTags.parent == name)
+    )
+    tags = tags_query.run(as_dict=True)
+    
+    lead["custom_tags"] = [tag["link_field"] for tag in tags]
     # Additional fields
     lead["fields_meta"] = get_fields_meta("CRM Lead")
     lead["_form_script"] = get_form_script('CRM Lead')

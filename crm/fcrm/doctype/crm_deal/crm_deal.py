@@ -232,6 +232,18 @@ class CRMDeal(Document):
             #     'width': '10rem',
             # },
             {
+                'label': 'Interested Services',
+                'type': 'Table MultiSelect',
+                'key': 'interested_services_for_lead',
+                'width': '8rem',
+            },
+            {
+                'label': 'Tags',
+                'type': 'Table MultiSelect',
+                'key': 'custom_tags',
+                'width': '8rem',
+            },
+            {
                 'label': 'Last Modified',
                 'type': 'Datetime',
                 'key': 'modified',
