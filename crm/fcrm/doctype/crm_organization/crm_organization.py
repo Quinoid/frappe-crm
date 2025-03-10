@@ -52,6 +52,12 @@ class CRMOrganization(Document):
 					'key': 'city',
 					'width': '14rem',
 				},
+				{
+	                'label': 'Tags',
+	                'type': 'Text',
+	                'key': 'custom_tags_data',
+	                'width': '8rem',
+	            },
 				# {
 				# 	'label': 'Annual Revenue',
 				# 	'type': 'Currency',
@@ -79,6 +85,7 @@ class CRMOrganization(Document):
 				"industry",
 				"currency",
 				"annual_revenue",
+				"custom_tags_data"
 				"modified",
 			]
 			return {'columns': columns, 'rows': rows}

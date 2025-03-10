@@ -233,14 +233,14 @@ class CRMDeal(Document):
             # },
             {
                 'label': 'Interested Services',
-                'type': 'Table MultiSelect',
-                'key': 'interested_services_for_lead',
+                'type': 'Text',
+                'key': 'interested_services',
                 'width': '8rem',
             },
             {
                 'label': 'Tags',
-                'type': 'Table MultiSelect',
-                'key': 'custom_tags',
+                'type': 'Text',
+                'key': 'custom_tags_data',
                 'width': '8rem',
             },
             {
@@ -271,6 +271,8 @@ class CRMDeal(Document):
             "first_responded_on",
             "modified",
             "_assign",
+            "interested_services",
+            "custom_tags_data"
         ]
         return {'columns': columns, 'rows': rows}
 

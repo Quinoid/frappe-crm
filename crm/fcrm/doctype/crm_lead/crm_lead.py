@@ -378,17 +378,17 @@ class CRMLead(Document):
 			# 	'options':'User'
 			# },
 			{
-				'label': 'Interested Services',
-				'type': 'Table MultiSelect',
-				'key': 'interested_services_for_lead',
-				'width': '8rem',
-			},
-			{
-				'label': 'Tags',
-				'type': 'Table MultiSelect',
-				'key': 'custom_tags',
-				'width': '8rem',
-			},
+                'label': 'Interested Services',
+                'type': 'Text',
+                'key': 'interested_services',
+                'width': '8rem',
+            },
+            {
+                'label': 'Tags',
+                'type': 'Text',
+                'key': 'custom_tags_data',
+                'width': '8rem',
+            },
 			{
 				'label': 'Last Modified',
 				'type': 'Datetime',
@@ -418,7 +418,8 @@ class CRMLead(Document):
 			"modified",
 			"_assign",
 			"image",
-			"interested_services_for_lead"
+			"interested_services",
+            "custom_tags_data"
 		]
 		return {'columns': columns, 'rows': rows}
 
