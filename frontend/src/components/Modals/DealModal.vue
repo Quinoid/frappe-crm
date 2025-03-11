@@ -205,6 +205,13 @@ function createDeal() {
         }
       })
   }
+    if (request.custom_tags&&request.custom_tags.length > 0) {
+    request.custom_tags = deal.custom_tags.map((s) => {
+      return {
+        link_field: s,
+      }
+    })
+  }
   createResource({
     url: 'crm.fcrm.doctype.crm_deal.crm_deal.create_deal',
     params: { args: request },

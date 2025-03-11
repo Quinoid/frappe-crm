@@ -175,6 +175,13 @@ async function reloadContactData() {
   }
 }
 async function callInsertDoc() {
+   if (_contact.value.custom_tags && _contact.value.custom_tags.length > 0) {
+     _contact.value.custom_tags = _contact.value.custom_tags.map((s) => {
+      return {
+        link_field: s,
+      }
+    })
+  }
   if (_contact.value.email_id) {
     _contact.value.email_ids = [{ email_id: _contact.value.email_id }]
     delete _contact.value.email_id
@@ -458,6 +465,7 @@ async function setAsPrimary(field, value) {
     })
   }
 }
+
 
 async function createNew(field, value) {
   let d = await call('crm.api.contact.create_new', {

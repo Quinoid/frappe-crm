@@ -141,6 +141,13 @@ function createNewLead() {
       },
     )
   }
+  if (request.custom_tags&&request.custom_tags.length > 0) {
+    request.custom_tags = lead.custom_tags.map((s) => {
+      return {
+        link_field: s,
+      }
+    })
+  }
   createLead.submit(request, {
     validate() {
       error.value = null

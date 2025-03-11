@@ -710,7 +710,8 @@ function updateField(name, value, callback) {
   let request = value
   if (
     (name === 'interested_services_for_lead' && value) ||
-    (name === 'interested_services_for_deal' && value)
+    (name === 'interested_services_for_deal' && value)||
+    (name === 'custom_tags'&&value)
   ) {
     request = value?.map((item) => {
       return {
