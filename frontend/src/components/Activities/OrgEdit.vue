@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="filteredSections"
-    class="flex flex-1 flex-col justify-between overflow-hidden p-4 w-4/5 gap-4"
+    class="flex flex-1 flex-col justify-between overflow-hidden p-4 lg:w-4/5 w-full gap-4"
   >
     <div class="flex flex-col overflow-y-auto shadow-sm rounded-md bg-white">
       <div
@@ -117,9 +117,21 @@
               </Button>
             </template>
           </div>
+           <div class=" lg:hidden">  
+        <Button
+              :label="__('Delete')"
+              theme="red"
+              size="sm"
+              @click="deleteContact"
+            >
+              <template #prefix>
+                <FeatherIcon name="trash-2" class="h-4 w-4" />
+              </template>
+            </Button>
+            </div>
         </div>
       </div>
-       <div>  
+       <div class="hidden lg:block">  
         <Button
               :label="__('Delete')"
               theme="red"

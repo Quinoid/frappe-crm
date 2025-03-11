@@ -2,7 +2,7 @@
   <ActivityHeader v-if="title != 'Details' && title != 'Deals'" v-model="tabIndex"
     v-model:showWhatsappTemplates="showWhatsappTemplates" :tabs="tabs" :title="title" :doc="doc" :emailBox="emailBox"
     :whatsappBox="whatsappBox" :modalRef="modalRef" />
-  <FadedScrollableDiv :maskHeight="30" class="flex flex-col flex-1 overflow-y-auto">
+  <FadedScrollableDiv :maskHeight="30" class="flex flex-col flex-1 overflow-y-auto bg-maingradient">
     <div v-if="all_activities?.loading"
       class="flex flex-1 flex-col items-center justify-center gap-3 text-xl font-medium text-gray-500">
       <LoadingIndicator class="h-6 w-6" />

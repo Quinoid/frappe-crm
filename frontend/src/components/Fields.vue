@@ -246,6 +246,9 @@
               class="bg-white"
             />
           </div>
+          <div class="pt-1">
+          <ErrorMessage v-if="errors?.[field.name]"  :message="errors[field.name]" />
+          </div>
         </div>
       </div>
     </div>
@@ -269,7 +272,9 @@ const { getUser } = usersStore()
 const props = defineProps({
   sections: Array,
   data: Object,
+  errors:Object
 })
+console.log(props.errors)
 </script>
 
 <style scoped>

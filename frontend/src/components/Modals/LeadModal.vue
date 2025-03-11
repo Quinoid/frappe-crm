@@ -23,8 +23,8 @@
           </div>
         </div>
         <div>
-          <Fields v-if="sections.data" :sections="sections.data" :data="lead" />
-          <ErrorMessage class="mt-4" v-if="error" :message="__(error)" />
+          <Fields v-if="sections.data" :sections="sections.data" :data="lead" :errors="fieldErrors" :key="JSON.stringify(fieldErrors)" />
+          <ErrorMessage class="mt-4" v-if="error && Object.keys(fieldErrors).length === 0" :message="__(error)" />
         </div>
       </div>
       <div class="px-4 pb-7 pt-4 sm:px-6">
@@ -52,6 +52,7 @@ import { capture } from '@/telemetry'
 import { createResource } from 'qbs-vue-ui'
 import { computed, onMounted, ref, reactive, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
+import { handleValidateForm } from '../../utils/index'
 
 const props = defineProps({
   defaults: Object,
@@ -63,6 +64,7 @@ const { getLeadStatus, statusOptions } = statusesStore()
 const show = defineModel()
 const router = useRouter()
 const error = ref(null)
+const fieldErrors = ref({})
 const isLeadCreating = ref(false)
 
 const sections = createResource({
@@ -129,6 +131,8 @@ function createNewLead() {
     lead.website = 'https://' + lead.website
   }
   let request = { ...lead }
+  const errors = handleValidateForm(sections?.data, request)
+  fieldErrors.value = errors
   if (
     request.interested_services_for_lead &&
     request.interested_services_for_lead.length > 0
