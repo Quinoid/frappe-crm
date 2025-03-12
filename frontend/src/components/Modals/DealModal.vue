@@ -179,7 +179,9 @@ const dealStatuses = computed(() => {
 function createDeal() {
   const errors = handleValidateForm(sections?.data, deal)
   fieldErrors.value = errors
-
+ if(errors&&Object.keys(errors).length > 0) {
+    return;
+  }
  if ((deal?.interested_services_for_deal?.length ?? 0) > 0 || (deal?.interested_services_for_lead?.length ?? 0) > 0) {
   // Proceed with logic
 

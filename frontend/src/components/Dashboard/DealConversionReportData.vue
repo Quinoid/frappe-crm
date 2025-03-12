@@ -3,7 +3,7 @@
     class="bg-white shadow-sm grid lg:col-span-4 col-span-6  rounded-lg p-6 sm:w-full w-full overflow-y-auto"
   >
    
-    <div class="flex justify-between items-center mb-4 ">
+    <div class="flex flex-col lg:flex-row lg:items-center gap-2  justify-between mb-4">
       <div class="flex gap-2 items-center">
       
       <div class="" >
@@ -16,7 +16,7 @@
         </div>
      
     </div>
-      <div class="flex gap-2 items-center">
+      <div class="flex gap-2 lg:items-center">
      <DateRangePicker
         v-model="filterData"
         variant="subtle"

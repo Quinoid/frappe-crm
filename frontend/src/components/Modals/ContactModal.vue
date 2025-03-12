@@ -179,7 +179,10 @@ async function reloadContactData() {
 }
 async function callInsertDoc() {
     const errors = handleValidateForm(sections?.data, _contact.value)
-    fieldErrors.value = errors
+  fieldErrors.value = errors
+     if(errors&&Object.keys(errors).length > 0) {
+    return;
+  }
    if (_contact.value.custom_tags && _contact.value.custom_tags.length > 0) {
      _contact.value.custom_tags = _contact.value.custom_tags.map((s) => {
       return {

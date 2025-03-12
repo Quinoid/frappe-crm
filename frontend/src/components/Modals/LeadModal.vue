@@ -133,6 +133,9 @@ function createNewLead() {
   let request = { ...lead }
   const errors = handleValidateForm(sections?.data, request)
   fieldErrors.value = errors
+   if(errors&&Object.keys(errors).length > 0) {
+    return;
+  }
   if (
     request.interested_services_for_lead &&
     request.interested_services_for_lead.length > 0

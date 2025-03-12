@@ -117,7 +117,7 @@
               </Button>
             </template>
           </div>
-           <div class=" lg:hidden">  
+           <div class=" lg:hidden !pl-0">  
         <Button
               :label="__('Delete')"
               theme="red"

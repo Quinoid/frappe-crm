@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white shadow-sm grid col-span-4  rounded-lg p-6 sm:w-full w-full overflow-y-auto">
 
-    <div class="flex justify-between items-center mb-4 ">
+    <div class="flex  flex-col lg:flex-row lg:items-center gap-2 justify-between  mb-4 ">
       <div class="flex gap-2 items-center">
         <div class="text-lg font-medium  text-gray-900">
           <h3 class=" flex gap-1 text-black font-inter text-base not-italic font-semibold leading-normal"
@@ -14,7 +14,7 @@
     
 
       </div>
-      <div class="flex gap-2 items-center">
+      <div class="flex gap-2 lg:items-center">
          <DateRangePicker v-model="filterData" variant="subtle" class="!w-[230px]" placeholder="Placeholder"
           :disabled="false" />
           <div class="flex gap-2 graph-actions ">

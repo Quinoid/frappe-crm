@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="fieldsLayout.data"
-    class="flex flex-1 flex-col justify-between overflow-hidden p-4 w-4/5 gap-4"
+    class="flex flex-1 flex-col justify-between overflow-hidden p-4 lg:w-4/5 w-full gap-4"
   >
     <div class="flex flex-col overflow-y-auto shadow-sm rounded-md bg-white">
       <div

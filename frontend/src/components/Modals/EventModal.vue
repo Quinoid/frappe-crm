@@ -61,8 +61,9 @@
             v-else-if="filteredSections"
             :sections="filteredSections"
             :data="_event"
+            :errors="fieldErrors"
+            :key="JSON.stringify(fieldErrors)"
           />
-          <ErrorMessage class="mt-4" v-if="error" :message="__(error)" />
         </div>
       </div>
       <div v-if="!detailMode" class="px-4 pb-7 pt-4 sm:px-6">
@@ -99,6 +100,7 @@ import { call, createResource } from 'qbs-vue-ui'
 import { ref, nextTick, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { createToast } from '@/utils'
+import { handleValidateForm } from '@/utils/index'
 
 const props = defineProps({
   event: {
@@ -120,7 +122,7 @@ const props = defineProps({
 })
 
 const { isManager } = usersStore()
-
+const fieldErrors = ref({})
 const router = useRouter()
 const show = defineModel()
 
@@ -134,18 +136,13 @@ async function updateContact() {
     show.value = false
     return
   }
-  if (!_event.value.starts_on) {
-    error.value = __('Start Date is mandatory')
-    return error.value
+    const values = { ..._event.value }
+
+ const errors = handleValidateForm(sections?.data, values)
+  fieldErrors.value = errors
+  if(errors&&Object.keys(errors).length > 0) {
+    return;
   }
-  if (!_event.value.subject) {
-    error.value = __('Subject is mandatory')
-    return error.value
-  }
-  if (!_event.value.event_category) {
-    error.value = __('Event Category is mandatory')
-  }
-  const values = { ..._event.value }
 
   if (
     _event.value.custom_participant &&
@@ -182,16 +179,13 @@ async function callSetValue(values) {
 async function callInsertDoc() {
   error.value = null
   let data = { ..._event.value }
-  if (!_event.value.starts_on) {
-    error.value = __('Start Date is mandatory')
-    return error.value
-  }
-  if (!_event.value.subject) {
-    error.value = __('Subject is mandatory')
-    return error.value
-  }
  
 
+  const errors = handleValidateForm(sections?.data, data)
+  fieldErrors.value = errors
+  if(errors&&Object.keys(errors).length > 0) {
+    return;
+  }
   if (
     _event.value.custom_participant &&
     _event.value.custom_participant?.length > 0

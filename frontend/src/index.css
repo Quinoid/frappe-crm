@@ -37,6 +37,7 @@
 }
 .separator-grid {
   height: 35px;
+  min-height: 35px;
 }
 
 .separator-grid > div {

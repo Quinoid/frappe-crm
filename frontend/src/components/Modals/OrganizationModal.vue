@@ -179,6 +179,9 @@ async function callSetValue(values) {
 async function callInsertDoc() {
   const errors = handleValidateForm(sections?.data, _organization.value)
   fieldErrors.value = errors
+   if(errors&&Object.keys(errors).length > 0) {
+    return;
+  }
   errorMessage.value = ''
   if (!validate()) return
      if (_organization.value.custom_tags&&_organization.value.custom_tags.length > 0) {
