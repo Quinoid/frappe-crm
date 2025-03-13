@@ -37,6 +37,38 @@
       </Dropdown>
     </template>
   </LayoutHeader>
+    <div
+    v-if="organization.data"
+    class="flex h-12 items-center justify-between gap-2 border-b px-3 py-2.5 lg:hidden md:hidden"
+  >
+         <component
+        :is="organization.data._assignedTo?.length == 1 ? 'Button' : 'div'"
+      >
+        <MultipleAvatar
+          :avatars="organization.data._assignedTo"
+          @click="showAssignmentModal = true"
+        />
+      </component>
+      <Dropdown
+        :options="statusOptions('organization', updateField, customStatuses)"
+      >
+        <template #default="{ open }">
+          <Button
+            :label="organization.data.organization_status"
+ :class="getOrganizationStatus(organization.data.organization_status).colorClass"          >
+            <template #prefix>
+              <IndicatorIcon />
+            </template>
+            <template #suffix>
+              <FeatherIcon
+                :name="open ? 'chevron-up' : 'chevron-down'"
+                class="h-4"
+              />
+            </template>
+          </Button>
+        </template>
+      </Dropdown>
+  </div>
   <div v-if="organization.data" class="flex h-full overflow-hidden">
     <Tabs v-model="tabIndex" :tabs="tabs">
       <template #tab="{ tab, selected }">

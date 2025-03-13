@@ -1,5 +1,5 @@
 <template>
-  <div class="flex border-b pr-3">
+  <div class="flex border-b pr-3 bg-white">
     <div class="z-20 -mr-4 ml-1 flex items-center justify-center">
       <Button variant="ghosted" @click="sidebarOpened = !sidebarOpened">
         <FeatherIcon name="menu" class="size-4" />

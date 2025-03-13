@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="filteredSections"
-    class="flex flex-1 flex-col justify-between overflow-hidden p-4 lg:w-4/5 w-full gap-4"
+    class="flex flex-1 flex-col justify-between overflow-hidden  p-2 lg:p-4 md:p-4  lg:w-4/5 w-full  gap-1 lg:gap-4 md:gap-4"
   >
     <div class="flex flex-col overflow-y-auto shadow-sm rounded-md bg-white">
       <div

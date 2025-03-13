@@ -54,10 +54,10 @@
             :showContactModal="showContactModal" :_contact="_contact" />
         </div>
       </div>
-      <div v-else-if="title == 'Deals'" class="pb-3 overflow-x-auto sm:w-full w-max">
+      <div v-else-if="title == 'Deals'" class="pb-3 overflow-x-auto sm:w-full  lg:w-max md:w-max">
         <ContactDeals :tab="tab" :contactId="contactId" />
       </div>
-      <div v-else-if="title == 'Tasks'" class="px-3 pb-3 sm:px-10 sm:pb-5 overflow-x-auto sm:w-full w-max">
+      <div v-else-if="title == 'Tasks'" class="px-3 pb-3 sm:px-10 sm:pb-5 overflow-x-auto sm:w-full lg:w-max md:w-max">
         <TaskArea v-model="all_activities" v-model:doc="doc" :modalRef="modalRef" :tasks="activities"
           :doctype="doctype" />
       </div>
