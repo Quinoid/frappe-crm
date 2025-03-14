@@ -36,7 +36,7 @@
           class=""
           :type="field.type"
           v-model="data[field.name]"
-          @change.stop="emit('update', field.name, $event.target.checked)"
+          @change.stop="handleChange( field, $event.target.checked)"
           :disabled="Boolean(field.read_only)"
         />
         <div v-else-if="field.type === 'Dropdown'">
@@ -103,7 +103,7 @@
           :value="data[field.name]"
           :placeholder="field.placeholder"
           :debounce="500"
-          @change.stop="emit('update', field.name, $event.target.value)"
+          @change.stop="handleChange( field, $event.target.value)"
         />
         <FormControl
           v-else-if="field.type === 'select'"
@@ -112,14 +112,14 @@
           :value="data[field.name]"
           :options="field.options"
           :debounce="500"
-          @change.stop="emit('update', field.name, $event.target.value)"
+          @change.stop="handleChange( field, $event.target.value)"
         />
         <Link
           v-else-if="['lead_owner', 'deal_owner'].includes(field.name)"
           class="form-control"
           :value="data[field.name] && getUser(data[field.name]).full_name"
           doctype="User"
-          @change="(data) => emit('update', field.name, data)"
+          @change="(data) => handleChange( field, data)"
           :placeholder="'Select' + ' ' + field.label + '...'"
           :hideMe="true"
         >
@@ -150,7 +150,7 @@
             :data="data"
             :label="field.label"
             :validate="validateEmail"
-            @change="(data) => emit('update', field.name, data)"
+            @change="(data) => handleChange(field, data)"
             :custom_option="field.custom_option"
             :datatype="field.data_type"
             :editableOnClick="true"
@@ -176,7 +176,7 @@
           :value="data[field.name]"
           :doctype="field.doctype"
           :placeholder="field.placeholder"
-          @change="(data) => emit('update', field.name, data)"
+          @change="(data) => handleChange( field, data)"
           :onCreate="field.create"
         />
 
@@ -187,14 +187,17 @@
           :value="data[field.name]"
           :placeholder="field.placeholder"
           :debounce="500"
-          @change.stop="emit('update', field.name, $event.target.value)"
+          @change.stop="handleChange(field, $event.target.value)"
         />
+              <ErrorMessage class="mt-1 ml-1" v-if="fieldErrors[field.name]" :message="fieldErrors[field.name]" />
+
       </div>
       <ArrowUpRightIcon
         v-if="field.type === 'link' && field.link && data[field.name]"
         class="h-4 w-4 shrink-0 cursor-pointer text-gray-600 hover:text-gray-800"
         @click="field.link(data[field.name])"
       />
+      
     </div>
   </FadedScrollableDiv>
 </template>
@@ -206,12 +209,13 @@ import Link from '@/components/Controls/Link.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import { usersStore } from '@/stores/users'
 import { Tooltip } from 'qbs-vue-ui'
-import { computed } from 'vue'
+import { computed ,ref} from 'vue'
 import MultiSelectBox from '@/components/Controls/MultiSelectBox.vue'
 import { validateEmail } from '@/utils'
 import EditIcon from '@/components/Icons/EditIcon.vue'
 import NestedPopover from '@/components/NestedPopover.vue'
 import DropdownItem from '@/components/DropdownItem.vue'
+
 
 const props = defineProps({
   fields: {
@@ -223,7 +227,7 @@ const props = defineProps({
     default: false,
   },
 })
-
+const fieldErrors=ref({})
 const { getUser } = usersStore()
 
 const emit = defineEmits(['update'])
@@ -243,6 +247,18 @@ const _fields = computed(() => {
   return all_fields
 })
 
+const handleChange = (field, data) => {
+  if (field) {
+    if (field.mandatory &&!data|| data == ''||data == null||data=='\n') {
+      fieldErrors.value[field.name] = __('This field is required')
+    } else {
+      fieldErrors.value[field.name]=undefined
+    }
+  } 
+  if (field?.name&& !fieldErrors[field.name]) {
+    emit('update', field.name, data)
+  }
+}
 function evaluate_depends_on(expression, field) {
   if (expression.substr(0, 5) == 'eval:') {
     try {

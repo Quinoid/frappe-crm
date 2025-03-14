@@ -349,11 +349,7 @@ const tabs = computed(() => {
       icon: DetailsIcon,
       condition: () => isMobileView.value,
     },
-    {
-      name: 'Activity',
-      label: __('Activity'),
-      icon: ActivityIcon,
-    },
+ 
     {
       name: 'Emails',
       label: __('Emails'),
@@ -385,6 +381,11 @@ const tabs = computed(() => {
       label: __('WhatsApp'),
       icon: WhatsAppIcon,
       condition: () => whatsappEnabled.value,
+    },
+       {
+      name: 'Activity',
+      label: __('Activity'),
+      icon: ActivityIcon,
     },
   ]
   return tabOptions.filter((tab) => (tab.condition ? tab.condition() : true))

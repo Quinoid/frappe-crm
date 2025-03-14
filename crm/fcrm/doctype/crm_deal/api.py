@@ -8,6 +8,7 @@ from crm.fcrm.doctype.crm_form_script.crm_form_script import get_form_script
 def get_deal(name):
 	Deal = frappe.qb.DocType("CRM Deal")
 	CustomLeadService = frappe.qb.DocType("Custom Lead Service")
+	CustomLeadTags = frappe.qb.DocType("Custom Lead Tags")
 
 	query = (
 		frappe.qb.from_(Deal)
@@ -39,6 +40,17 @@ def get_deal(name):
 	services = services_query.run(as_dict=True)
 	
 	deal["interested_services_for_lead"] = [service["link_field"] for service in services]
+
+
+	# Fetch the custom_tags from the Custom Lead Tags table
+	tags_query = (
+		frappe.qb.from_(CustomLeadTags)
+		.select(CustomLeadTags.link_field) 
+		.where(CustomLeadTags.parent == name)
+	)
+	tags = tags_query.run(as_dict=True)
+	
+	deal["custom_tags"] = [tag["link_field"] for tag in tags]
 
 	deal["fields_meta"] = get_fields_meta("CRM Deal") 
 	deal["_form_script"] = get_form_script('CRM Deal')

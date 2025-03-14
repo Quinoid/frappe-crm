@@ -29,33 +29,35 @@ def set_primary_mobile_no(doc):
 
 
 def update_deals_email_mobile_no(doc):
-    """Update email and mobile number for linked deals when the primary contact is updated"""
-    linked_deals = frappe.get_all(
-        "CRM Contacts",
-        filters={"contact": doc.name, "is_primary": 1},
-        fields=["parent"],
-    )
+	"""Update email and mobile number for linked deals when the primary contact is updated"""
+	linked_deals = frappe.get_all(
+		"CRM Contacts",
+		filters={"contact": doc.name, "is_primary": 1},
+		fields=["parent"],
+	)
 
-    for linked_deal in linked_deals:
-        deal = frappe.get_doc("CRM Deal", linked_deal.parent)
-        
-        # Check if update is required
-        if deal.email != doc.email_id or deal.mobile_no != doc.mobile_no:
-            deal.email = doc.email_id
-            deal.mobile_no = doc.mobile_no
+	for linked_deal in linked_deals:
+		deal = frappe.get_doc("CRM Deal", linked_deal.parent)
+		
+		# Check if update is required
+		if deal.email != doc.email_id or deal.mobile_no != doc.mobile_no:
+			deal.email = doc.email_id
+			deal.mobile_no = doc.mobile_no
 
-            # Save the updated deal, ignoring permissions
-            try:
-                deal.save(ignore_permissions=True)
-                frappe.db.commit()  # Ensure changes are committed
-            except Exception as e:
-                frappe.log_error(message=f"Error updating deal {deal.name}: {str(e)}", title="Deal Update Failed")
+			# Save the updated deal, ignoring permissions
+			try:
+				deal.save(ignore_permissions=True)
+				frappe.db.commit()  # Ensure changes are committed
+			except Exception as e:
+				frappe.log_error(message=f"Error updating deal {deal.name}: {str(e)}", title="Deal Update Failed")
 
 
 
 @frappe.whitelist()
 def get_contact(name):
 	Contact = frappe.qb.DocType("Contact")
+	CustomLeadService = frappe.qb.DocType("Custom Lead Service")
+	CustomLeadTags = frappe.qb.DocType("Custom Lead Tags")
 
 	query = (
 		frappe.qb.from_(Contact)
@@ -70,6 +72,15 @@ def get_contact(name):
 	contact = contact.pop()
 
 	contact["doctype"] = "Contact"
+	tags_query = (
+		frappe.qb.from_(CustomLeadTags)
+		.select(CustomLeadTags.link_field) 
+		.where(CustomLeadTags.parent == name)
+	)
+	tags = tags_query.run(as_dict=True)
+	
+	contact["custom_tags"] = [tag["link_field"] for tag in tags]
+
 	contact["email_ids"] = frappe.get_all(
 		"Contact Email", filters={"parent": name}, fields=["name", "email_id", "is_primary"]
 	)
@@ -82,50 +93,50 @@ def get_contact(name):
 
 @frappe.whitelist()
 def get_linked_deals(contact):
-    """Get linked deals for a contact"""
-    
-    # Check for read permissions on Contact
-    if not frappe.has_permission("Contact", "read", contact):
-        frappe.throw("Not permitted", frappe.PermissionError)
+	"""Get linked deals for a contact"""
+	
+	# Check for read permissions on Contact
+	if not frappe.has_permission("Contact", "read", contact):
+		frappe.throw("Not permitted", frappe.PermissionError)
 
-     # Fetch the contact document
-    contact_doc = frappe.get_doc("Contact", contact)
+	 # Fetch the contact document
+	contact_doc = frappe.get_doc("Contact", contact)
 
-    # Update email and mobile number for linked deals
-    update_deals_email_mobile_no(contact_doc)
-    
-    # Get deal names linked to the contact
-    deal_names = frappe.get_all(
-        "CRM Contacts",
-        filters={"contact": contact, "parenttype": "CRM Deal"},
-        fields=["parent"],
-        distinct=True,
-    )
+	# Update email and mobile number for linked deals
+	update_deals_email_mobile_no(contact_doc)
+	
+	# Get deal names linked to the contact
+	deal_names = frappe.get_all(
+		"CRM Contacts",
+		filters={"contact": contact, "parenttype": "CRM Deal"},
+		fields=["parent"],
+		distinct=True,
+	)
 
-    contact_doc = frappe.get_doc("Contact", contact)
+	contact_doc = frappe.get_doc("Contact", contact)
 
-    update_deals_email_mobile_no(contact_doc)
+	update_deals_email_mobile_no(contact_doc)
 
-    # Fetch deal details
-    deals = []
-    for d in deal_names:
-        deal = frappe.get_doc("CRM Deal", d.parent)  # Fetch the full deal document
-        # Extract required fields into a dictionary
-        deal_data = {
-            "name": deal.name,
-            "organization": deal.organization,
-            "currency": deal.currency,
-            "annual_revenue": deal.annual_revenue,
-            "status": deal.status,
-            "email": deal.email,
-            "mobile_no": deal.mobile_no,
-            "deal_owner": deal.deal_owner,
-            "modified": deal.modified,
-        }
-        deals.append(deal_data)
+	# Fetch deal details
+	deals = []
+	for d in deal_names:
+		deal = frappe.get_doc("CRM Deal", d.parent)  # Fetch the full deal document
+		# Extract required fields into a dictionary
+		deal_data = {
+			"name": deal.name,
+			"organization": deal.organization,
+			"currency": deal.currency,
+			"annual_revenue": deal.annual_revenue,
+			"status": deal.status,
+			"email": deal.email,
+			"mobile_no": deal.mobile_no,
+			"deal_owner": deal.deal_owner,
+			"modified": deal.modified,
+		}
+		deals.append(deal_data)
 
-    return deals
-    
+	return deals
+	
 
 @frappe.whitelist()
 def create_new(contact, field, value):

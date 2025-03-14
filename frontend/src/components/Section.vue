@@ -16,7 +16,7 @@
     leave-from-class="max-h-[200px] overflow-hidden" enter-from-class="max-h-0 overflow-hidden"
     leave-to-class="max-h-0 overflow-hidden">
     <div v-if="opened" :class="{
-      'p-3 !pt-0 h-full': !fromSidemenu,
+      'lg:p-3 md:p-3 p-1 !pt-0 h-full ': !fromSidemenu,
       'section-container-bg':  !fromSidemenu
     }">
       <slot v-bind="{ opened, open, close, toggle }"></slot>

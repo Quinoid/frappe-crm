@@ -35,6 +35,34 @@
 
     </template>
   </LayoutHeader>
+    <div
+    v-if="contact.data"
+    class="flex h-12 items-center justify-between gap-2 border-b px-3 py-2.5 lg:hidden md:hidden"
+  >
+          <component :is="contact.data._assignedTo?.length == 1 ? 'Button' : 'div'">
+        <MultipleAvatar
+          :avatars="contact.data._assignedTo"
+          @click="showAssignmentModal = true"
+        />
+      </component>
+      <Dropdown
+        :options="statusOptions('contact', updateField, customStatuses)"
+      >
+        <template #default="{ open }">
+          <Button :label="contact.data.contact_status"  :class="getContactStatus(contact.data.contact_status).colorClass">
+            <template #prefix>
+              <IndicatorIcon />
+            </template>
+            <template #suffix>
+              <FeatherIcon
+                :name="open ? 'chevron-up' : 'chevron-down'"
+                class="h-4"
+              />
+            </template>
+          </Button>
+        </template>
+      </Dropdown>
+  </div>
   <div v-if="contact.data" class="flex h-full flex-col overflow-hidden">
     <Tabs v-model="tabIndex" v-slot="{ tab }" :tabs="tabs">
       <Activities
@@ -161,7 +189,8 @@ function updateField(name, value, callback) {
   let request = value
   if (
     (name === 'interested_services_for_lead' && value) ||
-    (name === 'interested_services_for_deal' && value)
+    (name === 'interested_services_for_deal' && value) ||
+    (name === 'custom_tags'&&value)
   ) {
     request = value?.map((item) => {
       return {

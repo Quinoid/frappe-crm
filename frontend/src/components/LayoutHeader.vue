@@ -5,7 +5,7 @@
         <div class="flex items-center gap-2">
           <slot name="left-header" />
         </div>
-        <div class="flex items-center gap-2">
+        <div class=" items-center gap-2 hidden md:flex lg:flex">
           <slot name="right-header" class="flex items-center gap-2" />
         </div>
       </header>

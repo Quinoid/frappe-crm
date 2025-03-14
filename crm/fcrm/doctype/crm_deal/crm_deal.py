@@ -232,6 +232,18 @@ class CRMDeal(Document):
             #     'width': '10rem',
             # },
             {
+                'label': 'Interested Services',
+                'type': 'Text',
+                'key': 'interested_services',
+                'width': '8rem',
+            },
+            {
+                'label': 'Tags',
+                'type': 'Text',
+                'key': 'custom_tags_data',
+                'width': '8rem',
+            },
+            {
                 'label': 'Last Modified',
                 'type': 'Datetime',
                 'key': 'modified',
@@ -259,6 +271,8 @@ class CRMDeal(Document):
             "first_responded_on",
             "modified",
             "_assign",
+            "interested_services",
+            "custom_tags_data"
         ]
         return {'columns': columns, 'rows': rows}
 

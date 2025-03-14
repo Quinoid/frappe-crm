@@ -2,7 +2,7 @@
   <ActivityHeader v-if="title != 'Details' && title != 'Deals'" v-model="tabIndex"
     v-model:showWhatsappTemplates="showWhatsappTemplates" :tabs="tabs" :title="title" :doc="doc" :emailBox="emailBox"
     :whatsappBox="whatsappBox" :modalRef="modalRef" />
-  <FadedScrollableDiv :maskHeight="30" class="flex flex-col flex-1 overflow-y-auto">
+  <FadedScrollableDiv :maskHeight="30" class="flex flex-col flex-1 overflow-y-auto bg-maingradient">
     <div v-if="all_activities?.loading"
       class="flex flex-1 flex-col items-center justify-center gap-3 text-xl font-medium text-gray-500">
       <LoadingIndicator class="h-6 w-6" />
@@ -54,10 +54,10 @@
             :showContactModal="showContactModal" :_contact="_contact" />
         </div>
       </div>
-      <div v-else-if="title == 'Deals'" class="pb-3 overflow-x-auto sm:w-full w-max">
+      <div v-else-if="title == 'Deals'" class="pb-3 overflow-x-auto sm:w-full  lg:w-max md:w-max">
         <ContactDeals :tab="tab" :contactId="contactId" />
       </div>
-      <div v-else-if="title == 'Tasks'" class="px-3 pb-3 sm:px-10 sm:pb-5 overflow-x-auto sm:w-full w-max">
+      <div v-else-if="title == 'Tasks'" class="px-3 pb-3 sm:px-10 sm:pb-5 overflow-x-auto sm:w-full lg:w-max md:w-max">
         <TaskArea v-model="all_activities" v-model:doc="doc" :modalRef="modalRef" :tasks="activities"
           :doctype="doctype" />
       </div>

@@ -378,6 +378,18 @@ class CRMLead(Document):
 			# 	'options':'User'
 			# },
 			{
+                'label': 'Interested Services',
+                'type': 'Text',
+                'key': 'interested_services',
+                'width': '8rem',
+            },
+            {
+                'label': 'Tags',
+                'type': 'Text',
+                'key': 'custom_tags_data',
+                'width': '8rem',
+            },
+			{
 				'label': 'Last Modified',
 				'type': 'Datetime',
 				'key': 'modified',
@@ -406,6 +418,8 @@ class CRMLead(Document):
 			"modified",
 			"_assign",
 			"image",
+			"interested_services",
+            "custom_tags_data"
 		]
 		return {'columns': columns, 'rows': rows}
 

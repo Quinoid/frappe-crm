@@ -40,6 +40,8 @@
             :sections="filteredSections"
             class="border-t pt-4"
             :data="_organization"
+            :errors="fieldErrors"
+            :key="JSON.stringify(fieldErrors)"
           />
         </div>
         <p v-if="errorMessage" class="text-red-500 text-sm mt-2">
@@ -79,7 +81,7 @@ import { capture } from '@/telemetry'
 import { call, FeatherIcon, createResource } from 'qbs-vue-ui'
 import { ref, nextTick, watch, computed, h } from 'vue'
 import { useRouter } from 'vue-router'
-
+import { handleValidateForm } from '../../utils/index'
 const props = defineProps({
   options: {
     type: Object,
@@ -90,7 +92,7 @@ const props = defineProps({
     },
   },
 })
-
+const fieldErrors = ref({})
 const { isManager } = usersStore()
 
 const router = useRouter()
@@ -175,8 +177,20 @@ async function callSetValue(values) {
 }
 
 async function callInsertDoc() {
+  const errors = handleValidateForm(sections?.data, _organization.value)
+  fieldErrors.value = errors
+   if(errors&&Object.keys(errors).length > 0) {
+    return;
+  }
   errorMessage.value = ''
   if (!validate()) return
+     if (_organization.value.custom_tags&&_organization.value.custom_tags.length > 0) {
+     _organization.value.custom_tags = _organization.value.custom_tags.map((s) => {
+      return {
+        link_field: s,
+      }
+    })
+  }
   const doc = await call('frappe.client.insert', {
     doc: {
       doctype: 'CRM Organization',

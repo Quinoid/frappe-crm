@@ -62,6 +62,8 @@
             :sections="filteredSections"
             class="border-t pt-4"
             :data="_contact"
+            :errors="fieldErrors"
+            :key="JSON.stringify(fieldErrors)"
           />
            <ErrorMessage class="mt-4" v-if="error" :message="__(error)" />
 
@@ -104,6 +106,7 @@ import { ref, nextTick, watch, computed } from 'vue'
 import { createToast } from '@/utils'
 import { useRouter } from 'vue-router'
 import { statusesStore } from '@/stores/statuses'
+import { handleValidateForm } from '@/utils/index'
 const props = defineProps({
   contact: {
     type: Object,
@@ -118,7 +121,7 @@ const props = defineProps({
     },
   },
 })
-
+const fieldErrors = ref({})
 const { isManager } = usersStore()
 const error = ref(null)
 
@@ -175,6 +178,18 @@ async function reloadContactData() {
   }
 }
 async function callInsertDoc() {
+    const errors = handleValidateForm(sections?.data, _contact.value)
+  fieldErrors.value = errors
+     if(errors&&Object.keys(errors).length > 0) {
+    return;
+  }
+   if (_contact.value.custom_tags && _contact.value.custom_tags.length > 0) {
+     _contact.value.custom_tags = _contact.value.custom_tags.map((s) => {
+      return {
+        link_field: s,
+      }
+    })
+  }
   if (_contact.value.email_id) {
     _contact.value.email_ids = [{ email_id: _contact.value.email_id }]
     delete _contact.value.email_id
@@ -459,7 +474,9 @@ async function setAsPrimary(field, value) {
   }
 }
 
+
 async function createNew(field, value) {
+
   let d = await call('crm.api.contact.create_new', {
     contact: props.contact.data.name,
     field,

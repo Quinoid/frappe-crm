@@ -38,7 +38,7 @@
         v-slot="{ idx, column, item }"
         :row="row"
       >
-        <div v-if="column.key === 'due_date'">
+        <div class="min-w-0" v-if="column.key === 'due_date'">
           <Tooltip
             :text="item && dateFormat(item, 'ddd, MMM D, YYYY | hh:mm a')"
           >

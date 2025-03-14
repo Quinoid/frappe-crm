@@ -297,7 +297,7 @@ export const handleValidateForm = (sections, values) => {
 
   sections?.forEach((section) => {
     section.fields.forEach((field) => {
-      if (field.mandatory=== 0 && !values[field.name]?.trim()) {
+      if (field.mandatory=== 1 && !values[field.name]?.trim()) {
         errors[field.name] = __('This field is required')
       }
     })

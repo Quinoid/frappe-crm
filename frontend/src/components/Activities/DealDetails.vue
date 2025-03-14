@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="fieldsLayout.data"
-    class="flex flex-1 flex-col justify-between overflow-hidden p-4 w-4/5 gap-4"
+    class="flex flex-1 flex-col justify-between overflow-hidden p-4 lg:w-4/5 w-full gap-4"
   >
     <div class="flex flex-col overflow-y-auto shadow-sm rounded-md bg-white">
       <div
@@ -150,7 +150,7 @@
               :key="contact.name"
             >
               <div class="px-2 pb-2.5" :class="[i == 0 ? 'pt-5' : 'pt-2.5']">
-                <Section :is-opened="contact.opened">
+                <Section :is-opened="contact.opened "   :hideDrillDown="true">
                   <template #header="{ opened, toggle }">
                     <div
                       class="flex cursor-pointer items-center justify-between gap-2 pr-1 text-base leading-5 text-gray-700"

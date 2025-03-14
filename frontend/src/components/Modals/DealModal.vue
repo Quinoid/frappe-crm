@@ -38,6 +38,7 @@
             class="border-t pt-4"
             :sections="filteredSections"
             :data="deal"
+            :errors="fieldErrors" :key="JSON.stringify(fieldErrors)"
           />
           <ErrorMessage class="mt-4" v-if="error" :message="__(error)" />
         </div>
@@ -67,14 +68,14 @@ import { capture } from '@/telemetry'
 import { Switch, createResource } from 'qbs-vue-ui'
 import { computed, ref, reactive, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-
+import { handleValidateForm } from '@/utils/index'
 const props = defineProps({
   defaults: Object,
 })
 
 const { getUser, isManager } = usersStore()
 const { getDealStatus, statusOptions } = statusesStore()
-
+const fieldErrors = ref({})
 const show = defineModel()
 const router = useRouter()
 const error = ref(null)
@@ -176,6 +177,11 @@ const dealStatuses = computed(() => {
 })
 
 function createDeal() {
+  const errors = handleValidateForm(sections?.data, deal)
+  fieldErrors.value = errors
+ if(errors&&Object.keys(errors).length > 0) {
+    return;
+  }
  if ((deal?.interested_services_for_deal?.length ?? 0) > 0 || (deal?.interested_services_for_lead?.length ?? 0) > 0) {
   // Proceed with logic
 
@@ -204,6 +210,13 @@ function createDeal() {
           link_field: s,
         }
       })
+  }
+    if (request.custom_tags&&request.custom_tags.length > 0) {
+    request.custom_tags = deal.custom_tags.map((s) => {
+      return {
+        link_field: s,
+      }
+    })
   }
   createResource({
     url: 'crm.fcrm.doctype.crm_deal.crm_deal.create_deal',
