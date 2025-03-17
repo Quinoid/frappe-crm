@@ -1,5 +1,5 @@
 <template>
-  <LayoutHeader v-if="organization.data">
+  <LayoutHeader v-if="organization.data" :hideRightHeader="true">
     <template #left-header>
       <Breadcrumbs :items="breadcrumbs">
         <template #prefix="{ item }">

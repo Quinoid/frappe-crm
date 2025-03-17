@@ -5,7 +5,13 @@
         <div class="flex items-center gap-2">
           <slot name="left-header" />
         </div>
-        <div class=" items-center gap-2 hidden md:flex lg:flex">
+       
+        <div
+  :class="{
+    'hidden md:hidden': hideRightHeader, 
+    'lg:flex items-center gap-2': true
+  }"
+>
           <slot name="right-header" class="flex items-center gap-2" />
         </div>
       </header>
@@ -13,10 +19,17 @@
   </Teleport>
 </template>
 <script setup>
-import { ref, nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 
 const showHeader = ref(false)
 
+const props = defineProps({
+  hideRightHeader: {
+    type: Boolean,
+    default: false,
+  },
+  
+})
 nextTick(() => {
   showHeader.value = true
 })

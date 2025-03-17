@@ -1,5 +1,5 @@
 <template>
-  <LayoutHeader v-if="contact.data">
+  <LayoutHeader v-if="contact.data" :hideRightHeader="true">
     <template #left-header>
       <Breadcrumbs :items="breadcrumbs">
         <template #prefix="{ item }">
