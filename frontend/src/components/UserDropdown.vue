@@ -7,7 +7,8 @@
             ? 'w-[237px] bg-sidebar_active px-2 shadow-sm sidemenu-header-menu'
             : 'w-[237px] px-2 hover:bg-sidebar_hover sidemenu-header-menu'
         ">
-        <NEW_CRMLOGO class="size-8 flex-shrink-0 rounded" />
+        <!-- <NEW_CRMLOGO class="size-8 flex-shrink-0 rounded" /> -->
+        <img :src="logo"  alt="new crm logo" class="size-8 flex-shrink-0 rounded" />
         <div class="flex flex-1 flex-col text-left duration-300 ease-in-out" :class="isCollapsed
             ? 'ml-0 w-0 overflow-hidden opacity-0'
             : 'ml-2 w-auto opacity-100'
@@ -36,12 +37,11 @@
 </template>
 
 <script setup>
-import NEW_CRMLOGO from '@/components/Icons/NEW_CRMLOGO.vue'
 import SettingsModal from '@/components/Settings/SettingsModal.vue'
 import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'
 import { Dropdown } from 'qbs-vue-ui'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 const props = defineProps({
   isCollapsed: {
     type: Boolean,
@@ -65,7 +65,13 @@ const handleLogotut = async () => {
     showErrorAlert(msg)
   }
 }
+const logo = ref('')
 
+onMounted(async () => {
+  const res = await fetch('/api/method/crm.api.branding.get_branding')
+  const { message } = await res.json()
+  logo.value = message.logo
+})
 let dropdownOptions = ref([
   {
     group: 'Manage',
