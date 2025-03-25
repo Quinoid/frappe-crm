@@ -7,8 +7,12 @@
             ? 'w-[237px] bg-sidebar_active px-2 shadow-sm sidemenu-header-menu'
             : 'w-[237px] px-2 hover:bg-sidebar_hover sidemenu-header-menu'
         ">
-        <!-- <NEW_CRMLOGO class="size-8 flex-shrink-0 rounded" /> -->
-        <img :src="logo"  alt="new crm logo" class="size-8 flex-shrink-0 rounded" />
+        
+          <NEW_CRMLOGO v-if="appOrg === 'crm'" class="size-8 flex-shrink-0 rounded" />
+          <BizpoleLogo v-else-if="appOrg === 'bizpole'" class="size-8 flex-shrink-0 rounded" />
+          <QbsCrm v-else-if="appOrg === 'qbs'" class="size-8 flex-shrink-0 rounded" />
+
+          <img v-else :src="logo" alt="CRM Logo" class="size-8 flex-shrink-0 rounded" />
         <div class="flex flex-1 flex-col text-left duration-300 ease-in-out" :class="isCollapsed
             ? 'ml-0 w-0 overflow-hidden opacity-0'
             : 'ml-2 w-auto opacity-100'
@@ -37,6 +41,10 @@
 </template>
 
 <script setup>
+
+import BizpoleLogo from '@/components/Icons/BizpoleLogo.vue'
+import NEW_CRMLOGO from '@/components/Icons/NEW_CRMLOGO.vue'
+import QbsCrm from '@/components/Icons/QbsCrm.vue'
 import SettingsModal from '@/components/Settings/SettingsModal.vue'
 import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'
@@ -66,11 +74,13 @@ const handleLogotut = async () => {
   }
 }
 const logo = ref('')
-
+const appOrg = ref('')
 onMounted(async () => {
   const res = await fetch('/api/method/crm.api.branding.get_branding')
   const { message } = await res.json()
   logo.value = message.logo
+  appOrg.value = message.appOrg
+  console.log(message,appOrg.value)
 })
 let dropdownOptions = ref([
   {
