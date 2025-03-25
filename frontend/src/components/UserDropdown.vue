@@ -8,10 +8,9 @@
             : 'w-[237px] px-2 hover:bg-sidebar_hover sidemenu-header-menu'
         ">
         
-          <NEW_CRMLOGO v-if="appOrg === 'crm'" class="size-8 flex-shrink-0 rounded" />
-          <BizpoleLogo v-else-if="appOrg === 'bizpole'" class="size-8 flex-shrink-0 rounded" />
-          <QbsCrm v-else-if="appOrg === 'qbs'" class="size-8 flex-shrink-0 rounded" />
-
+          <NEW_CRMLOGO v-if="normalizedAppOrg === 'crm'" class="size-8 flex-shrink-0 rounded" />
+          <BizpoleLogo v-else-if="normalizedAppOrg === 'bizpole'" class="size-8 flex-shrink-0 rounded" />
+          <QbsCrm v-else-if="normalizedAppOrg === 'qbs'" class="size-8 flex-shrink-0 rounded" />
           <img v-else :src="logo" alt="CRM Logo" class="size-8 flex-shrink-0 rounded" />
         <div class="flex flex-1 flex-col text-left duration-300 ease-in-out" :class="isCollapsed
             ? 'ml-0 w-0 overflow-hidden opacity-0'
@@ -75,13 +74,16 @@ const handleLogotut = async () => {
 }
 const logo = ref('')
 const appOrg = ref('')
+
 onMounted(async () => {
   const res = await fetch('/api/method/crm.api.branding.get_branding')
   const { message } = await res.json()
   logo.value = message.logo
   appOrg.value = message.appOrg
-  console.log(message,appOrg.value)
 })
+const normalizedAppOrg = computed(() => appOrg.value?.trim().toLowerCase())
+
+
 let dropdownOptions = ref([
   {
     group: 'Manage',
