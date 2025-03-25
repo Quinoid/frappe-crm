@@ -28,8 +28,10 @@
           class="flex h-7 cursor-pointer items-center px-2 py-1 text-gray-600"
         >
           <Tooltip :text="__(field.tooltip)">
-            <div>{{ data[field.name] }}</div>
-          </Tooltip>
+          <div>
+        {{ formatFieldValue(field, data[field.name]) }}
+      </div>          
+    </Tooltip>
         </div>
         <FormControl
           v-else-if="field.type == 'checkbox'"
@@ -215,6 +217,7 @@ import { validateEmail } from '@/utils'
 import EditIcon from '@/components/Icons/EditIcon.vue'
 import NestedPopover from '@/components/NestedPopover.vue'
 import DropdownItem from '@/components/DropdownItem.vue'
+import dayjs from 'dayjs'
 
 
 const props = defineProps({
@@ -271,7 +274,12 @@ function evaluate_depends_on(expression, field) {
     }
   }
 }
-
+function formatFieldValue(field, value) {
+  if (field.type === 'dateTime' && value) {
+    return dayjs(value).format('DD MMM YYYY, hh:mm A') // e.g., 25 Mar 2025, 04:33 PM
+  }
+  return value
+}
 function evaluate(code, context = {}) {
   let variable_names = Object.keys(context)
   let variables = Object.values(context)

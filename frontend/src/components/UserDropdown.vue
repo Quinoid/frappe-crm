@@ -7,7 +7,7 @@
             ? 'w-[237px] bg-sidebar_active px-2 shadow-sm sidemenu-header-menu'
             : 'w-[237px] px-2 hover:bg-sidebar_hover sidemenu-header-menu'
         ">
-        <CRMHeaderLogo class="size-8 flex-shrink-0 rounded" />
+        <NEW_CRMLOGO class="size-8 flex-shrink-0 rounded" />
         <div class="flex flex-1 flex-col text-left duration-300 ease-in-out" :class="isCollapsed
             ? 'ml-0 w-0 overflow-hidden opacity-0'
             : 'ml-2 w-auto opacity-100'
@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import CRMHeaderLogo from '@/components/Icons/CRMHeaderLogo.vue'
+import NEW_CRMLOGO from '@/components/Icons/NEW_CRMLOGO.vue'
 import SettingsModal from '@/components/Settings/SettingsModal.vue'
 import { sessionStore } from '@/stores/session'
 import { usersStore } from '@/stores/users'

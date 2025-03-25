@@ -53,13 +53,6 @@
           </span>
         </template>
       </SidebarLink>
-      <a href="https://quinoid.com/" target="_blank" rel="noopener noreferrer" v-if="!isSidebarCollapsed" :class="[
-        ' mt-auto flex items-center pl-[4px] pr-[14px] py-1 text-sm text-gray-700',
-        !isSidebarCollapsed ? 'left-[2px]' : 'left-0',
-      ]">
-        <SideBarIcon />
-      </a>
-
     </div>
     <Notifications />
   </div>
@@ -89,7 +82,6 @@ import { useStorage } from '@vueuse/core'
 import { FeatherIcon } from 'qbs-vue-ui'
 import { computed, h } from 'vue'
 import EmailIcon from '../Icons/EmailIcon.vue'
-import SideBarIcon from './SideBarIcon.vue'
 const { getPinnedViews, getPublicViews, getReportViews } = viewsStore()
 const { toggle: toggleNotificationPanel } = notificationsStore()
 

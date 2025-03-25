@@ -47,10 +47,10 @@
           </div>
           <div @click="goToContacts" class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 cursor-pointer ">
             <div class=" flex gap-2 items-center ">
-              <span class="flex items-center bg-[#F5CFE9] p-2 rounded-[9px]">
+              <span class=" flex-shrink-0 flex items-center bg-[#F5CFE9] p-2 rounded-[9px]">
                 <ContactsIcon class="h-5 w-5   text-[#E94DA0]" />
               </span>
-              <h3 class="text-2xl ">Contacts</h3>
+              <h3 class="text-2xl truncate ">Contacts</h3>
             </div>
             <p class="text-[48px] font-semibold  text-primary">
               {{ dashboardData?.contact_total_count }}
@@ -58,10 +58,10 @@
           </div>
           <div @click="goToOrganizations" class="sm:col-span-1 dash_tile shadow-sm rounded-lg p-6 cursor-pointer ">
             <div class=" flex gap-2 items-center ">
-              <span class="flex items-center bg-[#DEEEF5] p-2 rounded-[9px]">
+    <span class="flex-shrink-0 flex items-center bg-[#DEEEF5] p-2 rounded-[9px]">
                 <OrganizationsIcon class="h-5 w-5   text-[#39B9CA]" />
               </span>
-              <h3 class="text-2xl ">Organizations</h3>
+          <h3 class="text-lg sm:text-2xl truncate">Organizations</h3>
             </div>
             <p class="text-[48px] font-semibold text-primary">
               {{ dashboardData?.organisation_total_count }}
