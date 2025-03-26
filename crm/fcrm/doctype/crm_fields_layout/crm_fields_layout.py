@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import json
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
@@ -56,7 +57,7 @@ def get_fields_layout(doctype: str, type: str):
 				}
 				section["fields"][section.get("fields").index(field["name"])] = field
 
-	return sections or []
+	return [section for section in sections if section.get("label") != "Update Details"]
 
 
 @frappe.whitelist()

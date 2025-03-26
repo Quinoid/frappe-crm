@@ -626,9 +626,9 @@ def get_sidebar_fields(doctype, name):
 		section_fields = section.get("fields") or []
 
 		# ✅ Custom handling for "Update Details" section
-		if section["name"] == "Update Details":
+		if section["name"] == "Update Details" :
 			static_fields = []
-			for fieldname in section_fields:
+			for fieldname in ['owner','creation','modified','modified_by']:
 				value = getattr(doc, fieldname, None)
 				label = {
 					"owner": "Created By",
@@ -636,6 +636,7 @@ def get_sidebar_fields(doctype, name):
 					"modified": "Last Modified",
 					"modified_by": "Modified By"
 				}.get(fieldname, fieldname.replace("_", " ").title())
+
 				field_type = "dateTime" if fieldname in ["creation", "modified"] else "Data"
 
 				static_fields.append({
