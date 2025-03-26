@@ -599,73 +599,72 @@ def get_fields_meta(doctype, restricted_fieldtypes=None, as_array=False):
 # 		fields_meta[field.fieldname] = field
 
 # 	return layout
+
 def get_sidebar_fields(doctype, name):
 	if not frappe.db.exists("CRM Fields Layout", {"dt": doctype, "type": "Side Panel"}):
 		return []
 
-	layout = frappe.get_doc("CRM Fields Layout", {"dt": doctype, "type": "Side Panel"}).layout
+	layout_doc = frappe.get_doc("CRM Fields Layout", {"dt": doctype, "type": "Side Panel"})
+	layout = json.loads(layout_doc.layout or "[]")
 	if not layout:
 		return []
 
-	layout = json.loads(layout)
-
 	not_allowed_fieldtypes = ["Tab Break", "Section Break", "Column Break"]
 
-	fields = frappe.get_meta(doctype).fields
-	fields = [field for field in fields if field.fieldtype not in not_allowed_fieldtypes]
+	# Get all fields excluding breaks
+	fields = [f for f in frappe.get_meta(doctype).fields if f.fieldtype not in not_allowed_fieldtypes]
 
 	doc = frappe.get_cached_doc(doctype, name)
-	has_high_permlevel_fields = any(df.permlevel > 0 for df in fields)
-	if has_high_permlevel_fields:
-		has_read_access_to_permlevels = doc.get_permlevel_access("read")
-		has_write_access_to_permlevels = doc.get_permlevel_access("write")
+
+	# Handle permission levels
+	has_high_permlevel_fields = any(f.permlevel > 0 for f in fields)
+	has_read_access = doc.get_permlevel_access("read") if has_high_permlevel_fields else []
+	has_write_access = doc.get_permlevel_access("write") if has_high_permlevel_fields else []
 
 	for section in layout:
 		section["name"] = section.get("name") or section.get("label")
-		for idx, field in enumerate(section.get("fields") or []):
-			field_obj = next((f for f in fields if f.fieldname == field), None)
-			if field_obj:
-				if field_obj.permlevel > 0:
-					field_has_write_access = field_obj.permlevel in has_write_access_to_permlevels
-					field_has_read_access = field_obj.permlevel in has_read_access_to_permlevels
-					if not field_has_write_access and field_has_read_access:
-						field_obj.read_only = 1
-					if not field_has_read_access and not field_has_write_access:
-						field_obj.hidden = 1
-				section["fields"][idx] = get_field_obj(field_obj, section)
+		section_fields = section.get("fields") or []
 
-		# Modify "Details" section if found
+		# ✅ Custom handling for "Update Details" section
 		if section["name"] == "Update Details":
-			standard_fields = []
-			for fieldname in section.get("fields", []):
-				field_obj = next((f for f in fields if f.fieldname == fieldname), None)
-				if field_obj:
-					standard_fields.append(get_field_obj(field_obj, section))
-				else:
-					# Handle core fields like owner, creation, modified, etc.
-					value = getattr(doc, fieldname, None)
-					label = {
-						"owner": "Created By",
-						"creation": "Created On",
-						"modified": "Last Modified",
-						"modified_by": "Modified By"
-					}.get(fieldname, fieldname.replace("_", " ").title())
-					field_type = "dateTime" if fieldname in ["creation", "modified"] else "Data"
+			static_fields = []
+			for fieldname in section_fields:
+				value = getattr(doc, fieldname, None)
+				label = {
+					"owner": "Created By",
+					"creation": "Created On",
+					"modified": "Last Modified",
+					"modified_by": "Modified By"
+				}.get(fieldname, fieldname.replace("_", " ").title())
+				field_type = "dateTime" if fieldname in ["creation", "modified"] else "Data"
 
-					standard_fields.append({
-						"label": label,
-						"type":  field_type,
-						"name": fieldname,
-						"read_only": 1,
-						"value": value,
-						"tooltip": f"{label} (system field)"
-					})
+				static_fields.append({
+					"label": label,
+					"type": field_type,
+					"name": fieldname,
+					"read_only": 1,
+					"value": value,
+					"tooltip": f"{label} (system field)"
+				})
 
-			section["fields"] = standard_fields
+			section["fields"] = static_fields
+			continue  # Skip default processing for this section
 
-	fields_meta = {}
-	for field in fields:
-		fields_meta[field.fieldname] = field
+		# ✅ Normal section: process fields from metadata + permissions
+		for idx, fieldname in enumerate(section_fields):
+			field_obj = next((f for f in fields if f.fieldname == fieldname), None)
+			if not field_obj:
+				continue
+
+			if field_obj.permlevel > 0:
+				can_write = field_obj.permlevel in has_write_access
+				can_read = field_obj.permlevel in has_read_access
+				if not can_write and can_read:
+					field_obj.read_only = 1
+				if not can_read and not can_write:
+					field_obj.hidden = 1
+
+			section["fields"][idx] = get_field_obj(field_obj, section)
 
 	return layout
 
