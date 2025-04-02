@@ -153,7 +153,7 @@
             <Avatar
               size="3xl"
               :image="organization.data.organization_logo"
-              :label="organization.data.name"
+              :label="organization.data.organization_name"
               class="!h-24 !w-24 avat_container"
             />
             <component
@@ -193,7 +193,7 @@
           </div>
           <div class="flex flex-col justify-center gap-2 sm:gap-0.5">
             <div class="text-3xl font-semibold text-gray-900">
-              {{ organization.data.name }}
+              {{ organization.data.organization_name }}
             </div>
             <div
               class="flex flex-col flex-wrap gap-3 text-base text-gray-700 sm:flex-row sm:items-center sm:gap-2"
@@ -713,7 +713,6 @@ function getDealRowObject(deal) {
     },
   }
 }
-console.log(organization.data, organization)
 function getContactRowObject(contact) {
   return {
     name: contact.name,

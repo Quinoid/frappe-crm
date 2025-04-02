@@ -6,9 +6,9 @@
     <div class="flex flex-col overflow-y-auto shadow-sm rounded-md bg-white">
       <div
         class="flex h-10.5 cursor-copy items-center px-5 py-2.5 text-lg font-medium border-b"
-        @click="copyToClipboard(doc.data.name)"
+        @click="copyToClipboard(doc.data.organization_name)"
       >
-        {{ __(doc.data.name) }}
+        {{ __(doc.data.organization_name) }}
       </div>
 
       <div class="flex items-center justify-between gap-5 border-b p-5">
