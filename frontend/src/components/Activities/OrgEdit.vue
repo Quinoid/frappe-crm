@@ -25,7 +25,7 @@
                 <Avatar
                   size="3xl"
                   class="size-12 avat_container"
-                  :label="doc.data.name || __('Untitled')"
+                  :label="doc.data.organization_name || __('Untitled')"
                   :image="doc.data.organization_logo"
                 />
                 <component
@@ -70,7 +70,7 @@
         <div class="flex flex-col gap-2.5 truncate">
           <Tooltip :text="doc.data?.full_name">
             <div class="truncate text-2xl font-medium">
-              {{ doc.data?.name || __('Untitled') }}
+              {{ doc.data?.organization_name || __('Untitled') }}
             </div>
           </Tooltip>
           <div class="flex justify-between items-center">
