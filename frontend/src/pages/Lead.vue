@@ -68,6 +68,7 @@
       >
         {{ __(lead.data.name) }}
       </div>
+     
       <FileUploader
         @success="(file) => updateField('image', file.file_url)"
         :validateFile="validateFile"
@@ -136,7 +137,7 @@
                     <PhoneIcon class="h-4 w-4 text-primary_text" />
                   </Button>
                 </Tooltip>
-                <Tooltip :text="__('Send an email')" :disabled="tab.name === 'Notes'||tab.name === 'Tasks'">
+                <Tooltip :text="__('Send an email')" >
                   <Button class="h-7 w-7">
                     <Email2Icon
                       class="h-4 w-4 text-primary_text"

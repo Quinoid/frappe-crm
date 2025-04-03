@@ -63,9 +63,9 @@
     >
       <div
         class="flex h-10.5 cursor-copy items-center border-b px-5 py-2.5 text-lg font-medium"
-        @click="copyToClipboard(deal.data.name)"
+        @click="copyToClipboard(deal.data?.name)"
       >
-        {{ __(deal.data.name) }}
+        {{ __(deal.data?.name) }}
       </div>
       <div class="flex items-center justify-start gap-5 border-b p-5 section-container-bg">
         <Tooltip :text="__('Organization logo')">
@@ -90,7 +90,7 @@
                 <PhoneIcon class="h-4 w-4 text-primary_text" />
               </Button>
             </Tooltip>
-                <Tooltip :text="__('Send an email')" :disabled="tab.name === 'Notes'||tab.name === 'Tasks'">
+                <Tooltip :text="__('Send an email')" >
               <Button class="h-7 w-7">
                 <Email2Icon
                   class="h-4 w-4 text-primary_text"
@@ -368,7 +368,7 @@ import {
   Tooltip,
   usePageMeta,
 } from 'qbs-vue-ui'
-import { computed, h, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const { $dialog, $socket, makeCall } = globalStore()
@@ -587,11 +587,15 @@ const fieldsLayout = createResource({
   transform: (data) => getParsedFields(data),
 })
 
+watch(fieldsLayout, () => {
+  console.log(fieldsLayout.data)
+})
+
 function getParsedFields(sections) {
   sections.forEach((section) => {
     if (section.name == 'contacts_section') return
     section.fields.forEach((field) => {
-      if (field.name == 'organization') {
+      if (field?.name == 'organization') {
         field.create = (value, close) => {
           _organization.value.organization_name = value
           showOrganizationModal.value = true
