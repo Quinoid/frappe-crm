@@ -3,13 +3,13 @@
 import json
 
 import frappe
+from crm.fcrm.doctype.crm_service_level_agreement.utils import get_sla
+from crm.fcrm.doctype.crm_status_change_log.crm_status_change_log import \
+    add_status_change_log
 from frappe import _
 from frappe.desk.form.assign_to import add as assign
 from frappe.model.document import Document
-
 from frappe.utils import has_gravatar, validate_email_address
-from crm.fcrm.doctype.crm_service_level_agreement.utils import get_sla
-from crm.fcrm.doctype.crm_status_change_log.crm_status_change_log import add_status_change_log
 
 
 class CRMLead(Document):
@@ -237,15 +237,16 @@ class CRMLead(Document):
 					deal.update({fieldname: self.get(field.fieldname)})
 
 		# Get the organization name from the organization document
-		organization_name = self.organization
-		if organization and frappe.db.exists("CRM Organization", organization):
-			organization_name = frappe.db.get_value("CRM Organization", organization, "organization_name")
+		# organization_name = self.organization
+		# if organization and frappe.db.exists("CRM Organization", organization):
+		# 	organization_name = frappe.db.get_value("CRM Organization", organization, "organization_name")
 
 		deal.update(
 			{
 				"lead": self.name,
 				"contacts": [{"contact": contact}],
-				"organization": organization_name  # Store the organization name instead of document name
+				"organization":organization.name,
+				"organization_name": organization.organization_name  # Store the organization name instead of document name
 			}
 		)
 
@@ -430,6 +431,8 @@ class CRMLead(Document):
 		return {'columns': columns, 'rows': rows}
 
 	@staticmethod
+
+
 	def default_kanban_settings():
 		return {
 			"column_field": "status",
