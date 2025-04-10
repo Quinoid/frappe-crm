@@ -155,7 +155,7 @@ class CRMLead(Document):
 
 		existing_organization = frappe.db.exists("CRM Organization", {"organization_name": self.organization})
 		if existing_organization:
-			return existing_organization.organization_name
+			return existing_organization
 
 		organization = frappe.new_doc("CRM Organization")
 		organization.update(
@@ -183,7 +183,7 @@ class CRMLead(Document):
 			}
 		)
 		organization.insert(ignore_permissions=True)
-		return organization.organization_name
+		return organization
 
 	def contact_exists(self, throw=True):
 		email_exist = frappe.db.exists("Contact Email", {"email_id": self.email})
@@ -232,14 +232,20 @@ class CRMLead(Document):
 
 			if hasattr(deal, fieldname):
 				if fieldname == "organization":
-					deal.update({fieldname: organization})
+					continue  # Skip organization here as we'll set it separately
 				else:
 					deal.update({fieldname: self.get(field.fieldname)})
+
+		# Get the organization name from the organization document
+		organization_name = self.organization
+		if organization and frappe.db.exists("CRM Organization", organization):
+			organization_name = frappe.db.get_value("CRM Organization", organization, "organization_name")
 
 		deal.update(
 			{
 				"lead": self.name,
 				"contacts": [{"contact": contact}],
+				"organization": organization_name  # Store the organization name instead of document name
 			}
 		)
 
