@@ -7,11 +7,11 @@
         </div>
        
         <div
-  :class="{
-    'hidden md:hidden': hideRightHeader, 
-    'lg:flex items-center gap-2': true
-  }"
->
+        :class="{
+          'hidden md:hidden': hideRightHeader, 
+          'lg:flex items-center gap-2': true
+        }"
+      >
           <slot name="right-header" class="flex items-center gap-2" />
         </div>
       </header>

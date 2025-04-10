@@ -1,15 +1,35 @@
 <template>
   <LayoutHeader v-if="lead.data">
-    <header
-      class="relative flex h-12 items-center justify-between gap-2 py-2.5 pl-5"
-    >
+    <template #left-header>
       <Breadcrumbs :items="breadcrumbs">
         <template #prefix="{ item }">
           <Icon v-if="item.icon" :icon="item.icon" class="mr-2 h-4" />
         </template>
       </Breadcrumbs>
-      <div class="absolute right-0">
-        <Dropdown :options="statusOptions('lead', updateField, customStatuses)">
+      </template>
+      <template #right-header>
+      <div class="">
+         <CustomActions v-if="customActions" :actions="customActions" />
+      <Button
+        :label="__('Convert')"
+        variant="solid"
+        class="bg-btn_primary"
+        @click="showConvertToDealModal = true"
+      />
+      </div>
+</template>
+  </LayoutHeader>
+  <div
+    v-if="lead.data"
+    class="flex h-12 items-center justify-between gap-2 border-b px-3 py-2.5"
+  >
+    <component :is="lead.data._assignedTo?.length == 1 ? 'Button' : 'div'">
+      <MultipleAvatar
+        :avatars="lead.data._assignedTo"
+        @click="showAssignmentModal = true"
+      />
+    </component>
+    <div><Dropdown :options="statusOptions('lead', updateField, customStatuses)">
           <template #default="{ open }">
             <Button
               :label="lead.data.status"
@@ -26,29 +46,8 @@
               </template>
             </Button>
           </template>
-        </Dropdown>
-      </div>
-    </header>
-  </LayoutHeader>
-  <div
-    v-if="lead.data"
-    class="flex h-12 items-center justify-between gap-2 border-b px-3 py-2.5"
-  >
-    <component :is="lead.data._assignedTo?.length == 1 ? 'Button' : 'div'">
-      <MultipleAvatar
-        :avatars="lead.data._assignedTo"
-        @click="showAssignmentModal = true"
-      />
-    </component>
-    <div class="flex items-center gap-2">
-      <CustomActions v-if="customActions" :actions="customActions" />
-      <Button
-        :label="__('Convert')"
-        variant="solid"
-        class="bg-btn_primary"
-        @click="showConvertToDealModal = true"
-      />
-    </div>
+        </Dropdown></div>
+    
   </div>
   <div v-if="lead?.data" class="flex h-full overflow-hidden">
     <Tabs

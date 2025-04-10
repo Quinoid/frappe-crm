@@ -1,15 +1,31 @@
 <template>
-  <LayoutHeader v-if="deal.data">
-    <header
-      class="relative flex h-12 items-center justify-between gap-2 py-2.5 pl-5"
-    >
+  <LayoutHeader v-if="deal.data" >
+        <template #left-header>
+
       <Breadcrumbs :items="breadcrumbs">
         <template #prefix="{ item }">
           <Icon v-if="item.icon" :icon="item.icon" class="mr-2 h-4" />
         </template>
       </Breadcrumbs>
-      <div class="absolute right-0">
-        <Dropdown :options="statusOptions('deal', updateField, customStatuses)">
+      </template>
+      <template #right-header>
+      <div >
+      <CustomActions v-if="customActions" :actions="customActions" />
+      </div>
+      </template>
+  </LayoutHeader>
+  <div
+    v-if="deal.data"
+    class="flex h-12 items-center justify-between gap-2 border-b px-3 py-2.5"
+  >
+    <component :is="deal.data._assignedTo?.length == 1 ? 'Button' : 'div'">
+      <MultipleAvatar
+        :avatars="deal.data._assignedTo"
+        @click="showAssignmentModal = true"
+      />
+    </component>
+    <div>
+       <Dropdown :options="statusOptions('deal', updateField, customStatuses)">
           <template #default="{ open }">
             <Button
               :label="deal.data.status"
@@ -28,21 +44,7 @@
           </template>
         </Dropdown>
       </div>
-    </header>
-  </LayoutHeader>
-  <div
-    v-if="deal.data"
-    class="flex h-12 items-center justify-between gap-2 border-b px-3 py-2.5"
-  >
-    <component :is="deal.data._assignedTo?.length == 1 ? 'Button' : 'div'">
-      <MultipleAvatar
-        :avatars="deal.data._assignedTo"
-        @click="showAssignmentModal = true"
-      />
-    </component>
-    <div class="flex items-center gap-2">
-      <CustomActions v-if="customActions" :actions="customActions" />
-    </div>
+    
   </div>
   <div v-if="deal.data" class="flex h-full overflow-hidden">
     <Tabs
@@ -244,49 +246,49 @@
   />
 </template>
 <script setup>
-import Icon from '@/components/Icon.vue'
-import DetailsIcon from '@/components/Icons/DetailsIcon.vue'
-import LoadingIndicator from '@/components/Icons/LoadingIndicator.vue'
-import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
-import EmailIcon from '@/components/Icons/EmailIcon.vue'
-import Email2Icon from '@/components/Icons/Email2Icon.vue'
-import CommentIcon from '@/components/Icons/CommentIcon.vue'
-import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
-import TaskIcon from '@/components/Icons/TaskIcon.vue'
-import NoteIcon from '@/components/Icons/NoteIcon.vue'
-import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
-import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import ArrowUpRightIcon from '@/components/Icons/ArrowUpRightIcon.vue'
-import SuccessIcon from '@/components/Icons/SuccessIcon.vue'
-import LayoutHeader from '@/components/LayoutHeader.vue'
 import Activities from '@/components/Activities/Activities.vue'
-import OrganizationModal from '@/components/Modals/OrganizationModal.vue'
-import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
-import MultipleAvatar from '@/components/MultipleAvatar.vue'
-import ContactModal from '@/components/Modals/ContactModal.vue'
 import Link from '@/components/Controls/Link.vue'
+import CustomActions from '@/components/CustomActions.vue'
+import Icon from '@/components/Icon.vue'
+import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
+import ArrowUpRightIcon from '@/components/Icons/ArrowUpRightIcon.vue'
+import CommentIcon from '@/components/Icons/CommentIcon.vue'
+import DetailsIcon from '@/components/Icons/DetailsIcon.vue'
+import Email2Icon from '@/components/Icons/Email2Icon.vue'
+import EmailIcon from '@/components/Icons/EmailIcon.vue'
+import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
+import LoadingIndicator from '@/components/Icons/LoadingIndicator.vue'
+import NoteIcon from '@/components/Icons/NoteIcon.vue'
+import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
+import SuccessIcon from '@/components/Icons/SuccessIcon.vue'
+import TaskIcon from '@/components/Icons/TaskIcon.vue'
+import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
+import LayoutHeader from '@/components/LayoutHeader.vue'
+import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
+import ContactModal from '@/components/Modals/ContactModal.vue'
+import OrganizationModal from '@/components/Modals/OrganizationModal.vue'
+import MultipleAvatar from '@/components/MultipleAvatar.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
 import SLASection from '@/components/SLASection.vue'
-import CustomActions from '@/components/CustomActions.vue'
-import { createToast, setupAssignees, setupCustomizations } from '@/utils'
-import { getView } from '@/utils/view'
-import { globalStore } from '@/stores/global'
-import { statusesStore } from '@/stores/statuses'
 import {
-  whatsappEnabled,
   callEnabled,
   isMobileView,
+  whatsappEnabled,
 } from '@/composables/settings'
+import { globalStore } from '@/stores/global'
+import { statusesStore } from '@/stores/statuses'
+import { createToast, setupAssignees, setupCustomizations } from '@/utils'
+import { getView } from '@/utils/view'
 import {
-  createResource,
-  Dropdown,
   Avatar,
-  Tabs,
   Breadcrumbs,
   call,
+  createResource,
+  Dropdown,
+  Tabs,
 } from 'qbs-vue-ui'
-import { ref, computed, h, onMounted } from 'vue'
+import { computed, h, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const { $dialog, $socket } = globalStore()
