@@ -114,6 +114,8 @@
         {
           label: __('Convert'),
           variant: 'solid',
+                    class: 'w-full bg-btn_primary hover:bg-btn_primary',
+
           onClick: convertToDeal,
         },
       ],
@@ -173,47 +175,47 @@
   </Dialog>
 </template>
 <script setup>
+import Activities from '@/components/Activities/Activities.vue'
+import Link from '@/components/Controls/Link.vue'
+import CustomActions from '@/components/CustomActions.vue'
 import Icon from '@/components/Icon.vue'
-import DetailsIcon from '@/components/Icons/DetailsIcon.vue'
 import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
-import EmailIcon from '@/components/Icons/EmailIcon.vue'
 import CommentIcon from '@/components/Icons/CommentIcon.vue'
+import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
+import DetailsIcon from '@/components/Icons/DetailsIcon.vue'
+import EmailIcon from '@/components/Icons/EmailIcon.vue'
+import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
+import NoteIcon from '@/components/Icons/NoteIcon.vue'
+import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'
 import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import TaskIcon from '@/components/Icons/TaskIcon.vue'
-import NoteIcon from '@/components/Icons/NoteIcon.vue'
 import WhatsAppIcon from '@/components/Icons/WhatsAppIcon.vue'
-import IndicatorIcon from '@/components/Icons/IndicatorIcon.vue'
-import OrganizationsIcon from '@/components/Icons/OrganizationsIcon.vue'
-import ContactsIcon from '@/components/Icons/ContactsIcon.vue'
 import LayoutHeader from '@/components/LayoutHeader.vue'
-import Activities from '@/components/Activities/Activities.vue'
 import AssignmentModal from '@/components/Modals/AssignmentModal.vue'
 import MultipleAvatar from '@/components/MultipleAvatar.vue'
-import Link from '@/components/Controls/Link.vue'
 import Section from '@/components/Section.vue'
 import SectionFields from '@/components/SectionFields.vue'
 import SLASection from '@/components/SLASection.vue'
-import CustomActions from '@/components/CustomActions.vue'
-import { createToast, setupAssignees, setupCustomizations } from '@/utils'
-import { getView } from '@/utils/view'
-import { globalStore } from '@/stores/global'
-import { contactsStore } from '@/stores/contacts'
-import { statusesStore } from '@/stores/statuses'
 import {
-  whatsappEnabled,
   callEnabled,
   isMobileView,
+  whatsappEnabled,
 } from '@/composables/settings'
+import { contactsStore } from '@/stores/contacts'
+import { globalStore } from '@/stores/global'
+import { statusesStore } from '@/stores/statuses'
+import { createToast, setupAssignees, setupCustomizations } from '@/utils'
+import { getView } from '@/utils/view'
 import {
-  createResource,
-  Dropdown,
-  Tabs,
-  Switch,
   Breadcrumbs,
   call,
+  createResource,
+  Dropdown,
+  Switch,
+  Tabs,
 } from 'qbs-vue-ui'
-import { ref, computed, onMounted, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const { $dialog, $socket } = globalStore()
 const { getContactByName, contacts } = contactsStore()
