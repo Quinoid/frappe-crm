@@ -153,14 +153,14 @@ class CRMLead(Document):
 		if not self.organization:
 			return
 
-		existing_organization = frappe.db.exists("CRM Organization", {"name": self.organization})
+		existing_organization = frappe.db.exists("CRM Organization", {"organization_name": self.organization})
 		if existing_organization:
-			return existing_organization
+			return existing_organization.organization_name
 
 		organization = frappe.new_doc("CRM Organization")
 		organization.update(
 			{
-				"organization_name": self.organization_name,
+				"organization_name": self.organization,
 				"website": self.website,
 				"territory": self.territory,
 				"industry": self.industry,
